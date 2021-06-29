@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>Ontap As Built Report</title>
+<style type="text/css">
+html { height: 100%; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background: #e6e6e6; }
+page { background: white; display: block; margin-top: 1rem; margin-left: auto; margin-right: auto; margin-bottom: 1rem; border-style: solid; border-width: 1px; border-color: #c6c6c6; }
+@media print { body, page { margin: 0; box-shadow: 0; } }
+hr { margin-top: 1.0rem; }
+ .portrait { background: white; width: 215.9mm; display: block; margin-top: 1rem; margin-left: auto; margin-right: auto; margin-bottom: 1rem; position: relative; border-style: solid; border-width: 1px; border-color: #c6c6c6; }
+ .landscape { background: white; width: 279.4mm; display: block; margin-top: 1rem; margin-left: auto; margin-right: auto; margin-bottom: 1rem; position: relative; border-style: solid; border-width: 1px; border-color: #c6c6c6; }
+ .OK { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e; }
+ .TableDefaultAltRow { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dddddd; }
+ .Caption { font-family: 'Calibri','Candara','Segoe','Segoe UI','Optima','Arial','Sans-Serif'; font-size: 0.92rem; text-align: left; font-weight: normal; font-style: italic; color: #000000; }
+ .Heading3 { font-family: 'Arial'; font-size: 1.00rem; text-align: left; font-weight: normal; color: #194fb4; }
+ .TableDefaultRow { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; }
+ .TableDefaultHeading { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #ffffff; background-color: #2f2f2f; }
+ .Title { font-family: 'Arial'; font-size: 2.00rem; text-align: center; font-weight: normal; color: #194fb4; }
+ .Heading5 { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; font-style: italic; color: #194fb4; }
+ .Info { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #a6d8e7; }
+ .Heading2 { font-family: 'Arial'; font-size: 1.17rem; text-align: left; font-weight: normal; color: #194fb4; }
+ .Normal { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; }
+ .TOC { font-family: 'Arial'; font-size: 1.33rem; text-align: left; font-weight: normal; color: #194fb4; }
+ .Heading1 { font-family: 'Arial'; font-size: 1.33rem; text-align: left; font-weight: normal; color: #194fb4; }
+ .Heading6 { font-family: 'Calibri','Candara','Segoe','Segoe UI','Optima','Arial','Sans-Serif'; font-size: 0.92rem; text-align: left; font-weight: normal; color: #1f3763; }
+ .Title3 { font-family: 'Arial'; font-size: 1.00rem; text-align: left; font-weight: normal; color: #2f2f2f; }
+ .Warning { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #ffe860; }
+ .Critical { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252; }
+ .Heading4 { font-family: 'Arial'; font-size: 0.92rem; text-align: left; font-weight: normal; color: #194fb4; }
+ .Title2 { font-family: 'Arial'; font-size: 1.50rem; text-align: center; font-weight: normal; color: #2f2f2f; }
+ .H1ExcludeTOC { font-family: 'Arial'; font-size: 1.33rem; text-align: left; font-weight: normal; color: #194fb4; }
+ table.tabledefault { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: solid; border-width: 0.04rem; border-color: #464547; border-collapse: collapse; }
+ table.tabledefault th { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #ffffff; background-color: #2f2f2f; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: solid; border-width: 0.04rem; border-color: #464547; border-collapse: collapse; }
+ table.tabledefault td { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: solid; border-width: 0.04rem; border-color: #464547; border-collapse: collapse; }
+ table.tabledefault tr:nth-child(odd) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: solid; border-width: 0.04rem; border-color: #464547; border-collapse: collapse; }
+ table.tabledefault tr:nth-child(even) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dddddd; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: solid; border-width: 0.04rem; border-color: #464547; border-collapse: collapse; }
+ table.borderless { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless th { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless td { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless tr:nth-child(odd) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless tr:nth-child(even) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+</style></head><body>
+<div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 4.58rem; padding-bottom: 5.92rem; padding-right: 4.58rem;">
+
+<div style="min-height: 229.29999999999995mm" ><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><div class="Title">Ontap As Built Report</div><div class="Title2">Zen Pr Solutions</div><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="borderless"><tbody>
+<tr><th>Author:</th><td>Jonathan Colon</td></tr>
+<tr><th>Date:</th><td>24 June 2021</td></tr>
+<tr><th>Version:</th><td>1.0</td></tr>
+</tbody></table>
+<br /></div>
+</div></div></div><div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 4.58rem; padding-bottom: 5.92rem; padding-right: 4.58rem;">
+<div style="min-height: 229.29999999999995mm" ><h1 class="TOC">Table of Contents</h1><table>
+<tr><td>1</td><td><a href="#2b69a198-c01a-4b73-a797-944166307386" style="text-decoration: none;">Report for Cluster OnPrem-HQ</a></td></tr>
+<tr><td>1.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#616598ec-d928-4146-9ee1-047b8d61ea2e" style="text-decoration: none;">Cluster Summary</a></td></tr>
+<tr><td>1.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#3c513f1e-4bd8-4403-9df6-f481c09832e5" style="text-decoration: none;">Cluster Information</a></td></tr>
+<tr><td>1.2</td><td>&nbsp;&nbsp;&nbsp;<a href="#16a15ee3-6350-4711-8e05-e92b8b321376" style="text-decoration: none;">Cluster HA Status</a></td></tr>
+<tr><td>1.3</td><td>&nbsp;&nbsp;&nbsp;<a href="#757e3b05-bffd-4413-a2a6-91f182f4eafb" style="text-decoration: none;">Cluster AutoSupport Status</a></td></tr>
+<tr><td>2</td><td><a href="#3e5bf894-ace5-4e44-bc4d-ba79020d279a" style="text-decoration: none;">Node Summary</a></td></tr>
+<tr><td>2.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#9498219f-ee67-4077-82c9-67a1ecdfc69c" style="text-decoration: none;">Node Inventory</a></td></tr>
+<tr><td>2.2</td><td>&nbsp;&nbsp;&nbsp;<a href="#5ca8d812-ae96-4938-aeb6-dd0955a278ed" style="text-decoration: none;">Node Hardware Information</a></td></tr>
+<tr><td>2.3</td><td>&nbsp;&nbsp;&nbsp;<a href="#86fbe5ea-4f65-4e84-a4b9-e3e8e5d149b2" style="text-decoration: none;">Node Service-Processor Information</a></td></tr>
+<tr><td>3</td><td><a href="#99cb8f88-520e-4b7f-be64-7e295ffa4222" style="text-decoration: none;">Storage Summary</a></td></tr>
+<tr><td>3.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#0a93b6dd-de85-449d-b4e8-0d19a93d4f11" style="text-decoration: none;">Aggregate Summary</a></td></tr>
+<tr><td>3.2</td><td>&nbsp;&nbsp;&nbsp;<a href="#f7c00f9a-5605-4727-a20a-40bc78cc3acc" style="text-decoration: none;">Disk Summary</a></td></tr>
+<tr><td>3.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#cb157883-0a4e-4680-bf44-f5ad91359aff" style="text-decoration: none;">Assigned Disk Summary</a></td></tr>
+<tr><td>3.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#653a98f5-9c3f-4a55-b531-815d69e71790" style="text-decoration: none;">Disk Container Type Summary</a></td></tr>
+<tr><td>3.2.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#13d192fe-1174-4e14-bd0b-26caaa1a5e19" style="text-decoration: none;">Failed Disk Summary</a></td></tr>
+<tr><td>3.3</td><td>&nbsp;&nbsp;&nbsp;<a href="#e34abe87-a8ef-4b34-a2af-3c397d96c966" style="text-decoration: none;">Disk Inventory</a></td></tr>
+<tr><td>3.4</td><td>&nbsp;&nbsp;&nbsp;<a href="#368054a8-3c22-4755-ace3-c86aac217b3d" style="text-decoration: none;">Shelf Inventory</a></td></tr>
+<tr><td>4</td><td><a href="#52810480-f400-4be5-9a45-45a2e4e7a946" style="text-decoration: none;">License Summary</a></td></tr>
+<tr><td>4.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#e4f32e8e-fb2e-47c7-a666-ff91126e577a" style="text-decoration: none;">License Usage Summary</a></td></tr>
+<tr><td>4.2</td><td>&nbsp;&nbsp;&nbsp;<a href="#c56b7b2e-d62e-49eb-883c-14662da87bb1" style="text-decoration: none;">License Feature Summary</a></td></tr>
+</table>
+</div></div></div><div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 4.58rem; padding-bottom: 5.92rem; padding-right: 4.58rem;">
+<div style="min-height: 229.29999999999995mm" ><a name="2b69a198-c01a-4b73-a797-944166307386"><h1 class="Heading1">1 Report for Cluster OnPrem-HQ</h1></a><a name="616598ec-d928-4146-9ee1-047b8d61ea2e"><h2 class="Heading2">1.1 Cluster Summary</h2></a><div>The following section provides a summary of the array configuration for OnPrem-HQ.</div><br /><a name="3c513f1e-4bd8-4403-9df6-f481c09832e5"><h3 class="Heading3">1.1.1 Cluster Information</h3></a><div>The following section provides a summary of the Cluster Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Cluster Name</th><td>OnPrem-HQ</td></tr>
+<tr><th>Cluster UUID</th><td>7b2309fb-5e00-11e8-b65d-005056b06330</td></tr>
+<tr><th>Cluster Serial</th><td>1-80-000011</td></tr>
+<tr><th>Cluster Controller</th><td>192.168.7.60</td></tr>
+<tr><th>Cluster Contact</th><td>&nbsp;</td></tr>
+<tr><th>Cluster Location</th><td>HOMELAB</td></tr>
+<tr><th>Ontap Version</th><td>NetApp Release 9.9.1: Sun Jun 13 11:45:05 UTC 2021</td></tr>
+<tr><th>Number of Aggregates</th><td>4</td></tr>
+<tr><th>Number of Volumes</th><td>5</td></tr>
+<tr><th>Overall System Health</th><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">OK</td></tr>
+</tbody></table>
+<br /></div>
+<a name="16a15ee3-6350-4711-8e05-e92b8b321376"><h2 class="Heading3">1.2 Cluster HA Status</h2></a><div>The following section provides a summary of the Cluster HA Status on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Partner</th><th>TakeOver Possible</th><th>TakeOver State</th><th>HA Mode</th><th>HA State</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>OnPrem-HQ-02</td><td>True</td><td>not_in_takeover</td><td>HA</td><td>CONNECTED</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>OnPrem-HQ-01</td><td>True</td><td>not_in_takeover</td><td>HA</td><td>CONNECTED</td></tr>
+</tbody></table>
+<br /></div>
+<a name="757e3b05-bffd-4413-a2a6-91f182f4eafb"><h2 class="Heading3">1.3 Cluster AutoSupport Status</h2></a><div>The following section provides a summary of the Cluster AutoSupport Status on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Node Name</th><td>OnPrem-HQ-01</td></tr>
+<tr><th>Protocol</th><td>https</td></tr>
+<tr><th>Enabled</th><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #ffe860;">False</td></tr>
+<tr><th>Last Time Stamp</th><td>06/24/2021 14:53:11</td></tr>
+<tr><th>Last Subject</th><td>SPARES_LOW</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Node Name</th><td>OnPrem-HQ-02</td></tr>
+<tr><th>Protocol</th><td>https</td></tr>
+<tr><th>Enabled</th><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #ffe860;">False</td></tr>
+<tr><th>Last Time Stamp</th><td>06/24/2021 14:53:08</td></tr>
+<tr><th>Last Subject</th><td>SPARES_LOW</td></tr>
+</tbody></table>
+<br /></div>
+<a name="3e5bf894-ace5-4e44-bc4d-ba79020d279a"><h1 class="Heading2">2 Node Summary</h1></a><div>The following section provides a summary of the Node on OnPrem-HQ.</div><br /><a name="9498219f-ee67-4077-82c9-67a1ecdfc69c"><h2 class="Heading3">2.1 Node Inventory</h2></a><div>The following section provides the Node inventory on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>System Model</th><th>System Id</th><th>Serial Number</th><th>Node Uptime</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>SIMBOX</td><td>4xxxxxxxxx</td><td>6xxxxxxxxxxx</td><td>06:52:05</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>SIMBOX</td><td>4xxxxxxxxx</td><td>6xxxxxxxxxxx</td><td>06:52:06</td></tr>
+</tbody></table>
+<br /></div>
+<a name="5ca8d812-ae96-4938-aeb6-dd0955a278ed"><h2 class="Heading3">2.2 Node Hardware Information</h2></a><div>The following section provides the Node Hardware inventory on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%" /><col style="max-width:60%; min-width:60%; width:60%" /></colgroup>
+<tbody>
+<tr><th>Name</th><td>OnPrem-HQ-01</td></tr>
+<tr><th>System Type</th><td>SIMBOX</td></tr>
+<tr><th>CPU Count</th><td>2</td></tr>
+<tr><th>Total Memory</th><td>8GB</td></tr>
+<tr><th>Vendor</th><td>NetApp</td></tr>
+<tr><th>AFF/FAS</th><td>FAS</td></tr>
+<tr><th>All Flash Optimized</th><td>False</td></tr>
+<tr><th>Epsilon</th><td>False</td></tr>
+<tr><th>System Healthy</th><td>Healthy</td></tr>
+<tr><th>Failed Fan Count</th><td>0</td></tr>
+<tr><th>Failed Fan Error</th><td>There are no failed fans.</td></tr>
+<tr><th>Failed PowerSupply Count</th><td>0</td></tr>
+<tr><th>Failed PowerSupply Error</th><td>There are no failed power supplies.</td></tr>
+<tr><th>Over Temperature</th><td>Normal Temperature</td></tr>
+<tr><th>NVRAM Battery Healthy</th><td>battery_ok</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%" /><col style="max-width:60%; min-width:60%; width:60%" /></colgroup>
+<tbody>
+<tr><th>Name</th><td>OnPrem-HQ-02</td></tr>
+<tr><th>System Type</th><td>SIMBOX</td></tr>
+<tr><th>CPU Count</th><td>2</td></tr>
+<tr><th>Total Memory</th><td>8GB</td></tr>
+<tr><th>Vendor</th><td>NetApp</td></tr>
+<tr><th>AFF/FAS</th><td>FAS</td></tr>
+<tr><th>All Flash Optimized</th><td>False</td></tr>
+<tr><th>Epsilon</th><td>False</td></tr>
+<tr><th>System Healthy</th><td>Healthy</td></tr>
+<tr><th>Failed Fan Count</th><td>0</td></tr>
+<tr><th>Failed Fan Error</th><td>There are no failed fans.</td></tr>
+<tr><th>Failed PowerSupply Count</th><td>0</td></tr>
+<tr><th>Failed PowerSupply Error</th><td>There are no failed power supplies.</td></tr>
+<tr><th>Over Temperature</th><td>Normal Temperature</td></tr>
+<tr><th>NVRAM Battery Healthy</th><td>battery_ok</td></tr>
+</tbody></table>
+<br /></div>
+<a name="86fbe5ea-4f65-4e84-a4b9-e3e8e5d149b2"><h2 class="Heading3">2.3 Node Service-Processor Information</h2></a><div>The following section provides the Node Service-Processor Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Type</th><th>IP Address</th><th>MAC Address</th><th>Network Configured</th><th>Firmware</th><th>Status</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #ffe860;">unknown</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #ffe860;">unknown</td></tr>
+</tbody></table>
+<br /></div>
+<a name="99cb8f88-520e-4b7f-be64-7e295ffa4222"><h1 class="Heading2">3 Storage Summary</h1></a><div>The following section provides a summary of the storage hardware on OnPrem-HQ.</div><br /><a name="0a93b6dd-de85-449d-b4e8-0d19a93d4f11"><h2 class="Heading3">3.1 Aggregate Summary</h2></a><div>The following section provides the Aggregates on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Capacity</th><th>Available</th><th>Used %</th><th>Disk Count</th><th>Root</th><th>Raid Type</th><th>State</th></tr></thead><tbody>
+<tr><td>aggr0_OnPrem_HQ_01</td><td>22.80GB</td><td>1.11GB</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">95</td><td>10</td><td>True</td><td>raid_dp</td><td>online</td></tr>
+<tr><td>aggr0_OnPrem_HQ_02</td><td>22.80GB</td><td>1.11GB</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">95</td><td>10</td><td>True</td><td>raid_dp</td><td>online</td></tr>
+<tr><td>OnPrem_HQ_01_SSD_1</td><td>219.46GB</td><td>219.46GB</td><td>0</td><td>23</td><td>False</td><td>raid_dp</td><td>online</td></tr>
+<tr><td>OnPrem_HQ_02_SSD_1</td><td>219.46GB</td><td>211.68GB</td><td>4</td><td>23</td><td>False</td><td>raid_dp</td><td>online</td></tr>
+</tbody></table>
+<br /></div>
+<a name="f7c00f9a-5605-4727-a20a-40bc78cc3acc"><h2 class="Heading3">3.2 Disk Summary</h2></a><div>The following section provides the disk summary information on controller OnPrem-HQ.</div><br /><a name="cb157883-0a4e-4680-bf44-f5ad91359aff"><h3 class="Heading4">3.2.1 Assigned Disk Summary</h3></a><div>The following section provides the number of disks assigned to each controller on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Node</th><th>Disk Count</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>12</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>12</td></tr>
+</tbody></table>
+<br /></div>
+<a name="653a98f5-9c3f-4a55-b531-815d69e71790"><h3 class="Heading4">3.2.2 Disk Container Type Summary</h3></a><div>The following section provides a summary of disk status on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Container</th><th>Disk Count</th></tr></thead><tbody>
+<tr><td>broken</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">1</td></tr>
+<tr><td>shared</td><td>23</td></tr>
+</tbody></table>
+<br /></div>
+<a name="13d192fe-1174-4e14-bd0b-26caaa1a5e19"><h3 class="Heading4">3.2.3 Failed Disk Summary</h3></a><div>The following section show failed disks on cluster OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Disk Name</th><th>Shelf</th><th>Bay</th><th>Pool</th><th>Disk Paths</th></tr></thead><tbody>
+<tr><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">VMw-1.3</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">2</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">0</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;">OnPrem-HQ-01:0d.2<br />OnPrem-HQ-02:0c.1</td></tr>
+</tbody></table>
+<br /></div>
+<a name="e34abe87-a8ef-4b34-a2af-3c397d96c966"><h2 class="Heading3">3.3 Disk Inventory</h2></a><div>The following section provides the Disks installed on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Disk Name</th><th>Shelf</th><th>Bay</th><th>Capacity</th><th>Model</th><th>SerialNumber</th><th>Type</th></tr></thead><tbody>
+<tr><td>VMw-1.1</td><td>&nbsp;</td><td>0</td><td>30GB</td><td>Virtualdisk</td><td>6000c29c99190846132db18401fc8823</td><td>SSD</td></tr>
+<tr><td>VMw-1.7</td><td>&nbsp;</td><td>6</td><td>30GB</td><td>Virtualdisk</td><td>6000c293647878de40476baeead2f197</td><td>SSD</td></tr>
+<tr><td>VMw-1.6</td><td>&nbsp;</td><td>5</td><td>30GB</td><td>Virtualdisk</td><td>6000c290b1862bb0c1039de21de84435</td><td>SSD</td></tr>
+<tr><td>VMw-1.5</td><td>&nbsp;</td><td>4</td><td>30GB</td><td>Virtualdisk</td><td>6000c29e69d5cf3e9e131b88c96d95b6</td><td>SSD</td></tr>
+<tr><td>VMw-1.4</td><td>&nbsp;</td><td>3</td><td>30GB</td><td>Virtualdisk</td><td>6000c2989f687f7978174b0f0b8d9af3</td><td>SSD</td></tr>
+<tr><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #d75252;"> VMw-1.3(*)</td><td>&nbsp;</td><td>2</td><td>30GB</td><td>Virtualdisk</td><td>6000c29156ef29aadf8cb8430df1c6f8</td><td>SSD</td></tr>
+<tr><td>VMw-1.24</td><td>&nbsp;</td><td>0</td><td>30GB</td><td>Virtualdisk</td><td>6000c292b6b4ba67dc40259f96e0a9a4</td><td>SSD</td></tr>
+<tr><td>VMw-1.23</td><td>&nbsp;</td><td>12</td><td>30GB</td><td>Virtualdisk</td><td>6000c29527f84729e9c2bf6ec3cf3a90</td><td>SSD</td></tr>
+<tr><td>VMw-1.22</td><td>&nbsp;</td><td>4</td><td>30GB</td><td>Virtualdisk</td><td>6000c29ed0f3242b394e7e5965f245eb</td><td>SSD</td></tr>
+<tr><td>VMw-1.21</td><td>&nbsp;</td><td>5</td><td>30GB</td><td>Virtualdisk</td><td>6000c295b26d3fbe171de23a8ba188b5</td><td>SSD</td></tr>
+<tr><td>VMw-1.20</td><td>&nbsp;</td><td>11</td><td>30GB</td><td>Virtualdisk</td><td>6000c29668901fe6f3caf94cebf5fbc7</td><td>SSD</td></tr>
+<tr><td>VMw-1.2</td><td>&nbsp;</td><td>1</td><td>30GB</td><td>Virtualdisk</td><td>6000c2929db4bb1b2e5c909c86a753a0</td><td>SSD</td></tr>
+<tr><td>VMw-1.19</td><td>&nbsp;</td><td>6</td><td>30GB</td><td>Virtualdisk</td><td>6000c2964b8adecb155b596bee1ea864</td><td>SSD</td></tr>
+<tr><td>VMw-1.18</td><td>&nbsp;</td><td>8</td><td>30GB</td><td>Virtualdisk</td><td>6000c2910fb22dadccc43529c111d0ed</td><td>SSD</td></tr>
+<tr><td>VMw-1.17</td><td>&nbsp;</td><td>9</td><td>30GB</td><td>Virtualdisk</td><td>6000c29d7d815ad8a1d31efee1c30833</td><td>SSD</td></tr>
+<tr><td>VMw-1.16</td><td>&nbsp;</td><td>10</td><td>30GB</td><td>Virtualdisk</td><td>6000c29863b578b40e10a623d0745182</td><td>SSD</td></tr>
+<tr><td>VMw-1.15</td><td>&nbsp;</td><td>3</td><td>30GB</td><td>Virtualdisk</td><td>6000c292236a09ce6dcd55fb74b88e36</td><td>SSD</td></tr>
+<tr><td>VMw-1.14</td><td>&nbsp;</td><td>2</td><td>30GB</td><td>Virtualdisk</td><td>6000c293907fa96397a4e4e748b1755f</td><td>SSD</td></tr>
+<tr><td>VMw-1.13</td><td>&nbsp;</td><td>1</td><td>30GB</td><td>Virtualdisk</td><td>6000c29e9e29c990c546bbc2016738e8</td><td>SSD</td></tr>
+<tr><td>VMw-1.12</td><td>&nbsp;</td><td>12</td><td>30GB</td><td>Virtualdisk</td><td>6000c29bd6b04bfe180e386d2b2a4378</td><td>SSD</td></tr>
+<tr><td>VMw-1.11</td><td>&nbsp;</td><td>11</td><td>30GB</td><td>Virtualdisk</td><td>6000c2943c636dd2b9f2ec5333ff51be</td><td>SSD</td></tr>
+<tr><td>VMw-1.10</td><td>&nbsp;</td><td>10</td><td>30GB</td><td>Virtualdisk</td><td>6000c295d8a8fa81110f4db7a1833cd3</td><td>SSD</td></tr>
+<tr><td>VMw-1.8</td><td>&nbsp;</td><td>8</td><td>30GB</td><td>Virtualdisk</td><td>6000c29b4e83f1fc85be80b16377acd8</td><td>SSD</td></tr>
+<tr><td>VMw-1.9</td><td>&nbsp;</td><td>9</td><td>30GB</td><td>Virtualdisk</td><td>6000c29a0accd199b9d1d764a0fa05f5</td><td>SSD</td></tr>
+</tbody></table>
+<br /></div>
+<a name="368054a8-3c22-4755-ace3-c86aac217b3d"><h2 class="Heading3">3.4 Shelf Inventory</h2></a><div>The following section provides the available Shelf on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Node Name</th><th>Channel</th><th>Shelf Name</th><th>Shelf ID</th><th>State</th><th>Type</th><th>Firmware</th><th>Bay Count</th></tr></thead><tbody>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</tbody></table>
+<br /></div>
+<a name="52810480-f400-4be5-9a45-45a2e4e7a946"><h1 class="Heading2">4 License Summary</h1></a><div>The following section provides a summary of the license usage on OnPrem-HQ.</div><br /><a name="e4f32e8e-fb2e-47c7-a666-ff91126e577a"><h2 class="Heading3">4.1 License Usage Summary</h2></a><div>The following section provides the installed licenses on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Package</th><th>Type</th><th>Description</th><th>Risk</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>cifs</td><td>license</td><td>CIFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>cifs</td><td>license</td><td>CIFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ</td><td>base</td><td>site</td><td>Cluster Base License</td><td>&nbsp;</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>fcp</td><td>license</td><td>FCP License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>fcp</td><td>license</td><td>FCP License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>flexclone</td><td>license</td><td>FlexClone License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>flexclone</td><td>license</td><td>FlexClone License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>iscsi</td><td>license</td><td>iSCSI License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>iscsi</td><td>license</td><td>iSCSI License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>nfs</td><td>license</td><td>NFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>nfs</td><td>license</td><td>NFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ</td><td>s3</td><td>site</td><td>S3 License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snaplock</td><td>license</td><td>SnapLock License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snaplock</td><td>license</td><td>SnapLock License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snapmanagersuite</td><td>license</td><td>SnapManagerSuite License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snapmanagersuite</td><td>license</td><td>SnapManagerSuite License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snapmirror</td><td>license</td><td>SnapMirror License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snapmirror</td><td>license</td><td>SnapMirror License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ</td><td>snapmirror_sync</td><td>site</td><td>SnapMirror Synchronous License</td><td>&nbsp;</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snaprestore</td><td>license</td><td>SnapRestore License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snaprestore</td><td>license</td><td>SnapRestore License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snapvault</td><td>license</td><td>SnapVault License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snapvault</td><td>license</td><td>SnapVault License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #aadb1e;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>tpm</td><td>license</td><td>Trusted Platform Module License</td><td>&nbsp;</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>tpm</td><td>license</td><td>Trusted Platform Module License</td><td>&nbsp;</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>ve</td><td>license</td><td>Volume Encryption License</td><td>&nbsp;</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>ve</td><td>license</td><td>Volume Encryption License</td><td>&nbsp;</td></tr>
+</tbody></table>
+<br /></div>
+<a name="c56b7b2e-d62e-49eb-883c-14662da87bb1"><h2 class="Heading3">4.2 License Feature Summary</h2></a><div>The following section provides the License Feature Usage on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>cifs</td><td>available</td><td>-</td></tr>
+<tr><td>snapvault_secondary</td><td>available</td><td>-</td></tr>
+<tr><td>snapvault_primary</td><td>available</td><td>-</td></tr>
+<tr><td>snaprestore</td><td>available</td><td>-</td></tr>
+<tr><td>snapmirror</td><td>available</td><td>-</td></tr>
+<tr><td>snapmanager_sql</td><td>available</td><td>-</td></tr>
+<tr><td>snapmanager_sharepoint</td><td>available</td><td>-</td></tr>
+<tr><td>snapmanager_sap</td><td>available</td><td>-</td></tr>
+<tr><td>snapmanager_oracle</td><td>available</td><td>-</td></tr>
+<tr><td>snapmanager_hyperv</td><td>available</td><td>-</td></tr>
+<tr><td>snapmanager_exchange</td><td>available</td><td>-</td></tr>
+<tr><td>snapdrive_unix</td><td>available</td><td>-</td></tr>
+<tr><td>snapdrive_windows</td><td>available</td><td>-</td></tr>
+<tr><td>nfs</td><td>available</td><td>-</td></tr>
+<tr><td>iscsi</td><td>available</td><td>-</td></tr>
+<tr><td>flexclone</td><td>available</td><td>-</td></tr>
+<tr><td>fcp</td><td>available</td><td>-</td></tr>
+<tr><td>multistore</td><td>not_available</td><td>Feature not supported</td></tr>
+<tr><td>mt_ek_mgmt</td><td>not_available</td><td>Feature not licensed and disabled</td></tr>
+<tr><td>v_storageattach</td><td>not_available</td><td>Feature not licensed</td></tr>
+<tr><td>s3</td><td>off</td><td>Feature licensed but disabled</td></tr>
+<tr><td>syncmirror</td><td>on</td><td>-</td></tr>
+<tr><td>snaplock</td><td>on</td><td>Feature licensed and enabled</td></tr>
+<tr><td>ndmp</td><td>on</td><td>-</td></tr>
+<tr><td>flexcache</td><td>on</td><td>-</td></tr>
+<tr><td>dedupe</td><td>on</td><td>-</td></tr>
+<tr><td>compression</td><td>on</td><td>-</td></tr>
+</tbody></table>
+<br /></div>
+</div>
+</div></div></body>
