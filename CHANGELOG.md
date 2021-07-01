@@ -1,13 +1,19 @@
-# :arrows_counterclockwise: NetApp ONTAP As Built Report Changelog
+# NetApp Ontap Storage As Built Report Changelog
 
-## [0.1.0] - YYYY-MM-DD
-
-### Added
+## [0.2] - 2021-06-26
 
 ### Changed
 
-### Fixed
+- Add HealthCheck Support
 
-### Removed
+- Add Report Info for Disk,License,Shelf,Service-Processor & AutoSupport
 
+- Fix Code Indentation
 
+- Add Report Sample Images and HTML file
+
+## [0.1] - 2021-06-14
+
+### Changed
+
+- Initial Report structure creation
