@@ -32,14 +32,14 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     # General information
     $TextInfo = (Get-Culture).TextInfo
 
-    $Script:Array = $Null
-    $Script:Unit = "GB"
     #Connect to Ontap Storage Array using supplied credentials
     foreach ($OntapArray in $Target) {
         Try {
-            $Array = Connect-NcController -Name $OntapArray -Credential $Credential
+            Write-PScriboMessage "Connecting to NetApp Storage '$OntapArray'."
+            $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop
         } Catch {
             Write-Verbose "Unable to connect to the $OntapArray Array"
+            throw
         }
 
         #region VxRail Section
@@ -50,7 +50,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             Write-PScriboMessage "Cluster InfoLevel set at $($InfoLevel.Cluster)."
             if ($InfoLevel.Cluster -gt 0) {
                 Section -Style Heading2 'Cluster Information' {
-                    # VxRail Cluster
+                    # Ontap Cluster
                     Get-AbrOntapCluster
                     Section -Style Heading3 'Cluster HA Status' {
                         Paragraph "The following section provides a summary of the Cluster HA Status on $($ClusterInfo.ClusterName)."
@@ -64,7 +64,29 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }
-            #endregion Cluster Section
-        }
+        }#endregion Cluster Section
+            #region Node Section
+            Write-PScriboMessage "Node InfoLevel set at $($InfoLevel.Node)."
+            if ($InfoLevel.Node -gt 0) {
+            Section -Style Heading2 'Node Summary' {
+            Paragraph "The following section provides a summary of the Node on $($ClusterInfo.ClusterName)."
+            BlankLine
+                Section -Style Heading3 'Node Inventory' {
+                    Paragraph "The following section provides the node inventory on $($ClusterInfo.ClusterName)."
+                    BlankLine
+                    Get-AbrOntapNodes
+                    Section -Style Heading4 'Node Hardware Inventory' {
+                        Paragraph "The following section provides the node hardware inventory on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapNodesHW
+                    }
+                    Section -Style Heading4 'Node Service-Processor Inventory' {
+                        Paragraph "The following section provides the node service-processor information on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapNodesSP
+                    }
+                }
+            }
+        }#endregion Node Section
     }
 }
