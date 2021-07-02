@@ -23,8 +23,8 @@ function Get-AbrOntapCluster {
     }
 
     process {
-        if ($OntapArray) {
-            $global:ClusterInfo = Get-NcCluster
+        $global:ClusterInfo = Get-NcCluster
+        if ($ClusterInfo) {
             $ClusterDiag = Get-NcDiagnosisStatus
             $ClusterVersion = Get-NcSystemVersion
             $ArrayAggr = Get-NcAggr

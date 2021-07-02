@@ -1,7 +1,7 @@
 function Get-AbrOntapClusterASUP {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP cluster information from the Cluster Management Network
+    Used by As Built Report to retrieve NetApp ONTAP cluster autoSupport status from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -19,12 +19,12 @@ function Get-AbrOntapClusterASUP {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP cluster high availability information."
+        Write-PscriboMessage "Collecting ONTAP AutoSupport information."
     }
 
     process {
-        if ($OntapArray) {
-            $AutoSupport = Get-NcAutoSupportConfig
+        $AutoSupport = Get-NcAutoSupportConfig
+        if ($AutoSupport) {
             $AutoSupportSummary = foreach ($NodesAUTO in $AutoSupport) {
                 [PSCustomObject] @{
                     'Node Name' = $NodesAUTO.NodeName

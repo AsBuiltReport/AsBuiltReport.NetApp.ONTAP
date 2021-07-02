@@ -1,7 +1,7 @@
 function Get-AbrOntapClusterHA {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP cluster information from the Cluster Management Network
+    Used by As Built Report to retrieve NetApp ONTAP cluster HA information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,8 +23,8 @@ function Get-AbrOntapClusterHA {
     }
 
     process {
-        if ($OntapArray) {
-            $NodeSum = Get-NcNode
+        $NodeSum = Get-NcNode
+        if ($NodeSum) {
             $NodeSummary = foreach ($Nodes in $NodeSum) {
                 $ClusterHa = Get-NcClusterHa -Node $Nodes.Node
                 [PSCustomObject] @{
