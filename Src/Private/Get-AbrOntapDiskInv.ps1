@@ -23,6 +23,7 @@ function Get-AbrOntapDiskInv {
     }
 
     process {
+        $Unit = "GB"
         $DiskInv = Get-NcDisk
         $NodeDiskBroken = Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
         if ($DiskInv) {
