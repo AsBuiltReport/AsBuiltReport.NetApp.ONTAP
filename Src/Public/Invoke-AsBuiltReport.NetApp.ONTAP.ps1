@@ -149,6 +149,28 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }
+            }#endregion License Section
+            Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
+            if ($InfoLevel.Network -gt 0) {
+                Section -Style Heading2 'Network Summary' {
+                    Paragraph "The following section provides a summary of the networking features on $($ClusterInfo.ClusterName)."
+                    BlankLine
+                    Section -Style Heading3 'Network Ports Summary' {
+                        Paragraph "The following section provides the physical ports on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapNetworkPorts
+                        Section -Style Heading4 'Network Link Aggregation Group Summary' {
+                            Paragraph "The following section provides the IFGRP Aggregated Ports on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNetworkIfgrp
+                        }
+                        Section -Style Heading4 'IPSpace Summary' {
+                            Paragraph "The following section provides the IPSpece information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNetworkIpSpace
+                        }
+                    }
+                }
+            }#endregion License Section
         }
     }
