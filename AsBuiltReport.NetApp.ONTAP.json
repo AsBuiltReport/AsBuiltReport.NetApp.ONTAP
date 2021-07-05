@@ -16,7 +16,8 @@
         "Cluster": 1,
         "Node": 1,
         "Storage": 1,
-        "License": 1
+        "License": 1,
+        "Network": 1
     },
     "HealthCheck": {
         "Cluster": {
@@ -32,6 +33,9 @@
             "Aggr": true,
             "DiskStatus": true,
             "ShelfStatus": true
+        },
+        "Network": {
+            "Port": true
         },
         "License": {
             "RiskSummary": true,
