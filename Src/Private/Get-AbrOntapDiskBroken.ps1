@@ -23,9 +23,9 @@ function Get-AbrOntapDiskBroken {
     }
 
     process {
-        $NodeDiskBroken = Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
+        $global:NodeDiskBroken = Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
         if ($NodeDiskBroken) {
-                $DiskFailed = foreach ($DiskBroken in $NodeDiskBroken) {
+            $DiskFailed = foreach ($DiskBroken in $NodeDiskBroken) {
                     [PSCustomObject] @{
                         'Disk Name' = $DiskBroken.Name
                         'Shelf' = $DiskBroken.Shelf
