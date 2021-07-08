@@ -23,7 +23,7 @@ function Get-AbrOntapClusterHA {
     }
 
     process {
-        $NodeSum = Get-NcNode
+        $NodeSum = Get-NcNode | Where-Object { $null -ne $_.NodeModel }
         if ($NodeSum) {
             $NodeSummary = foreach ($Nodes in $NodeSum) {
                 $ClusterHa = Get-NcClusterHa -Node $Nodes.Node
