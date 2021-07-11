@@ -112,10 +112,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapDiskType
                         }
-                        Section -Style Heading4 'Failed Disk Summary' {
-                            Paragraph "The following section show failed disks on cluster $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapDiskBroken
+                        if (Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }) {
+                            Section -Style Heading4 'Failed Disk Summary' {
+                                Paragraph "The following section show failed disks on cluster $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapDiskBroken
+                            }
                         }
                         Section -Style Heading4 'Disk Inventory' {
                             Paragraph "The following section provides the Disks installed on $($ClusterInfo.ClusterName)."
@@ -149,7 +151,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion License Section
+            }#endregion Storage Section
+            #region Network Section
             Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
             if ($InfoLevel.Network -gt 0) {
                 Section -Style Heading2 'Network Summary' {
@@ -164,13 +167,44 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapNetworkIfgrp
                         }
+                        if (Get-NcNetPortVlan) {
+                            Section -Style Heading4 'Vlan Summary' {
+                                Paragraph "The following section provides the Vlan information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapNetworkVlans
+                            }
+                        }
                         Section -Style Heading4 'IPSpace Summary' {
-                            Paragraph "The following section provides the IPSpece information on $($ClusterInfo.ClusterName)."
+                            Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
                             BlankLine
-                            Get-AbrOntapNetworkIpSpace
+                            Get-AbrOntapNetworkIfgrp
+                        }
+                        Section -Style Heading4 'Broadcast Domain Summary' {
+                            Paragraph "The following section provides the Broadcast Domain information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNetworkBdomain
+                        }
+                        Section -Style Heading4 'Failover Group Summary' {
+                            Paragraph "The following section provides the Failover Group information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNetworkFailoverGroup
+                        }
+                        if (Get-NcNetSubnet) {
+                            Section -Style Heading4 'Subnet Summary' {
+                                Paragraph "The following section provides the Subnet information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapNetworkSubnet
+                            }
+                        }
+                        if (Get-NcNetRoute) {
+                            Section -Style Heading4 'Routes Summary' {
+                                Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapNetworkRoutes
+                            }
                         }
                     }
                 }
-            }#endregion License Section
+            }#endregion Network Section
         }
     }
