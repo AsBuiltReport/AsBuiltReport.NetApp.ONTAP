@@ -30,8 +30,8 @@ function Get-AbrOntapNetworkIpSpace {
                 $inObj = [ordered] @{
                     'Name' = $Item.Ipspace
                     'SVM' = $Item.Vservers
-                    'Ports' = $Item.Ports
-                    'Broadcast Domains' = $Item.BroadcastDomains
+                    'Ports' = [string]$Item.Ports
+                    'Broadcast Domains' = [string]$Item.BroadcastDomains
                 }
                 $IPSpaceObj += [pscustomobject]$inobj
             }
