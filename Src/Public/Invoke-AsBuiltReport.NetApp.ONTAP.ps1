@@ -134,7 +134,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Storage Section
-            #region Storage Section
+            #region License Section
             Write-PScriboMessage "License InfoLevel set at $($InfoLevel.License)."
             if ($InfoLevel.License -gt 0) {
                 Section -Style Heading2 'Licenses Summary' {
@@ -151,7 +151,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion Storage Section
+            }#endregion License Section
             #region Network Section
             Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
             if ($InfoLevel.Network -gt 0) {
@@ -203,8 +203,57 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapNetworkRoutes
                             }
                         }
+                        Section -Style Heading4 'Network Interfaces Summary' {
+                            Paragraph "The following section provides the Network Interfaces information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNetworkMgmt
+                        }
                     }
                 }
             }#endregion Network Section
+            #region Vserver Section
+            Write-PScriboMessage "Vserver InfoLevel set at $($InfoLevel.Vserver)."
+            if ($InfoLevel.Vserver -gt 0) {
+                Section -Style Heading2 'Vserver Summary' {
+                    Paragraph "The following section provides a summary of the vserver information on $($ClusterInfo.ClusterName)."
+                    BlankLine
+                    Section -Style Heading3 'Vserver Information Summary' {
+                        Paragraph "The following section provides the configured ISCSI service on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapVserverSummary
+                        Section -Style Heading4 'ISCSI Services Summary' {
+                            Paragraph "The following section provides the ISCSI Service Information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapVserverIscsi
+                            Section -Style Heading5 'ISCSI Interface Summary' {
+                                Paragraph "The following section provides the ISCSI Interface Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverIscsiInterface
+                            }
+                            Section -Style Heading5 'ISCSI Client Initiator Summary' {
+                                Paragraph "The following section provides the ISCSI Interface Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverIscsiInitiator
+                            }
+                        }
+                        Section -Style Heading4 'FCP Services Summary' {
+                            Paragraph "The following section provides the FCP Service Information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapVserverFcp
+                            Section -Style Heading5 'FCP Interface Summary' {
+                                Paragraph "The following section provides the FCP Interface Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverFcpInterface
+                            }
+                            Section -Style Heading5 'FCP Physical Adapter Summary' {
+                                Paragraph "The following section provides the FCP Physical Adapter Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverFcpAdapter
+
+                            }
+                        }
+                    }
+                }
+            }#endregion Vserver Section
         }
     }
