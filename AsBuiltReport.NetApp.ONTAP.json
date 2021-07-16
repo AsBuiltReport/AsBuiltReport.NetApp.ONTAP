@@ -17,7 +17,8 @@
         "Node": 1,
         "Storage": 1,
         "License": 1,
-        "Network": 1
+        "Network": 1,
+        "Vserver": 1
     },
     "HealthCheck": {
         "Cluster": {
@@ -35,12 +36,17 @@
             "ShelfStatus": true
         },
         "Network": {
-            "Port": true
+            "Port": true,
+            "Interface": true
         },
         "License": {
             "RiskSummary": true,
             "ServiceProcessor": true
+        },
+        "Vserver": {
+            "Status": true,
+            "Iscsi": true,
+            "FCP": true
         }
-
     }
 }
