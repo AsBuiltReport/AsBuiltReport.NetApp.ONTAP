@@ -158,10 +158,15 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 Section -Style Heading2 'Network Summary' {
                     Paragraph "The following section provides a summary of the networking features on $($ClusterInfo.ClusterName)."
                     BlankLine
-                    Section -Style Heading3 'Network Ports Summary' {
-                        Paragraph "The following section provides the physical ports on $($ClusterInfo.ClusterName)."
+                    Section -Style Heading3 'Network IPSpace Summary' {
+                        Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Get-AbrOntapNetworkPorts
+                        Get-AbrOntapNetworkIpSpace
+                        Section -Style Heading4 'Network Ports Summary' {
+                            Paragraph "The following section provides the physical ports on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNetworkPorts
+                        }
                         Section -Style Heading4 'Network Link Aggregation Group Summary' {
                             Paragraph "The following section provides the IFGRP Aggregated Ports on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -173,11 +178,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 BlankLine
                                 Get-AbrOntapNetworkVlans
                             }
-                        }
-                        Section -Style Heading4 'IPSpace Summary' {
-                            Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapNetworkIfgrp
                         }
                         Section -Style Heading4 'Broadcast Domain Summary' {
                             Paragraph "The following section provides the Broadcast Domain information on $($ClusterInfo.ClusterName)."
