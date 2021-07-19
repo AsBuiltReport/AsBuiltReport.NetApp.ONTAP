@@ -67,7 +67,7 @@ function Get-AbrOntapNetworkMgmt {
             }
 
             $TableParams = @{
-                Name = "Cluster MGMT Network Information - $($ClusterInfo.ClusterName)"
+                Name = "Management Network Information - $($ClusterInfo.ClusterName)"
                 List = $false
             }
             if ($Report.ShowTableCaptions) {
@@ -93,7 +93,7 @@ function Get-AbrOntapNetworkMgmt {
             }
 
             $TableParams = @{
-                Name = "Cluster Intercluster Network Information - $($ClusterInfo.ClusterName)"
+                Name = "Intercluster Network Information - $($ClusterInfo.ClusterName)"
                 List = $false
             }
             if ($Report.ShowTableCaptions) {
@@ -101,14 +101,14 @@ function Get-AbrOntapNetworkMgmt {
             }
             $ClusterObj | Table @TableParams
         }
-        $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'data'}
+        $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp'}
         $ClusterObj = @()
         if ($ClusterData) {
             foreach ($Item in $ClusterData) {
                 $inObj = [ordered] @{
                     'Data Interface' = $Item.InterfaceName
                     'Status' = $Item.OpStatus
-                    'Data Protocols' = $Item.DataProtocols
+                    'Data Protocols' = [string]$Item.DataProtocols
                     'Vserver' = $Item.Vserver
                     'Address' = $Item.Address
                 }
@@ -119,7 +119,7 @@ function Get-AbrOntapNetworkMgmt {
             }
 
             $TableParams = @{
-                Name = "Cluster Data Network Information - $($ClusterInfo.ClusterName)"
+                Name = "Data Network Information - $($ClusterInfo.ClusterName)"
                 List = $false
             }
             if ($Report.ShowTableCaptions) {
