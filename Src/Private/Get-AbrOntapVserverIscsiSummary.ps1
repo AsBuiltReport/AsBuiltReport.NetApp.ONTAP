@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverFcp {
+function Get-AbrOntapVserverIscsiSummary {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver FCP information from the Cluster Management Network
+    Used by As Built Report to retrieve NetApp ONTAP Vserver ISCSI information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -19,30 +19,31 @@ function Get-AbrOntapVserverFcp {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver FCP information."
+        Write-PscriboMessage "Collecting ONTAP Vserver ISCSI information."
     }
 
     process {
-        $VserverData = Get-NcFcpService
+        $VserverData = Get-NcIscsiService
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Vserver' = $Item.Vserver
+                    'IQN Name' = $Item.NodeName
+                    'Alias Name' = $Item.AliasName
                     'Status' = Switch ($Item.IsAvailable) {
                         'True' { 'Up' }
                         'False' { 'Down' }
                     }
-                    'FCP WWNN' = $Item.NodeName
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
-            if ($Healthcheck.Vserver.FCP) {
+            if ($Healthcheck.Vserver.Iscsi) {
                 $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
             }
 
             $TableParams = @{
-                Name = "Vserver FCP Service Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver ISCSI Service Information - $($ClusterInfo.ClusterName)"
                 List = $false
             }
             if ($Report.ShowTableCaptions) {
