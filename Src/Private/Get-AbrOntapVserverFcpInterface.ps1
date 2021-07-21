@@ -29,8 +29,7 @@ function Get-AbrOntapVserverFcpInterface {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Interface Name' = $Item.InterfaceName
-                    'WWNN' = $Item.NodeName
-                    'WWPN' = $Item.PortName
+                    'FCP WWPN' = $Item.PortName
                     'Home Port' = $Item.CurrentPort
                     'Vserver' = $Item.Vserver
                 }

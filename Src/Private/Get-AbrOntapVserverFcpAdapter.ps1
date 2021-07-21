@@ -23,7 +23,7 @@ function Get-AbrOntapVserverFcpAdapter {
     }
 
     process {
-        $VserverData = Get-NcFcpAdapter
+        $VserverData = Get-NcFcpAdapter | Where-Object {$_.PhysicalProtocol -ne 'ethernet' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
