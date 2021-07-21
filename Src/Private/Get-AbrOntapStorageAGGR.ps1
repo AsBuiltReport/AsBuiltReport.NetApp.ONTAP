@@ -30,9 +30,9 @@ function Get-AbrOntapStorageAGGR {
             $RootAggr = Get-NcAggr $Aggr.Name | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
                 [PSCustomObject] @{
                     'Name' = $Aggr.Name
-                    'Capacity' = "$([math]::Round(($Aggr.Totalsize) / "1$($Unit)", 2))$Unit"
-                    'Available' = "$([math]::Round(($Aggr.Available) / "1$($Unit)", 2))$Unit"
-                    'Used %' = [int]$Aggr.Used
+                    'Capacity' = "$([math]::Round(($Aggr.Totalsize) / "1$($Unit)", 0))$Unit"
+                    'Available' = "$([math]::Round(($Aggr.Available) / "1$($Unit)", 0))$Unit"
+                    'Used' = "$([int]$Aggr.Used)%"
                     'Disk Count' = $Aggr.Disks
                     'Root' = $RootAggr
                     'Raid Type' = ($Aggr.RaidType.Split(",")[0]).ToUpper()
@@ -42,7 +42,7 @@ function Get-AbrOntapStorageAGGR {
             if ($Healthcheck.Storage.Aggr) {
                 $AggrSpaceSummary | Where-Object { $_.'State' -eq 'failed' } | Set-Style -Style Critical -Property 'State'
                 $AggrSpaceSummary | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' } | Set-Style -Style Warning -Property 'State'
-                $AggrSpaceSummary | Where-Object { $_.'Used %' -ge 90 } | Set-Style -Style Critical -Property 'Used %'
+                $AggrSpaceSummary | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
             }
             $TableParams = @{
                 Name = "Aggregate Summary - $($ClusterInfo.ClusterName)"
