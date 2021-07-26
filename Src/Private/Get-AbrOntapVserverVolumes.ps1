@@ -52,6 +52,72 @@ function Get-AbrOntapVserverVolumes {
             }
             $VserverObj | Table @TableParams
         }
+        $VserverClonedVol = Get-NcVolClone
+        $VserverObj = @()
+        if ($VserverClonedVol) {
+            foreach ($Item in $VserverClonedVol) {
+                $inObj = [ordered] @{
+                    'Volume' = $Item.Name
+                    'Vserver' = $Item.Vserver
+                    'ParentVolume' = $Item.ParentVolume
+                    'Volume Type' = $Item.VolumeType.ToUpper()
+                    'Parent Snapshot' = $Item.ParentSnapshot
+                    'Space Reserve' = $Item.SpaceReserve
+                    'Space Guarantee' = $Item.SpaceGuaranteeEnabled
+                    'Capacity' = "$([math]::Round(($Item.Size - $Item.Used) / "1$($Unit)", 0))$Unit"
+                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 0))$Unit"
+                    'Used' = "$($Item.Used)%"
+                    'Aggregate' = $Item.Aggregate
+                }
+                $VserverObj += [pscustomobject]$inobj
+            }
+            if ($Healthcheck.Vserver.Status) {
+                $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+            }
+
+            $TableParams = @{
+                Name = "Vserver Cloned Volumes Information - $($ClusterInfo.ClusterName)"
+                List = $true
+                ColumnWidths = 25, 75
+            }
+            if ($Report.ShowTableCaptions) {
+                $TableParams['Caption'] = "- $($TableParams.Name)"
+            }
+            $VserverObj | Table @TableParams
+        }
+        $VserverClonedVol = Get-NcVolClone
+        $VserverObj = @()
+        if ($VserverClonedVol) {
+            foreach ($Item in $VserverClonedVol) {
+                $inObj = [ordered] @{
+                    'Volume' = $Item.Name
+                    'Vserver' = $Item.Vserver
+                    'ParentVolume' = $Item.ParentVolume
+                    'Volume Type' = $Item.VolumeType.ToUpper()
+                    'Parent Snapshot' = $Item.ParentSnapshot
+                    'Space Reserve' = $Item.SpaceReserve
+                    'Space Guarantee' = $Item.SpaceGuaranteeEnabled
+                    'Capacity' = "$([math]::Round(($Item.Size - $Item.Used) / "1$($Unit)", 0))$Unit"
+                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 0))$Unit"
+                    'Used' = "$($Item.Used)%"
+                    'Aggregate' = $Item.Aggregate
+                }
+                $VserverObj += [pscustomobject]$inobj
+            }
+            if ($Healthcheck.Vserver.Status) {
+                $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+            }
+
+            $TableParams = @{
+                Name = "Vserver Cloned Volumes Information - $($ClusterInfo.ClusterName)"
+                List = $true
+                ColumnWidths = 25, 75
+            }
+            if ($Report.ShowTableCaptions) {
+                $TableParams['Caption'] = "- $($TableParams.Name)"
+            }
+            $VserverObj | Table @TableParams
+        }
     }
 
     end {}
