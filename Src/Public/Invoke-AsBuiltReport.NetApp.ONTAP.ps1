@@ -42,7 +42,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             throw
         }
 
-        #region VxRail Section
+        #region Cluster Section
         Section -Style Heading1 "Report for Cluster $($ClusterInfo.ClusterName)" {
             Paragraph "The following section provides a summary of the array configuration for $($ClusterInfo.ClusterName)."
             BlankLine
@@ -218,28 +218,58 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Paragraph "The following section provides a summary of the vserver information on $($ClusterInfo.ClusterName)."
                     BlankLine
                     Section -Style Heading3 'Vserver Information Summary' {
-                        Paragraph "The following section provides the configured ISCSI service on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following section provides a summary of the configured vserver on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapVserverSummary
+                        Section -Style Heading4 'Vserver Storage Volumes Summary' {
+                            Paragraph "The following section provides the Vserver Volumes Information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapVserverVolumes
+                            if (Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}) {
+                                Section -Style Heading5 'Vserver Qtree Summary' {
+                                    Paragraph "The following section provides the Vserver Volumes Qtree Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverVolumesQtree
+                                    Section -Style Heading6 'Vserver Export Policy Summary' {
+                                        Paragraph "The following section provides the Vserver Volumes Export policy Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverVolumesExportPolicy
+                                    }
+                                }
+                            if (Get-NcQuota) {
+                                Section -Style Heading5 'Vserver Volume Quota Summary' {
+                                    Paragraph "The following section provides the Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverVolumesQuota
+                                }
+                            }
+                        }
+                    }
+                    }
+                    Section -Style Heading3 'Vserver Protocol Information Summary' {
+                        Paragraph "The following section provides a summary of the vserver protocol information on $($ClusterInfo.ClusterName)."
+                        BlankLine
                         Section -Style Heading4 'ISCSI Services Summary' {
                             Paragraph "The following section provides the ISCSI Service Information on $($ClusterInfo.ClusterName)."
                             BlankLine
-                            Get-AbrOntapVserverIscsi
+                            Get-AbrOntapVserverIscsiSummary
                             Section -Style Heading5 'ISCSI Interface Summary' {
                                 Paragraph "The following section provides the ISCSI Interface Information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapVserverIscsiInterface
                             }
-                            Section -Style Heading5 'ISCSI Client Initiator Summary' {
-                                Paragraph "The following section provides the ISCSI Interface Information on $($ClusterInfo.ClusterName)."
-                                BlankLine
-                                Get-AbrOntapVserverIscsiInitiator
+                            if (Get-NcIscsiInitiator) {
+                                Section -Style Heading5 'ISCSI Client Initiator Summary' {
+                                    Paragraph "The following section provides the ISCSI Interface Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverIscsiInitiator
+                                }
                             }
                         }
                         Section -Style Heading4 'FCP Services Summary' {
                             Paragraph "The following section provides the FCP Service Information on $($ClusterInfo.ClusterName)."
                             BlankLine
-                            Get-AbrOntapVserverFcp
+                            Get-AbrOntapVserverFcpSummary
                             Section -Style Heading5 'FCP Interface Summary' {
                                 Paragraph "The following section provides the FCP Interface Information on $($ClusterInfo.ClusterName)."
                                 BlankLine
@@ -249,7 +279,31 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the FCP Physical Adapter Information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapVserverFcpAdapter
-
+                            }
+                        }
+                        Section -Style Heading4 'Vserver FCP/ISCSI Lun Storage Summary' {
+                            Paragraph "The following section provides the Lun Storage Information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapVserverLunStorage
+                            Section -Style Heading5 'Igroup Mapping Summary' {
+                                Paragraph "The following section provides the Lun  Interface Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverLunIgroup
+                            }
+                        }
+                        Section -Style Heading4 'NFS Services Summary' {
+                            Paragraph "The following section provides the NFS Service Information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapVserverNFSSummary
+                            Section -Style Heading5 'NFS Options Summary' {
+                                Paragraph "The following section provides the NFS Service Options Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverNFSOptions
+                                Section -Style Heading6 'NFS Volume Export Summary' {
+                                    Paragraph "The following section provides the VServer NFS Service Exports Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverNFSExport
+                                }
                             }
                         }
                     }
