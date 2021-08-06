@@ -46,7 +46,9 @@
         "Vserver": {
             "Status": true,
             "Iscsi": true,
-            "FCP": true
+            "FCP": true,
+            "NFS": true,
+            "Quota": true
         }
     }
 }
