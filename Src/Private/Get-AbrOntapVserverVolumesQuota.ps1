@@ -1,32 +1,4 @@
 
-function Set-Metric ($value, $limit){
-    if ($value -gt 0) {
-        if ($value -lt 3 -and $limit -ne '-' ) {
-            $value = "$($limit)KB"
-            return $value
-        }
-        elseif ($value -in 4..6) {
-            $value = "$($limit / 1KB)MB"
-            return $value
-        }
-        elseif ($value -in 7..9) {
-            $value = "$($limit / 1MB)GB"
-            return $value
-        }
-        elseif ($value -in 10..11) {
-            $value = "$($limit / 1GB)TB"
-            return $value
-        }
-        elseif ($value -in 12..14) {
-            $value = "$($limit / 1TB)PB"
-            return $value
-        }
-        else {
-            $value = $limit
-            return $value
-        }
-    }
-}
 function Get-AbrOntapVserverVolumesQuota {
     <#
     .SYNOPSIS
@@ -52,6 +24,34 @@ function Get-AbrOntapVserverVolumesQuota {
     }
 
     process {
+        function Get-Metric($value, $limit) {
+            if ($value -gt 0) {
+                if ($value -lt 3 -and $limit -ne '-' ) {
+                    $value = "$($limit)KB"
+                    return $value
+                }
+                elseif ($value -in 4..6) {
+                    $value = "$($limit / 1KB)MB"
+                    return $value
+                }
+                elseif ($value -in 7..9) {
+                    $value = "$($limit / 1MB)GB"
+                    return $value
+                }
+                elseif ($value -in 10..11) {
+                    $value = "$($limit / 1GB)TB"
+                    return $value
+                }
+                elseif ($value -in 12..14) {
+                    $value = "$($limit / 1TB)PB"
+                    return $value
+                }
+                else {
+                    $value = $limit
+                    return $value
+                }
+            }
+        }
         $VserverQuotaStatus = Get-NcQuotaStatus
         $VserverObj = @()
         if ($VserverQuotaStatus) {
@@ -85,8 +85,8 @@ function Get-AbrOntapVserverVolumesQuota {
         $VserverObj = @()
         if ($VserverQuota) {
             foreach ($Item in $VserverQuota) {
-                $Item.DiskLimit = Set-Metric $Item.DiskLimit.Length $Item.DiskLimit
-                $Item.SoftDiskLimit = Set-Metric $Item.SoftDiskLimit.Length $Item.SoftDiskLimit
+                $Item.DiskLimit = Get-Metric $Item.DiskLimit.Length $Item.DiskLimit
+                $Item.SoftDiskLimit = Get-Metric $Item.SoftDiskLimit.Length $Item.SoftDiskLimit
                 $inObj = [ordered] @{
                     'Volume' = $Item.Volume
                     'Type' = $Item.QuotaType
@@ -120,9 +120,9 @@ function Get-AbrOntapVserverVolumesQuota {
         $VserverObj = @()
         if ($VserverQuotaReport) {
             foreach ($Item in $VserverQuotaReport) {
-                $Item.DiskLimit = Set-Metric $Item.DiskLimit.Length $Item.DiskLimit
-                $Item.SoftDiskLimit = Set-Metric $Item.SoftDiskLimit.Length $Item.SoftDiskLimit
-                $Item.DiskUsed = Set-Metric $Item.DiskUsed.Length $Item.DiskUsed
+                $Item.DiskLimit = Get-Metric $Item.DiskLimit.Length $Item.DiskLimit
+                $Item.SoftDiskLimit = Get-Metric $Item.SoftDiskLimit.Length $Item.SoftDiskLimit
+                $Item.DiskUsed = Get-Metric $Item.DiskUsed.Length $Item.DiskUsed
                 $inObj = [ordered] @{
                     'Volume' = $Item.Volume
                     'Quota Target' = $Item.QuotaTarget
