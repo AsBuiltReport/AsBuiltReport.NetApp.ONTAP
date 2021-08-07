@@ -32,7 +32,6 @@ function Get-AbrOntapVserverCIFSShareProp {
                     'Share Name' = $Item.ShareName
                     'Share ACL' = $Item.Acl
                     'Share Properties' = ($Item).ShareProperties | Join-String -Separator ', '
-                    'Comment' = $Item.Comment
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
@@ -40,7 +39,7 @@ function Get-AbrOntapVserverCIFSShareProp {
             $TableParams = @{
                 Name = "The CIFS Share Properties & Acl Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 20, 20, 20, 20, 20
+                ColumnWidths = 20, 20, 30, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
