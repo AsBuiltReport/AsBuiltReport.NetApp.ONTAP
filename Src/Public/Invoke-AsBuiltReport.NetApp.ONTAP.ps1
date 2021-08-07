@@ -306,6 +306,44 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
+                        Section -Style Heading4 'CIFS Services Summary' {
+                            Paragraph "The following section provides the CIFS Service Information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapVserverCIFSSummary
+                            Section -Style Heading5 'CIFS Service Configuration Summary' {
+                                Paragraph "The following section provides the Cifs Service Configuration Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverCIFSSecurity
+                                Section -Style Heading6 'CIFS Domain Controller Summary' {
+                                    Paragraph "The following section provides the Connected Domain Controller Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverCIFSDC
+                                }
+                                Section -Style Heading6 'CIFS Local Group Summary' {
+                                    Paragraph "The following section provides the Cifs Service Local Group Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverCIFSLocalGroup
+                                    BlankLine
+                                    Paragraph "The following section provides the Cifs Service Local Group Memeber Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverCIFSLGMembers
+                                }
+                            }
+                            Section -Style Heading5 'CIFS Options Summary' {
+                                Paragraph "The following section provides the CIFS Service Options Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverCIFSOptions
+                                Section -Style Heading6 'CIFS Share Summary' {
+                                    Paragraph "The following section provides the CIFS Service Shares Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverCIFSShare
+                                    BlankLine
+                                    Paragraph "The following section provides the CIFS Shares Properties & Acl Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverCIFSShareProp
+                                }
+                            }
+                        }
                     }
                 }
             }#endregion Vserver Section
