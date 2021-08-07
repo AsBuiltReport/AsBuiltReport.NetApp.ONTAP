@@ -48,7 +48,8 @@
             "Iscsi": true,
             "FCP": true,
             "NFS": true,
-            "Quota": true
+            "Quota": true,
+            "CIFS": true
         }
     }
 }
