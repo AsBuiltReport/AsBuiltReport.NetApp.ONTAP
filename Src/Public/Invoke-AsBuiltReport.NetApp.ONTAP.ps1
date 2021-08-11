@@ -225,6 +225,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Vserver Volumes Information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapVserverVolumes
+                            BlankLine
+                            Section -Style Heading5 'Vserver Volumes Snapshot Summary' {
+                                Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapVserverVolumeSnapshot
+                            }
                             if (Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}) {
                                 Section -Style Heading5 'Vserver Qtree Summary' {
                                     Paragraph "The following section provides the Vserver Volumes Qtree Information on $($ClusterInfo.ClusterName)."
