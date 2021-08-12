@@ -350,6 +350,22 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
+                        if (Get-AbrOntapApi -uri "/api/protocols/s3/services?") {
+                            Section -Style Heading4 'S3 Services Summary' {
+                                Paragraph "The following section provides the S3 Service Information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Section -Style Heading5 'S3 Service Configuration Summary' {
+                                    Paragraph "The following section provides the S3 Service Configuration Information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverS3Summary
+                                    Section -Style Heading6 'S3 Bucket Summary' {
+                                        Paragraph "The following section provides the S3 Bucket Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverS3Bucket
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }#endregion Vserver Section
