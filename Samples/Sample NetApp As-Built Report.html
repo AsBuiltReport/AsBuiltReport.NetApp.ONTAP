@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- saved from url=(0108)file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#1542e3a4-2883-4d12-b1bc-48e28e3f0e2f -->
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>NetApp ONTAP As Built Report</title>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>NetApp ONTAP As Built Report</title>
 <style type="text/css">
 html { height: 100%; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background: #e6e6e6; }
 page { background: white; display: block; margin-top: 1rem; margin-left: auto; margin-right: auto; margin-bottom: 1rem; border-style: solid; border-width: 1px; border-color: #c6c6c6; }
@@ -8,96 +8,105 @@ page { background: white; display: block; margin-top: 1rem; margin-left: auto; m
 hr { margin-top: 1.0rem; }
  .portrait { background: white; width: 210mm; display: block; margin-top: 1rem; margin-left: auto; margin-right: auto; margin-bottom: 1rem; position: relative; border-style: solid; border-width: 1px; border-color: #c6c6c6; }
  .landscape { background: white; width: 297mm; display: block; margin-top: 1rem; margin-left: auto; margin-right: auto; margin-bottom: 1rem; position: relative; border-style: solid; border-width: 1px; border-color: #c6c6c6; }
- .OK { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0; }
- .TableDefaultRow { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; }
  .Caption { font-family: 'Arial'; font-size: 0.83rem; text-align: center; font-weight: normal; font-style: italic; color: #565656; }
- .Heading6 { font-family: 'Calibri','Candara','Segoe','Segoe UI','Optima','Arial','Sans-Serif'; font-size: 0.92rem; text-align: left; font-weight: normal; color: #1f3763; }
- .Heading5 { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #00447c; }
- .Heading3 { font-family: 'Arial'; font-size: 1.00rem; text-align: left; font-weight: normal; color: #00447c; }
- .TableDefaultHeading { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #fafafa; background-color: #0076ce; }
- .Footer { font-family: 'Arial'; font-size: 0.83rem; text-align: center; font-weight: normal; color: #565656; }
- .Heading2 { font-family: 'Arial'; font-size: 1.17rem; text-align: left; font-weight: normal; color: #00447c; }
- .Title2 { font-family: 'Arial'; font-size: 1.50rem; text-align: center; font-weight: normal; color: #00447c; }
- .Title { font-family: 'Arial'; font-size: 2.00rem; text-align: center; font-weight: normal; color: #0076ce; }
- .Heading1 { font-family: 'Arial'; font-size: 1.33rem; text-align: left; font-weight: normal; color: #00447c; }
- .Warning { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5; }
- .TableDefaultAltRow { font-family: 'Calibri','Candara','Segoe','Segoe UI','Optima','Arial','Sans-Serif'; font-size: 0.92rem; text-align: left; font-weight: normal; color: #000000; background-color: #d0ddee; }
- .Critical { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #f5dbd9; }
- .Title3 { font-family: 'Arial'; font-size: 1.00rem; text-align: left; font-weight: normal; color: #00447c; }
+ .TableDefaultRow { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; }
  .Normal { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; }
+ .Heading2 { font-family: 'Arial'; font-size: 1.17rem; text-align: left; font-weight: normal; color: #00447c; }
+ .Heading3 { font-family: 'Arial'; font-size: 1.00rem; text-align: left; font-weight: normal; color: #00447c; }
+ .Footer { font-family: 'Arial'; font-size: 0.83rem; text-align: center; font-weight: normal; color: #565656; }
+ .Warning { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5; }
  .Info { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #e1f1f6; }
- .Header { font-family: 'Arial'; font-size: 0.83rem; text-align: center; font-weight: normal; color: #565656; }
  .TOC { font-family: 'Arial'; font-size: 1.33rem; text-align: left; font-weight: normal; color: #00447c; }
+ .Critical { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #f5dbd9; }
+ .Heading5 { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #00447c; }
+ .Heading1 { font-family: 'Arial'; font-size: 1.33rem; text-align: left; font-weight: normal; color: #00447c; }
+ .TableDefaultAltRow { font-family: 'Calibri','Candara','Segoe','Segoe UI','Optima','Arial','Sans-Serif'; font-size: 0.92rem; text-align: left; font-weight: normal; color: #000000; background-color: #d0ddee; }
+ .OK { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0; }
+ .Header { font-family: 'Arial'; font-size: 0.83rem; text-align: center; font-weight: normal; color: #565656; }
  .Heading4 { font-family: 'Arial'; font-size: 0.92rem; text-align: left; font-weight: normal; color: #00447c; }
- table.borderless { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
- table.borderless th { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
- table.borderless td { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
- table.borderless tr:nth-child(odd) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
- table.borderless tr:nth-child(even) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ .Title { font-family: 'Arial'; font-size: 2.00rem; text-align: center; font-weight: normal; color: #0076ce; }
+ .Heading6 { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #00447c; }
+ .TableDefaultHeading { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #fafafa; background-color: #0076ce; }
+ .Title3 { font-family: 'Arial'; font-size: 1.00rem; text-align: left; font-weight: normal; color: #00447c; }
+ .Title2 { font-family: 'Arial'; font-size: 1.50rem; text-align: center; font-weight: normal; color: #00447c; }
  table.tabledefault { padding: 0.08rem 0.17rem 0.13rem 0.17rem; border-style: solid; border-width: 0.02rem; border-color: #0076ce; border-collapse: collapse; }
  table.tabledefault th { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #fafafa; background-color: #0076ce; padding: 0.08rem 0.17rem 0.13rem 0.17rem; border-style: solid; border-width: 0.02rem; border-color: #0076ce; border-collapse: collapse; }
  table.tabledefault td { padding: 0.08rem 0.17rem 0.13rem 0.17rem; border-style: solid; border-width: 0.02rem; border-color: #0076ce; border-collapse: collapse; }
  table.tabledefault tr:nth-child(odd) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.17rem 0.13rem 0.17rem; border-style: solid; border-width: 0.02rem; border-color: #0076ce; border-collapse: collapse; }
  table.tabledefault tr:nth-child(even) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.17rem 0.13rem 0.17rem; border-style: solid; border-width: 0.02rem; border-color: #0076ce; border-collapse: collapse; }
+ table.borderless { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless th { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless td { padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless tr:nth-child(odd) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
+ table.borderless tr:nth-child(even) { font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #565656; padding: 0.08rem 0.33rem 0rem 0.33rem; border-style: none; border-collapse: collapse; }
 </style></head><body>
 <div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 5.92rem; padding-bottom: 5.92rem; padding-right: 5.92rem;">
 
-<div style="min-height: 246.89999999999998mm"><br><br><br><br><br><br><br><br><br><br><br><div class="Title">NetApp ONTAP As Built Report</div><br><br><div class="Title2">Zen PR Solutions</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="borderless"><tbody>
+<div style="min-height: 246.89999999999998mm" ><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><div class="Title">NetApp ONTAP As Built Report</div><br /><br /><div class="Title2">Zen PR Solutions</div><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="borderless"><tbody>
 <tr><th>Author:</th><td>rebelinux</td></tr>
-<tr><th>Date:</th><td>Thursday, August 5, 2021</td></tr>
+<tr><th>Date:</th><td>Wednesday, August 11, 2021</td></tr>
 <tr><th>Version:</th><td>1.0</td></tr>
 </tbody></table>
-<br></div>
+<br /></div>
 </div></div></div><div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 5.92rem; padding-bottom: 5.92rem; padding-right: 5.92rem;">
-<div style="min-height: 246.89999999999998mm"><div><div class="Header">NetApp ONTAP As Built Report - v1.0</div><br></div><h1 class="TOC">Table of Contents</h1><table>
-<tbody><tr><td>1</td><td><a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#babaf1db-e4a1-4992-8718-f905aad24fea" style="text-decoration: none;">Report for Cluster OnPrem-HQ</a></td></tr>
-<tr><td>1.1</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#c8156285-0e33-478f-bd5e-e782c14b1bd0" style="text-decoration: none;">Cluster Information</a></td></tr>
-<tr><td>1.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#da454239-42ab-4a08-b794-ff3c0e05eefc" style="text-decoration: none;">Cluster HA Status</a></td></tr>
-<tr><td>1.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#68da036a-8d84-4af8-93b1-ee516140156d" style="text-decoration: none;">Cluster Auto Support Status</a></td></tr>
-<tr><td>2</td><td><a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#110b7da8-5285-4fcb-a3d3-e8f02dc66dab" style="text-decoration: none;">Node Summary</a></td></tr>
-<tr><td>2.1</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#3f7e4301-1076-495f-ad16-acf46fd9287f" style="text-decoration: none;">Node Inventory</a></td></tr>
-<tr><td>2.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#ad0e1f87-b8ca-4c38-bcfd-1e3cca70eb61" style="text-decoration: none;">Node Hardware Inventory</a></td></tr>
-<tr><td>2.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#e7e09468-600e-4d93-bb2e-1750cc670dfc" style="text-decoration: none;">Node Service-Processor Inventory</a></td></tr>
-<tr><td>3</td><td><a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#4e19c074-d365-4d12-a4a1-07435c4e6d69" style="text-decoration: none;">Storage Summary</a></td></tr>
-<tr><td>3.1</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#73bbb9f9-137a-4fab-b4fe-b2700fe3ae79" style="text-decoration: none;">Aggregate Inventory</a></td></tr>
-<tr><td>3.2</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#80474298-5ebb-4f37-926f-5705a884f663" style="text-decoration: none;">Disk Summary</a></td></tr>
-<tr><td>3.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#eaf067f3-ff15-4995-967a-885caeed1c4f" style="text-decoration: none;">Assigned Disk Summary</a></td></tr>
-<tr><td>3.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#3ad23a87-f859-4d84-b5b1-ebe677a4b32c" style="text-decoration: none;">Disk Container Type Summary</a></td></tr>
-<tr><td>3.2.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#4ecf055d-f6e5-404b-b031-449277312bd9" style="text-decoration: none;">Disk Inventory</a></td></tr>
-<tr><td>4</td><td><a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#2bce17f9-8b51-4f7e-8c19-83de6b986134" style="text-decoration: none;">Licenses Summary</a></td></tr>
-<tr><td>4.1</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#726e67ff-d011-4b75-976d-7a251d6b480b" style="text-decoration: none;">License Usage Summary</a></td></tr>
-<tr><td>4.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#47faa1d7-b140-48d0-a1ff-e02e0898baea" style="text-decoration: none;">License Feature Summary</a></td></tr>
-<tr><td>5</td><td><a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#fe8ee7da-b745-49a3-9748-925800ef0137" style="text-decoration: none;">Network Summary</a></td></tr>
-<tr><td>5.1</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#7e7ee0a1-6539-46dd-aba9-2faec96ad090" style="text-decoration: none;">Network IPSpace Summary</a></td></tr>
-<tr><td>5.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#e712d9bd-c595-4cc9-8d31-5483d250c5d4" style="text-decoration: none;">Network Ports Summary</a></td></tr>
-<tr><td>5.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#65d53b0c-7873-4f3f-be09-0d743af94a3a" style="text-decoration: none;">Network Link Aggregation Group Summary</a></td></tr>
-<tr><td>5.1.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#9ab3b6c1-b1a6-49a0-98bc-2ac6a42275bf" style="text-decoration: none;">Vlan Summary</a></td></tr>
-<tr><td>5.1.4</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#4b7dab36-3dc5-4edc-9ab6-262cfd68be72" style="text-decoration: none;">Broadcast Domain Summary</a></td></tr>
-<tr><td>5.1.5</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#fff20e22-279d-455a-8b79-33dd585f743f" style="text-decoration: none;">Failover Group Summary</a></td></tr>
-<tr><td>5.1.6</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#3b48b36f-38ae-4985-b0d2-fc7ceedb2be6" style="text-decoration: none;">Subnet Summary</a></td></tr>
-<tr><td>5.1.7</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#b664e799-b03c-4b59-bbe6-47cda527adda" style="text-decoration: none;">Routes Summary</a></td></tr>
-<tr><td>5.1.8</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#f836831c-769c-42fc-93ee-e867f35ee576" style="text-decoration: none;">Network Interfaces Summary</a></td></tr>
-<tr><td>6</td><td><a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#697db605-0d3b-4a56-8b41-5b11164a4cc7" style="text-decoration: none;">Vserver Summary</a></td></tr>
-<tr><td>6.1</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#1984c227-dfe2-439b-b759-5916e83685d6" style="text-decoration: none;">Vserver Information Summary</a></td></tr>
-<tr><td>6.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#8b3d965f-eb94-4849-b50c-a1d1bb4696f8" style="text-decoration: none;">Vserver Storage Volumes Summary</a></td></tr>
-<tr><td>6.1.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#e37642a2-2f5f-46db-ae65-5628efe5e250" style="text-decoration: none;">Vserver Qtree Summary</a></td></tr>
-<tr><td>6.1.1.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#3bcf7ad9-f5a1-47d2-9dcf-578ab76ccfd1" style="text-decoration: none;">Vserver Export Policy Summary</a></td></tr>
-<tr><td>6.1.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#6be8a33e-6e1a-417e-9426-37a44d28e73a" style="text-decoration: none;">Vserver Volume Quota Summary</a></td></tr>
-<tr><td>6.2</td><td>&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#051c3ef8-a179-4da9-afe5-d5da074972ec" style="text-decoration: none;">Vserver Protocol Information Summary</a></td></tr>
-<tr><td>6.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#0dc9d7cd-c8c0-4ef5-b427-1c75bcff743d" style="text-decoration: none;">ISCSI Services Summary</a></td></tr>
-<tr><td>6.2.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#c57683b4-19b9-4576-8d53-fa77ecbbe344" style="text-decoration: none;">ISCSI Interface Summary</a></td></tr>
-<tr><td>6.2.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#f7d3738b-cf52-4d2f-ac01-472a2631f310" style="text-decoration: none;">ISCSI Client Initiator Summary</a></td></tr>
-<tr><td>6.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#0a2dcd80-068f-45cb-a90b-0d423ef48045" style="text-decoration: none;">FCP Services Summary</a></td></tr>
-<tr><td>6.2.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#97613fdc-d9f1-409e-b595-169373ad6593" style="text-decoration: none;">FCP Interface Summary</a></td></tr>
-<tr><td>6.2.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#4e2e2ea3-f826-4cb3-8c94-3825b3390fbc" style="text-decoration: none;">FCP Physical Adapter Summary</a></td></tr>
-<tr><td>6.2.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#36e52238-efba-4d22-84a4-c664d10067f2" style="text-decoration: none;">Vserver FCP/ISCSI Lun Storage Summary</a></td></tr>
-<tr><td>6.2.3.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#5c1b6ba6-5853-4656-bc0d-2377f6f9df62" style="text-decoration: none;">Igroup Mapping Summary</a></td></tr>
-<tr><td>6.2.4</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#1cb3e6b4-4865-4714-b2a3-4e67b5d0b5d0" style="text-decoration: none;">NFS Services Summary</a></td></tr>
-<tr><td>6.2.4.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#ddc652b7-6a46-466d-b7bd-297e15c3bb57" style="text-decoration: none;">NFS Options Summary</a></td></tr>
-<tr><td>6.2.4.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="file:///home/rebelinux/script/NetApp%20ONTAP%20As%20Built%20Report.html#dd454aa5-89ff-4cf5-b7c0-19c64e401754" style="text-decoration: none;">NFS Volume Export Summary</a></td></tr>
-</tbody></table>
-</div><div><br><div class="Footer">Page 2</div></div></div></div><div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 5.92rem; padding-bottom: 5.92rem; padding-right: 5.92rem;">
-<div style="min-height: 246.89999999999998mm"><div><div class="Header">NetApp ONTAP As Built Report - v1.0</div><br></div><a name="babaf1db-e4a1-4992-8718-f905aad24fea"><h1 class="Heading1">1 Report for Cluster OnPrem-HQ</h1></a><div>The following section provides a summary of the array configuration for OnPrem-HQ.</div><br><a name="c8156285-0e33-478f-bd5e-e782c14b1bd0"><h2 class="Heading2">1.1 Cluster Information</h2></a><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<div style="min-height: 246.89999999999998mm" ><div><div class="Header">NetApp ONTAP As Built Report - v1.0</div><br /></div><h1 class="TOC">Table of Contents</h1><table>
+<tr><td>1</td><td><a href="#bd39a3f7-b73b-4d10-9f2e-5cd20f5780bc" style="text-decoration: none;">Report for Cluster OnPrem-HQ</a></td></tr>
+<tr><td>1.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#93caa60f-2a61-40d3-b27e-2115f746c7fc" style="text-decoration: none;">Cluster Information</a></td></tr>
+<tr><td>1.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#a65e5850-1156-4477-8776-80f2370b96ba" style="text-decoration: none;">Cluster HA Status</a></td></tr>
+<tr><td>1.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#71931d79-c2be-4d61-8308-1fa6bafce9bd" style="text-decoration: none;">Cluster Auto Support Status</a></td></tr>
+<tr><td>2</td><td><a href="#89e0950c-fdee-4b66-9684-f1c97cba2c07" style="text-decoration: none;">Node Summary</a></td></tr>
+<tr><td>2.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#94988f7e-1ae0-457b-8a80-eb45ea3b9755" style="text-decoration: none;">Node Inventory</a></td></tr>
+<tr><td>2.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#7e0629bc-02ad-498c-8e26-7cab0d2512c0" style="text-decoration: none;">Node Hardware Inventory</a></td></tr>
+<tr><td>2.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#058b524f-71d8-458a-9c79-2f57bc776bbd" style="text-decoration: none;">Node Service-Processor Inventory</a></td></tr>
+<tr><td>3</td><td><a href="#01b5c7ba-f77a-47fb-bb9d-3d3e3e98e8cd" style="text-decoration: none;">Storage Summary</a></td></tr>
+<tr><td>3.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#93c629bf-357b-46ec-b8f8-a2a554d4cde9" style="text-decoration: none;">Aggregate Inventory</a></td></tr>
+<tr><td>3.2</td><td>&nbsp;&nbsp;&nbsp;<a href="#2ab0ffd3-1763-42cb-af61-cddb99d0f407" style="text-decoration: none;">Disk Summary</a></td></tr>
+<tr><td>3.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#218218d6-14de-4d32-b011-6810d23c352c" style="text-decoration: none;">Assigned Disk Summary</a></td></tr>
+<tr><td>3.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#4a85acd6-3d33-4951-bdfd-4ddc738958c3" style="text-decoration: none;">Disk Container Type Summary</a></td></tr>
+<tr><td>3.2.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#f9fec992-17d2-4ce0-9c99-e908352123d0" style="text-decoration: none;">Disk Inventory</a></td></tr>
+<tr><td>4</td><td><a href="#f10c27d3-451d-489f-921b-de79f67a7422" style="text-decoration: none;">Licenses Summary</a></td></tr>
+<tr><td>4.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#93d2ae77-5bbb-4a24-a857-ce3299d64a7c" style="text-decoration: none;">License Usage Summary</a></td></tr>
+<tr><td>4.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#de3dea36-4a49-4347-82ee-8ee85d7c7c70" style="text-decoration: none;">License Feature Summary</a></td></tr>
+<tr><td>5</td><td><a href="#6548df30-36cc-4be6-b48e-d39f4cdd61c7" style="text-decoration: none;">Network Summary</a></td></tr>
+<tr><td>5.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#053c42a0-ff3c-4685-ad67-a77393a1254c" style="text-decoration: none;">Network IPSpace Summary</a></td></tr>
+<tr><td>5.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fb160597-6d44-42af-a499-4c59adbee9d7" style="text-decoration: none;">Network Ports Summary</a></td></tr>
+<tr><td>5.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#a76f7c95-9400-49e2-aa5e-58cea6897714" style="text-decoration: none;">Network Link Aggregation Group Summary</a></td></tr>
+<tr><td>5.1.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#0a5b9023-5fe5-4a35-b5b8-a551a3ef6ad5" style="text-decoration: none;">Vlan Summary</a></td></tr>
+<tr><td>5.1.4</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#6fc379b7-cb96-4821-95cf-1eec579e2edb" style="text-decoration: none;">Broadcast Domain Summary</a></td></tr>
+<tr><td>5.1.5</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#9942ac22-1116-4dbc-8ca6-95ff3763774f" style="text-decoration: none;">Failover Group Summary</a></td></tr>
+<tr><td>5.1.6</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#7aa463f3-34a9-4d6a-84dd-e95472cff08a" style="text-decoration: none;">Subnet Summary</a></td></tr>
+<tr><td>5.1.7</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#12714f3c-3f71-4658-b0f2-366c2c70ea38" style="text-decoration: none;">Routes Summary</a></td></tr>
+<tr><td>5.1.8</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#ae72cf21-ac55-4db5-a032-a630c33fc723" style="text-decoration: none;">Network Interfaces Summary</a></td></tr>
+<tr><td>6</td><td><a href="#d61909c9-a72c-4bac-9bd5-cc83091fd559" style="text-decoration: none;">Vserver Summary</a></td></tr>
+<tr><td>6.1</td><td>&nbsp;&nbsp;&nbsp;<a href="#dde3baa7-d2f8-4747-a367-0e961cae0187" style="text-decoration: none;">Vserver Information Summary</a></td></tr>
+<tr><td>6.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fddbba0a-0593-4ed5-83c4-8bb82c0ccb75" style="text-decoration: none;">Vserver Storage Volumes Summary</a></td></tr>
+<tr><td>6.1.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#4c339d30-fda5-47cc-8453-92b33c932af6" style="text-decoration: none;">Vserver Volumes Snapshot Summary</a></td></tr>
+<tr><td>6.1.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#7b682e90-a6b4-42f7-9854-9147a6e9c16b" style="text-decoration: none;">Vserver Qtree Summary</a></td></tr>
+<tr><td>6.1.1.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#8efa83d7-6bb9-487c-9934-12671b593dcd" style="text-decoration: none;">Vserver Export Policy Summary</a></td></tr>
+<tr><td>6.1.1.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#86f29efc-f278-460f-a106-00aa4150a18e" style="text-decoration: none;">Vserver Volume Quota Summary</a></td></tr>
+<tr><td>6.2</td><td>&nbsp;&nbsp;&nbsp;<a href="#88d1f87d-0ede-4e65-86b2-85bc9e4a413c" style="text-decoration: none;">Vserver Protocol Information Summary</a></td></tr>
+<tr><td>6.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#8dfd86fc-bcca-459c-baa6-1782e2ce6d10" style="text-decoration: none;">ISCSI Services Summary</a></td></tr>
+<tr><td>6.2.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#7a25a255-a2d6-4d43-b772-4d440df48e97" style="text-decoration: none;">ISCSI Interface Summary</a></td></tr>
+<tr><td>6.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#5bf7f6ea-c269-439b-85f9-ba080cb40912" style="text-decoration: none;">FCP Services Summary</a></td></tr>
+<tr><td>6.2.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#215613e3-4f04-4bd1-a24f-a038883b4629" style="text-decoration: none;">FCP Interface Summary</a></td></tr>
+<tr><td>6.2.2.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#da2d7786-2c72-4a40-b676-03f363ccacaf" style="text-decoration: none;">FCP Physical Adapter Summary</a></td></tr>
+<tr><td>6.2.3</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#c0ae56fe-72ac-4b69-8ecb-a8bbe6eaa432" style="text-decoration: none;">Vserver FCP/ISCSI Lun Storage Summary</a></td></tr>
+<tr><td>6.2.3.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#7dc1fb11-4361-4337-b6d6-4ea0442a5114" style="text-decoration: none;">Igroup Mapping Summary</a></td></tr>
+<tr><td>6.2.4</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fb7c01aa-adf4-4e6b-aa20-9ffd9594f46c" style="text-decoration: none;">NFS Services Summary</a></td></tr>
+<tr><td>6.2.4.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#8988ecac-20f8-4c3f-8323-04e90ed59d2a" style="text-decoration: none;">NFS Options Summary</a></td></tr>
+<tr><td>6.2.4.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#17b14993-3721-4cf5-8ec3-2dcf8200515c" style="text-decoration: none;">NFS Volume Export Summary</a></td></tr>
+<tr><td>6.2.5</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#59cefb9b-d976-4ebb-afde-0563f52a7481" style="text-decoration: none;">CIFS Services Summary</a></td></tr>
+<tr><td>6.2.5.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#78adbd1d-e7a7-4f77-bcec-be7623722224" style="text-decoration: none;">CIFS Service Configuration Summary</a></td></tr>
+<tr><td>6.2.5.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#b98389f7-66dc-42e6-878f-224cb6321d99" style="text-decoration: none;">CIFS Domain Controller Summary</a></td></tr>
+<tr><td>6.2.5.1.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#7964f71d-473e-4d09-99e4-8a58ed6ecaa1" style="text-decoration: none;">CIFS Local Group Summary</a></td></tr>
+<tr><td>6.2.5.2</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#d292b26a-d914-431f-b01a-0a9eaca3407b" style="text-decoration: none;">CIFS Options Summary</a></td></tr>
+<tr><td>6.2.5.2.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#c03639b3-89a9-47a8-9a02-7850d92cf918" style="text-decoration: none;">CIFS Share Summary</a></td></tr>
+<tr><td>6.2.6</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#3351e6a1-3903-44cf-89fb-8c920614f8ae" style="text-decoration: none;">S3 Services Summary</a></td></tr>
+<tr><td>6.2.6.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#ced927f6-9fb2-4abd-8f4b-9bee5dda5027" style="text-decoration: none;">S3 Service Configuration Summary</a></td></tr>
+<tr><td>6.2.6.1.1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#02c23d42-fe25-476b-9f6d-27af224ef74d" style="text-decoration: none;">S3 Bucket Summary</a></td></tr>
+</table>
+</div><div><br /><div class="Footer">Page 2</div></div></div></div><div class="portrait"><div class="Normal" style="padding-top: 5.92rem; padding-left: 5.92rem; padding-bottom: 5.92rem; padding-right: 5.92rem;">
+<div style="min-height: 246.89999999999998mm" ><div><div class="Header">NetApp ONTAP As Built Report - v1.0</div><br /></div><a name="bd39a3f7-b73b-4d10-9f2e-5cd20f5780bc"><h1 class="Heading1">1 Report for Cluster OnPrem-HQ</h1></a><div>The following section provides a summary of the array configuration for OnPrem-HQ.</div><br /><a name="93caa60f-2a61-40d3-b27e-2115f746c7fc"><h2 class="Heading2">1.1 Cluster Information</h2></a><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Cluster Name</th><td>OnPrem-HQ</td></tr>
 <tr><th>Cluster UUID</th><td>7b2309fb-5e00-11e8-b65d-005056b06330</td></tr>
@@ -107,39 +116,39 @@ hr { margin-top: 1.0rem; }
 <tr><th>Cluster Location</th><td>HOMELAB</td></tr>
 <tr><th>Ontap Version</th><td>NetApp Release 9.9.1P1: Fri Jul 02 20:21:27 UTC 2021</td></tr>
 <tr><th>Number of Aggregates</th><td>4</td></tr>
-<tr><th>Number of Volumes</th><td>16</td></tr>
-<tr><th>Overall System Health</th><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">OK</td></tr>
+<tr><th>Number of Volumes</th><td>27</td></tr>
+<tr><th>Overall System Health</th><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">OK</td></tr>
 </tbody></table>
-<div class="Caption">Table 1 - Cluster Information - OnPrem-HQ</div><br></div>
-<a name="da454239-42ab-4a08-b794-ff3c0e05eefc"><h3 class="Heading3">1.1.1 Cluster HA Status</h3></a><div>The following section provides a summary of the Cluster HA Status on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Partner</th><th>TakeOver Possible</th><th>TakeOver State</th><th>HA Mode</th><th>HA State</th></tr></thead><tbody>
+<div class="Caption">Table 1 - Cluster Information - OnPrem-HQ</div><br /></div>
+<a name="a65e5850-1156-4477-8776-80f2370b96ba"><h3 class="Heading3">1.1.1 Cluster HA Status</h3></a><div>The following section provides a summary of the Cluster HA Status on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Partner</th><th>TakeOver Possible</th><th>TakeOver State</th><th>HA Mode</th><th>HA State</th></tr></thead><tbody>
 <tr><td>OnPrem-HQ-01</td><td>OnPrem-HQ-02</td><td>True</td><td>not_in_takeover</td><td>HA</td><td>CONNECTED</td></tr>
 <tr><td>OnPrem-HQ-02</td><td>OnPrem-HQ-01</td><td>True</td><td>not_in_takeover</td><td>HA</td><td>CONNECTED</td></tr>
 </tbody></table>
-<div class="Caption">Table 2 - Cluster HA Status - OnPrem-HQ</div><br></div>
-<a name="68da036a-8d84-4af8-93b1-ee516140156d"><h3 class="Heading3">1.1.2 Cluster Auto Support Status</h3></a><div>The following section provides a summary of the Cluster AutoSupport Status on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<div class="Caption">Table 2 - Cluster HA Status - OnPrem-HQ</div><br /></div>
+<a name="71931d79-c2be-4d61-8308-1fa6bafce9bd"><h3 class="Heading3">1.1.2 Cluster Auto Support Status</h3></a><div>The following section provides a summary of the Cluster AutoSupport Status on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Node Name</th><td>OnPrem-HQ-01</td></tr>
 <tr><th>Protocol</th><td>https</td></tr>
-<tr><th>Enabled</th><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">False</td></tr>
-<tr><th>Last Time Stamp</th><td>08/05/2021 20:32:36</td></tr>
+<tr><th>Enabled</th><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">False</td></tr>
+<tr><th>Last Time Stamp</th><td>08/11/2021 08:50:49</td></tr>
 <tr><th>Last Subject</th><td>MANAGEMENT_LOG</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Node Name</th><td>OnPrem-HQ-02</td></tr>
 <tr><th>Protocol</th><td>https</td></tr>
-<tr><th>Enabled</th><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">False</td></tr>
-<tr><th>Last Time Stamp</th><td>08/05/2021 20:32:50</td></tr>
+<tr><th>Enabled</th><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">False</td></tr>
+<tr><th>Last Time Stamp</th><td>08/11/2021 08:50:54</td></tr>
 <tr><th>Last Subject</th><td>MANAGEMENT_LOG</td></tr>
 </tbody></table>
-<br></div>
-<a name="110b7da8-5285-4fcb-a3d3-e8f02dc66dab"><h1 class="Heading2">2 Node Summary</h1></a><div>The following section provides a summary of the Node on OnPrem-HQ.</div><br><a name="3f7e4301-1076-495f-ad16-acf46fd9287f"><h2 class="Heading3">2.1 Node Inventory</h2></a><div>The following section provides the node inventory on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Model</th><th>Id</th><th>Serial</th><th>Uptime</th></tr></thead><tbody>
-<tr><td>OnPrem-HQ-01</td><td>SIMBOX</td><td>4053517983</td><td>621803000017</td><td>12:49:37</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>SIMBOX</td><td>4053517984</td><td>621803000018</td><td>12:49:20</td></tr>
+<br /></div>
+<a name="89e0950c-fdee-4b66-9684-f1c97cba2c07"><h1 class="Heading2">2 Node Summary</h1></a><div>The following section provides a summary of the Node on OnPrem-HQ.</div><br /><a name="94988f7e-1ae0-457b-8a80-eb45ea3b9755"><h2 class="Heading3">2.1 Node Inventory</h2></a><div>The following section provides the node inventory on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Model</th><th>Id</th><th>Serial</th><th>Uptime</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>SIMBOX</td><td>XXXXXXXXXX</td><td>XXXXXXXXXXXX</td><td>14:35:56</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>SIMBOX</td><td>XXXXXXXXXX</td><td>XXXXXXXXXXXX</td><td>14:35:53</td></tr>
 </tbody></table>
-<div class="Caption">Table 3 - Node Summary - OnPrem-HQ</div><br></div>
-<a name="ad0e1f87-b8ca-4c38-bcfd-1e3cca70eb61"><h3 class="Heading4">2.1.1 Node Hardware Inventory</h3></a><div>The following section provides the node hardware inventory on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%"><col style="max-width:60%; min-width:60%; width:60%"></colgroup>
+<div class="Caption">Table 3 - Node Summary - OnPrem-HQ</div><br /></div>
+<a name="7e0629bc-02ad-498c-8e26-7cab0d2512c0"><h3 class="Heading4">2.1.1 Node Hardware Inventory</h3></a><div>The following section provides the node hardware inventory on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%" /><col style="max-width:60%; min-width:60%; width:60%" /></colgroup>
 <tbody>
 <tr><th>Name</th><td>OnPrem-HQ-01</td></tr>
 <tr><th>System Type</th><td>SIMBOX</td></tr>
@@ -157,8 +166,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>Over Temperature</th><td>Normal Temperature</td></tr>
 <tr><th>NVRAM Battery Healthy</th><td>battery_ok</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%"><col style="max-width:60%; min-width:60%; width:60%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%" /><col style="max-width:60%; min-width:60%; width:60%" /></colgroup>
 <tbody>
 <tr><th>Name</th><td>OnPrem-HQ-02</td></tr>
 <tr><th>System Type</th><td>SIMBOX</td></tr>
@@ -176,34 +185,34 @@ hr { margin-top: 1.0rem; }
 <tr><th>Over Temperature</th><td>Normal Temperature</td></tr>
 <tr><th>NVRAM Battery Healthy</th><td>battery_ok</td></tr>
 </tbody></table>
-<br></div>
-<a name="e7e09468-600e-4d93-bb2e-1750cc670dfc"><h3 class="Heading4">2.1.2 Node Service-Processor Inventory</h3></a><div>The following section provides the node service-processor information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Type</th><th>IP Address</th><th>MAC Address</th><th>Network Configured</th><th>Firmware</th><th>Status</th></tr></thead><tbody>
-<tr><td>OnPrem-HQ-01</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
+<br /></div>
+<a name="058b524f-71d8-458a-9c79-2f57bc776bbd"><h3 class="Heading4">2.1.2 Node Service-Processor Inventory</h3></a><div>The following section provides the node service-processor information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Type</th><th>IP Address</th><th>MAC Address</th><th>Network Configured</th><th>Firmware</th><th>Status</th></tr></thead><tbody>
+<tr><td>OnPrem-HQ-01</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
 </tbody></table>
-<br></div>
+<br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Type</th><th>IP Address</th><th>MAC Address</th><th>Network Configured</th><th>Firmware</th><th>Status</th></tr></thead><tbody>
-<tr><td>OnPrem-HQ-01</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">unknown</td></tr>
 </tbody></table>
-<div class="Caption">Table 4 - Node Service-Processor Information - OnPrem-HQ</div><br></div>
-<a name="4e19c074-d365-4d12-a4a1-07435c4e6d69"><h1 class="Heading2">3 Storage Summary</h1></a><div>The following section provides a summary of the storage hardware on OnPrem-HQ.</div><br><a name="73bbb9f9-137a-4fab-b4fe-b2700fe3ae79"><h2 class="Heading3">3.1 Aggregate Inventory</h2></a><div>The following section provides the Aggregates on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Capacity</th><th>Available</th><th>Used</th><th>Disk Count</th><th>Root</th><th>Raid Type</th><th>State</th></tr></thead><tbody>
-<tr><td>aggr0_OnPrem_HQ_01</td><td>23GB</td><td>1GB</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #f5dbd9;">95%</td><td>10</td><td>True</td><td>RAID_DP</td><td>online</td></tr>
-<tr><td>aggr0_OnPrem_HQ_02</td><td>23GB</td><td>1GB</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #f5dbd9;">95%</td><td>10</td><td>True</td><td>RAID_DP</td><td>online</td></tr>
-<tr><td>OnPrem_HQ_01_SSD_1</td><td>219GB</td><td>202GB</td><td>8%</td><td>23</td><td>False</td><td>RAID_DP</td><td>online</td></tr>
-<tr><td>OnPrem_HQ_02_SSD_1</td><td>219GB</td><td>199GB</td><td>9%</td><td>23</td><td>False</td><td>RAID_DP</td><td>online</td></tr>
+<div class="Caption">Table 4 - Node Service-Processor Information - OnPrem-HQ</div><br /></div>
+<a name="01b5c7ba-f77a-47fb-bb9d-3d3e3e98e8cd"><h1 class="Heading2">3 Storage Summary</h1></a><div>The following section provides a summary of the storage hardware on OnPrem-HQ.</div><br /><a name="93c629bf-357b-46ec-b8f8-a2a554d4cde9"><h2 class="Heading3">3.1 Aggregate Inventory</h2></a><div>The following section provides the Aggregates on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Capacity</th><th>Available</th><th>Used</th><th>Disk Count</th><th>Root</th><th>Raid Type</th><th>State</th></tr></thead><tbody>
+<tr><td>aggr0_OnPrem_HQ_01</td><td>23GB</td><td>1GB</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #f5dbd9;">96%</td><td>10</td><td>True</td><td>RAID_DP</td><td>online</td></tr>
+<tr><td>aggr0_OnPrem_HQ_02</td><td>23GB</td><td>1GB</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #f5dbd9;">95%</td><td>10</td><td>True</td><td>RAID_DP</td><td>online</td></tr>
+<tr><td>OnPrem_HQ_01_SSD_1</td><td>219GB</td><td>199GB</td><td>9%</td><td>23</td><td>False</td><td>RAID_DP</td><td>online</td></tr>
+<tr><td>OnPrem_HQ_02_SSD_1</td><td>219GB</td><td>197GB</td><td>10%</td><td>23</td><td>False</td><td>RAID_DP</td><td>online</td></tr>
 </tbody></table>
-<div class="Caption">Table 5 - Aggregate Summary - OnPrem-HQ</div><br></div>
-<a name="80474298-5ebb-4f37-926f-5705a884f663"><h2 class="Heading3">3.2 Disk Summary</h2></a><div>The following section provides the disk summary information on controller OnPrem-HQ.</div><br><a name="eaf067f3-ff15-4995-967a-885caeed1c4f"><h3 class="Heading4">3.2.1 Assigned Disk Summary</h3></a><div>The following section provides the number of disks assigned to each controller on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Node</th><th>Disk Count</th></tr></thead><tbody>
+<div class="Caption">Table 5 - Aggregate Summary - OnPrem-HQ</div><br /></div>
+<a name="2ab0ffd3-1763-42cb-af61-cddb99d0f407"><h2 class="Heading3">3.2 Disk Summary</h2></a><div>The following section provides the disk summary information on controller OnPrem-HQ.</div><br /><a name="218218d6-14de-4d32-b011-6810d23c352c"><h3 class="Heading4">3.2.1 Assigned Disk Summary</h3></a><div>The following section provides the number of disks assigned to each controller on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Node</th><th>Disk Count</th></tr></thead><tbody>
 <tr><td>OnPrem-HQ-01</td><td>12</td></tr>
 <tr><td>OnPrem-HQ-02</td><td>12</td></tr>
 </tbody></table>
-<div class="Caption">Table 6 - Assigned Disk Summary - OnPrem-HQ</div><br></div>
-<a name="3ad23a87-f859-4d84-b5b1-ebe677a4b32c"><h3 class="Heading4">3.2.2 Disk Container Type Summary</h3></a><div>The following section provides a summary of disk status on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Container</th><th>Disk Count</th></tr></thead><tbody>
+<div class="Caption">Table 6 - Assigned Disk Summary - OnPrem-HQ</div><br /></div>
+<a name="4a85acd6-3d33-4951-bdfd-4ddc738958c3"><h3 class="Heading4">3.2.2 Disk Container Type Summary</h3></a><div>The following section provides a summary of disk status on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Container</th><th>Disk Count</th></tr></thead><tbody>
 <tr><td>shared</td><td>24</td></tr>
 </tbody></table>
-<div class="Caption">Table 7 - Disk Container Type Summary - OnPrem-HQ</div><br></div>
-<a name="4ecf055d-f6e5-404b-b031-449277312bd9"><h3 class="Heading4">3.2.3 Disk Inventory</h3></a><div>The following section provides the Disks installed on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Disk Name</th><th>Shelf</th><th>Bay</th><th>Capacity</th><th>Model</th><th>Type</th></tr></thead><tbody>
+<div class="Caption">Table 7 - Disk Container Type Summary - OnPrem-HQ</div><br /></div>
+<a name="f9fec992-17d2-4ce0-9c99-e908352123d0"><h3 class="Heading4">3.2.3 Disk Inventory</h3></a><div>The following section provides the Disks installed on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Disk Name</th><th>Shelf</th><th>Bay</th><th>Capacity</th><th>Model</th><th>Type</th></tr></thead><tbody>
 <tr><td>VMw-1.1</td><td>&nbsp;</td><td>0</td><td>30GB</td><td>Virtualdisk</td><td>SSD</td></tr>
 <tr><td>VMw-1.10</td><td>&nbsp;</td><td>10</td><td>30GB</td><td>Virtualdisk</td><td>SSD</td></tr>
 <tr><td>VMw-1.11</td><td>&nbsp;</td><td>11</td><td>30GB</td><td>Virtualdisk</td><td>SSD</td></tr>
@@ -229,7 +238,7 @@ hr { margin-top: 1.0rem; }
 <tr><td>VMw-1.8</td><td>&nbsp;</td><td>8</td><td>30GB</td><td>Virtualdisk</td><td>SSD</td></tr>
 <tr><td>VMw-1.9</td><td>&nbsp;</td><td>9</td><td>30GB</td><td>Virtualdisk</td><td>SSD</td></tr>
 </tbody></table>
-<div class="Caption">Table 8 - Disk Inventory - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 8 - Disk Inventory - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Disk Name</th><th>Shelf</th><th>Bay</th><th>SerialNumber</th><th>Type</th></tr></thead><tbody>
 <tr><td>VMw-1.1</td><td>&nbsp;</td><td>0</td><td>6000c29333280b56d5c27a7098e29ef6</td><td>SSD</td></tr>
 <tr><td>VMw-1.10</td><td>&nbsp;</td><td>10</td><td>6000c296f238575261e4baa3ce93ec8a</td><td>SSD</td></tr>
@@ -256,38 +265,38 @@ hr { margin-top: 1.0rem; }
 <tr><td>VMw-1.8</td><td>&nbsp;</td><td>8</td><td>6000c293184669a73dad9026b40d904c</td><td>SSD</td></tr>
 <tr><td>VMw-1.9</td><td>&nbsp;</td><td>9</td><td>6000c297877ab0bd88bc0daff51dc92f</td><td>SSD</td></tr>
 </tbody></table>
-<div class="Caption">Table 9 - Disk Serial Number Inventory - OnPrem-HQ</div><br></div>
-<a name="2bce17f9-8b51-4f7e-8c19-83de6b986134"><h1 class="Heading2">4 Licenses Summary</h1></a><div>The following section provides a summary of the license usage on OnPrem-HQ.</div><br><a name="726e67ff-d011-4b75-976d-7a251d6b480b"><h2 class="Heading3">4.1 License Usage Summary</h2></a><div>The following section provides the installed licenses on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Package</th><th>Type</th><th>Description</th><th>Risk</th></tr></thead><tbody>
+<div class="Caption">Table 9 - Disk Serial Number Inventory - OnPrem-HQ</div><br /></div>
+<a name="f10c27d3-451d-489f-921b-de79f67a7422"><h1 class="Heading2">4 Licenses Summary</h1></a><div>The following section provides a summary of the license usage on OnPrem-HQ.</div><br /><a name="93d2ae77-5bbb-4a24-a857-ce3299d64a7c"><h2 class="Heading3">4.1 License Usage Summary</h2></a><div>The following section provides the installed licenses on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Package</th><th>Type</th><th>Description</th><th>Risk</th></tr></thead><tbody>
 <tr><td>OnPrem-HQ</td><td>base</td><td>site</td><td>Cluster Base License</td><td>&nbsp;</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>cifs</td><td>license</td><td>CIFS License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>cifs</td><td>license</td><td>CIFS License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>fcp</td><td>license</td><td>FCP License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>fcp</td><td>license</td><td>FCP License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>flexclone</td><td>license</td><td>FlexClone License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>flexclone</td><td>license</td><td>FlexClone License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>iscsi</td><td>license</td><td>iSCSI License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>iscsi</td><td>license</td><td>iSCSI License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>nfs</td><td>license</td><td>NFS License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>nfs</td><td>license</td><td>NFS License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ</td><td>s3</td><td>site</td><td>S3 License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>snaplock</td><td>license</td><td>SnapLock License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>snaplock</td><td>license</td><td>SnapLock License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>snapmanagersuite</td><td>license</td><td>SnapManagerSuite License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>snapmanagersuite</td><td>license</td><td>SnapManagerSuite License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>snapmirror</td><td>license</td><td>SnapMirror License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>snapmirror</td><td>license</td><td>SnapMirror License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>cifs</td><td>license</td><td>CIFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>cifs</td><td>license</td><td>CIFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>fcp</td><td>license</td><td>FCP License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>fcp</td><td>license</td><td>FCP License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>flexclone</td><td>license</td><td>FlexClone License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>flexclone</td><td>license</td><td>FlexClone License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>iscsi</td><td>license</td><td>iSCSI License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>iscsi</td><td>license</td><td>iSCSI License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>nfs</td><td>license</td><td>NFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>nfs</td><td>license</td><td>NFS License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ</td><td>s3</td><td>site</td><td>S3 License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snaplock</td><td>license</td><td>SnapLock License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snaplock</td><td>license</td><td>SnapLock License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snapmanagersuite</td><td>license</td><td>SnapManagerSuite License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snapmanagersuite</td><td>license</td><td>SnapManagerSuite License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snapmirror</td><td>license</td><td>SnapMirror License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snapmirror</td><td>license</td><td>SnapMirror License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
 <tr><td>OnPrem-HQ</td><td>snapmirror_sync</td><td>site</td><td>SnapMirror Synchronous License</td><td>&nbsp;</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>snaprestore</td><td>license</td><td>SnapRestore License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>snaprestore</td><td>license</td><td>SnapRestore License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-01</td><td>snapvault</td><td>license</td><td>SnapVault License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
-<tr><td>OnPrem-HQ-02</td><td>snapvault</td><td>license</td><td>SnapVault License</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snaprestore</td><td>license</td><td>SnapRestore License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snaprestore</td><td>license</td><td>SnapRestore License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-01</td><td>snapvault</td><td>license</td><td>SnapVault License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
+<tr><td>OnPrem-HQ-02</td><td>snapvault</td><td>license</td><td>SnapVault License</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #dff0d0;">low</td></tr>
 <tr><td>OnPrem-HQ-01</td><td>tpm</td><td>license</td><td>Trusted Platform Module License</td><td>&nbsp;</td></tr>
 <tr><td>OnPrem-HQ-02</td><td>tpm</td><td>license</td><td>Trusted Platform Module License</td><td>&nbsp;</td></tr>
 <tr><td>OnPrem-HQ-01</td><td>ve</td><td>license</td><td>Volume Encryption License</td><td>&nbsp;</td></tr>
 <tr><td>OnPrem-HQ-02</td><td>ve</td><td>license</td><td>Volume Encryption License</td><td>&nbsp;</td></tr>
 </tbody></table>
-<div class="Caption">Table 10 - License Summary - OnPrem-HQ</div><br></div>
-<a name="47faa1d7-b140-48d0-a1ff-e02e0898baea"><h3 class="Heading4">4.1.1 License Feature Summary</h3></a><div>The following section provides the License Feature Usage on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<div class="Caption">Table 10 - License Summary - OnPrem-HQ</div><br /></div>
+<a name="de3dea36-4a49-4347-82ee-8ee85d7c7c70"><h3 class="Heading4">4.1.1 License Feature Summary</h3></a><div>The following section provides the License Feature Usage on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Status</th><th>Notes</th></tr></thead><tbody>
 <tr><td>cifs</td><td>available</td><td>-</td></tr>
 <tr><td>compression</td><td>on</td><td>-</td></tr>
 <tr><td>dedupe</td><td>on</td><td>-</td></tr>
@@ -316,24 +325,24 @@ hr { margin-top: 1.0rem; }
 <tr><td>syncmirror</td><td>on</td><td>-</td></tr>
 <tr><td>v_storageattach</td><td>not_available</td><td>Feature not licensed</td></tr>
 </tbody></table>
-<div class="Caption">Table 11 - License Feature Summary - OnPrem-HQ</div><br></div>
-<a name="fe8ee7da-b745-49a3-9748-925800ef0137"><h1 class="Heading2">5 Network Summary</h1></a><div>The following section provides a summary of the networking features on OnPrem-HQ.</div><br><a name="7e7ee0a1-6539-46dd-aba9-2faec96ad090"><h2 class="Heading3">5.1 Network IPSpace Summary</h2></a><div>The following section provides the IPSpace information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<div class="Caption">Table 11 - License Feature Summary - OnPrem-HQ</div><br /></div>
+<a name="6548df30-36cc-4be6-b48e-d39f4cdd61c7"><h1 class="Heading2">5 Network Summary</h1></a><div>The following section provides a summary of the networking features on OnPrem-HQ.</div><br /><a name="053c42a0-ff3c-4685-ad67-a77393a1254c"><h2 class="Heading3">5.1 Network IPSpace Summary</h2></a><div>The following section provides the IPSpace information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Name</th><td>Cluster</td></tr>
 <tr><th>SVM</th><td>Cluster</td></tr>
 <tr><th>Ports</th><td>OnPrem-HQ-01:e0a; OnPrem-HQ-01:e0b; OnPrem-HQ-02:e0a; OnPrem-HQ-02:e0b</td></tr>
 <tr><th>Broadcast Domains</th><td>Cluster</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Name</th><td>Default</td></tr>
 <tr><th>SVM</th><td>NAS; NFS; OnPrem-HQ; SAN</td></tr>
 <tr><th>Ports</th><td>OnPrem-HQ-01:a0a; OnPrem-HQ-01:a0a-11; OnPrem-HQ-01:a0a-12; OnPrem-HQ-01:a0a-5; OnPrem-HQ-01:a0a-6; OnPrem-HQ-01:e0c; OnPrem-HQ-01:e0d; OnPrem-HQ-01:e0e; OnPrem-HQ-01:e0f; OnPrem-HQ-01:e0g; OnPrem-HQ-02:a0a; OnPrem-HQ-02:a0a-11; OnPrem-HQ-02:a0a-12; OnPrem-HQ-02:a0a-5; OnPrem-HQ-02:a0a-6; OnPrem-HQ-02:e0c; OnPrem-HQ-02:e0d; OnPrem-HQ-02:e0e; OnPrem-HQ-02:e0f; OnPrem-HQ-02:e0g</td></tr>
 <tr><th>Broadcast Domains</th><td>Default-1; Default-2; ISCSI-A; ISCSI-B; MANAGEMENT; Replication; VLAN5-MANAGEMENT</td></tr>
 </tbody></table>
-<br></div>
-<a name="e712d9bd-c595-4cc9-8d31-5483d250c5d4"><h3 class="Heading4">5.1.1 Network Ports Summary</h3></a><div>The following section provides the physical ports on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Port Name</th><th>Role</th><th>Link Status</th><th>Node Owner</th><th>Mac Address</th><th>MTU</th><th>Admin State</th></tr></thead><tbody>
+<br /></div>
+<a name="fb160597-6d44-42af-a499-4c59adbee9d7"><h3 class="Heading4">5.1.1 Network Ports Summary</h3></a><div>The following section provides the physical ports on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Port Name</th><th>Role</th><th>Link Status</th><th>Node Owner</th><th>Mac Address</th><th>MTU</th><th>Admin State</th></tr></thead><tbody>
 <tr><td>e0a</td><td>cluster</td><td>up</td><td>OnPrem-HQ-01</td><td>00:50:56:b0:73:f8</td><td>9000</td><td>True</td></tr>
 <tr><td>e0b</td><td>cluster</td><td>up</td><td>OnPrem-HQ-01</td><td>00:50:56:b0:bc:ba</td><td>9000</td><td>True</td></tr>
 <tr><td>e0c</td><td>node_mgmt</td><td>up</td><td>OnPrem-HQ-01</td><td>00:50:56:b0:1e:0e</td><td>1500</td><td>True</td></tr>
@@ -349,8 +358,8 @@ hr { margin-top: 1.0rem; }
 <tr><td>e0f</td><td>data</td><td>up</td><td>OnPrem-HQ-02</td><td>02:50:56:b0:8a:17</td><td>1500</td><td>True</td></tr>
 <tr><td>e0g</td><td>data</td><td>up</td><td>OnPrem-HQ-02</td><td>02:50:56:b0:8a:17</td><td>1500</td><td>True</td></tr>
 </tbody></table>
-<div class="Caption">Table 12 - Physical Port Information - OnPrem-HQ</div><br></div>
-<a name="65d53b0c-7873-4f3f-be09-0d743af94a3a"><h3 class="Heading4">5.1.2 Network Link Aggregation Group Summary</h3></a><div>The following section provides the IFGRP Aggregated Ports on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<div class="Caption">Table 12 - Physical Port Information - OnPrem-HQ</div><br /></div>
+<a name="a76f7c95-9400-49e2-aa5e-58cea6897714"><h3 class="Heading4">5.1.2 Network Link Aggregation Group Summary</h3></a><div>The following section provides the IFGRP Aggregated Ports on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Port Name</th><td>a0a</td></tr>
 <tr><th>Distribution Function</th><td>ip</td></tr>
@@ -360,8 +369,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>Mac Address</th><td>02:50:56:b0:73:f8</td></tr>
 <tr><th>Port Participation</th><td>full</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Port Name</th><td>a0a</td></tr>
 <tr><th>Distribution Function</th><td>ip</td></tr>
@@ -371,8 +380,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>Mac Address</th><td>02:50:56:b0:8a:17</td></tr>
 <tr><th>Port Participation</th><td>full</td></tr>
 </tbody></table>
-<br></div>
-<a name="9ab3b6c1-b1a6-49a0-98bc-2ac6a42275bf"><h3 class="Heading4">5.1.3 Vlan Summary</h3></a><div>The following section provides the Vlan information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>InterfaceName</th><th>ParentInterface</th><th>VlanID</th><th>Node</th></tr></thead><tbody>
+<br /></div>
+<a name="0a5b9023-5fe5-4a35-b5b8-a551a3ef6ad5"><h3 class="Heading4">5.1.3 Vlan Summary</h3></a><div>The following section provides the Vlan information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>InterfaceName</th><th>ParentInterface</th><th>VlanID</th><th>Node</th></tr></thead><tbody>
 <tr><td>a0a-11</td><td>a0a</td><td>11</td><td>OnPrem-HQ-01</td></tr>
 <tr><td>a0a-12</td><td>a0a</td><td>12</td><td>OnPrem-HQ-01</td></tr>
 <tr><td>a0a-5</td><td>a0a</td><td>5</td><td>OnPrem-HQ-01</td></tr>
@@ -382,34 +391,34 @@ hr { margin-top: 1.0rem; }
 <tr><td>a0a-5</td><td>a0a</td><td>5</td><td>OnPrem-HQ-02</td></tr>
 <tr><td>a0a-6</td><td>a0a</td><td>6</td><td>OnPrem-HQ-02</td></tr>
 </tbody></table>
-<div class="Caption">Table 13 - Network VLAN Information - OnPrem-HQ</div><br></div>
-<a name="4b7dab36-3dc5-4edc-9ab6-262cfd68be72"><h3 class="Heading4">5.1.4 Broadcast Domain Summary</h3></a><div>The following section provides the Broadcast Domain information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Ipspace</th><th>Failover Groups</th><th>Mtu</th><th>Ports</th></tr></thead><tbody>
-<tr><td>Cluster</td><td>Cluster</td><td>Cluster</td><td>9000</td><td>OnPrem-HQ-01:e0a<br>OnPrem-HQ-01:e0b<br>OnPrem-HQ-02:e0a<br>OnPrem-HQ-02:e0b</td></tr>
+<div class="Caption">Table 13 - Network VLAN Information - OnPrem-HQ</div><br /></div>
+<a name="6fc379b7-cb96-4821-95cf-1eec579e2edb"><h3 class="Heading4">5.1.4 Broadcast Domain Summary</h3></a><div>The following section provides the Broadcast Domain information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Ipspace</th><th>Failover Groups</th><th>Mtu</th><th>Ports</th></tr></thead><tbody>
+<tr><td>Cluster</td><td>Cluster</td><td>Cluster</td><td>9000</td><td>OnPrem-HQ-01:e0a<br />OnPrem-HQ-01:e0b<br />OnPrem-HQ-02:e0a<br />OnPrem-HQ-02:e0b</td></tr>
 <tr><td>Default-1</td><td>Default</td><td>Default-1</td><td>1500</td><td>OnPrem-HQ-01:a0a</td></tr>
 <tr><td>Default-2</td><td>Default</td><td>Default-2</td><td>1500</td><td>OnPrem-HQ-02:a0a</td></tr>
-<tr><td>ISCSI-A</td><td>Default</td><td>ISCSI-A</td><td>1500</td><td>OnPrem-HQ-01:a0a-6<br>OnPrem-HQ-02:a0a-6</td></tr>
-<tr><td>ISCSI-B</td><td>Default</td><td>ISCSI-B</td><td>1500</td><td>OnPrem-HQ-01:a0a-12<br>OnPrem-HQ-02:a0a-12</td></tr>
-<tr><td>MANAGEMENT</td><td>Default</td><td>MANAGEMENT</td><td>1500</td><td>OnPrem-HQ-01:e0c<br>OnPrem-HQ-02:e0c</td></tr>
-<tr><td>Replication</td><td>Default</td><td>Replication</td><td>1500</td><td>OnPrem-HQ-01:a0a-11<br>OnPrem-HQ-02:a0a-11</td></tr>
-<tr><td>VLAN5-MANAGEMENT</td><td>Default</td><td>VLAN5-MANAGEMENT</td><td>1500</td><td>OnPrem-HQ-01:a0a-5<br>OnPrem-HQ-02:a0a-5</td></tr>
+<tr><td>ISCSI-A</td><td>Default</td><td>ISCSI-A</td><td>1500</td><td>OnPrem-HQ-01:a0a-6<br />OnPrem-HQ-02:a0a-6</td></tr>
+<tr><td>ISCSI-B</td><td>Default</td><td>ISCSI-B</td><td>1500</td><td>OnPrem-HQ-01:a0a-12<br />OnPrem-HQ-02:a0a-12</td></tr>
+<tr><td>MANAGEMENT</td><td>Default</td><td>MANAGEMENT</td><td>1500</td><td>OnPrem-HQ-01:e0c<br />OnPrem-HQ-02:e0c</td></tr>
+<tr><td>Replication</td><td>Default</td><td>Replication</td><td>1500</td><td>OnPrem-HQ-01:a0a-11<br />OnPrem-HQ-02:a0a-11</td></tr>
+<tr><td>VLAN5-MANAGEMENT</td><td>Default</td><td>VLAN5-MANAGEMENT</td><td>1500</td><td>OnPrem-HQ-01:a0a-5<br />OnPrem-HQ-02:a0a-5</td></tr>
 </tbody></table>
-<div class="Caption">Table 14 - Network Broadcast Domain Information - OnPrem-HQ</div><br></div>
-<a name="fff20e22-279d-455a-8b79-33dd585f743f"><h3 class="Heading4">5.1.5 Failover Group Summary</h3></a><div>The following section provides the Failover Group information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Vserver</th><th>Target</th></tr></thead><tbody>
-<tr><td>Cluster</td><td>Cluster</td><td>OnPrem-HQ-01:e0a<br>OnPrem-HQ-01:e0b<br>OnPrem-HQ-02:e0a<br>OnPrem-HQ-02:e0b</td></tr>
+<div class="Caption">Table 14 - Network Broadcast Domain Information - OnPrem-HQ</div><br /></div>
+<a name="9942ac22-1116-4dbc-8ca6-95ff3763774f"><h3 class="Heading4">5.1.5 Failover Group Summary</h3></a><div>The following section provides the Failover Group information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Vserver</th><th>Target</th></tr></thead><tbody>
+<tr><td>Cluster</td><td>Cluster</td><td>OnPrem-HQ-01:e0a<br />OnPrem-HQ-01:e0b<br />OnPrem-HQ-02:e0a<br />OnPrem-HQ-02:e0b</td></tr>
 <tr><td>Default-1</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a</td></tr>
 <tr><td>Default-2</td><td>OnPrem-HQ</td><td>OnPrem-HQ-02:a0a</td></tr>
-<tr><td>ISCSI-A</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-6<br>OnPrem-HQ-02:a0a-6</td></tr>
-<tr><td>ISCSI-B</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-12<br>OnPrem-HQ-02:a0a-12</td></tr>
-<tr><td>MANAGEMENT</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:e0c<br>OnPrem-HQ-02:e0c</td></tr>
-<tr><td>Replication</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-11<br>OnPrem-HQ-02:a0a-11</td></tr>
-<tr><td>VLAN5-MANAGEMENT</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-5<br>OnPrem-HQ-02:a0a-5</td></tr>
+<tr><td>ISCSI-A</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-6<br />OnPrem-HQ-02:a0a-6</td></tr>
+<tr><td>ISCSI-B</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-12<br />OnPrem-HQ-02:a0a-12</td></tr>
+<tr><td>MANAGEMENT</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:e0c<br />OnPrem-HQ-02:e0c</td></tr>
+<tr><td>Replication</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-11<br />OnPrem-HQ-02:a0a-11</td></tr>
+<tr><td>VLAN5-MANAGEMENT</td><td>OnPrem-HQ</td><td>OnPrem-HQ-01:a0a-5<br />OnPrem-HQ-02:a0a-5</td></tr>
 </tbody></table>
-<div class="Caption">Table 15 - Network Failover Group Information - OnPrem-HQ</div><br></div>
-<a name="3b48b36f-38ae-4985-b0d2-fc7ceedb2be6"><h3 class="Heading4">5.1.6 Subnet Summary</h3></a><div>The following section provides the Subnet information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Subnet</th><th>Gateway</th><th>Total IP</th><th>Used IP</th><th>Ip Ranges</th></tr></thead><tbody>
+<div class="Caption">Table 15 - Network Failover Group Information - OnPrem-HQ</div><br /></div>
+<a name="7aa463f3-34a9-4d6a-84dd-e95472cff08a"><h3 class="Heading4">5.1.6 Subnet Summary</h3></a><div>The following section provides the Subnet information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Name</th><th>Subnet</th><th>Gateway</th><th>Total IP</th><th>Used IP</th><th>Ip Ranges</th></tr></thead><tbody>
 <tr><td>VLAN5-MANAGEMENT</td><td>192.168.5.0/24</td><td>192.168.5.254</td><td>11</td><td>0</td><td>192.168.5.80-192.168.5.90</td></tr>
 </tbody></table>
-<div class="Caption">Table 16 - Network Subnet Information - OnPrem-HQ</div><br></div>
-<a name="b664e799-b03c-4b59-bbe6-47cda527adda"><h3 class="Heading4">5.1.7 Routes Summary</h3></a><div>The following section provides the Routes information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Destination</th><th>Gateway</th><th>Metric</th><th>Vserver</th></tr></thead><tbody>
+<div class="Caption">Table 16 - Network Subnet Information - OnPrem-HQ</div><br /></div>
+<a name="12714f3c-3f71-4658-b0f2-366c2c70ea38"><h3 class="Heading4">5.1.7 Routes Summary</h3></a><div>The following section provides the Routes information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Destination</th><th>Gateway</th><th>Metric</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>0.0.0.0/0</td><td>192.168.5.254</td><td>20</td><td>NAS</td></tr>
 <tr><td>0.0.0.0/0</td><td>192.168.5.254</td><td>20</td><td>NFS</td></tr>
 <tr><td>0.0.0.0/0</td><td>192.168.7.254</td><td>20</td><td>OnPrem-HQ</td></tr>
@@ -417,92 +426,146 @@ hr { margin-top: 1.0rem; }
 <tr><td>0.0.0.0/0</td><td>192.168.6.254</td><td>20</td><td>SAN</td></tr>
 <tr><td>0.0.0.0/0</td><td>192.168.12.254</td><td>20</td><td>SAN</td></tr>
 </tbody></table>
-<div class="Caption">Table 17 - Network Route Information - OnPrem-HQ</div><br></div>
-<a name="f836831c-769c-42fc-93ee-e867f35ee576"><h3 class="Heading4">5.1.8 Network Interfaces Summary</h3></a><div>The following section provides the Network Interfaces information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Cluster Interface</th><th>Status</th><th>Data Protocols</th><th>Vserver</th><th>Address</th></tr></thead><tbody>
+<div class="Caption">Table 17 - Network Route Information - OnPrem-HQ</div><br /></div>
+<a name="ae72cf21-ac55-4db5-a032-a630c33fc723"><h3 class="Heading4">5.1.8 Network Interfaces Summary</h3></a><div>The following section provides the Network Interfaces information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Cluster Interface</th><th>Status</th><th>Data Protocols</th><th>Vserver</th><th>Address</th></tr></thead><tbody>
 <tr><td>OnPrem-HQ-01_clus1</td><td>up</td><td>none</td><td>Cluster</td><td>169.254.115.248</td></tr>
 <tr><td>OnPrem-HQ-01_clus2</td><td>up</td><td>none</td><td>Cluster</td><td>169.254.188.186</td></tr>
 <tr><td>OnPrem-HQ-02_clus1</td><td>up</td><td>none</td><td>Cluster</td><td>169.254.138.23</td></tr>
 <tr><td>OnPrem-HQ-02_clus2</td><td>up</td><td>none</td><td>Cluster</td><td>169.254.118.172</td></tr>
 </tbody></table>
-<div class="Caption">Table 18 - Cluster Network Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 18 - Cluster Network Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>MGMT Interface</th><th>Status</th><th>Data Protocols</th><th>Vserver</th><th>Address</th></tr></thead><tbody>
 <tr><td>cluster_mgmt</td><td>up</td><td>none</td><td>OnPrem-HQ</td><td>192.168.7.60</td></tr>
 <tr><td>OnPrem-HQ-01_mgmt1</td><td>up</td><td>none</td><td>OnPrem-HQ</td><td>192.168.7.61</td></tr>
 <tr><td>OnPrem-HQ-02_mgmt1</td><td>up</td><td>none</td><td>OnPrem-HQ</td><td>192.168.7.62</td></tr>
 </tbody></table>
-<div class="Caption">Table 19 - Management Network Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 19 - Management Network Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Intercluster Interface</th><th>Status</th><th>Data Protocols</th><th>Vserver</th><th>Address</th></tr></thead><tbody>
 <tr><td>REPLICATION-OnPrem-HQ-01</td><td>up</td><td>none</td><td>OnPrem-HQ</td><td>192.168.11.61</td></tr>
 <tr><td>REPLICATION-OnPrem-HQ-02</td><td>up</td><td>none</td><td>OnPrem-HQ</td><td>192.168.11.62</td></tr>
 </tbody></table>
-<div class="Caption">Table 20 - Intercluster Network Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 20 - Intercluster Network Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Data Interface</th><th>Status</th><th>Data Protocols</th><th>Vserver</th><th>Address</th></tr></thead><tbody>
 <tr><td>lif_NAS_812</td><td>up</td><td>nfs cifs s3</td><td>NAS</td><td>192.168.5.62</td></tr>
 <tr><td>lif_NAS_964</td><td>up</td><td>nfs cifs s3</td><td>NAS</td><td>192.168.5.61</td></tr>
-<tr><td>lif_NFS_149</td><td>up</td><td>nfs</td><td>NFS</td><td>192.168.5.64</td></tr>
-<tr><td>lif_NFS_593</td><td>up</td><td>nfs</td><td>NFS</td><td>192.168.5.63</td></tr>
+<tr><td>lif_NFS_149</td><td>up</td><td>nfs cifs s3</td><td>NFS</td><td>192.168.5.64</td></tr>
+<tr><td>lif_NFS_593</td><td>up</td><td>nfs cifs</td><td>NFS</td><td>192.168.5.63</td></tr>
 <tr><td>ISCSI-A-OnPrem-HQ-01</td><td>up</td><td>iscsi</td><td>SAN</td><td>192.168.6.61</td></tr>
 <tr><td>ISCSI-A-OnPrem-HQ-02</td><td>up</td><td>iscsi</td><td>SAN</td><td>192.168.6.62</td></tr>
 <tr><td>ISCSI-B-OnPrem-HQ-01</td><td>up</td><td>iscsi</td><td>SAN</td><td>192.168.12.61</td></tr>
 <tr><td>ISCSI-B-OnPrem-HQ-02</td><td>up</td><td>iscsi</td><td>SAN</td><td>192.168.12.62</td></tr>
 </tbody></table>
-<div class="Caption">Table 21 - Data Network Information - OnPrem-HQ</div><br></div>
-<a name="697db605-0d3b-4a56-8b41-5b11164a4cc7"><h1 class="Heading2">6 Vserver Summary</h1></a><div>The following section provides a summary of the vserver information on OnPrem-HQ.</div><br><a name="1984c227-dfe2-439b-b759-5916e83685d6"><h2 class="Heading3">6.1 Vserver Information Summary</h2></a><div>The following section provides a summary of the configured vserver on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver Name</th><th>Status</th><th>Vserver Type</th><th>Allowed Protocols</th><th>Disallowed Protocols</th><th>IP Space</th></tr></thead><tbody>
+<div class="Caption">Table 21 - Data Network Information - OnPrem-HQ</div><br /></div>
+<a name="d61909c9-a72c-4bac-9bd5-cc83091fd559"><h1 class="Heading2">6 Vserver Summary</h1></a><div>The following section provides a summary of the vserver information on OnPrem-HQ.</div><br /><a name="dde3baa7-d2f8-4747-a367-0e961cae0187"><h2 class="Heading3">6.1 Vserver Information Summary</h2></a><div>The following section provides a summary of the configured vserver on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver Name</th><th>Status</th><th>Vserver Type</th><th>Allowed Protocols</th><th>Disallowed Protocols</th><th>IP Space</th></tr></thead><tbody>
 <tr><td>NAS</td><td>running</td><td>data</td><td>nfs cifs</td><td>fcp iscsi ndmp</td><td>Default</td></tr>
 <tr><td>NFS</td><td>running</td><td>data</td><td>nfs cifs fcp iscsi ndmp</td><td>&nbsp;</td><td>Default</td></tr>
 <tr><td>SAN</td><td>running</td><td>data</td><td>fcp iscsi</td><td>nfs cifs ndmp</td><td>Default</td></tr>
 </tbody></table>
-<div class="Caption">Table 22 - Vserver Summary Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 22 - Vserver Summary Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Root Volume</th><th>Vserver</th><th>Status</th><th>TotalSize</th><th>Used</th><th>Available</th><th>Dedup</th><th>Aggregate</th></tr></thead><tbody>
 <tr><td>NAS_root</td><td>NAS</td><td>online</td><td>0.02GB</td><td>5%</td><td>0.02GB</td><td>True</td><td>OnPrem_HQ_02_SSD_1</td></tr>
-<tr><td>NFS_root</td><td>NFS</td><td>online</td><td>0.02GB</td><td>1%</td><td>0.02GB</td><td>False</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>NFS_root</td><td>NFS</td><td>online</td><td>0.02GB</td><td>7%</td><td>0.02GB</td><td>False</td><td>OnPrem_HQ_02_SSD_1</td></tr>
 <tr><td>SAN_root</td><td>SAN</td><td>online</td><td>0.02GB</td><td>5%</td><td>0.02GB</td><td>True</td><td>OnPrem_HQ_01_SSD_1</td></tr>
 </tbody></table>
-<div class="Caption">Table 23 - Vserver Root Volume Information - OnPrem-HQ</div><br></div>
-<a name="8b3d965f-eb94-4849-b50c-a1d1bb4696f8"><h3 class="Heading4">6.1.1 Vserver Storage Volumes Summary</h3></a><div>The following section provides the Vserver Volumes Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Vserver</th><th>Status</th><th>Capacity</th><th>Available</th><th>Used</th><th>Aggregate</th></tr></thead><tbody>
-<tr><td>DATA</td><td>NAS</td><td>online</td><td>105GB</td><td>100GB</td><td>0%</td><td>&nbsp;</td></tr>
-<tr><td>DATA__0001</td><td>NAS</td><td>online</td><td>105GB</td><td>100GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
-<tr><td>fg_oss_1627048265</td><td>NAS</td><td>online</td><td>842GB</td><td>401GB</td><td>0%</td><td>&nbsp;</td></tr>
-<tr><td>fg_oss_1627048265__0001</td><td>NAS</td><td>online</td><td>211GB</td><td>200GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
-<tr><td>fg_oss_1627048265__0002</td><td>NAS</td><td>online</td><td>211GB</td><td>200GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
-<tr><td>fg_oss_1627048265__0003</td><td>NAS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
-<tr><td>fg_oss_1627048265__0004</td><td>NAS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<div class="Caption">Table 23 - Vserver Root Volume Information - OnPrem-HQ</div><br /></div>
+<a name="fddbba0a-0593-4ed5-83c4-8bb82c0ccb75"><h3 class="Heading4">6.1.1 Vserver Storage Volumes Summary</h3></a><div>The following section provides the Vserver Volumes Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Vserver</th><th>Status</th><th>Capacity</th><th>Available</th><th>Used</th><th>Aggregate</th></tr></thead><tbody>
+<tr><td>DATA</td><td>NAS</td><td>online</td><td>105GB</td><td>97GB</td><td>2%</td><td>&nbsp;</td></tr>
+<tr><td>DATA__0001</td><td>NAS</td><td>online</td><td>105GB</td><td>97GB</td><td>2%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1627048265</td><td>NAS</td><td>online</td><td>842GB</td><td>398GB</td><td>0%</td><td>&nbsp;</td></tr>
+<tr><td>fg_oss_1627048265__0001</td><td>NAS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1627048265__0002</td><td>NAS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1627048265__0003</td><td>NAS</td><td>online</td><td>211GB</td><td>197GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>fg_oss_1627048265__0004</td><td>NAS</td><td>online</td><td>211GB</td><td>197GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>fg_oss_1628735534</td><td>NAS</td><td>online</td><td>842GB</td><td>395GB</td><td>0%</td><td>&nbsp;</td></tr>
+<tr><td>fg_oss_1628735534__0001</td><td>NAS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1628735534__0002</td><td>NAS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1628735534__0003</td><td>NAS</td><td>online</td><td>211GB</td><td>197GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>fg_oss_1628735534__0004</td><td>NAS</td><td>online</td><td>211GB</td><td>197GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>fg_oss_1628735658</td><td>NFS</td><td>online</td><td>842GB</td><td>395GB</td><td>0%</td><td>&nbsp;</td></tr>
+<tr><td>fg_oss_1628735658__0001</td><td>NFS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1628735658__0002</td><td>NFS</td><td>online</td><td>211GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>fg_oss_1628735658__0003</td><td>NFS</td><td>online</td><td>211GB</td><td>197GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>fg_oss_1628735658__0004</td><td>NFS</td><td>online</td><td>211GB</td><td>197GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
+<tr><td>SHARE_NFS</td><td>NFS</td><td>online</td><td>1GB</td><td>1GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
 <tr><td>NTAPSOL_LUN_1</td><td>SAN</td><td>online</td><td>50GB</td><td>50GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
-<tr><td>Oracle_Data_Volumes</td><td>SAN</td><td>online</td><td>253GB</td><td>202GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
+<tr><td>Oracle_Data_Volumes</td><td>SAN</td><td>online</td><td>253GB</td><td>199GB</td><td>0%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
 <tr><td>SERVER_DATASTORE</td><td>SAN</td><td>online</td><td>15GB</td><td>4GB</td><td>71%</td><td>OnPrem_HQ_01_SSD_1</td></tr>
 <tr><td>SERVER_DATASTORE_2</td><td>SAN</td><td>online</td><td>20GB</td><td>20GB</td><td>0%</td><td>OnPrem_HQ_02_SSD_1</td></tr>
 </tbody></table>
-<div class="Caption">Table 24 - Vserver Volume Information - OnPrem-HQ</div><br></div>
-<a name="e37642a2-2f5f-46db-ae65-5628efe5e250"><h4 class="Heading5">6.1.1.1 Vserver Qtree Summary</h4></a><div>The following section provides the Vserver Volumes Qtree Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Qtree</th><th>Volume</th><th>Status</th><th>Security Style</th><th>Export Policy</th><th>Vserver</th></tr></thead><tbody>
-<tr><td>TB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
+<div class="Caption">Table 24 - Vserver Volume Information - OnPrem-HQ</div><br /></div>
+<br /><a name="4c339d30-fda5-47cc-8453-92b33c932af6"><h4 class="Heading5">6.1.1.1 Vserver Volumes Snapshot Summary</h4></a><div>The following section provides the Vserver Volumes Snapshot Configuration on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:40%; min-width:40%; width:40%" /><col style="max-width:15%; min-width:15%; width:15%" /><col style="max-width:15%; min-width:15%; width:15%" /><col style="max-width:15%; min-width:15%; width:15%" /><col style="max-width:15%; min-width:15%; width:15%" /></colgroup>
+<thead><tr><th>Volume</th><th>Snapshot Count</th><th>Snapshot Policy</th><th>Used</th><th>Vserver</th></tr></thead><tbody>
+<tr><td>DATA</td><td>9</td><td>default</td><td>17.868GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>9</td><td>default</td><td>0.004GB</td><td>NAS</td></tr>
+<tr><td>SHARE_NFS</td><td>10</td><td>default</td><td>0.003GB</td><td>NFS</td></tr>
+<tr><td>NTAPSOL_LUN_1</td><td>1</td><td>none</td><td>0.004GB</td><td>SAN</td></tr>
+<tr><td>Oracle_Data_Volumes</td><td>13</td><td>default</td><td>2.844GB</td><td>SAN</td></tr>
+<tr><td>SERVER_DATASTORE</td><td>2</td><td>none</td><td>4.437GB</td><td>SAN</td></tr>
+</tbody></table>
+<div class="Caption">Table 25 - Vserver Volume SnapShot Configuration Information - OnPrem-HQ</div><br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:20%; min-width:20%; width:20%" /><col style="max-width:30%; min-width:30%; width:30%" /><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:10%; min-width:10%; width:10%" /><col style="max-width:15%; min-width:15%; width:15%" /></colgroup>
+<thead><tr><th>Volume Name</th><th>Snapshot Name</th><th>Created Time</th><th>Used</th><th>Vserver</th></tr></thead><tbody>
+<tr><td>DATA</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.13GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>DATA__0001</td><td>weekly.2021-08-01_0015</td><td>07/31/2021 20:15:00</td><td>0.001GB</td><td>NAS</td></tr>
+<tr><td>NTAPSOL_LUN_1</td><td>clone_NTAPSOL_LUN_1_cl.2021-07-22_020615.0</td><td>07/21/2021 22:06:16</td><td>0.004GB</td><td>SAN</td></tr>
+<tr><td>Oracle_Data_Volumes</td><td>Oracle_Database_ntaprhat-01v_08-01-2021_17.19.27.3637_0</td><td>08/01/2021 17:19:14</td><td>2.031GB</td><td>SAN</td></tr>
+<tr><td>Oracle_Data_Volumes</td><td>Oracle_Database_ntaprhat-01v_08-01-2021_17.19.27.3637_0</td><td>08/01/2021 17:19:14</td><td>2.031GB</td><td>SAN</td></tr>
+<tr><td>Oracle_Data_Volumes</td><td>Oracle_Database_ntaprhat-01v_08-01-2021_17.19.27.3637_0</td><td>08/01/2021 17:19:14</td><td>2.031GB</td><td>SAN</td></tr>
+</tbody></table>
+<div class="Caption">Table 26 - HealthCheck - Volume Snapshot over 7 days only - OnPrem-HQ</div><br /></div>
+<a name="7b682e90-a6b4-42f7-9854-9147a6e9c16b"><h4 class="Heading5">6.1.1.2 Vserver Qtree Summary</h4></a><div>The following section provides the Vserver Volumes Qtree Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Qtree</th><th>Volume</th><th>Status</th><th>Security Style</th><th>Export Policy</th><th>Vserver</th></tr></thead><tbody>
+<tr><td>KB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
 <tr><td>SHARE</td><td>DATA</td><td>normal</td><td>unix</td><td>default</td><td>NAS</td></tr>
 <tr><td>HR</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
 <tr><td>GB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
-<tr><td>KB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
+<tr><td>TB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
 <tr><td>MB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
 <tr><td>PB</td><td>DATA</td><td>normal</td><td>unix</td><td>DATA</td><td>NAS</td></tr>
 <tr><td>prueba01</td><td>fg_oss_1627048265</td><td>normal</td><td>unix</td><td>default</td><td>NAS</td></tr>
+<tr><td>fabricpool</td><td>fg_oss_1628735534</td><td>normal</td><td>unix</td><td>default</td><td>NAS</td></tr>
+<tr><td>humanresources</td><td>fg_oss_1628735658</td><td>normal</td><td>unix</td><td>default</td><td>NFS</td></tr>
+<tr><td>IT</td><td>SHARE_NFS</td><td>normal</td><td>unix</td><td>default</td><td>NFS</td></tr>
+<tr><td>DP</td><td>SHARE_NFS</td><td>normal</td><td>unix</td><td>default</td><td>NFS</td></tr>
 </tbody></table>
-<div class="Caption">Table 25 - Vserver Volume Qtree Information - OnPrem-HQ</div><br></div>
-<a name="3bcf7ad9-f5a1-47d2-9dcf-578ab76ccfd1"><h5 class="Heading6">6.1.1.1.1 Vserver Export Policy Summary</h5></a><div>The following section provides the Vserver Volumes Export policy Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Policy Name</th><th>Rule Index</th><th>Client Match</th><th>Protocol</th><th>Ro Rule</th><th>Rw Rule</th><th>Vserver</th></tr></thead><tbody>
+<div class="Caption">Table 27 - Vserver Volume Qtree Information - OnPrem-HQ</div><br /></div>
+<a name="8efa83d7-6bb9-487c-9934-12671b593dcd"><h5 class="Heading6">6.1.1.2.1 Vserver Export Policy Summary</h5></a><div>The following section provides the Vserver Volumes Export policy Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Policy Name</th><th>Rule Index</th><th>Client Match</th><th>Protocol</th><th>Ro Rule</th><th>Rw Rule</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>DATA</td><td>1</td><td>0.0.0.0/0</td><td>any</td><td>never</td><td>never</td><td>NAS</td></tr>
 <tr><td>DATA</td><td>2</td><td>192.168.7.0/24</td><td>any</td><td>sys</td><td>sys</td><td>NAS</td></tr>
 <tr><td>default</td><td>1</td><td>0.0.0.0/0</td><td>any</td><td>any</td><td>never</td><td>NAS</td></tr>
-<tr><td>default</td><td>1</td><td>0.0.0.0/0</td><td>nfs3<br>nfs4<br>nfs</td><td>any</td><td>any</td><td>NFS</td></tr>
+<tr><td>default</td><td>1</td><td>0.0.0.0/0</td><td>nfs3<br />nfs4<br />nfs</td><td>any</td><td>any</td><td>NFS</td></tr>
 </tbody></table>
-<div class="Caption">Table 26 - Vserver Volume Export Policy Information - OnPrem-HQ</div><br></div>
-<a name="6be8a33e-6e1a-417e-9426-37a44d28e73a"><h4 class="Heading5">6.1.1.2 Vserver Volume Quota Summary</h4></a><div>The following section provides the Vserver Volumes Quota Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Status</th><th>Substatus</th><th>Vserver</th></tr></thead><tbody>
+<div class="Caption">Table 28 - Vserver Volume Export Policy Information - OnPrem-HQ</div><br /></div>
+<a name="86f29efc-f278-460f-a106-00aa4150a18e"><h4 class="Heading5">6.1.1.3 Vserver Volume Quota Summary</h4></a><div>The following section provides the Vserver Volumes Quota Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Status</th><th>Substatus</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>DATA</td><td>on</td><td>none</td><td>NAS</td></tr>
 <tr><td>fg_oss_1627048265</td><td>on</td><td>none</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735534</td><td>on</td><td>none</td><td>NAS</td></tr>
 <tr><td>NAS_root</td><td>off</td><td>none</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735658</td><td>on</td><td>none</td><td>NFS</td></tr>
 <tr><td>NFS_root</td><td>off</td><td>none</td><td>NFS</td></tr>
+<tr><td>SHARE_NFS</td><td>off</td><td>none</td><td>NFS</td></tr>
 <tr><td>NTAPSOL_LUN_1</td><td>off</td><td>none</td><td>SAN</td></tr>
 <tr><td>Oracle_Data_Volumes</td><td>off</td><td>none</td><td>SAN</td></tr>
 <tr><td>SAN_root</td><td>off</td><td>none</td><td>SAN</td></tr>
 <tr><td>SERVER_DATASTORE</td><td>off</td><td>none</td><td>SAN</td></tr>
 <tr><td>SERVER_DATASTORE_2</td><td>off</td><td>none</td><td>SAN</td></tr>
 </tbody></table>
-<div class="Caption">Table 27 - Vserver Volume Quota Status Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 29 - Vserver Volume Quota Status Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Type</th><th>Target</th><th>Disk Limit</th><th>File Limit</th><th>Soft Disk Limit</th><th>Soft File Limit</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>DATA</td><td>tree</td><td>*</td><td>-</td><td>-</td><td>-</td><td>-</td><td>NAS</td></tr>
 <tr><td>DATA</td><td>tree</td><td>/vol/DATA/GB</td><td>19GB</td><td>-</td><td>-</td><td>-</td><td>NAS</td></tr>
@@ -513,7 +576,7 @@ hr { margin-top: 1.0rem; }
 <tr><td>DATA</td><td>tree</td><td>/vol/DATA/SHARE</td><td>500MB</td><td>-</td><td>100MB</td><td>-</td><td>NAS</td></tr>
 <tr><td>DATA</td><td>tree</td><td>/vol/DATA/TB</td><td>1TB</td><td>-</td><td>-</td><td>-</td><td>NAS</td></tr>
 </tbody></table>
-<div class="Caption">Table 28 - Vserver Volume Quota Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 30 - Vserver Volume Quota Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Quota Target</th><th>Qtree</th><th>Disk Limit</th><th>Soft Disk Limit</th><th>Disk Used</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>DATA</td><td>/vol/DATA/SHARE</td><td>SHARE</td><td>500MB</td><td>100MB</td><td>0KB</td><td>NAS</td></tr>
 <tr><td>DATA</td><td>/vol/DATA/HR</td><td>HR</td><td>140MB</td><td>120MB</td><td>130.83984375MB</td><td>NAS</td></tr>
@@ -525,8 +588,12 @@ hr { margin-top: 1.0rem; }
 <tr><td>DATA</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0KB</td><td>NAS</td></tr>
 <tr><td>fg_oss_1627048265</td><td>/vol/fg_oss_1627048265/prueba01</td><td>prueba01</td><td>200GB</td><td>-</td><td>0KB</td><td>NAS</td></tr>
 <tr><td>fg_oss_1627048265</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0KB</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735534</td><td>/vol/fg_oss_1628735534/fabricpool</td><td>fabricpool</td><td>100GB</td><td>-</td><td>0KB</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735534</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0KB</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735658</td><td>/vol/fg_oss_1628735658/humanresources</td><td>humanresources</td><td>100GB</td><td>-</td><td>0KB</td><td>NFS</td></tr>
+<tr><td>fg_oss_1628735658</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0KB</td><td>NFS</td></tr>
 </tbody></table>
-<div class="Caption">Table 29 - Vserver Volume Quota Report (Disk) Information - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 31 - Vserver Volume Quota Report (Disk) Information - OnPrem-HQ</div><br /></div>
 <div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Volume</th><th>Quota Target</th><th>Qtree</th><th>Files Limit</th><th>Soft File Limit</th><th>Files Used</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>DATA</td><td>/vol/DATA/SHARE</td><td>SHARE</td><td>-</td><td>-</td><td>1</td><td>NAS</td></tr>
 <tr><td>DATA</td><td>/vol/DATA/HR</td><td>HR</td><td>100000</td><td>10000</td><td>4</td><td>NAS</td></tr>
@@ -538,42 +605,35 @@ hr { margin-top: 1.0rem; }
 <tr><td>DATA</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0</td><td>NAS</td></tr>
 <tr><td>fg_oss_1627048265</td><td>/vol/fg_oss_1627048265/prueba01</td><td>prueba01</td><td>-</td><td>-</td><td>1</td><td>NAS</td></tr>
 <tr><td>fg_oss_1627048265</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735534</td><td>/vol/fg_oss_1628735534/fabricpool</td><td>fabricpool</td><td>-</td><td>-</td><td>1</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735534</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0</td><td>NAS</td></tr>
+<tr><td>fg_oss_1628735658</td><td>/vol/fg_oss_1628735658/humanresources</td><td>humanresources</td><td>-</td><td>-</td><td>1</td><td>NFS</td></tr>
+<tr><td>fg_oss_1628735658</td><td>*</td><td>&nbsp;</td><td>-</td><td>-</td><td>0</td><td>NFS</td></tr>
 </tbody></table>
-<div class="Caption">Table 30 - Vserver Volume Quota Report (File) Information - OnPrem-HQ</div><br></div>
-<a name="051c3ef8-a179-4da9-afe5-d5da074972ec"><h2 class="Heading3">6.2 Vserver Protocol Information Summary</h2></a><div>The following section provides a summary of the vserver protocol information on OnPrem-HQ.</div><br><a name="0dc9d7cd-c8c0-4ef5-b427-1c75bcff743d"><h3 class="Heading4">6.2.1 ISCSI Services Summary</h3></a><div>The following section provides the ISCSI Service Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>IQN Name</th><th>Alias Name</th><th>Status</th></tr></thead><tbody>
+<div class="Caption">Table 32 - Vserver Volume Quota Report (File) Information - OnPrem-HQ</div><br /></div>
+<a name="88d1f87d-0ede-4e65-86b2-85bc9e4a413c"><h2 class="Heading3">6.2 Vserver Protocol Information Summary</h2></a><div>The following section provides a summary of the vserver protocol information on OnPrem-HQ.</div><br /><a name="8dfd86fc-bcca-459c-baa6-1782e2ce6d10"><h3 class="Heading4">6.2.1 ISCSI Services Summary</h3></a><div>The following section provides the ISCSI Service Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>IQN Name</th><th>Alias Name</th><th>Status</th></tr></thead><tbody>
 <tr><td>SAN</td><td>iqn.1992-08.com.netapp:sn.f4084491dfec11ebba75005056b073f8:vs.3</td><td>SAN</td><td>Up</td></tr>
 </tbody></table>
-<div class="Caption">Table 31 - Vserver ISCSI Service Information - OnPrem-HQ</div><br></div>
-<a name="c57683b4-19b9-4576-8d53-fa77ecbbe344"><h4 class="Heading5">6.2.1.1 ISCSI Interface Summary</h4></a><div>The following section provides the ISCSI Interface Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Interface Name</th><th>Ip Address</th><th>Port</th><th>Status</th><th>Vserver</th></tr></thead><tbody>
+<div class="Caption">Table 33 - Vserver ISCSI Service Information - OnPrem-HQ</div><br /></div>
+<a name="7a25a255-a2d6-4d43-b772-4d440df48e97"><h4 class="Heading5">6.2.1.1 ISCSI Interface Summary</h4></a><div>The following section provides the ISCSI Interface Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Interface Name</th><th>Ip Address</th><th>Port</th><th>Status</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>ISCSI-A-OnPrem-HQ-01</td><td>192.168.6.61</td><td>3260</td><td>Up</td><td>SAN</td></tr>
 <tr><td>ISCSI-A-OnPrem-HQ-02</td><td>192.168.6.62</td><td>3260</td><td>Up</td><td>SAN</td></tr>
 <tr><td>ISCSI-B-OnPrem-HQ-01</td><td>192.168.12.61</td><td>3260</td><td>Up</td><td>SAN</td></tr>
 <tr><td>ISCSI-B-OnPrem-HQ-02</td><td>192.168.12.62</td><td>3260</td><td>Up</td><td>SAN</td></tr>
 </tbody></table>
-<div class="Caption">Table 32 - ISCSI Interface Information - OnPrem-HQ</div><br></div>
-<a name="f7d3738b-cf52-4d2f-ac01-472a2631f310"><h4 class="Heading5">6.2.1.2 ISCSI Client Initiator Summary</h4></a><div>The following section provides the ISCSI Interface Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Initiator Name</th><th>Target Port Group</th><th>Vserver</th></tr></thead><tbody>
-<tr><td>iqn.1986-03.com.sun:01:2845eacc1fae.60bbfa60</td><td>ISCSI-A-OnPrem-HQ-01</td><td>SAN</td></tr>
-<tr><td>iqn.1994-05.com.redhat:abdab89e83c7</td><td>ISCSI-A-OnPrem-HQ-01</td><td>SAN</td></tr>
-<tr><td>iqn.1986-03.com.sun:01:2845eacc1fae.60bbfa60</td><td>ISCSI-A-OnPrem-HQ-02</td><td>SAN</td></tr>
-<tr><td>iqn.1994-05.com.redhat:abdab89e83c7</td><td>ISCSI-A-OnPrem-HQ-02</td><td>SAN</td></tr>
-<tr><td>iqn.1986-03.com.sun:01:2845eacc1fae.60bbfa60</td><td>ISCSI-B-OnPrem-HQ-01</td><td>SAN</td></tr>
-<tr><td>iqn.1994-05.com.redhat:abdab89e83c7</td><td>ISCSI-B-OnPrem-HQ-01</td><td>SAN</td></tr>
-<tr><td>iqn.1986-03.com.sun:01:2845eacc1fae.60bbfa60</td><td>ISCSI-B-OnPrem-HQ-02</td><td>SAN</td></tr>
-<tr><td>iqn.1994-05.com.redhat:abdab89e83c7</td><td>ISCSI-B-OnPrem-HQ-02</td><td>SAN</td></tr>
-</tbody></table>
-<div class="Caption">Table 33 - ISCSI Client Initiator Information - OnPrem-HQ</div><br></div>
-<a name="0a2dcd80-068f-45cb-a90b-0d423ef48045"><h3 class="Heading4">6.2.2 FCP Services Summary</h3></a><div>The following section provides the FCP Service Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>FCP WWNN</th><th>Status</th></tr></thead><tbody>
+<div class="Caption">Table 34 - ISCSI Interface Information - OnPrem-HQ</div><br /></div>
+<a name="5bf7f6ea-c269-439b-85f9-ba080cb40912"><h3 class="Heading4">6.2.2 FCP Services Summary</h3></a><div>The following section provides the FCP Service Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>FCP WWNN</th><th>Status</th></tr></thead><tbody>
 <tr><td>SAN</td><td>20:02:00:50:56:b0:73:f8</td><td>Up</td></tr>
 </tbody></table>
-<div class="Caption">Table 34 - Vserver FCP Service Information - OnPrem-HQ</div><br></div>
-<a name="97613fdc-d9f1-409e-b595-169373ad6593"><h4 class="Heading5">6.2.2.1 FCP Interface Summary</h4></a><div>The following section provides the FCP Interface Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Interface Name</th><th>FCP WWPN</th><th>Home Port</th><th>Vserver</th></tr></thead><tbody>
+<div class="Caption">Table 35 - Vserver FCP Service Information - OnPrem-HQ</div><br /></div>
+<a name="215613e3-4f04-4bd1-a24f-a038883b4629"><h4 class="Heading5">6.2.2.1 FCP Interface Summary</h4></a><div>The following section provides the FCP Interface Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Interface Name</th><th>FCP WWPN</th><th>Home Port</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>lif_SAN_24</td><td>20:03:00:50:56:b0:73:f8</td><td>0a</td><td>SAN</td></tr>
 <tr><td>lif_SAN_300</td><td>20:04:00:50:56:b0:73:f8</td><td>0b</td><td>SAN</td></tr>
 <tr><td>lif_SAN_378</td><td>20:00:00:50:56:b0:73:f8</td><td>0a</td><td>SAN</td></tr>
 <tr><td>lif_SAN_622</td><td>20:01:00:50:56:b0:73:f8</td><td>0b</td><td>SAN</td></tr>
 </tbody></table>
-<div class="Caption">Table 35 - FCP Interface Information - OnPrem-HQ</div><br></div>
-<a name="4e2e2ea3-f826-4cb3-8c94-3825b3390fbc"><h4 class="Heading5">6.2.2.2 FCP Physical Adapter Summary</h4></a><div>The following section provides the FCP Physical Adapter Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Node Name</th><th>Adapter</th><th>Protocol</th><th>Speed</th><th>Status</th></tr></thead><tbody>
+<div class="Caption">Table 36 - FCP Interface Information - OnPrem-HQ</div><br /></div>
+<a name="da2d7786-2c72-4a40-b676-03f363ccacaf"><h4 class="Heading5">6.2.2.2 FCP Physical Adapter Summary</h4></a><div>The following section provides the FCP Physical Adapter Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Node Name</th><th>Adapter</th><th>Protocol</th><th>Speed</th><th>Status</th></tr></thead><tbody>
 <tr><td>OnPrem-HQ-01</td><td>0a</td><td>fibre_channel</td><td>auto</td><td>Up</td></tr>
 <tr><td>OnPrem-HQ-01</td><td>0b</td><td>fibre_channel</td><td>auto</td><td>Up</td></tr>
 <tr><td>OnPrem-HQ-01</td><td>0e</td><td>fibre_channel</td><td>auto</td><td>Up</td></tr>
@@ -587,8 +647,8 @@ hr { margin-top: 1.0rem; }
 <tr><td>OnPrem-HQ-02</td><td>1a</td><td>fibre_channel</td><td>auto</td><td>Up</td></tr>
 <tr><td>OnPrem-HQ-02</td><td>1b</td><td>fibre_channel</td><td>auto</td><td>Up</td></tr>
 </tbody></table>
-<div class="Caption">Table 36 - FCP Physical Adapter Information - OnPrem-HQ</div><br></div>
-<a name="36e52238-efba-4d22-84a4-c664d10067f2"><h3 class="Heading4">6.2.3 Vserver FCP/ISCSI Lun Storage Summary</h3></a><div>The following section provides the Lun Storage Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<div class="Caption">Table 37 - FCP Physical Adapter Information - OnPrem-HQ</div><br /></div>
+<a name="c0ae56fe-72ac-4b69-8ecb-a8bbe6eaa432"><h3 class="Heading4">6.2.3 Vserver FCP/ISCSI Lun Storage Summary</h3></a><div>The following section provides the Lun Storage Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>NTAPSOL_LUN_1</td></tr>
 <tr><th>Parent Volume</th><td>NTAPSOL_LUN_1</td></tr>
@@ -607,8 +667,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>Yes</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>Oracle_Data_U02</td></tr>
 <tr><th>Parent Volume</th><td>Oracle_Data_Volumes</td></tr>
@@ -627,8 +687,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>Yes</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>Oracle_Data_U03</td></tr>
 <tr><th>Parent Volume</th><td>Oracle_Data_Volumes</td></tr>
@@ -647,8 +707,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>Yes</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>Oracle_Data_U04</td></tr>
 <tr><th>Parent Volume</th><td>Oracle_Data_Volumes</td></tr>
@@ -667,8 +727,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>Yes</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>SERVER_DATASTORE</td></tr>
 <tr><th>Parent Volume</th><td>SERVER_DATASTORE</td></tr>
@@ -687,8 +747,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>Yes</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>SERVER_DATASTORE_2_1</td></tr>
 <tr><th>Parent Volume</th><td>SERVER_DATASTORE_2</td></tr>
@@ -707,8 +767,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>No</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Lun Name</th><td>SERVER_DATASTORE_2_2</td></tr>
 <tr><th>Parent Volume</th><td>SERVER_DATASTORE_2</td></tr>
@@ -727,18 +787,18 @@ hr { margin-top: 1.0rem; }
 <tr><th>IsMapped</th><td>No</td></tr>
 <tr><th>Status</th><td>Up</td></tr>
 </tbody></table>
-<br></div>
-<a name="5c1b6ba6-5853-4656-bc0d-2377f6f9df62"><h4 class="Heading5">6.2.3.1 Igroup Mapping Summary</h4></a><div>The following section provides the Lun  Interface Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<a name="7dc1fb11-4361-4337-b6d6-4ea0442a5114"><h4 class="Heading5">6.2.3.1 Igroup Mapping Summary</h4></a><div>The following section provides the Lun  Interface Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Igroup Name</th><td>NTAPRHAT-01V</td></tr>
 <tr><th>Type</th><td>linux</td></tr>
 <tr><th>Protocol</th><td>mixed</td></tr>
 <tr><th>Vserver</th><td>SAN</td></tr>
 <tr><th>Initiators</th><td>iqn.1994-05.com.redhat:abdab89e83c7</td></tr>
-<tr><th>Mapped Lun</th><td>Oracle_Data_U02<br>Oracle_Data_U03<br>Oracle_Data_U04</td></tr>
+<tr><th>Mapped Lun</th><td>Oracle_Data_U02<br />Oracle_Data_U03<br />Oracle_Data_U04</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Igroup Name</th><td>NTAPSOL-01V</td></tr>
 <tr><th>Type</th><td>solaris</td></tr>
@@ -747,23 +807,23 @@ hr { margin-top: 1.0rem; }
 <tr><th>Initiators</th><td>iqn.1986-03.com.sun:01:2845eacc1fae.60bbfa60</td></tr>
 <tr><th>Mapped Lun</th><td>NTAPSOL_LUN_1</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%"><col style="max-width:75%; min-width:75%; width:75%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
 <tbody>
 <tr><th>Igroup Name</th><td>RegionA01-COMP-CLUSTER</td></tr>
 <tr><th>Type</th><td>vmware</td></tr>
 <tr><th>Protocol</th><td>mixed</td></tr>
 <tr><th>Vserver</th><td>SAN</td></tr>
-<tr><th>Initiators</th><td>iqn.1998-01.com.vmware:comp-01a-2581ec1ed06134af<br>iqn.1998-01.com.vmware:comp-02a-2c120275e45e175a</td></tr>
+<tr><th>Initiators</th><td>iqn.1998-01.com.vmware:comp-01a-2581ec1ed06134af<br />iqn.1998-01.com.vmware:comp-02a-2c120275e45e175a</td></tr>
 <tr><th>Mapped Lun</th><td>SERVER_DATASTORE</td></tr>
 </tbody></table>
-<br></div>
-<a name="1cb3e6b4-4865-4714-b2a3-4e67b5d0b5d0"><h3 class="Heading4">6.2.4 NFS Services Summary</h3></a><div>The following section provides the NFS Service Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>General Access</th><th>Nfs v3</th><th>Nfs v4</th><th>Nfs v41</th></tr></thead><tbody>
-<tr><td>NAS</td><td>Yes</td><td>Enabled</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">Disabled</td><td style="font-family: &#39;Arial&#39;; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">Disabled</td></tr>
+<br /></div>
+<a name="fb7c01aa-adf4-4e6b-aa20-9ffd9594f46c"><h3 class="Heading4">6.2.4 NFS Services Summary</h3></a><div>The following section provides the NFS Service Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>General Access</th><th>Nfs v3</th><th>Nfs v4</th><th>Nfs v41</th></tr></thead><tbody>
+<tr><td>NAS</td><td>Yes</td><td>Enabled</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">Disabled</td><td style="font-family: 'Arial'; font-size: 0.83rem; text-align: left; font-weight: normal; color: #000000; background-color: #fef3b5;">Disabled</td></tr>
 <tr><td>NFS</td><td>Yes</td><td>Enabled</td><td>Enabled</td><td>Enabled</td></tr>
 </tbody></table>
-<div class="Caption">Table 37 - Vserver NFS Service Information - OnPrem-HQ</div><br></div>
-<a name="ddc652b7-6a46-466d-b7bd-297e15c3bb57"><h4 class="Heading5">6.2.4.1 NFS Options Summary</h4></a><div>The following section provides the NFS Service Options Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:50%; min-width:50%; width:50%"><col style="max-width:50%; min-width:50%; width:50%"></colgroup>
+<div class="Caption">Table 38 - Vserver NFS Service Information - OnPrem-HQ</div><br /></div>
+<a name="8988ecac-20f8-4c3f-8323-04e90ed59d2a"><h4 class="Heading5">6.2.4.1 NFS Options Summary</h4></a><div>The following section provides the NFS Service Options Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:50%; min-width:50%; width:50%" /><col style="max-width:50%; min-width:50%; width:50%" /></colgroup>
 <tbody>
 <tr><th>Vserver</th><td>NAS</td></tr>
 <tr><th>Allow Idle Connection</th><td>False</td></tr>
@@ -780,8 +840,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>Nfsv40 Acl Enabled</th><td>False</td></tr>
 <tr><th>Nfsv40 Enabled</th><td>False</td></tr>
 </tbody></table>
-<br></div>
-<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:50%; min-width:50%; width:50%"><col style="max-width:50%; min-width:50%; width:50%"></colgroup>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:50%; min-width:50%; width:50%" /><col style="max-width:50%; min-width:50%; width:50%" /></colgroup>
 <tbody>
 <tr><th>Vserver</th><td>NFS</td></tr>
 <tr><th>Allow Idle Connection</th><td>False</td></tr>
@@ -798,8 +858,8 @@ hr { margin-top: 1.0rem; }
 <tr><th>Nfsv40 Acl Enabled</th><td>False</td></tr>
 <tr><th>Nfsv40 Enabled</th><td>True</td></tr>
 </tbody></table>
-<br></div>
-<a name="dd454aa5-89ff-4cf5-b7c0-19c64e401754"><h5 class="Heading6">6.2.4.1.1 NFS Volume Export Summary</h5></a><div>The following section provides the VServer NFS Service Exports Information on OnPrem-HQ.</div><br><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Path Name</th><th>Vserver</th></tr></thead><tbody>
+<br /></div>
+<a name="17b14993-3721-4cf5-8ec3-2dcf8200515c"><h5 class="Heading6">6.2.4.1.1 NFS Volume Export Summary</h5></a><div>The following section provides the VServer NFS Service Exports Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Path Name</th><th>Vserver</th></tr></thead><tbody>
 <tr><td>/</td><td>NAS</td></tr>
 <tr><td>/DATA</td><td>NAS</td></tr>
 <tr><td>/vol/DATA</td><td>NAS</td></tr>
@@ -813,10 +873,226 @@ hr { margin-top: 1.0rem; }
 <tr><td>/vol/NAS_root</td><td>NAS</td></tr>
 <tr><td>/vol/fg_oss_1627048265</td><td>NAS</td></tr>
 <tr><td>/vol/fg_oss_1627048265/prueba01</td><td>NAS</td></tr>
+<tr><td>/vol/fg_oss_1628735534</td><td>NAS</td></tr>
+<tr><td>/vol/fg_oss_1628735534/fabricpool</td><td>NAS</td></tr>
 <tr><td>/</td><td>NFS</td></tr>
+<tr><td>/SHARE_NFS</td><td>NFS</td></tr>
 <tr><td>/vol/NFS_root</td><td>NFS</td></tr>
+<tr><td>/vol/SHARE_NFS</td><td>NFS</td></tr>
+<tr><td>/vol/SHARE_NFS/DP</td><td>NFS</td></tr>
+<tr><td>/vol/SHARE_NFS/IT</td><td>NFS</td></tr>
+<tr><td>/vol/fg_oss_1628735658</td><td>NFS</td></tr>
+<tr><td>/vol/fg_oss_1628735658/humanresources</td><td>NFS</td></tr>
 </tbody></table>
-<div class="Caption">Table 38 - Vserver NFS Service Volume Export Summary - OnPrem-HQ</div><br></div>
+<div class="Caption">Table 39 - Vserver NFS Service Volume Export Summary - OnPrem-HQ</div><br /></div>
+<a name="59cefb9b-d976-4ebb-afde-0563f52a7481"><h3 class="Heading4">6.2.5 CIFS Services Summary</h3></a><div>The following section provides the CIFS Service Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Node Name</th><td>OnPrem-HQ-01</td></tr>
+<tr><th>Cifs Domain Name</th><td>OnPrem.local</td></tr>
+<tr><th>Cifs NetBios Name</th><td>NAS</td></tr>
+<tr><th>Cifs Domain IP</th><td>192.168.5.1</td></tr>
+<tr><th>AD Server Site</th><td>OnPrem-HQ</td></tr>
+<tr><th>Cifs Server Status</th><td>Running</td></tr>
+<tr><th>Status Details</th><td>Response time (msec): 13</td></tr>
+<tr><th>Vserver</th><td>NAS</td></tr>
+<tr><th>Status</th><td>UP</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Node Name</th><td>OnPrem-HQ-02</td></tr>
+<tr><th>Cifs Domain Name</th><td>OnPrem.local</td></tr>
+<tr><th>Cifs NetBios Name</th><td>NAS</td></tr>
+<tr><th>Cifs Domain IP</th><td>192.168.5.1</td></tr>
+<tr><th>AD Server Site</th><td>OnPrem-HQ</td></tr>
+<tr><th>Cifs Server Status</th><td>Running</td></tr>
+<tr><th>Status Details</th><td>Response time (msec): 9</td></tr>
+<tr><th>Vserver</th><td>NAS</td></tr>
+<tr><th>Status</th><td>UP</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Node Name</th><td>OnPrem-HQ-01</td></tr>
+<tr><th>Cifs Domain Name</th><td>OnPrem.local</td></tr>
+<tr><th>Cifs NetBios Name</th><td>NFS</td></tr>
+<tr><th>Cifs Domain IP</th><td>192.168.5.1</td></tr>
+<tr><th>AD Server Site</th><td>OnPrem-HQ</td></tr>
+<tr><th>Cifs Server Status</th><td>Running</td></tr>
+<tr><th>Status Details</th><td>Response time (msec): 9</td></tr>
+<tr><th>Vserver</th><td>NFS</td></tr>
+<tr><th>Status</th><td>UP</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:75%; min-width:75%; width:75%" /></colgroup>
+<tbody>
+<tr><th>Node Name</th><td>OnPrem-HQ-02</td></tr>
+<tr><th>Cifs Domain Name</th><td>OnPrem.local</td></tr>
+<tr><th>Cifs NetBios Name</th><td>NFS</td></tr>
+<tr><th>Cifs Domain IP</th><td>192.168.5.1</td></tr>
+<tr><th>AD Server Site</th><td>OnPrem-HQ</td></tr>
+<tr><th>Cifs Server Status</th><td>Running</td></tr>
+<tr><th>Status Details</th><td>Response time (msec): 5</td></tr>
+<tr><th>Vserver</th><td>NFS</td></tr>
+<tr><th>Status</th><td>UP</td></tr>
+</tbody></table>
+<br /></div>
+<a name="78adbd1d-e7a7-4f77-bcec-be7623722224"><h4 class="Heading5">6.2.5.1 CIFS Service Configuration Summary</h4></a><div>The following section provides the Cifs Service Configuration Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:35%; min-width:35%; width:35%" /><col style="max-width:65%; min-width:65%; width:65%" /></colgroup>
+<tbody>
+<tr><th>Vserver</th><td>NAS</td></tr>
+<tr><th>Kerberos Clock Skew</th><td>5</td></tr>
+<tr><th>Kerberos Renew Age</th><td>7</td></tr>
+<tr><th>Kerberos Ticket Age</th><td>10</td></tr>
+<tr><th>Aes Encryption Enabled</th><td>False</td></tr>
+<tr><th>Signing Required</th><td>False</td></tr>
+<tr><th>Smb Encryption Required</th><td>False</td></tr>
+<tr><th>Lm Compatibility Level</th><td>lm_ntlm_ntlmv2_krb</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:35%; min-width:35%; width:35%" /><col style="max-width:65%; min-width:65%; width:65%" /></colgroup>
+<tbody>
+<tr><th>Vserver</th><td>NFS</td></tr>
+<tr><th>Kerberos Clock Skew</th><td>5</td></tr>
+<tr><th>Kerberos Renew Age</th><td>7</td></tr>
+<tr><th>Kerberos Ticket Age</th><td>10</td></tr>
+<tr><th>Aes Encryption Enabled</th><td>False</td></tr>
+<tr><th>Signing Required</th><td>False</td></tr>
+<tr><th>Smb Encryption Required</th><td>False</td></tr>
+<tr><th>Lm Compatibility Level</th><td>lm_ntlm_ntlmv2_krb</td></tr>
+</tbody></table>
+<br /></div>
+<a name="b98389f7-66dc-42e6-878f-224cb6321d99"><h5 class="Heading6">6.2.5.1.1 CIFS Domain Controller Summary</h5></a><div>The following section provides the Connected Domain Controller Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>DC Name</th><th>Domain</th><th>Node</th><th>Server Type</th><th>Prefer Type</th><th>Status</th></tr></thead><tbody>
+<tr><td>server-dc-01v</td><td>OnPrem.local</td><td>OnPrem-HQ-01</td><td>ms_dc</td><td>favored</td><td>ok</td></tr>
+<tr><td>server-dc-01v</td><td>OnPrem.local</td><td>OnPrem-HQ-01</td><td>ms_dc</td><td>favored</td><td>ok</td></tr>
+<tr><td>server-dc-01v</td><td>OnPrem.local</td><td>OnPrem-HQ-02</td><td>ms_dc</td><td>favored</td><td>ok</td></tr>
+<tr><td>server-dc-01v</td><td>OnPrem.local</td><td>OnPrem-HQ-02</td><td>ms_dc</td><td>favored</td><td>ok</td></tr>
+</tbody></table>
+<div class="Caption">Table 40 - CIFS Connected Domain Controller Information - OnPrem-HQ</div><br /></div>
+<a name="7964f71d-473e-4d09-99e4-8a58ed6ecaa1"><h5 class="Heading6">6.2.5.1.2 CIFS Local Group Summary</h5></a><div>The following section provides the Cifs Service Local Group Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Group Name</th><th>Description</th><th>Vserver</th></tr></thead><tbody>
+<tr><td>BUILTIN\Administrators</td><td>Built-in Administrators group</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Backup Operators</td><td>Backup Operators group</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Guests</td><td>Built-in Guests Group</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Power Users</td><td>Restricted administrative privileges</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Users</td><td>All users</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Administrators</td><td>Built-in Administrators group</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Backup Operators</td><td>Backup Operators group</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Guests</td><td>Built-in Guests Group</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Power Users</td><td>Restricted administrative privileges</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Users</td><td>All users</td><td>NFS</td></tr>
+</tbody></table>
+<div class="Caption">Table 41 - CIFS Connected Local Group Information - OnPrem-HQ</div><br /></div>
+<br /><div>The following section provides the Cifs Service Local Group Memeber Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Group Name</th><th>Description</th><th>Vserver</th></tr></thead><tbody>
+<tr><td>BUILTIN\Administrators</td><td>NAS\Administrator</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Administrators</td><td>OnPrem\Domain Admins</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Guests</td><td>OnPrem\Domain Guests</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Users</td><td>OnPrem\Domain Users</td><td>NAS</td></tr>
+<tr><td>BUILTIN\Administrators</td><td>NFS\Administrator</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Administrators</td><td>OnPrem\Domain Admins</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Guests</td><td>OnPrem\Domain Guests</td><td>NFS</td></tr>
+<tr><td>BUILTIN\Users</td><td>OnPrem\Domain Users</td><td>NFS</td></tr>
+</tbody></table>
+<div class="Caption">Table 42 - CIFS Connected Local Group Members Information - OnPrem-HQ</div><br /></div>
+<a name="d292b26a-d914-431f-b01a-0a9eaca3407b"><h4 class="Heading5">6.2.5.2 CIFS Options Summary</h4></a><div>The following section provides the CIFS Service Options Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:50%; min-width:50%; width:50%" /><col style="max-width:50%; min-width:50%; width:50%" /></colgroup>
+<tbody>
+<tr><th>Vserver</th><td>NAS</td></tr>
+<tr><th>Client Session Timeout</th><td>900</td></tr>
+<tr><th>DefaultUnixUser</th><td>pcuser</td></tr>
+<tr><th>Client Version Reporting Enabled</th><td>True</td></tr>
+<tr><th>Copy Offload Direct Copy Enabled</th><td>True</td></tr>
+<tr><th>Copy Offload Enabled</th><td>True</td></tr>
+<tr><th>Dac Enabled</th><td>False</td></tr>
+<tr><th>Export Policy Enabled</th><td>False</td></tr>
+<tr><th>Large Mtu Enabled</th><td>True</td></tr>
+<tr><th>Local Auth Enabled</th><td>True</td></tr>
+<tr><th>Local Users And Groups Enabled</th><td>True</td></tr>
+<tr><th>Multi Channel Enabled</th><td>False</td></tr>
+<tr><th>Nbns Enabled</th><td>False</td></tr>
+<tr><th>Netbios Over Tcp Enabled</th><td>True</td></tr>
+<tr><th>Referral Enabled</th><td>False</td></tr>
+<tr><th>Shadow Copy Enabled</th><td>True</td></tr>
+<tr><th>Smb1 Enabled</th><td>False</td></tr>
+<tr><th>Smb2 Enabled</th><td>True</td></tr>
+<tr><th>Smb31 Enabled</th><td>True</td></tr>
+<tr><th>Smb3 Enabled</th><td>True</td></tr>
+<tr><th>Max Connections Per Session</th><td>32</td></tr>
+<tr><th>Max Credits</th><td>128</td></tr>
+<tr><th>Max File Write Zero Length</th><td>33554432</td></tr>
+<tr><th>Max Lifs Per Session</th><td>256</td></tr>
+<tr><th>Max Mpx</th><td>255</td></tr>
+<tr><th>Max Opens Same File Per Tree</th><td>1000</td></tr>
+<tr><th>Restrict Anonymous</th><td>no_restriction</td></tr>
+<tr><th>Shadow Copy Dir Depth</th><td>5</td></tr>
+<tr><th>Smb1 Max Buffer Size</th><td>65535</td></tr>
+</tbody></table>
+<br /></div>
+<div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:50%; min-width:50%; width:50%" /><col style="max-width:50%; min-width:50%; width:50%" /></colgroup>
+<tbody>
+<tr><th>Vserver</th><td>NFS</td></tr>
+<tr><th>Client Session Timeout</th><td>900</td></tr>
+<tr><th>DefaultUnixUser</th><td>pcuser</td></tr>
+<tr><th>Client Version Reporting Enabled</th><td>True</td></tr>
+<tr><th>Copy Offload Direct Copy Enabled</th><td>True</td></tr>
+<tr><th>Copy Offload Enabled</th><td>True</td></tr>
+<tr><th>Dac Enabled</th><td>False</td></tr>
+<tr><th>Export Policy Enabled</th><td>False</td></tr>
+<tr><th>Large Mtu Enabled</th><td>True</td></tr>
+<tr><th>Local Auth Enabled</th><td>True</td></tr>
+<tr><th>Local Users And Groups Enabled</th><td>True</td></tr>
+<tr><th>Multi Channel Enabled</th><td>True</td></tr>
+<tr><th>Nbns Enabled</th><td>False</td></tr>
+<tr><th>Netbios Over Tcp Enabled</th><td>True</td></tr>
+<tr><th>Referral Enabled</th><td>False</td></tr>
+<tr><th>Shadow Copy Enabled</th><td>True</td></tr>
+<tr><th>Smb1 Enabled</th><td>False</td></tr>
+<tr><th>Smb2 Enabled</th><td>True</td></tr>
+<tr><th>Smb31 Enabled</th><td>True</td></tr>
+<tr><th>Smb3 Enabled</th><td>True</td></tr>
+<tr><th>Max Connections Per Session</th><td>32</td></tr>
+<tr><th>Max Credits</th><td>128</td></tr>
+<tr><th>Max File Write Zero Length</th><td>33554432</td></tr>
+<tr><th>Max Lifs Per Session</th><td>256</td></tr>
+<tr><th>Max Mpx</th><td>255</td></tr>
+<tr><th>Max Opens Same File Per Tree</th><td>1000</td></tr>
+<tr><th>Restrict Anonymous</th><td>no_enumeration</td></tr>
+<tr><th>Shadow Copy Dir Depth</th><td>5</td></tr>
+<tr><th>Smb1 Max Buffer Size</th><td>65535</td></tr>
+</tbody></table>
+<br /></div>
+<a name="c03639b3-89a9-47a8-9a02-7850d92cf918"><h5 class="Heading6">6.2.5.2.1 CIFS Share Summary</h5></a><div>The following section provides the CIFS Service Shares Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:20%; min-width:20%; width:20%" /><col style="max-width:20%; min-width:20%; width:20%" /><col style="max-width:20%; min-width:20%; width:20%" /><col style="max-width:40%; min-width:40%; width:40%" /></colgroup>
+<thead><tr><th>Vserver Name</th><th>Share Name</th><th>Volume</th><th>Path</th></tr></thead><tbody>
+<tr><td>NAS</td><td>c$</td><td>NAS_root</td><td>/</td></tr>
+<tr><td>NAS</td><td>DATA</td><td>DATA</td><td>/DATA</td></tr>
+<tr><td>NAS</td><td>HR</td><td>DATA</td><td>/DATA/HR</td></tr>
+<tr><td>NAS</td><td>ipc$</td><td>NAS_root</td><td>/</td></tr>
+<tr><td>NFS</td><td>c$</td><td>NFS_root</td><td>/</td></tr>
+<tr><td>NFS</td><td>DP</td><td>SHARE_NFS</td><td>/SHARE_NFS/DP</td></tr>
+<tr><td>NFS</td><td>ipc$</td><td>NFS_root</td><td>/</td></tr>
+<tr><td>NFS</td><td>IT</td><td>SHARE_NFS</td><td>/SHARE_NFS/IT</td></tr>
+</tbody></table>
+<div class="Caption">Table 43 - Vserver CIFS Share Information - OnPrem-HQ</div><br /></div>
+<br /><div>The following section provides the CIFS Shares Properties &amp; Acl Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:20%; min-width:20%; width:20%" /><col style="max-width:20%; min-width:20%; width:20%" /><col style="max-width:30%; min-width:30%; width:30%" /><col style="max-width:30%; min-width:30%; width:30%" /></colgroup>
+<thead><tr><th>Vserver Name</th><th>Share Name</th><th>Share ACL</th><th>Share Properties</th></tr></thead><tbody>
+<tr><td>NAS</td><td>c$</td><td>BUILTIN\Administrators / Full Control</td><td>oplocks, browsable, changenotify, show_previous_versions</td></tr>
+<tr><td>NAS</td><td>DATA</td><td>Everyone / Full Control</td><td>oplocks, browsable, changenotify, show_previous_versions</td></tr>
+<tr><td>NAS</td><td>HR</td><td>Everyone / Full Control</td><td>browsable, show_previous_versions, oplocks, changenotify</td></tr>
+<tr><td>NAS</td><td>ipc$</td><td>&nbsp;</td><td>browsable</td></tr>
+<tr><td>NFS</td><td>c$</td><td>BUILTIN\Administrators / Full Control</td><td>oplocks, browsable, changenotify, show_previous_versions</td></tr>
+<tr><td>NFS</td><td>DP</td><td>Everyone / Full Control</td><td>browsable, show_previous_versions, oplocks, changenotify</td></tr>
+<tr><td>NFS</td><td>ipc$</td><td>&nbsp;</td><td>browsable</td></tr>
+<tr><td>NFS</td><td>IT</td><td>Everyone / Full Control</td><td>browsable, show_previous_versions, oplocks, changenotify</td></tr>
+</tbody></table>
+<div class="Caption">Table 44 - The CIFS Share Properties &amp; Acl Information - OnPrem-HQ</div><br /></div>
+<a name="3351e6a1-3903-44cf-89fb-8c920614f8ae"><h3 class="Heading4">6.2.6 S3 Services Summary</h3></a><div>The following section provides the S3 Service Information on OnPrem-HQ.</div><br /><a name="ced927f6-9fb2-4abd-8f4b-9bee5dda5027"><h4 class="Heading5">6.2.6.1 S3 Service Configuration Summary</h4></a><div>The following section provides the S3 Service Configuration Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%;"><thead><tr><th>Vserver</th><th>HTTP</th><th>HTTP Port</th><th>HTTPS</th><th>HTTPS Port</th><th>Status</th></tr></thead><tbody>
+<tr><td>NAS</td><td>False</td><td>80</td><td>True</td><td>443</td><td>UP</td></tr>
+<tr><td>nfs</td><td>False</td><td>80</td><td>True</td><td>443</td><td>UP</td></tr>
+</tbody></table>
+<div class="Caption">Table 45 - Vserver S3 Service Information - OnPrem-HQ</div><br /></div>
+<a name="02c23d42-fe25-476b-9f6d-27af224ef74d"><h5 class="Heading6">6.2.6.1.1 S3 Bucket Summary</h5></a><div>The following section provides the S3 Bucket Information on OnPrem-HQ.</div><br /><div style="word-break: break-word; overflow-wrap: anywhere; "><table class="tabledefault" style="width:100%; table-layout: fixed;"><colgroup><col style="max-width:30%; min-width:30%; width:30%" /><col style="max-width:25%; min-width:25%; width:25%" /><col style="max-width:15%; min-width:15%; width:15%" /><col style="max-width:15%; min-width:15%; width:15%" /><col style="max-width:15%; min-width:15%; width:15%" /></colgroup>
+<thead><tr><th>Bucket</th><th>Volume</th><th>Total</th><th>Used</th><th>Vserver</th></tr></thead><tbody>
+<tr><td>prueba01</td><td>fg_oss_1627048265</td><td>200 GB</td><td>0 GB</td><td>NAS</td></tr>
+<tr><td>fabricpool</td><td>fg_oss_1628735534</td><td>100 GB</td><td>0 GB</td><td>NAS</td></tr>
+<tr><td>humanresources</td><td>fg_oss_1628735658</td><td>100 GB</td><td>0 GB</td><td>NFS</td></tr>
+</tbody></table>
+<div class="Caption">Table 46 - Vserver S3 Bucket Information - OnPrem-HQ</div><br /></div>
 </div>
-<div><br><div class="Footer">Page 3</div></div></div></div>
-</body></html>
+<div><br /><div class="Footer">Page 3</div></div></div></div></body>
