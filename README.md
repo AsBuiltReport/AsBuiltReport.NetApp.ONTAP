@@ -33,6 +33,8 @@ For detailed documentation around the whole project, please refer to the `README
 
 ### Sample Report - Custom Style 1
 
+Sample NetApp Ontap As Built report HTML file: <a href="https://raw.githubusercontent.com/rebelinux/AsBuiltReport.NetApp.ONTAP/dev/Samples/Sample%20NetApp%20As-Built%20Report.html" download>Sample NetApp As-Built Report.html</a>
+
 Sample NetApp Ontap As Built report with health checks, using custom report style.
 
 ![Sample NetApp Ontap As Built Report](https://github.com/rebelinux/AsBuiltReport.NetApp.ONTAP/raw/dev/Samples/Sample_NetApp_Report_1.png "Sample NetApp Ontap As Built Report")
