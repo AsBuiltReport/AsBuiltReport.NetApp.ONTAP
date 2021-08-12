@@ -64,7 +64,7 @@ function Get-AbrOntapApi {
         $password = $Credential.GetNetworkCredential().Password
         $auth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($username + ":" + $password ))
         $ClusterIP = $ClusterInfo.NcController.Address.IPAddressToString
-        $fields = '&fields=*&return_records=true&return_timeout=15'
+        $fields = 'fields=*&return_records=true&return_timeout=15'
         $api = "https://" + $($ClusterIP)
         $headers = @{
             'Accept'        = 'application/json'
