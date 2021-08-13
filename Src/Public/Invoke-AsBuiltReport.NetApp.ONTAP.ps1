@@ -42,7 +42,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             throw
         }
 
-        #region Cluster Section
+        #region Cluster
+        #---------------------------------------------------------------------------------------------#
+        #                                 Cluster Section                                             #
+        #---------------------------------------------------------------------------------------------#
         Section -Style Heading1 "Report for Cluster $($ClusterInfo.ClusterName)" {
             Paragraph "The following section provides a summary of the array configuration for $($ClusterInfo.ClusterName)."
             BlankLine
@@ -65,7 +68,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
         }#endregion Cluster Section
-            #region Node Section
+        #region Node
+        #---------------------------------------------------------------------------------------------#
+        #                                 Node Section                                                #
+        #---------------------------------------------------------------------------------------------#
+
             Write-PScriboMessage "Node InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Node -gt 0) {
                 Section -Style Heading2 'Node Summary' {
@@ -88,7 +95,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Node Section
-            #region Storage Section
+
+        #region Storage
+        #---------------------------------------------------------------------------------------------#
+        #                                 Storage Section                                             #
+        #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Storage InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Storage -gt 0) {
                 Section -Style Heading2 'Storage Summary' {
@@ -135,6 +146,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }#endregion Storage Section
             #region License Section
+        #---------------------------------------------------------------------------------------------#
+        #                                 License Section                                             #
+        #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "License InfoLevel set at $($InfoLevel.License)."
             if ($InfoLevel.License -gt 0) {
                 Section -Style Heading2 'Licenses Summary' {
@@ -153,6 +167,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }#endregion License Section
             #region Network Section
+        #---------------------------------------------------------------------------------------------#
+        #                                 Network Section                                             #
+        #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
             if ($InfoLevel.Network -gt 0) {
                 Section -Style Heading2 'Network Summary' {
@@ -212,6 +229,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }#endregion Network Section
             #region Vserver Section
+        #---------------------------------------------------------------------------------------------#
+        #                                 Vserver Section                                             #
+        #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Vserver InfoLevel set at $($InfoLevel.Vserver)."
             if ($InfoLevel.Vserver -gt 0) {
                 Section -Style Heading2 'Vserver Summary' {
@@ -251,7 +271,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    }
+                }
+        #---------------------------------------------------------------------------------------------#
+        #                                 Vserver Protocol Section                                    #
+        #---------------------------------------------------------------------------------------------#
                     Section -Style Heading3 'Vserver Protocol Information Summary' {
                         Paragraph "The following section provides a summary of the vserver protocol information on $($ClusterInfo.ClusterName)."
                         BlankLine
@@ -272,6 +295,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
+        #---------------------------------------------------------------------------------------------#
+        #                                 FCP Section                                                 #
+        #---------------------------------------------------------------------------------------------#
                         Section -Style Heading4 'FCP Services Summary' {
                             Paragraph "The following section provides the FCP Service Information on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -297,6 +323,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapVserverLunIgroup
                             }
                         }
+        #---------------------------------------------------------------------------------------------#
+        #                                 NFS Section                                                 #
+        #---------------------------------------------------------------------------------------------#
                         Section -Style Heading4 'NFS Services Summary' {
                             Paragraph "The following section provides the NFS Service Information on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -312,6 +341,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
+        #---------------------------------------------------------------------------------------------#
+        #                                 CIFS Section                                                #
+        #---------------------------------------------------------------------------------------------#
                         Section -Style Heading4 'CIFS Services Summary' {
                             Paragraph "The following section provides the CIFS Service Information on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -350,6 +382,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
+        #---------------------------------------------------------------------------------------------#
+        #                                 S3 Section                                                  #
+        #---------------------------------------------------------------------------------------------#
                         if (Get-AbrOntapApi -uri "/api/protocols/s3/services?") {
                             Section -Style Heading4 'S3 Services Summary' {
                                 Paragraph "The following section provides the S3 Service Information on $($ClusterInfo.ClusterName)."
@@ -369,5 +404,41 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Vserver Section
+            #region Replication Section
+        #---------------------------------------------------------------------------------------------#
+        #                                 Replication Section                                         #
+        #---------------------------------------------------------------------------------------------#
+            Write-PScriboMessage "Replication InfoLevel set at $($InfoLevel.Replication)."
+            if ($InfoLevel.Replication -gt 0) {
+                Section -Style Heading2 'Replication Summary' {
+                    Paragraph "The following section provides a summary of the replication information on $($ClusterInfo.ClusterName)."
+                    BlankLine
+                    Section -Style Heading3 'Cluster Peer Information' {
+                        Paragraph "The following section provides the Cluster Peer information on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapRepClusterPeer
+                    }
+                    Section -Style Heading3 'Vserver Peer Information' {
+                        Paragraph "The following section provides the Vserver Peer information on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapRepVserverPeer
+                        Section -Style Heading4 'SnapMirror Relationship Information' {
+                            Paragraph "The following section provides the SnapMirror Relationship information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapRepRelationship
+                            Section -Style Heading5 'SnapMirror Replication History Information' {
+                                Paragraph "The following section provides the SnapMirror Operation information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapRepHistory
+                            }
+                        }
+                        Section -Style Heading4 'SnapMirror Destinations Information' {
+                            Paragraph "The following section provides the SnapMirror (List-Destination) information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapRepDestinations
+                        }
+                    }
+                }
+            }#endregion Replication Section
         }
     }

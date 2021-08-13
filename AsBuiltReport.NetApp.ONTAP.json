@@ -18,7 +18,8 @@
         "Storage": 1,
         "License": 1,
         "Network": 1,
-        "Vserver": 1
+        "Vserver": 1,
+        "Replication": 1
     },
     "HealthCheck": {
         "Cluster": {
@@ -51,6 +52,13 @@
             "Quota": true,
             "CIFS": true,
             "Snapshot": true
+        },
+        "Replication": {
+            "Status": true,
+            "ClusterPeer": true,
+            "VserverPeer": true,
+            "Relationship": true,
+            "History": true
         }
     }
 }
