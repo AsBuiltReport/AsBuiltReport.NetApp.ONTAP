@@ -19,7 +19,8 @@
         "License": 1,
         "Network": 1,
         "Vserver": 1,
-        "Replication": 1
+        "Replication": 1,
+        "Efficiency": 1
     },
     "HealthCheck": {
         "Cluster": {
@@ -58,7 +59,9 @@
             "ClusterPeer": true,
             "VserverPeer": true,
             "Relationship": true,
-            "History": true
+            "History": true,
+            "Mediator": true
+
         }
     }
 }

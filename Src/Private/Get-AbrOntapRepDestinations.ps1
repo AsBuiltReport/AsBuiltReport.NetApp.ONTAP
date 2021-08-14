@@ -27,6 +27,9 @@ function Get-AbrOntapRepDestinations {
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {
+                if ($Item.RelationshipStatus) {
+                    $Item.RelationshipStatus = ($Item.RelationshipStatus).toUpper()
+                }
                 $inObj = [ordered] @{
                     'Destination Vserver' = $Item.DestinationVserver
                     'Destination Location' = $Item.DestinationLocation
@@ -40,7 +43,7 @@ function Get-AbrOntapRepDestinations {
                         'load_sharing' { 'LS' }
                     }
                     'Policy Type' = $Item.PolicyType
-                    'Status' = ($Item.RelationshipStatus).toUpper()
+                    'Status' = $Item.RelationshipStatus
                 }
                 $ReplicaObj += [pscustomobject]$inobj
             }
