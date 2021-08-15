@@ -23,7 +23,6 @@ function Get-AbrOntapVserverVolumes {
     }
 
     process {
-        $Unit = "GB"
         $VserverRootVol = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
         if ($VserverRootVol) {
@@ -32,9 +31,9 @@ function Get-AbrOntapVserverVolumes {
                     'Volume' = $Item.Name
                     'Vserver' = $Item.Vserver
                     'Status' = $Item.State
-                    'Capacity' = "$([math]::Round(($Item.Totalsize) / "1$($Unit)", 0))$Unit"
-                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 0))$Unit"
-                    'Used' = "$($Item.Used)%"
+                    'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                     'Aggregate' = $Item.Aggregate
                 }
                 $VserverObj += [pscustomobject]$inobj
@@ -46,6 +45,7 @@ function Get-AbrOntapVserverVolumes {
             $TableParams = @{
                 Name = "Vserver Volume Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 30, 10, 10, 10, 10, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -64,42 +64,9 @@ function Get-AbrOntapVserverVolumes {
                     'Parent Snapshot' = $Item.ParentSnapshot
                     'Space Reserve' = $Item.SpaceReserve
                     'Space Guarantee' = $Item.SpaceGuaranteeEnabled
-                    'Capacity' = "$([math]::Round(($Item.Size - $Item.Used) / "1$($Unit)", 0))$Unit"
-                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 0))$Unit"
-                    'Used' = "$($Item.Used)%"
-                    'Aggregate' = $Item.Aggregate
-                }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
-            }
-
-            $TableParams = @{
-                Name = "Vserver Cloned Volumes Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 25, 75
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
-        }
-        $VserverClonedVol = Get-NcVolClone
-        $VserverObj = @()
-        if ($VserverClonedVol) {
-            foreach ($Item in $VserverClonedVol) {
-                $inObj = [ordered] @{
-                    'Volume' = $Item.Name
-                    'Vserver' = $Item.Vserver
-                    'ParentVolume' = $Item.ParentVolume
-                    'Volume Type' = $Item.VolumeType.ToUpper()
-                    'Parent Snapshot' = $Item.ParentSnapshot
-                    'Space Reserve' = $Item.SpaceReserve
-                    'Space Guarantee' = $Item.SpaceGuaranteeEnabled
-                    'Capacity' = "$([math]::Round(($Item.Size - $Item.Used) / "1$($Unit)", 0))$Unit"
-                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 0))$Unit"
-                    'Used' = "$($Item.Used)%"
+                    'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Available' = $Item.Size - $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                     'Aggregate' = $Item.Aggregate
                 }
                 $VserverObj += [pscustomobject]$inobj
