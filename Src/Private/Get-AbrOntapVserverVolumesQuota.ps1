@@ -24,34 +24,7 @@ function Get-AbrOntapVserverVolumesQuota {
     }
 
     process {
-        function Get-Metric($value, $limit) {
-            if ($value -gt 0) {
-                if ($value -lt 3 -and $limit -ne '-' ) {
-                    $value = "$($limit)KB"
-                    return $value
-                }
-                elseif ($value -in 4..6) {
-                    $value = "$($limit / 1KB)MB"
-                    return $value
-                }
-                elseif ($value -in 7..9) {
-                    $value = "$($limit / 1MB)GB"
-                    return $value
-                }
-                elseif ($value -in 10..11) {
-                    $value = "$($limit / 1GB)TB"
-                    return $value
-                }
-                elseif ($value -in 12..14) {
-                    $value = "$($limit / 1TB)PB"
-                    return $value
-                }
-                else {
-                    $value = $limit
-                    return $value
-                }
-            }
-        }
+
         $VserverQuotaStatus = Get-NcQuotaStatus
         $VserverObj = @()
         if ($VserverQuotaStatus) {
@@ -85,16 +58,14 @@ function Get-AbrOntapVserverVolumesQuota {
         $VserverObj = @()
         if ($VserverQuota) {
             foreach ($Item in $VserverQuota) {
-                $Item.DiskLimit = Get-Metric $Item.DiskLimit.Length $Item.DiskLimit
-                $Item.SoftDiskLimit = Get-Metric $Item.SoftDiskLimit.Length $Item.SoftDiskLimit
                 $inObj = [ordered] @{
                     'Volume' = $Item.Volume
                     'Type' = $Item.QuotaType
                     'Target' = $Item.QuotaTarget
-                    'Disk Limit' = $Item.DiskLimit
-                    'File Limit' = $Item.FileLimit
-                    'Soft Disk Limit' = $Item.SoftDiskLimit
-                    'Soft File Limit' = $Item.SoftFileLimit
+                    'Disk Limit' = $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'File Limit' = $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
+                    'Soft Disk Limit' = $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Soft File Limit' = $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
                     'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
@@ -120,16 +91,13 @@ function Get-AbrOntapVserverVolumesQuota {
         $VserverObj = @()
         if ($VserverQuotaReport) {
             foreach ($Item in $VserverQuotaReport) {
-                $Item.DiskLimit = Get-Metric $Item.DiskLimit.Length $Item.DiskLimit
-                $Item.SoftDiskLimit = Get-Metric $Item.SoftDiskLimit.Length $Item.SoftDiskLimit
-                $Item.DiskUsed = Get-Metric $Item.DiskUsed.Length $Item.DiskUsed
                 $inObj = [ordered] @{
                     'Volume' = $Item.Volume
                     'Quota Target' = $Item.QuotaTarget
                     'Qtree' = $Item.Qtree
-                    'Disk Limit' = $Item.DiskLimit
-                    'Soft Disk Limit' = $Item.SoftDiskLimit
-                    'Disk Used' = $Item.DiskUsed
+                    'Disk Limit' = $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Soft Disk Limit' = $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Disk Used' = $Item.DiskUsed | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                     'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
@@ -158,9 +126,9 @@ function Get-AbrOntapVserverVolumesQuota {
                     'Volume' = $Item.Volume
                     'Quota Target' = $Item.QuotaTarget
                     'Qtree' = $Item.Qtree
-                    'Files Limit' = $Item.FileLimit
-                    'Soft File Limit' = $Item.SoftFileLimit
-                    'Files Used' = $Item.FilesUsed
+                    'Files Limit' = $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
+                    'Soft File Limit' = $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
+                    'Files Used' = $Item.FilesUsed | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
                     'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
