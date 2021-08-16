@@ -21,7 +21,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     begin {
         Write-PscriboMessage "Collecting ONTAP Vserver volumes snapshot information."
     }
-
+    #// TODO Add Volume SnapshotReserve, current used space and SnapshotOverflow
     process {
         $Unit = "GB"
         $VserverData = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
@@ -35,7 +35,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                         'Volume' = $Item.Name
                         'Snapshot Count' = $SnapPolicy.SnapshotCount
                         'Snapshot Policy' = $SnapPolicy.SnapshotPolicy
-                        'Used' = "$([math]::Round(($SnapUsed) / "1$($Unit)", 3))$Unit"
+                        'Used' = "$([math]::Round(($SnapUsed) / "1$($Unit)", 3))$Unit" #// TODO convert to ConvertTo-FormattedNumber
                         'Vserver' = $Item.Vserver
                     }
                 }
@@ -71,7 +71,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                                 'Volume Name' = $Vol.Name
                                 'Snapshot Name' = $Item.Name
                                 'Created Time' = $Item.Created
-                                'Used' = "$([math]::Round(($Item.Total) / "1$($Unit)", 3))$Unit"
+                                'Used' = "$([math]::Round(($Item.Total) / "1$($Unit)", 3))$Unit" #// TODO convert to ConvertTo-FormattedNumber
                                 'Vserver' = $Vol.Vserver
                             }
                         }

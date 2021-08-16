@@ -30,9 +30,9 @@ function Get-AbrOntapStorageAGGR {
             $RootAggr = Get-NcAggr $Aggr.Name | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
                 [PSCustomObject] @{
                     'Name' = $Aggr.Name
-                    'Capacity' = "$([math]::Round(($Aggr.Totalsize) / "1$($Unit)", 0))$Unit"
-                    'Available' = "$([math]::Round(($Aggr.Available) / "1$($Unit)", 0))$Unit"
-                    'Used' = "$([int]$Aggr.Used)%"
+                    'Capacity' = "$([math]::Round(($Aggr.Totalsize) / "1$($Unit)", 0))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'Available' = "$([math]::Round(($Aggr.Available) / "1$($Unit)", 0))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'Used' = "$([int]$Aggr.Used)%" #// TODO convert to ConvertTo-FormattedNumber
                     'Disk Count' = $Aggr.Disks
                     'Root' = $RootAggr
                     'Raid Type' = ($Aggr.RaidType.Split(",")[0]).ToUpper()

@@ -59,9 +59,9 @@ function Get-AbrOntapVserverSummary {
                     'Root Volume' = $Item.Name
                     'Vserver' = $Item.Vserver
                     'Status' = $Item.State
-                    'TotalSize' = "$([math]::Round(($Item.Totalsize) / "1$($Unit)", 2))$Unit"
-                    'Used' = "$($Item.Used)%"
-                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 2))$Unit"
+                    'TotalSize' = "$([math]::Round(($Item.Totalsize) / "1$($Unit)", 2))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'Used' = "$($Item.Used)%" #// TODO convert to ConvertTo-FormattedNumber
+                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 2))$Unit" #// TODO convert to ConvertTo-FormattedNumber
                     'Dedup' = $Item.Dedupe
                     'Aggregate' = $Item.Aggregate
                 }
@@ -89,7 +89,7 @@ function Get-AbrOntapVserverSummary {
                     'Aggregate' = $Item.AggregateName
                     'Type' = $Item.AggregateType
                     'SnapLock Type' = $Item.SnaplockType
-                    'Available' = "$([math]::Round(($Item.AvailableSize) / "1$($Unit)", 2))$Unit"
+                    'Available' = "$([math]::Round(($Item.AvailableSize) / "1$($Unit)", 2))$Unit" #// TODO convert to ConvertTo-FormattedNumber
                 }
                 $VserverObj += [pscustomobject]$inobj
             }

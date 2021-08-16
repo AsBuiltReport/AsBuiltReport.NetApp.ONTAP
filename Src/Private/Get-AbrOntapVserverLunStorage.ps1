@@ -41,9 +41,9 @@ function Get-AbrOntapVserverLunStorage {
                     'Initiator Group' = $lunmap
                     'Home Node ' = $Item.Node
                     'Vserver' = $Item.Vserver
-                    'Capacity' = "$([math]::Round(($Item.Size) / "1$($Unit)", 0))$Unit"
-                    'Available' = "$([math]::Round(($available) / "1$($Unit)", 0))$Unit"
-                    'Used' = "$([math]::Round(($used) / "1", 0))%"
+                    'Capacity' = "$([math]::Round(($Item.Size) / "1$($Unit)", 0))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'Available' = "$([math]::Round(($available) / "1$($Unit)", 0))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'Used' = "$([math]::Round(($used) / "1", 0))%" #// TODO convert to ConvertTo-FormattedNumber
                     'OS Type' = $Item.Protocol
                     'IsThin' = Switch ($Item.Thin) {
                         'True' { 'Yes' }
