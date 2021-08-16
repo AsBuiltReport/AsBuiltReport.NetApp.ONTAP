@@ -463,10 +463,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 Section -Style Heading2 'Efficiency Summary' {
                     Paragraph "The following section provides the Storage Efficiency Saving information on $($ClusterInfo.ClusterName)."
                     BlankLine
+                    Get-AbrOntapEfficiencyConfig
                     Section -Style Heading3 'Aggregate Total Efficiency Summary' {
                         Paragraph "The following section provides the Aggregate Efficiency Saving information on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        #Get-AbrOntapVserverS3Summary
+                        Get-AbrOntapEfficiencyAggr
                         Section -Style Heading4 'Per Volume Efficiency Summary' {
                             Paragraph "The following section provides the Volume Efficiency Saving information on $($ClusterInfo.ClusterName)."
                             BlankLine

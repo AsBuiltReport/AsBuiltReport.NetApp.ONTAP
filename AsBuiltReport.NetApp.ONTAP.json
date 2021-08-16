@@ -35,7 +35,8 @@
         "Storage": {
             "Aggr": true,
             "DiskStatus": true,
-            "ShelfStatus": true
+            "ShelfStatus": true,
+            "Efficiency": true
         },
         "Network": {
             "Port": true,
