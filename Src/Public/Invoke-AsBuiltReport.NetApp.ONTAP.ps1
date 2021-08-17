@@ -273,10 +273,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Paragraph "The following section provides the Vserver Volumes Qtree Information on $($ClusterInfo.ClusterName)."
                                     BlankLine
                                     Get-AbrOntapVserverVolumesQtree
-                                    Section -Style Heading6 'Vserver Export Policy Summary' {
-                                        Paragraph "The following section provides the Vserver Volumes Export policy Information on $($ClusterInfo.ClusterName)."
-                                        BlankLine
-                                        Get-AbrOntapVserverVolumesExportPolicy
+                                    if (Get-NcExportRule) {
+                                        Section -Style Heading6 'Vserver Export Policy Summary' {
+                                            Paragraph "The following section provides the Vserver Volumes Export policy Information on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapVserverVolumesExportPolicy
+                                        }
                                     }
                                 }
                             if (Get-NcQuota) {
@@ -345,60 +347,64 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         #---------------------------------------------------------------------------------------------#
         #                                 NFS Section                                                 #
         #---------------------------------------------------------------------------------------------#
-                        Section -Style Heading4 'NFS Services Summary' {
-                            Paragraph "The following section provides the NFS Service Information on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapVserverNFSSummary
-                            Section -Style Heading5 'NFS Options Summary' {
-                                Paragraph "The following section provides the NFS Service Options Information on $($ClusterInfo.ClusterName)."
+                        if (Get-AbrOntapApi -Uri "/api/protocols/nfs/services?" ) {
+                            Section -Style Heading4 'NFS Services Summary' {
+                                Paragraph "The following section provides the NFS Service Information on $($ClusterInfo.ClusterName)."
                                 BlankLine
-                                Get-AbrOntapVserverNFSOptions
-                                Section -Style Heading6 'NFS Volume Export Summary' {
-                                    Paragraph "The following section provides the VServer NFS Service Exports Information on $($ClusterInfo.ClusterName)."
+                                Get-AbrOntapVserverNFSSummary
+                                Section -Style Heading5 'NFS Options Summary' {
+                                    Paragraph "The following section provides the NFS Service Options Information on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapVserverNFSExport
+                                    Get-AbrOntapVserverNFSOptions
+                                    Section -Style Heading6 'NFS Volume Export Summary' {
+                                        Paragraph "The following section provides the VServer NFS Service Exports Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverNFSExport
+                                    }
                                 }
                             }
                         }
         #---------------------------------------------------------------------------------------------#
         #                                 CIFS Section                                                #
         #---------------------------------------------------------------------------------------------#
-                        Section -Style Heading4 'CIFS Services Summary' {
-                            Paragraph "The following section provides the CIFS Service Information on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapVserverCIFSSummary
-                            Section -Style Heading5 'CIFS Service Configuration Summary' {
-                                Paragraph "The following section provides the Cifs Service Configuration Information on $($ClusterInfo.ClusterName)."
+                        if (Get-AbrOntapApi -Uri "/api/protocols/cifs/services?") {
+                            Section -Style Heading4 'CIFS Services Summary' {
+                                Paragraph "The following section provides the CIFS Service Information on $($ClusterInfo.ClusterName)."
                                 BlankLine
-                                Get-AbrOntapVserverCIFSSecurity
-                                Section -Style Heading6 'CIFS Domain Controller Summary' {
-                                    Paragraph "The following section provides the Connected Domain Controller Information on $($ClusterInfo.ClusterName)."
+                                Get-AbrOntapVserverCIFSSummary
+                                Section -Style Heading5 'CIFS Service Configuration Summary' {
+                                    Paragraph "The following section provides the Cifs Service Configuration Information on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapVserverCIFSDC
+                                    Get-AbrOntapVserverCIFSSecurity
+                                    Section -Style Heading6 'CIFS Domain Controller Summary' {
+                                        Paragraph "The following section provides the Connected Domain Controller Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverCIFSDC
+                                    }
+                                    Section -Style Heading6 'CIFS Local Group Summary' {
+                                        Paragraph "The following section provides the Cifs Service Local Group Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverCIFSLocalGroup
+                                        BlankLine
+                                        Paragraph "The following section provides the Cifs Service Local Group Memeber Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverCIFSLGMembers
+                                    }
                                 }
-                                Section -Style Heading6 'CIFS Local Group Summary' {
-                                    Paragraph "The following section provides the Cifs Service Local Group Information on $($ClusterInfo.ClusterName)."
+                                Section -Style Heading5 'CIFS Options Summary' {
+                                    Paragraph "The following section provides the CIFS Service Options Information on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapVserverCIFSLocalGroup
-                                    BlankLine
-                                    Paragraph "The following section provides the Cifs Service Local Group Memeber Information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapVserverCIFSLGMembers
-                                }
-                            }
-                            Section -Style Heading5 'CIFS Options Summary' {
-                                Paragraph "The following section provides the CIFS Service Options Information on $($ClusterInfo.ClusterName)."
-                                BlankLine
-                                Get-AbrOntapVserverCIFSOptions
-                                Section -Style Heading6 'CIFS Share Summary' {
-                                    Paragraph "The following section provides the CIFS Service Shares Information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapVserverCIFSShare
-                                    BlankLine
-                                    Paragraph "The following section provides the CIFS Shares Properties & Acl Information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapVserverCIFSShareProp
-                                    PageBreak
+                                    Get-AbrOntapVserverCIFSOptions
+                                    Section -Style Heading6 'CIFS Share Summary' {
+                                        Paragraph "The following section provides the CIFS Service Shares Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverCIFSShare
+                                        BlankLine
+                                        Paragraph "The following section provides the CIFS Shares Properties & Acl Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverCIFSShareProp
+                                        PageBreak
+                                    }
                                 }
                             }
                         }
