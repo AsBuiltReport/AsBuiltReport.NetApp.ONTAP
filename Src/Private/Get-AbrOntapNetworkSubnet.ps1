@@ -41,6 +41,7 @@ function Get-AbrOntapNetworkSubnet {
             $TableParams = @{
                 Name = "Network Subnet Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 20, 20, 20, 10, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
