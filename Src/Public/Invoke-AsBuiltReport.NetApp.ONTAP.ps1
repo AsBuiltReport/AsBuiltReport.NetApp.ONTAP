@@ -249,7 +249,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Vserver Volumes Information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapVserverVolumes
-                            BlankLine
+                            if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
+                                Section -Style Heading5 'Vserver FlexGroup Volumes Summary' {
+                                    Paragraph "The following section provides the Vserver FlexGroup Volumes Configuration on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverVolumesFlexgroup
+                                }
+                            }
+                            if (Get-NcVolClone) {
+                                Section -Style Heading5 'Vserver Flexclone Volumes Summary' {
+                                    Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverVolumesFlexclone
+                                }
+                            }
                             Section -Style Heading5 'Vserver Volumes Snapshot Summary' {
                                 Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
@@ -468,11 +481,16 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the Aggregate Efficiency Saving information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapEfficiencyAggr
-                        Section -Style Heading4 'Per Volume Efficiency Summary' {
-                            Paragraph "The following section provides the Volume Efficiency Saving information on $($ClusterInfo.ClusterName)."
+                        Section -Style Heading4 'Volume Efficiency Summary' {
+                            Paragraph "The following section provides the Volume Efficiency Saving Summary information on $($ClusterInfo.ClusterName)."
                             BlankLine
-                            #Get-AbrOntapVserverS3Bucket
-                            PageBreak
+                            Get-AbrOntapEfficiencyVol
+                            Section -Style Heading5 'Volume Efficiency Detail' {
+                                Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapEfficiencyVolDetailed
+                                PageBreak
+                            }
                         }
                     }
                 }
