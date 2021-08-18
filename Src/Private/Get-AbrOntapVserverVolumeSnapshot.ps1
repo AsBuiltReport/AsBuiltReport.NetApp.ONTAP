@@ -21,21 +21,22 @@ function Get-AbrOntapVserverVolumeSnapshot {
     begin {
         Write-PscriboMessage "Collecting ONTAP Vserver volumes snapshot information."
     }
-    #// TODO Add Volume SnapshotReserve, current used space and SnapshotOverflow
+
     process {
-        $Unit = "GB"
         $VserverData = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
+                $SnapReserve = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSpaceAttributes
                 $SnapPolicy = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSnapshotAttributes
                 $SnapUsed = (Get-NcVol $Item.Name | Get-NCSnapshot | Select-Object -ExpandProperty Total | Measure-Object -Sum).sum
                 if ($SnapPolicy.SnapshotCount -gt 0) {
                     $inObj = [ordered] @{
                         'Volume' = $Item.Name
-                        'Snapshot Count' = $SnapPolicy.SnapshotCount
-                        'Snapshot Policy' = $SnapPolicy.SnapshotPolicy
-                        'Used' = "$([math]::Round(($SnapUsed) / "1$($Unit)", 3))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                        'Reserve Size' = $SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        'Reserve Available' = $SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        'Used' = $SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        'Policy' = $SnapPolicy.SnapshotPolicy
                         'Vserver' = $Item.Vserver
                     }
                 }
@@ -48,50 +49,12 @@ function Get-AbrOntapVserverVolumeSnapshot {
             $TableParams = @{
                 Name = "Vserver Volume SnapShot Configuration Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 40, 15, 15, 15, 15
+                ColumnWidths = 30, 12, 12, 15, 16, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
             $VserverObj | Table @TableParams
-        }
-        if ($Healthcheck.Vserver.Snapshot) {
-            $Unit = "GB"
-            $SnapshotDays = 7
-            $Now=Get-Date
-            $VserverData = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
-            $VserverObj = @()
-            if ($VserverData) {
-                foreach ($Vol in $VserverData) {
-                    $SnapCount = (Get-NcVol $Vol.Name | Select-Object -ExpandProperty VolumeSnapshotAttributes).SnapshotCount
-                    $Snap = get-ncsnapshot $Vol.Name | Select-Object Name,Total,Created,Busy
-                    foreach ($Item in $Snap) {
-                        if ($SnapCount -gt 0 -and $Item.Created -le $Now.AddDays(-$SnapshotDays) -and $Item.Name -notlike '*snapmirror*') {
-                            $inObj = [ordered] @{
-                                'Volume Name' = $Vol.Name
-                                'Snapshot Name' = $Item.Name
-                                'Created Time' = $Item.Created
-                                'Used' = "$([math]::Round(($Item.Total) / "1$($Unit)", 3))$Unit" #// TODO convert to ConvertTo-FormattedNumber
-                                'Vserver' = $Vol.Vserver
-                            }
-                        }
-                        else {
-                            continue
-                        }
-                    }
-                    $VserverObj += [pscustomobject]$inobj
-                }
-
-                $TableParams = @{
-                    Name = "HealthCheck - Volume Snapshot over 7 days only - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 20, 30, 25, 10, 15
-                }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $VserverObj | Table @TableParams
-            }
         }
     }
 
