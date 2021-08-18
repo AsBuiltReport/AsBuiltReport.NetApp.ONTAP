@@ -26,7 +26,7 @@ function Get-AbrOntapDiskShelf {
         $NodeSum = Get-NcNode
         if ($NodeSum) {
             $ShelfInventory = foreach ($Nodes in $NodeSum) {
-                $global:Nodeshelf = Get-NcShelf -NodeName $Nodes.Node
+                $Nodeshelf = Get-NcShelf -NodeName $Nodes.Node
                 if ($Nodeshelf) {
                     [PSCustomObject] @{
                         'Node Name' = $Nodeshelf.NodeName

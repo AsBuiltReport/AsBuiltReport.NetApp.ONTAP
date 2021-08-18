@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkVlans {
     }
 
     process {
-        $global:Vlan = Get-NcNetPortVlan
+        $Vlan = Get-NcNetPortVlan
         $VlanObj = @()
         if ($Vlan) {
             foreach ($Item in $Vlan) {
