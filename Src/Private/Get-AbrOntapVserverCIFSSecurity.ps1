@@ -29,17 +29,20 @@ function Get-AbrOntapVserverCIFSSecurity {
             foreach ($Item in $VserverData) {
                 $CIFSSVM = Get-NcCifsSecurity -VserverContext $Item.Vserver
                 foreach ($SVM in $CIFSSVM) {
-                    $inObj = [ordered] @{
-                        'Vserver' = $SVM.Vserver
-                        'Kerberos Clock Skew' = $SVM.KerberosClockSkew
-                        'Kerberos Renew Age' = $SVM.KerberosRenewAge
-                        'Kerberos Ticket Age' = $SVM.KerberosTicketAge
-                        'Aes Encryption Enabled' = $SVM.IsAesEncryptionEnabled
-                        'Signing Required' = $SVM.IsSigningRequired
-                        'Smb Encryption Required' = $SVM.IsSmbEncryptionRequired
-                        'Lm Compatibility Level' = $SVM.LmCompatibilityLevel
+                    if ($SVM.KerberosClockSkew) {
+                        $inObj = [ordered] @{
+                            'Vserver' = $SVM.Vserver
+                            'Kerberos Clock Skew' = $SVM.KerberosClockSkew
+                            'Kerberos Renew Age' = $SVM.KerberosRenewAge
+                            'Kerberos Ticket Age' = $SVM.KerberosTicketAge
+                            'Aes Encryption Enabled' = $SVM.IsAesEncryptionEnabled
+                            'Signing Required' = $SVM.IsSigningRequired
+                            'Smb Encryption Required' = $SVM.IsSmbEncryptionRequired
+                            'Lm Compatibility Level' = $SVM.LmCompatibilityLevel
+                        }
+                        $VserverObj += [pscustomobject]$inobj
                     }
-                    $VserverObj += [pscustomobject]$inobj
+                    else {continue}
                 }
             }
 
