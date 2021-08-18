@@ -263,6 +263,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Get-AbrOntapVserverVolumesFlexclone
                                 }
                             }
+                            if ((Get-NcFlexcacheConnectedCache) -or (Get-NcFlexcache)) {
+                                Section -Style Heading5 'Vserver Flexcache Volumes Summary' {
+                                    Paragraph "The following section provides the Vserver Flexcache Volumes Configuration on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapVserverVolumesFlexcache
+                                }
+                            }
                             Section -Style Heading5 'Vserver Volumes Snapshot Summary' {
                                 Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
@@ -503,4 +510,5 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             }
         }
     }
+    #$global:CurrentNcController = $null
 }
