@@ -1,7 +1,7 @@
 function Get-AbrOntapNetworkRoutes {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP network rRoute information from the Cluster Management Network
+    Used by As Built Report to retrieve NetApp ONTAP network Route information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -25,7 +25,7 @@ function Get-AbrOntapNetworkRoutes {
     process {
         $Routes = Get-NcNetRoute
         $RoutesObj = @()
-        if ($Vlan) {
+        if ($Routes) {
             foreach ($Item in $Routes) {
                 $inObj = [ordered] @{
                     'Destination' = $Item.Destination
