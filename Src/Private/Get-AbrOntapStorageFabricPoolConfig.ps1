@@ -27,7 +27,6 @@ function Get-AbrOntapEfficiencyAggrConfig {
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-
                 $inObj = [ordered] @{
                     'Object Store Name' = $Item.ObjectStoreName
                     'S3 Name' = $Item.S3Name

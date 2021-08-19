@@ -37,6 +37,7 @@ function Get-AbrOntapNodes {
             $TableParams = @{
                 Name = "Node Summary - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 27, 27, 17, 17, 12
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

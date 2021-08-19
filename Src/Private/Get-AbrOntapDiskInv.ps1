@@ -39,7 +39,7 @@ function Get-AbrOntapDiskInv {
                     'Disk Name' = $Disk
                     'Shelf' = $Disks.Shelf
                     'Bay' = $Disks.Bay
-                    'Capacity' = "$([math]::Round(($Disks.Capacity) / "1$($Unit)", 2))$Unit"
+                    'Capacity' = $Disks.Capacity | ConvertTo-FormattedNumber -Type Disksize -ErrorAction SilentlyContinue
                     'Model' = $Disks.Model
                     'Type' = $DiskType.DiskType
                 }
