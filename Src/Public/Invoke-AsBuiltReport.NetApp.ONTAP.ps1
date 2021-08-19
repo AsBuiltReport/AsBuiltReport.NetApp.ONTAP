@@ -111,6 +111,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the Aggregates on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapStorageAGGR
+                        if (Get-NcAggrObjectStore) {
+                            Section -Style Heading4 'Aggregate FabricPool Summary' {
+                                Paragraph "The following section provides the FabricPool information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapStorageFabricPool
+                                if (Get-NcAggrObjectStoreConfig) {
+                                    Section -Style Heading5 'Aggregate  FabriPool Object Store Configuration Summary' {
+                                        Paragraph "The following section provides the  FabriPool Object Store Configuration on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapEfficiencyAggrConfig
+                                    }
+                                }
+                            }
+                        }
                     }
                     Section -Style Heading3 'Disk Summary' {
                         Paragraph "The following section provides the disk summary information on controller $($ClusterInfo.ClusterName)."
