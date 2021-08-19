@@ -44,7 +44,7 @@ function Get-AbrOntapClusterHA {
             $TableParams = @{
                 Name = "Cluster HA Status - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 20, 20, 11, 16, 13, 20
+                ColumnWidths = 20, 20, 11, 19, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -41,16 +41,16 @@ function Get-AbrOntapNodesSP {
                 $NodeServiceProcessor | Where-Object { $_.'Status' -like 'unknown' -or $_.'Status' -like 'sp-daemon-offline' } | Set-Style -Style Warning -Property 'Status'
                 $NodeServiceProcessor | Where-Object { $_.'Network Configured' -like "false" } | Set-Style -Style Critical -Property 'Network Configured'
             }
-
-            $TableParams = @{
-                Name = "Node Service-Processor Information - $($ClusterInfo.ClusterName)"
-                List = $false
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $NodeServiceProcessor | Table @TableParams
         }
+
+        $TableParams = @{
+            Name = "Node Service-Processor Information - $($ClusterInfo.ClusterName)"
+            List = $false
+        }
+        if ($Report.ShowTableCaptions) {
+            $TableParams['Caption'] = "- $($TableParams.Name)"
+        }
+        $NodeServiceProcessor | Table @TableParams
     }
 
     end {}
