@@ -23,7 +23,6 @@ function Get-AbrOntapVserverSummary {
     }
 
     process {
-        $Unit = "GB"
         $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq "data" }
         $VserverObj = @()
         if ($VserverData) {
@@ -59,9 +58,9 @@ function Get-AbrOntapVserverSummary {
                     'Root Volume' = $Item.Name
                     'Vserver' = $Item.Vserver
                     'Status' = $Item.State
-                    'TotalSize' = "$([math]::Round(($Item.Totalsize) / "1$($Unit)", 2))$Unit" #// TODO convert to ConvertTo-FormattedNumber
-                    'Used' = "$($Item.Used)%" #// TODO convert to ConvertTo-FormattedNumber
-                    'Available' = "$([math]::Round(($Item.Available) / "1$($Unit)", 2))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'TotalSize' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                    'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Dedup' = $Item.Dedupe
                     'Aggregate' = $Item.Aggregate
                 }
@@ -89,7 +88,7 @@ function Get-AbrOntapVserverSummary {
                     'Aggregate' = $Item.AggregateName
                     'Type' = $Item.AggregateType
                     'SnapLock Type' = $Item.SnaplockType
-                    'Available' = "$([math]::Round(($Item.AvailableSize) / "1$($Unit)", 2))$Unit" #// TODO convert to ConvertTo-FormattedNumber
+                    'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                 }
                 $VserverObj += [pscustomobject]$inobj
             }

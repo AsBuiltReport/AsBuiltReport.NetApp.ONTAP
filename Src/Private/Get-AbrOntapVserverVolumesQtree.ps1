@@ -23,7 +23,6 @@ function Get-AbrOntapVserverVolumesQtree {
     }
 
     process {
-        $Unit = "GB"
         $VserverQtree = Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}
         $VserverObj = @()
         if ($VserverQtree) {

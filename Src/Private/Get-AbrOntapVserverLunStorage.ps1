@@ -23,7 +23,6 @@ function Get-AbrOntapVserverLunStorage {
     }
 
     process {
-        $Unit = "GB"
         $VserverLun = get-nclun
         $VserverObj = @()
         if ($VserverLun) {
@@ -41,9 +40,9 @@ function Get-AbrOntapVserverLunStorage {
                     'Initiator Group' = $lunmap
                     'Home Node ' = $Item.Node
                     'Vserver' = $Item.Vserver
-                    'Capacity' = "$([math]::Round(($Item.Size) / "1$($Unit)", 0))$Unit" #// TODO convert to ConvertTo-FormattedNumber
-                    'Available' = "$([math]::Round(($available) / "1$($Unit)", 0))$Unit" #// TODO convert to ConvertTo-FormattedNumber
-                    'Used' = "$([math]::Round(($used) / "1", 0))%" #// TODO convert to ConvertTo-FormattedNumber
+                    'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                    'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                    'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                     'OS Type' = $Item.Protocol
                     'IsThin' = Switch ($Item.Thin) {
                         'True' { 'Yes' }

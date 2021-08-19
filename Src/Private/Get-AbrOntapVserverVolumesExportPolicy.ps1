@@ -23,7 +23,6 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     }
 
     process {
-        $Unit = "GB"
         $VserverData = Get-NcExportRule
         $VserverObj = @()
         if ($VserverData) {
