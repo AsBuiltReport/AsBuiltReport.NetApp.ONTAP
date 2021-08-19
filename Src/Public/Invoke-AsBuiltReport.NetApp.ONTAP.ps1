@@ -83,6 +83,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the node inventory on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNodes
+                        Get-AbrOntapNodeStorage
                         Section -Style Heading4 'Node Hardware Inventory' {
                             Paragraph "The following section provides the node hardware inventory on $($ClusterInfo.ClusterName)."
                             BlankLine
