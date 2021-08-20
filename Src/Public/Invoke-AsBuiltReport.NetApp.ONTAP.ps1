@@ -413,7 +413,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             #                                 CIFS Section                                                #
             #---------------------------------------------------------------------------------------------#
-                                if (Get-AbrOntapApi -Uri "/api/protocols/cifs/services?") { #// TODO Fix Condition to non API to make sure pre 9.6 support
+                                if (Get-AbrOntapApi -Uri "/api/protocols/cifs/services?") { #// TODO #1 Fix Condition to non API to make sure pre Ontap 9.6 support
                                     Section -Style Heading4 'CIFS Services Summary' {
                                         Paragraph "The following section provides the CIFS Service Information on $($ClusterInfo.ClusterName)."
                                         BlankLine
