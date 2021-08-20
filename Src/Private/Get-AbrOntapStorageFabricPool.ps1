@@ -37,6 +37,9 @@ function Get-AbrOntapStorageFabricPool {
                 }
                 $OutObj += [pscustomobject]$inobj
             }
+            if ($Healthcheck.Storage.FabricPool) {
+                $OutObj | Where-Object { $_.'Status' -like 'unavailable' } | Set-Style -Style Warning -Property 'Status'
+            }
 
             $TableParams = @{
                 Name = "Aggregate FabriPool Information - $($ClusterInfo.ClusterName)"

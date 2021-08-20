@@ -36,7 +36,8 @@
             "Aggr": true,
             "DiskStatus": true,
             "ShelfStatus": true,
-            "Efficiency": true
+            "Efficiency": true,
+            "FabricPool": true
         },
         "Network": {
             "Port": true,
