@@ -94,12 +94,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the node service-processor information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapNodesSP
-                                PageBreak
                             }
                         }
                     }
                 }
             }#endregion Node Section
+            PageBreak
 
         #region Storage
         #---------------------------------------------------------------------------------------------#
@@ -160,11 +160,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Disks installed on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapDiskInv
-                            PageBreak
                         }
                     }
                 }
             }#endregion Storage Section
+            PageBreak
             #region License Section
         #---------------------------------------------------------------------------------------------#
         #                                 License Section                                             #
@@ -182,11 +182,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the License Feature Usage on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapClusterLicenseUsage
-                            PageBreak
                         }
                     }
                 }
             }#endregion License Section
+            PageBreak
             #region Network Section
         #---------------------------------------------------------------------------------------------#
         #                                 Network Section                                             #
@@ -247,11 +247,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Network Interfaces information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapNetworkMgmt
-                            PageBreak
                         }
                     }
                 }
             }#endregion Network Section
+            PageBreak
             #region Vserver Section
         #---------------------------------------------------------------------------------------------#
         #                                 Vserver Section                                             #
@@ -321,13 +321,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             Paragraph "The following section provides the Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesQuota
-                                            PageBreak
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                    PageBreak
             #---------------------------------------------------------------------------------------------#
             #                                 Vserver Protocol Section                                    #
             #---------------------------------------------------------------------------------------------#
@@ -382,10 +382,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             Paragraph "The following section provides the Lun  Interface Information on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverLunIgroup
-                                            PageBreak
                                         }
                                     }
                                 }
+                                PageBreak
             #---------------------------------------------------------------------------------------------#
             #                                 NFS Section                                                 #
             #---------------------------------------------------------------------------------------------#
@@ -408,6 +408,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                 }
+                                PageBreak
+
             #---------------------------------------------------------------------------------------------#
             #                                 CIFS Section                                                #
             #---------------------------------------------------------------------------------------------#
@@ -447,11 +449,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Paragraph "The following section provides the CIFS Shares Properties & Acl Information on $($ClusterInfo.ClusterName)."
                                                 BlankLine
                                                 Get-AbrOntapVserverCIFSShareProp
-                                                PageBreak
                                             }
                                         }
                                     }
                                 }
+                                PageBreak
+
             #---------------------------------------------------------------------------------------------#
             #                                 S3 Section                                                  #
             #---------------------------------------------------------------------------------------------#
@@ -515,13 +518,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Paragraph "The following section provides the SnapMirror Mediator information on $($ClusterInfo.ClusterName)."
                                     BlankLine
                                     Get-AbrOntapRepMediator
-                                    PageBreak
                                 }
                             }
                         }
                     }
                 }
             }#endregion Replication Section
+            PageBreak
 
             #---------------------------------------------------------------------------------------------#
             #                                 Efficiency Section                                          #
@@ -546,7 +549,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapEfficiencyVolDetailed
-                                        PageBreak
                                     }
                                 }
                             }
@@ -554,6 +556,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }
+            PageBreak
         }
     }
     #$global:CurrentNcController = $null
