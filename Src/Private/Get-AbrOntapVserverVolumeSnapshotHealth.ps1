@@ -42,13 +42,13 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                                 'Vserver' = $Vol.Vserver
                             }
                         }
-                        else {continue}
                     }
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $VserverObjSorted = $VserverObj | Select-Object -Unique -Property 'Volume Name','Snapshot Name','Created Time','Used','Vserver'
+
             $TableParams = @{
                 Name = "HealthCheck - Volume Snapshot over 7 days only - $($ClusterInfo.ClusterName)"
                 List = $false
@@ -57,7 +57,9 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
-            $VserverObjSorted | Table @TableParams
+            if ($VserverObjSorted) {
+                $VserverObjSorted | Table @TableParams
+            }
         }
     }
 

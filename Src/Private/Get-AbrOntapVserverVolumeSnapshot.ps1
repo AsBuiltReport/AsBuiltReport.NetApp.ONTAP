@@ -29,7 +29,6 @@ function Get-AbrOntapVserverVolumeSnapshot {
             foreach ($Item in $VserverData) {
                 $SnapReserve = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSpaceAttributes
                 $SnapPolicy = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSnapshotAttributes
-                $SnapUsed = (Get-NcVol $Item.Name | Get-NCSnapshot | Select-Object -ExpandProperty Total | Measure-Object -Sum).sum
                 if ($SnapPolicy.SnapshotCount -gt 0) {
                     $inObj = [ordered] @{
                         'Volume' = $Item.Name
@@ -40,9 +39,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                         'Vserver' = $Item.Vserver
                     }
                 }
-                else {
-                    continue
-                }
+
                 $VserverObj += [pscustomobject]$inobj
             }
 
@@ -54,7 +51,9 @@ function Get-AbrOntapVserverVolumeSnapshot {
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
-            $VserverObj | Table @TableParams
+            if ($VserverObj) {
+                $VserverObj | Table @TableParams
+            }
         }
     }
 

@@ -44,7 +44,9 @@ function Get-AbrOntapVserverNFSExport {
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
-            $VserverObj | Table @TableParams
+            if ($VserverObj) {
+                $VserverObj | Table @TableParams
+            }
         }
     }
 
