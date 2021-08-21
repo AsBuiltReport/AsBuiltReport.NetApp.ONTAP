@@ -385,7 +385,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                 }
-                                PageBreak
             #---------------------------------------------------------------------------------------------#
             #                                 NFS Section                                                 #
             #---------------------------------------------------------------------------------------------#
@@ -408,12 +407,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                 }
-                                PageBreak
-
             #---------------------------------------------------------------------------------------------#
             #                                 CIFS Section                                                #
             #---------------------------------------------------------------------------------------------#
-                                if (Get-AbrOntapApi -Uri "/api/protocols/cifs/services?") { #// TODO #1 Fix Condition to non API to make sure pre Ontap 9.6 support
+                                if (Get-NcVserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus) {
                                     Section -Style Heading4 'CIFS Services Summary' {
                                         Paragraph "The following section provides the CIFS Service Information on $($ClusterInfo.ClusterName)."
                                         BlankLine
@@ -453,8 +450,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                 }
-                                PageBreak
-
             #---------------------------------------------------------------------------------------------#
             #                                 S3 Section                                                  #
             #---------------------------------------------------------------------------------------------#
@@ -470,7 +465,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Paragraph "The following section provides the S3 Bucket Information on $($ClusterInfo.ClusterName)."
                                                 BlankLine
                                                 Get-AbrOntapVserverS3Bucket
-                                                PageBreak
                                             }
                                         }
                                     }
@@ -479,6 +473,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }#endregion Vserver Section
+                PageBreak
                 #region Replication Section
         #---------------------------------------------------------------------------------------------#
         #                                 Replication Section                                         #
@@ -494,30 +489,36 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapRepClusterPeer
                         }
-                        Section -Style Heading3 'Vserver Peer Information' {
-                            Paragraph "The following section provides the Vserver Peer information on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapRepVserverPeer
-                            Section -Style Heading4 'SnapMirror Relationship Information' {
-                                Paragraph "The following section provides the SnapMirror Relationship information on $($ClusterInfo.ClusterName)."
+                        if (Get-NcVserverPeer) {
+                            Section -Style Heading3 'Vserver Peer Information' {
+                                Paragraph "The following section provides the Vserver Peer information on $($ClusterInfo.ClusterName)."
                                 BlankLine
-                                Get-AbrOntapRepRelationship
-                                Section -Style Heading5 'SnapMirror Replication History Information' {
-                                    Paragraph "The following section provides the SnapMirror Operation information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapRepHistory
+                                Get-AbrOntapRepVserverPeer
+                                if (Get-NcSnapmirror) {
+                                    Section -Style Heading4 'SnapMirror Relationship Information' {
+                                        Paragraph "The following section provides the SnapMirror Relationship information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapRepRelationship
+                                        Section -Style Heading5 'SnapMirror Replication History Information' {
+                                            Paragraph "The following section provides the SnapMirror Operation information on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapRepHistory
+                                        }
+                                    }
                                 }
-                            }
-                            Section -Style Heading4 'SnapMirror Destinations Information' {
-                                Paragraph "The following section provides the SnapMirror (List-Destination) information on $($ClusterInfo.ClusterName)."
-                                BlankLine
-                                Get-AbrOntapRepDestinations
-                            }
-                            if (Get-AbrOntapApi -uri "/api/cluster/mediators?") {
-                                Section -Style Heading4 'Ontap Mediator Information' {
-                                    Paragraph "The following section provides the SnapMirror Mediator information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapRepMediator
+                                if (Get-NcSnapmirrorDestination) {
+                                    Section -Style Heading4 'SnapMirror Destinations Information' {
+                                        Paragraph "The following section provides the SnapMirror (List-Destination) information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapRepDestinations
+                                    }
+                                }
+                                if (Get-AbrOntapApi -uri "/api/cluster/mediators?") {
+                                    Section -Style Heading4 'Ontap Mediator Information' {
+                                        Paragraph "The following section provides the SnapMirror Mediator information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapRepMediator
+                                    }
                                 }
                             }
                         }
@@ -556,7 +557,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }
-            PageBreak
         }
     }
     #$global:CurrentNcController = $null
