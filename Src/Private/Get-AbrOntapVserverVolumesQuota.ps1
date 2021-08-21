@@ -48,6 +48,7 @@ function Get-AbrOntapVserverVolumesQuota {
             $TableParams = @{
                 Name = "Vserver Volume Quota Status Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 45, 15, 15, 25
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -81,6 +82,7 @@ function Get-AbrOntapVserverVolumesQuota {
             $TableParams = @{
                 Name = "Vserver Volume Quota Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 10, 20, 10, 10, 10, 10, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -112,6 +114,7 @@ function Get-AbrOntapVserverVolumesQuota {
             $TableParams = @{
                 Name = "Vserver Volume Quota Report (Disk) Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 19, 15, 12, 12, 12, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -137,6 +140,7 @@ function Get-AbrOntapVserverVolumesQuota {
             $TableParams = @{
                 Name = "Vserver Volume Quota Report (File) Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 19, 15, 12, 12, 12, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

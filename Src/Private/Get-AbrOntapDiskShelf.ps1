@@ -46,7 +46,8 @@ function Get-AbrOntapDiskShelf {
             }
             $TableParams = @{
                 Name = "Shelf Inventory - $($ClusterInfo.ClusterName)"
-                List = $false
+                List = $true
+                ColumnWidths = 35, 65
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -44,6 +44,7 @@ function Get-AbrOntapVserverVolumesQtree {
             $TableParams = @{
                 Name = "Vserver Volume Qtree Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 22, 28, 10, 10, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

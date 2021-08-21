@@ -44,6 +44,7 @@ function Get-AbrOntapRepClusterPeer {
             $TableParams = @{
                 Name = "Replication - Cluster Peer Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 20, 20, 20, 10, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

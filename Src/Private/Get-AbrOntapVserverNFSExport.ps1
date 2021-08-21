@@ -40,6 +40,7 @@ function Get-AbrOntapVserverNFSExport {
             $TableParams = @{
                 Name = "Vserver NFS Service Volume Export Summary - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 65, 35
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

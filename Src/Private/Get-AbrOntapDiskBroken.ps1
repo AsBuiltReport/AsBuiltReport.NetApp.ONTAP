@@ -40,6 +40,7 @@ function Get-AbrOntapDiskBroken {
             $TableParams = @{
                 Name = "Failed Disk Summary - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 25, 13, 13, 13, 35
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

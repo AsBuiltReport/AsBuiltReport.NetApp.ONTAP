@@ -38,6 +38,7 @@ function Get-AbrOntapVserverCIFSLGMembers {
             $TableParams = @{
                 Name = "CIFS Connected Local Group Members Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 40, 40, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

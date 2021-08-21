@@ -29,7 +29,6 @@ function Get-AbrOntapVserverNFSOptions {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Vserver' = $Item.Vserver
-                    #'' = $Item.
                     'Allow Idle Connection' = $Item.AllowIdleConnection
                     'Idle Connection Timeout' = $Item.IdleConnectionTimeout
                     'Ignore NtAcl For Root' = $Item.IgnoreNtAclForRoot

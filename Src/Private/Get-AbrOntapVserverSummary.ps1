@@ -44,6 +44,7 @@ function Get-AbrOntapVserverSummary {
             $TableParams = @{
                 Name = "Vserver Summary Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 15, 15, 20, 20, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -73,6 +74,7 @@ function Get-AbrOntapVserverSummary {
             $TableParams = @{
                 Name = "Vserver Root Volume Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 15, 10, 10, 10, 10, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -96,6 +98,7 @@ function Get-AbrOntapVserverSummary {
             $TableParams = @{
                 Name = "Vserver Aggregate Resource Allocation Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 25, 30, 10, 20, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
