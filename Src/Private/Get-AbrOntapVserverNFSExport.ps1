@@ -30,8 +30,8 @@ function Get-AbrOntapVserverNFSExport {
                 $NFSVserver = Get-NcNfsExport -VS $SVM.Vserver
                 foreach ($Item in $NFSVserver) {
                     $inObj = [ordered] @{
-                        'Path Name' = $Item.Pathname
                         'Vserver' = $SVM.Vserver
+                        'Path Name' = $Item.Pathname
                     }
                 $VserverObj += [pscustomobject]$inobj
             }
@@ -40,7 +40,7 @@ function Get-AbrOntapVserverNFSExport {
             $TableParams = @{
                 Name = "Vserver NFS Service Volume Export Summary - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 65, 35
+                ColumnWidths = 35, 65
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

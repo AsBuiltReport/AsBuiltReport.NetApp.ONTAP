@@ -45,7 +45,7 @@ function Get-AbrOntapVserverVolumes {
             $TableParams = @{
                 Name = "Vserver Volume Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 30, 10, 10, 10, 10, 10, 20
+                ColumnWidths = 27, 15, 10, 10, 10, 8, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

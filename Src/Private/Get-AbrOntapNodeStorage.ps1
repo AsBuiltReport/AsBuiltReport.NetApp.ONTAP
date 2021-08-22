@@ -45,7 +45,7 @@ function Get-AbrOntapNodeStorage {
             $TableParams = @{
                 Name = "Node Storage Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 20, 20, 10, 10, 10, 15
+                ColumnWidths = 30, 30, 10, 10, 10, 10
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
