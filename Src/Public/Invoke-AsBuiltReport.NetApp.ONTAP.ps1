@@ -294,7 +294,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     }
 
                                     if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcSnapshot) {
-                                        Section -Style Heading5 'Vserver Volumes Snapshot Summary' {
+                                        Section -Style Heading5 'Vserver Volumes Snapshot Configuration Summary' {
                                             Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumeSnapshot

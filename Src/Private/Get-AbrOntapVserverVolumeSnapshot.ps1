@@ -23,21 +23,20 @@ function Get-AbrOntapVserverVolumeSnapshot {
     }
 
     process {
-        $VserverData = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $VolumeFilter = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
+        if ($VolumeFilter) {
+            foreach ($Item in $VolumeFilter) {
                 $SnapReserve = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSpaceAttributes
                 $SnapPolicy = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSnapshotAttributes
-                if ($SnapPolicy.SnapshotCount -gt 0) {
-                    $inObj = [ordered] @{
-                        'Volume' = $Item.Name
-                        'Reserve Size' = $SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                        'Reserve Available' = $SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                        'Used' = $SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                        'Policy' = $SnapPolicy.SnapshotPolicy
-                        'Vserver' = $Item.Vserver
-                    }
+                $inObj = [ordered] @{
+                    'Volume' = $Item.Name
+                    'Snapshot Enabled' = $SnapPolicy.AutoSnapshotsEnabled
+                    'Reserve Size' = $SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                    'Reserve Available' = $SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                    'Used' = $SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                    'Policy' = $SnapPolicy.SnapshotPolicy
+                    'Vserver' = $Item.Vserver
                 }
 
                 $VserverObj += [pscustomobject]$inobj
@@ -46,7 +45,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
             $TableParams = @{
                 Name = "Vserver Volume SnapShot Configuration Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 30, 12, 12, 15, 16, 15
+                ColumnWidths = 20, 14, 12, 12, 12, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
