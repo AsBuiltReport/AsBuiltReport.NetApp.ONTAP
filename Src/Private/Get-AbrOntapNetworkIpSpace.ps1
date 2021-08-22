@@ -29,9 +29,9 @@ function Get-AbrOntapNetworkIpSpace {
             foreach ($Item in $IPSpace) {
                 $inObj = [ordered] @{
                     'Name' = $Item.Ipspace
-                    'SVM' = $Item.Vservers | Join-String -Separator '; '
-                    'Ports' = $Item.Ports | Join-String -Separator '; '
-                    'Broadcast Domains' = $Item.BroadcastDomains | Join-String -Separator '; '
+                    'SVM' = $Item.Vservers -join '; '
+                    'Ports' = $Item.Ports -join '; '
+                    'Broadcast Domains' = $Item.BroadcastDomains -join '; '
                 }
                 $IPSpaceObj += [pscustomobject]$inobj
             }

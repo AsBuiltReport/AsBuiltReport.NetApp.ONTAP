@@ -31,7 +31,7 @@ function Get-AbrOntapVserverCIFSShareProp {
                     'Vserver Name' = $Item.CifsServer
                     'Share Name' = $Item.ShareName
                     'Share ACL' = $Item.Acl
-                    'Share Properties' = ($Item).ShareProperties | Join-String -Separator ', '
+                    'Share Properties' = ($Item).ShareProperties -join ', '
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
