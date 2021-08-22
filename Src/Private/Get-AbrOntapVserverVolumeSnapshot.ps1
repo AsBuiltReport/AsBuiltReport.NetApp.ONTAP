@@ -41,6 +41,9 @@ function Get-AbrOntapVserverVolumeSnapshot {
 
                 $VserverObj += [pscustomobject]$inobj
             }
+            if ($Healthcheck.Vserver.Snapshot) {
+                $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'True' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size','Reserve Available','Used'
+            }
 
             $TableParams = @{
                 Name = "Vserver Volume SnapShot Configuration Information - $($ClusterInfo.ClusterName)"
