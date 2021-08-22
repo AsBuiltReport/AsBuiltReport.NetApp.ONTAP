@@ -43,6 +43,28 @@ function Get-AbrOntapDiskType {
             }
             $DiskType | Table @TableParams
         }
+        $Node = Get-NcNode
+        if ($Node -and (Confirm-NcAggrSpareLow | Where-Object {$_.Value -eq "True"})) {
+            $OutObj = foreach ($Item in $Node) {
+                $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node
+                [PSCustomObject] @{
+                    'Node' = $Item.Node
+                    'Aggregate Spare Low' = $DiskSpareLow.Value.ToString().Replace("True", "Yes").Replace("False","No")
+                    }
+                }
+                if ($Healthcheck.Storage.DiskStatus) {
+                    $OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' } | Set-Style -Style Critical -Property 'Node','Aggregate Spare Low'
+                }
+            $TableParams = @{
+                Name = "HealthCheck - Aggregate Disk Spare Low - $($ClusterInfo.ClusterName)"
+                List = $false
+                ColumnWidths = 50, 50
+            }
+            if ($Report.ShowTableCaptions) {
+                $TableParams['Caption'] = "- $($TableParams.Name)"
+            }
+            $OutObj | Table @TableParams
+        }
     }
 
     end {}
