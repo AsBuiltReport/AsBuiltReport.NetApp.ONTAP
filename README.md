@@ -69,7 +69,7 @@ This report is compatible with the following PowerShell versions;
 
 | Windows PowerShell 5.1 | PowerShell Core | PowerShell 7 |
 |:----------------------:|:---------------:|:------------:|
-|   :white_check_mark:   |   :white_check_mark:    |  :x:  |
+|   :white_check_mark:   |   :white_check_mark:    |  :white_check_mark:  |
 
 ## :wrench: System Requirements
 
@@ -132,7 +132,7 @@ The **Report** schema provides configuration of the NetApp ONTAP report informat
 
 | Sub-Schema          | Setting      | Default                        | Description                                                  |
 |---------------------|--------------|--------------------------------|--------------------------------------------------------------|
-| Name                | User defined | NetApp ONTAP As Built Report | The name of the As Built Report                              |
+| Name                | User defined | NetApp ONTAP As Built Report   | The name of the As Built Report                              |
 | Version             | User defined | 1.0                            | The report version                                           |
 | Status              | User defined | Released                       | The report release status                                    |
 | ShowCoverPageImage  | true / false | true                           | Toggle to enable/disable the display of the cover page image |
