@@ -241,6 +241,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapNetworkRoutes
+                                Section -Style Heading5 'Per Network Interface Routes Summary' {
+                                    Paragraph "The following section provides the Per Network Interface Routes information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapNetworkRouteLifs
+                                }
                             }
                         }
                         Section -Style Heading4 'Network Interfaces Summary' {
@@ -378,10 +383,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         Paragraph "The following section provides the Lun Storage Information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapVserverLunStorage
-                                        Section -Style Heading5 'Igroup Mapping Summary' {
-                                            Paragraph "The following section provides the Lun  Interface Information on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverLunIgroup
+                                        if (Get-NcIgroup) {
+                                            Section -Style Heading5 'Igroup Mapping Summary' {
+                                                Paragraph "The following section provides the Igroup Mapping Information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapVserverLunIgroup
+                                                if ($Healthcheck.Vserver.Status) {
+                                                    Section -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
+                                                        Paragraph "The following section provides information of Non Mapped Lun on $($ClusterInfo.ClusterName)."
+                                                        BlankLine
+                                                        Get-AbrOntapVserverNonMappedLun
+                                                    }
+                                                }
+
+                                            }
                                         }
                                     }
                                 }
