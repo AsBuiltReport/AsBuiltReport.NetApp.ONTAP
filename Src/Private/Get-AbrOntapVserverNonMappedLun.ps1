@@ -39,13 +39,13 @@ function Get-AbrOntapVserverNonMappedLun {
                         'True' { 'Yes' }
                         'False' { 'No' }
                     }
-                    'Protocol' = $Item.Protocol
+                    'Lun Format' = $Item.Protocol
                     'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj
             }
             if ($Healthcheck.Vserver.Status) {
-                $OutObj | Set-Style -Style Warning -Property 'Volume Name','Lun Name','Online','Mapped','Protocol','Vserver'
+                $OutObj | Set-Style -Style Warning -Property 'Volume Name','Lun Name','Online','Mapped','Lun Format','Vserver'
             }
 
             $TableParams = @{
