@@ -27,6 +27,9 @@ function Get-AbrOntapRepRelationship {
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {
+                $lag = [timespan]::fromseconds($Item.LagTime).tostring()
+                $time = $lag.Split(".").Split(":")
+                $lagtime =  $time[0] + " days, " + $time[1] + " hrs, " + $time[2] + " mins, " + $time[0] + " secs"
                 $inObj = [ordered] @{
                     'Source Vserver' = $Item.SourceVserver
                     'Source Location' = $Item.SourceLocation
@@ -44,7 +47,7 @@ function Get-AbrOntapRepRelationship {
                     'Policy' = $Item.Policy
                     'Policy Type' = $Item.PolicyType
                     'Unhealthy Reason' = $Item.UnhealthyReason
-                    'Lag Time' = [timespan]::fromseconds($Item.LagTime).tostring()
+                    'Lag Time' = $lagtime
                     'Status' = ($Item.Status).toUpper()
                 }
                 $ReplicaObj += [pscustomobject]$inobj
