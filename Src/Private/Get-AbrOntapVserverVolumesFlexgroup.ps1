@@ -29,9 +29,9 @@ function Get-AbrOntapVserverVolumesFlexgroup {
             foreach ($Item in $Data) {
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
-                    'Vserver' = $Item.Vserver
                     'Status' = $Item.State
                     'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                    'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj
             }
@@ -42,7 +42,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
             $TableParams = @{
                 Name = "Vserver Flexgroup Volume Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 30, 30, 20, 20
+                ColumnWidths = 30, 20, 20, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
