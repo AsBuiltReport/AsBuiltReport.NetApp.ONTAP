@@ -99,7 +99,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Node Section
-            PageBreak
+            if ($InfoLevel.Node -gt 0) {
+                PageBreak
+            }
 
         #region Storage
         #---------------------------------------------------------------------------------------------#
@@ -164,7 +166,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Storage Section
-            PageBreak
+            if ($InfoLevel.Storage -gt 0) {
+                PageBreak
+            }
             #region License Section
         #---------------------------------------------------------------------------------------------#
         #                                 License Section                                             #
@@ -186,7 +190,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion License Section
-            PageBreak
+            if ($InfoLevel.License -gt 0) {
+                PageBreak
+            }
             #region Network Section
         #---------------------------------------------------------------------------------------------#
         #                                 Network Section                                             #
@@ -256,7 +262,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Network Section
-            PageBreak
+            if ($InfoLevel.Network -gt 0) {
+                PageBreak
+            }
             #region Vserver Section
         #---------------------------------------------------------------------------------------------#
         #                                 Vserver Section                                             #
@@ -332,7 +340,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    PageBreak
+                    if ($InfoLevel.Vserver -gt 0) {
+                        PageBreak
+                    }
             #---------------------------------------------------------------------------------------------#
             #                                 Vserver Protocol Section                                    #
             #---------------------------------------------------------------------------------------------#
@@ -488,7 +498,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }#endregion Vserver Section
-                PageBreak
+                if ($InfoLevel.Vserver -gt 0) {
+                    PageBreak
+                }
                 #region Replication Section
         #---------------------------------------------------------------------------------------------#
         #                                 Replication Section                                         #
@@ -540,7 +552,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Replication Section
-            PageBreak
+            if ($InfoLevel.Replication -gt 0) {
+                PageBreak
+            }
 
             #---------------------------------------------------------------------------------------------#
             #                                 Efficiency Section                                          #
@@ -556,15 +570,103 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Aggregate Efficiency Saving information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapEfficiencyAggr
-                            if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcEfficiency) {
-                                Section -Style Heading4 'Volume Efficiency Summary' {
-                                    Paragraph "The following section provides the Volume Efficiency Saving Summary information on $($ClusterInfo.ClusterName)."
+                            if (Get-NcEfficiency | Where-Object {$_.Name -ne "vol0"}) {
+                                Section -Style Heading4 'Volume Deduplication Summary' {
+                                    Paragraph "The following section provides the Volume Deduplication Summary on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapEfficiencyVol
+                                    Get-AbrOntapEfficiencyVolSisStatus
+                                    Section -Style Heading5 'Volume Efficiency Summary' {
+                                        Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapEfficiencyVol
+                                    }
                                     Section -Style Heading5 'Volume Efficiency Detail' {
                                         Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapEfficiencyVolDetailed
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ($InfoLevel.Efficiency -gt 0) {
+                PageBreak
+            }
+            #---------------------------------------------------------------------------------------------#
+            #                                 System Configuration Section                                #
+            #---------------------------------------------------------------------------------------------#
+            Write-PScriboMessage "Efficiency InfoLevel set at $($InfoLevel.System)."
+            if ($InfoLevel.System -gt 0) {
+                if (Get-NcTime) {
+                    Section -Style Heading2 'System Configuration Summary' {
+                        Paragraph "The following section provides the Cluster System Configuration on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        if (Get-NcSystemImage) {
+                            Section -Style Heading3 'System Image Configuration Summary' {
+                                Paragraph "The following section provides the System Image Configuration on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigImage
+                            }
+                        }
+                        if (Get-NcNetDns) {
+                            Section -Style Heading3 'DNS Configuration Summary' {
+                                Paragraph "The following section provides the DNS Configuration on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigDNS
+                            }
+                        }
+                        if (Get-NcSnmp) {
+                            Section -Style Heading3 'SNMP Configuration Summary' {
+                                Paragraph "The following section provides the SNMP Configuration on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigSNMP
+                            }
+                        }
+                        if (Get-NcConfigBackupUrl) {
+                            Section -Style Heading3 'Configuration Backup Setting Summary' {
+                                Paragraph "The following section provides the Configuration Backup Setting on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigBackupURL
+                                if (Get-NcConfigBackup) {
+                                    Section -Style Heading4 'Configuration Backup Items Summary' {
+                                        Paragraph "The following section provides the Configuration Backup Items on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapSysConfigBackup
+                                    }
+                                }
+                            }
+                        }
+                        if (Get-NcEmsDestination) {
+                            Section -Style Heading3 'EMS Configuration Summary' {
+                                Paragraph "The following section provides the EMS Configuration on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigEMSSettings
+                                if ($HealthCheck.System.EMS) {
+                                    Section -Style Heading4 'Cluster Emergency and Alert Messages Summary' {
+                                        Paragraph "The following section provides Cluster Emergency and Alert Messages  on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapSysConfigEMS
+                                    }
+                                }
+                            }
+                        }
+                        if (Get-NcTimezone) {
+                            Section -Style Heading3 'System Timezone Configuration Summary' {
+                                Paragraph "The following section provides the System Timezone Configuration on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigTZ
+                                if (Get-NcNtpServer) {
+                                    Section -Style Heading4 'Network Time Protocol Configuration' {
+                                        Paragraph "The following section provides the Network Time Protocol Configuration on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapSysConfigNTP
+                                        Section -Style Heading5 'Network Time Protocol Node Status Information' {
+                                            Paragraph "The following section provides the Network Time Protocol Node Status on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapSysConfigNTPHost
+                                        }
                                     }
                                 }
                             }
