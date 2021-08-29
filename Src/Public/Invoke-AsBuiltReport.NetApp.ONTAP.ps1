@@ -284,6 +284,16 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Paragraph "The following section provides the Vserver Volumes Information on $($ClusterInfo.ClusterName)."
                                     BlankLine
                                     Get-AbrOntapVserverVolumes
+                                    if (Get-NcVol | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                        Section -Style Heading5 'Vserver Volumes QoS Summary' {
+                                            Paragraph "The following section provides the Vserver QoS Group Configuration on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapVserverVolumesQosGroup
+                                            Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapVserverVolumesQos
+                                        }
+                                    }
                                     if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
                                         Section -Style Heading5 'Vserver FlexGroup Volumes Summary' {
                                             Paragraph "The following section provides the Vserver FlexGroup Volumes Configuration on $($ClusterInfo.ClusterName)."
@@ -296,6 +306,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesFlexclone
+                                            Get-AbrOntapVserverVolumesQos
                                         }
                                     }
                                     if ((Get-NcFlexcacheConnectedCache) -or (Get-NcFlexcache)) {
@@ -608,6 +619,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the System Image Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigImage
+                            }
+                        }
+                        if (Get-NcSystemServicesWebNode) {
+                            Section -Style Heading3 'System Web Service Summary' {
+                                Paragraph "The following section provides the System Web Service Status on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSysConfigWebStatus
                             }
                         }
                         if (Get-NcNetDns) {
