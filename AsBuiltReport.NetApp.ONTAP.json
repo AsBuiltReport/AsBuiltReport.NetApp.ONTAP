@@ -20,7 +20,8 @@
         "Network": 1,
         "Vserver": 1,
         "Replication": 1,
-        "Efficiency": 1
+        "Efficiency": 1,
+        "System": 1
     },
     "HealthCheck": {
         "Cluster": {
@@ -63,7 +64,11 @@
             "Relationship": true,
             "History": true,
             "Mediator": true
-
+        },
+        "System": {
+            "NTP": true,
+            "DNS": true,
+            "EMS": true
         }
     }
 }
