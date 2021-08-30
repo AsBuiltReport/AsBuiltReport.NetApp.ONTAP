@@ -605,6 +605,37 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             if ($InfoLevel.Efficiency -gt 0) {
                 PageBreak
             }
+
+            #---------------------------------------------------------------------------------------------#
+            #                                 Security Section                                          #
+            #---------------------------------------------------------------------------------------------#
+            Write-PScriboMessage "Security InfoLevel set at $($InfoLevel.Security)."
+            if ($InfoLevel.Security -gt 0) {
+                Section -Style Heading2 'Security Summary' {
+                    Paragraph "The following section provides the Security related information on $($ClusterInfo.ClusterName)."
+                    BlankLine
+                    if (Get-NcUser) {
+                        Section -Style Heading3 'Local User Summary' {
+                            Paragraph "The following section provides the Local User information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecurityUsers
+                        }
+                    }
+                    if (Get-NcSecuritySsl) {
+                        Section -Style Heading3 'Vserver SSL Certificate Summary' {
+                            Paragraph "The following section provides the Vserver SSL Certificates information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecuritySSLVserver
+                            Paragraph "The following section provides the Vserver SSL Certificates Detailed information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecuritySSLDetailed
+                        }
+                    }
+                }
+            }
+            if ($InfoLevel.Security -gt 0) {
+                PageBreak
+            }
             #---------------------------------------------------------------------------------------------#
             #                                 System Configuration Section                                #
             #---------------------------------------------------------------------------------------------#

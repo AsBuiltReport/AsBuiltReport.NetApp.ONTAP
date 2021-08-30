@@ -21,6 +21,7 @@
         "Vserver": 1,
         "Replication": 1,
         "Efficiency": 1,
+        "Security": 1,
         "System": 1
     },
     "HealthCheck": {
@@ -69,6 +70,9 @@
             "NTP": true,
             "DNS": true,
             "EMS": true
-        }
+        },
+        "Security": {
+        "Users": true
+    }
     }
 }
