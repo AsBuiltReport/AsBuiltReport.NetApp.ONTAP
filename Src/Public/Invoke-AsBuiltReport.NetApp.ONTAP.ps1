@@ -83,13 +83,17 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the node inventory on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNodes
-                        Get-AbrOntapNodeStorage
+                        Section -Style Heading4 'Node Vol0 Inventory' {
+                            Paragraph "The following section provides the node vol0 inventory on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapNodeStorage
+                        }
                         Section -Style Heading4 'Node Hardware Inventory' {
                             Paragraph "The following section provides the node hardware inventory on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapNodesHW
                         }
-                        if (Get-NcServiceProcessor) {
+                        if (Get-NcServiceProcessor | Where-Object {$NULL -ne $_.IpAddress -and $NULL -ne $_.MacAddress}) {
                             Section -Style Heading4 'Node Service-Processor Inventory' {
                                 Paragraph "The following section provides the node service-processor information on $($ClusterInfo.ClusterName)."
                                 BlankLine
@@ -275,7 +279,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading2 'Vserver Summary' {
                         Paragraph "The following section provides a summary of the vserver information on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Section -Style Heading3 'Vserver Information Summary' {
+                        Section -Style Heading3 'Vserver Status Summary' {
                             Paragraph "The following section provides a summary of the configured vserver on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapVserverSummary
@@ -285,13 +289,23 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     BlankLine
                                     Get-AbrOntapVserverVolumes
                                     if (Get-NcVol | Select-Object -ExpandProperty VolumeQosAttributes) {
-                                        Section -Style Heading5 'Vserver Volumes QoS Summary' {
-                                            Paragraph "The following section provides the Vserver QoS Group Configuration on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesQosGroup
-                                            Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesQos
+                                        Section -Style Heading5 'Vserver Volumes QoS Policy Summary' {
+                                            Paragraph "The following section provides the Vserver QoS Configuration on $($ClusterInfo.ClusterName)."
+                                            Section -Style Heading6 'Vserver Volumes Fixed QoS Policy' {
+                                                Paragraph "The following section provides the Volume Fixed QoS Group information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapVserverVolumesQosGPFixed
+                                            }
+                                            Section -Style Heading6 'Vserver Volumes Adaptive QoS Policy' {
+                                                Paragraph "The following section provides the Volumes Adaptive QoS Group information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapVserverVolumesQosGPAdaptive
+                                            }
+                                            Section -Style Heading6 'Vserver per Volumes QoS Policy Summary' {
+                                                Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapVserverVolumesQos
+                                            }
                                         }
                                     }
                                     if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
@@ -306,7 +320,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesFlexclone
-                                            Get-AbrOntapVserverVolumesQos
                                         }
                                     }
                                     if ((Get-NcFlexcacheConnectedCache) -or (Get-NcFlexcache)) {
@@ -323,6 +336,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             BlankLine
                                             Get-AbrOntapVserverVolumeSnapshot
                                             if ($HealthCheck.Vserver.Snapshot) {
+                                                Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck on $($ClusterInfo.ClusterName)."
+                                                BlankLine
                                                 Get-AbrOntapVserverVolumeSnapshotHealth
                                             }
                                         }

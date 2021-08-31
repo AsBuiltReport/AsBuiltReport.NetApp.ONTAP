@@ -43,12 +43,16 @@ function Get-AbrOntapRepDestinations {
                         'load_sharing' { 'LS' }
                     }
                     'Policy Type' = $Item.PolicyType
-                    'Status' = $Item.RelationshipStatus
+                    'Status' = Switch ($Item.RelationshipStatus) {
+                        $Null { 'Unknown' }
+                        default { $Item.RelationshipStatus }
+                    }
                 }
                 $ReplicaObj += [pscustomobject]$inobj
             }
             if ($Healthcheck.Replication.Relationship) {
                 $ReplicaObj | Where-Object { $NULL -ne $_.'Unhealthy Reason' } | Set-Style -Style Warning -Property 'Unhealthy Reason'
+                $ReplicaObj | Where-Object { $NULL -ne $_.'Status' -eq "Unknown" } | Set-Style -Style Warning -Property 'Status'
             }
 
             $TableParams = @{

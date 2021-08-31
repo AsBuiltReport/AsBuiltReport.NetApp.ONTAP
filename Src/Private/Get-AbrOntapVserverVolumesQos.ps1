@@ -30,8 +30,14 @@ function Get-AbrOntapVserverVolumesQos {
                 $VolQoS = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeQosAttributes
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
-                    'Fixed Policy Name' = $VolQoS.PolicyGroupName
-                    'Adaptive Policy Name' = $VolQoS.AdaptivePolicyGroupName
+                    'Fixed Policy Name' = Switch ($VolQoS.PolicyGroupName) {
+                        $Null { 'None' }
+                        default { $VolQoS.PolicyGroupName }
+                    }
+                    'Adaptive Policy Name' = Switch ($VolQoS.AdaptivePolicyGroupName) {
+                        $Null { 'None' }
+                        default { $VolQoS.AdaptivePolicyGroupName }
+                    }
                     'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj

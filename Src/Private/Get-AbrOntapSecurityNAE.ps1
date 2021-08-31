@@ -34,6 +34,7 @@ function Get-AbrOntapSecurityNAE {
                         'true' { 'Yes' }
                         'false' { 'No' }
                         $Null { 'Unsupported' }
+                        default { $NAE }
                     }
                     'Volume Count' = $Item.Volumes
                     'State' = $TextInfo.ToTitleCase($Item.State)

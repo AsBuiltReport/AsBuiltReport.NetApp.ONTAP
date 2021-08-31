@@ -31,9 +31,11 @@ function Get-AbrOntapSysConfigBackupURL {
                     'Cluster IP' = $Item.NcController
                     'Url' = Switch ($Item.Url) {
                         $Null { 'Not Configured' }
+                        default { $Item.Url }
                     }
                     'Username' = Switch ($Item.Username) {
                         $Null { 'Not Configured' }
+                        default { $Item.Username }
                     }
                 }
                 $OutObj += [pscustomobject]$inobj

@@ -29,11 +29,26 @@ function Get-AbrOntapSysConfigEMSSettings {
             foreach ($Item in $Data) {
                 $inObj = [ordered] @{
                     'Name' = $Item.Name
-                    'Email Destinations' = $Item.Mail
-                    'Snmp Traphost' = $Item.Snmp
-                    'Snmp Community' = $Item.SnmpCommunity
-                    'Syslog' = $Item.Syslog
-                    'Syslog Facility' = $Item.SyslogFacility
+                    'Email Destinations' = Switch ($Item.Mail) {
+                        $Null { '-' }
+                        default { $Item.Mail }
+                    }
+                    'Snmp Traphost' = Switch ($Item.Snmp) {
+                        $Null { '-' }
+                        default { $Item.Snmp }
+                    }
+                    'Snmp Community' = Switch ($Item.SnmpCommunity) {
+                        $Null { '-' }
+                        default { $Item.SnmpCommunity }
+                    }
+                    'Syslog' = Switch ($Item.Syslog) {
+                        $Null { '-' }
+                        default { $Item.Syslog }
+                    }
+                    'Syslog Facility' = Switch ($Item.SyslogFacility) {
+                        $Null { '-' }
+                        default { $Item.SyslogFacility }
+                    }
                 }
                 $OutObj += [pscustomobject]$inobj
             }

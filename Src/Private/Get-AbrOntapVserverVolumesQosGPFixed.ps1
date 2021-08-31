@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverVolumesQosGroup {
+function Get-AbrOntapVserverVolumesQosGPFixed {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos group information from the Cluster Management Network
+    Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos group fixed information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -19,7 +19,7 @@ function Get-AbrOntapVserverVolumesQosGroup {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes qos group information."
+        Write-PscriboMessage "Collecting ONTAP Vserver volumes qos group fixed information."
     }
 
     process {
@@ -42,32 +42,7 @@ function Get-AbrOntapVserverVolumesQosGroup {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume Fixed QoS Group Information - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 20, 24, 24, 12, 20
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
-        }
-        $QoSFilter = Get-NcQosAdaptivePolicyGroup
-        $OutObj = @()
-        if ($QoSFilter) {
-            foreach ($Item in $QoSFilter) {
-                $VolQoS = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeQosAttributes
-                $inObj = [ordered] @{
-                    'Policy Name' = $Item.PolicyGroup
-                    'Peak Iops' = $Item.PeakIops
-                    'Expected Iops' = $Item.ExpectedIops
-                    'Min Iops' = $Item.AbsoluteMinIops
-                    'Vserver' = $Item.Vserver
-                }
-                $OutObj += [pscustomobject]$inobj
-            }
-
-            $TableParams = @{
-                Name = "Vserver Volume Adaptive QoS Group Information - $($ClusterInfo.ClusterName)"
+                Name = "Volume Fixed QoS Group Information - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 24, 24, 12, 20
             }

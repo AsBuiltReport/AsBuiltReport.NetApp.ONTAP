@@ -51,32 +51,36 @@ function Get-AbrOntapEfficiencyAggr {
         }
         $Data =  Get-NcAggr | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
         $Savingfilter = (Get-NcAggrEfficiency | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
-        $OutObj = @()
         if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
-            foreach ($Item in $Data) {
-                $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo
-                $VolInAggr = Get-NcVol -Aggregate $Item.Name
-                $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True"}
-                $inObj = [ordered] @{
-                    'Aggregate' = $Item.Name
-                    'Volumes without Deduplication' = $VolFilter.Name
+            Section -Style Heading4 'HealthCheck - Volume efficiency opportunities for improvement' {
+                Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
+                BlankLine
+                $OutObj = @()
+                foreach ($Item in $Data) {
+                    $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo
+                    $VolInAggr = Get-NcVol -Aggregate $Item.Name
+                    $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True"}
+                    $inObj = [ordered] @{
+                        'Aggregate' = $Item.Name
+                        'Volumes without Deduplication' = $VolFilter.Name
+                    }
+                    $OutObj += [pscustomobject]$inobj
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            if ($Healthcheck.Storage.Efficiency) {
-                $OutObj | Set-Style -Style Warning -Property 'Aggregate','Volumes without Deduplication'
-            }
+                if ($Healthcheck.Storage.Efficiency) {
+                    $OutObj | Set-Style -Style Warning -Property 'Aggregate','Volumes without Deduplication'
+                }
 
-            $TableParams = @{
-                Name = "HealthCheck - Volume efficiency opportunities for improvement - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 45, 55
+                $TableParams = @{
+                    Name = "HealthCheck - Volume efficiency opportunities for improvement - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 45, 55
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
         }
     }
 

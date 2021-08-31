@@ -29,7 +29,10 @@ function Get-AbrOntapClusterLicenseUsage {
                 [PSCustomObject] @{
                     'Name' = $NodeLFs.FeatureName
                     'Status' = $NodeLFs.Status
-                    'Notes' = $NodeLFs.Notes
+                    'Notes' = Switch ($NodeLFs.Notes) {
+                        "-" { 'None' }
+                        default { $NodeLFs.Notes }
+                    }
                 }
             }
             $TableParams = @{
