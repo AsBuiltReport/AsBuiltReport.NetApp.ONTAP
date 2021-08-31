@@ -23,7 +23,7 @@ function Get-AbrOntapEfficiencyVol {
     }
 
     process {
-        $Data =  Get-NcVol | Where-Object {$_.Name -ne 'vol0'}
+        $Data =  Get-NcVol | Where-Object {$_.Name -ne 'vol0' -and $_.State -eq "online"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
