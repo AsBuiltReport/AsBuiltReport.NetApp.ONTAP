@@ -69,7 +69,8 @@
         "System": {
             "NTP": true,
             "DNS": true,
-            "EMS": true
+            "EMS": true,
+            "Backup": true
         },
         "Security": {
             "Users": true,

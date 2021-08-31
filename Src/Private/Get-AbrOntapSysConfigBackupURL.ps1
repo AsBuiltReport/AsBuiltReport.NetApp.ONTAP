@@ -29,10 +29,19 @@ function Get-AbrOntapSysConfigBackupURL {
             foreach ($Item in $Data) {
                 $inObj = [ordered] @{
                     'Cluster IP' = $Item.NcController
-                    'Url' = $Item.Url
-                    'Username' = $Item.Username
+                    'Url' = Switch ($Item.Url) {
+                        $Null { 'Not Configured' }
+                    }
+                    'Username' = Switch ($Item.Username) {
+                        $Null { 'Not Configured' }
+                    }
                 }
                 $OutObj += [pscustomobject]$inobj
+            }
+
+            if ($Healthcheck.System.Backup) {
+                $OutObj | Where-Object { $_.'Url' -eq 'Not Configured'} | Set-Style -Style Warning -Property 'Url'
+                $OutObj | Where-Object { $_.'Username' -eq 'Not Configured'} | Set-Style -Style Warning -Property 'Username'
             }
 
             $TableParams = @{
