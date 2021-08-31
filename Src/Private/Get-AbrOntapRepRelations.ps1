@@ -46,14 +46,17 @@ function Get-AbrOntapRepRelationship {
                     }
                     'Policy' = $Item.Policy
                     'Policy Type' = $Item.PolicyType
-                    'Unhealthy Reason' = $Item.UnhealthyReason
+                    'Unhealthy Reason' = Switch ($Item.UnhealthyReason) {
+                        $NULL { "None" }
+                        default { $Item.UnhealthyReason }
+                    }
                     'Lag Time' = $lagtime
                     'Status' = ($Item.Status).toUpper()
                 }
                 $ReplicaObj += [pscustomobject]$inobj
             }
             if ($Healthcheck.Replication.Relationship) {
-                $ReplicaObj | Where-Object { $NULL -ne $_.'Unhealthy Reason' } | Set-Style -Style Warning -Property 'Unhealthy Reason'
+                $ReplicaObj | Where-Object { $NULL -ne $_.'Unhealthy Reason' -or $_.'Unhealthy Reason' -ne "None" } | Set-Style -Style Warning -Property 'Unhealthy Reason'
             }
 
             $TableParams = @{
