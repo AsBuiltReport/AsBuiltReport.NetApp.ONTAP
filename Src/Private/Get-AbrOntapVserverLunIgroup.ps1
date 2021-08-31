@@ -28,7 +28,7 @@ function Get-AbrOntapVserverLunIgroup {
         if ($VserverIgroup) {
             foreach ($Item in $VserverIgroup) {
                 $lunmap = get-nclunmap | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -ExpandProperty Path
-                $reportingnodes = get-nclunmap | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -ExpandProperty ReportingNodes
+                $reportingnodes = get-nclunmap | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -Unique -ExpandProperty ReportingNodes
                 $MappedLun = @()
                 foreach ($lun in $lunmap) {
                     $lunname = $lun.split('/')
