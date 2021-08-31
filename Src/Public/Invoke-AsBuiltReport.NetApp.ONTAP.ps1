@@ -631,6 +631,37 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Get-AbrOntapSecuritySSLDetailed
                         }
                     }
+                    if (Get-NcSecurityKeyManagerKeyStore) {
+                        Section -Style Heading3 'Security Key Management Service (KMS) Summary' {
+                            Paragraph "The following section provides the Key Management Service type on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecurityKMS
+                            if (Get-NcSecurityKeyManagerExternal) {
+                                Section -Style Heading4 'External Key Management Service (KMS) Summary' {
+                                    Paragraph "The following section provides the External KMS information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapSecurityKMSExt
+                                    Section -Style Heading5 'External Key Management Service (KMS) Status Summary' {
+                                        Paragraph "The following section provides the External KMS Status information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapSecurityKMSExtStatus
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (Get-NcAggr) {
+                        Section -Style Heading3 'Security Aggregate Encryption (NAE) Summary' {
+                            Paragraph "The following section provides the Aggregate Encryption (NAE) information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecurityNAE
+                            Section -Style Heading4 'Security Volume Encryption (NVE) Summary' {
+                                Paragraph "The following section provides the Volume Encryption (NVE) information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSecurityNVE
+                            }
+                        }
+                    }
                 }
             }
             if ($InfoLevel.Security -gt 0) {

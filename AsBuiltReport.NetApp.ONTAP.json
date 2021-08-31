@@ -72,7 +72,8 @@
             "EMS": true
         },
         "Security": {
-            "Users": true
+            "Users": true,
+            "KMS": true
     }
     }
 }
