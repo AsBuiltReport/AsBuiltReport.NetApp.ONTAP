@@ -33,6 +33,7 @@ function Get-AbrOntapSecurityNAE {
                     'Aggregate Encryption' = Switch ($NAE) {
                         'true' { 'Yes' }
                         'false' { 'No' }
+                        $Null { 'Unsupported' }
                     }
                     'Volume Count' = $Item.Volumes
                     'State' = $TextInfo.ToTitleCase($Item.State)

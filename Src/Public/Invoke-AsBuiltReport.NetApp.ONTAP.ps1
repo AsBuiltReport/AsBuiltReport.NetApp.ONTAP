@@ -631,7 +631,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Get-AbrOntapSecuritySSLDetailed
                         }
                     }
-                    if (Get-NcSecurityKeyManagerKeyStore) {
+                    if (Get-NcSecurityKeyManagerKeyStore -ErrorAction SilentlyContinue) {
                         Section -Style Heading3 'Security Key Management Service (KMS) Summary' {
                             Paragraph "The following section provides the Key Management Service type on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -697,7 +697,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapSysConfigDNS
                             }
                         }
-                        if (Get-NcSnmp) {
+                        if (Get-NcSnmp | Where-Object { $NULL -ne $_.Traphost -and $NULL -ne $_.Communities}) {
                             Section -Style Heading3 'SNMP Configuration Summary' {
                                 Paragraph "The following section provides the SNMP Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
