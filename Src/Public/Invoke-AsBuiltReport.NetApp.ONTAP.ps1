@@ -596,7 +596,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Aggregate Efficiency Saving information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapEfficiencyAggr
-                            if (Get-NcEfficiency | Where-Object {$_.Name -ne "vol0"}) {
+                            $VolFilter = Get-ncvol | Where-Object {$_.State -eq "online"}
+                            if (Get-NcEfficiency -Volume $VolFilter.Name | Where-Object {$_.Name -ne "vol0"}) {
                                 Section -Style Heading4 'Volume Deduplication Summary' {
                                     Paragraph "The following section provides the Volume Deduplication Summary on $($ClusterInfo.ClusterName)."
                                     BlankLine
