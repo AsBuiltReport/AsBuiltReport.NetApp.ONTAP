@@ -56,7 +56,7 @@ function Get-AbrOntapRepRelationship {
                 $ReplicaObj += [pscustomobject]$inobj
             }
             if ($Healthcheck.Replication.Relationship) {
-                $ReplicaObj | Where-Object { $NULL -ne $_.'Unhealthy Reason' -or $_.'Unhealthy Reason' -ne "None" } | Set-Style -Style Warning -Property 'Unhealthy Reason'
+                $ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne "None" } | Set-Style -Style Warning -Property 'Unhealthy Reason'
             }
 
             $TableParams = @{

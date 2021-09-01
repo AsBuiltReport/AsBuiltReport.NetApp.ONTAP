@@ -51,8 +51,7 @@ function Get-AbrOntapRepDestinations {
                 $ReplicaObj += [pscustomobject]$inobj
             }
             if ($Healthcheck.Replication.Relationship) {
-                $ReplicaObj | Where-Object { $NULL -ne $_.'Unhealthy Reason' } | Set-Style -Style Warning -Property 'Unhealthy Reason'
-                $ReplicaObj | Where-Object { $NULL -ne $_.'Status' -eq "Unknown" } | Set-Style -Style Warning -Property 'Status'
+                $ReplicaObj | Where-Object { $_.'Status' -eq "Unknown" } | Set-Style -Style Warning -Property 'Status'
             }
 
             $TableParams = @{

@@ -37,7 +37,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
             }
 
             if ($Healthcheck.Security.KMS) {
-                $OutObj | Where-Object { $_.'Status' -ne 'Available'} | Set-Style -Style Warning -Property 'Status'
+                $OutObj | Where-Object { $_.'Status' -ne 'Available'} | Set-Style -Style Critical -Property 'Status'
             }
 
             $TableParams = @{
