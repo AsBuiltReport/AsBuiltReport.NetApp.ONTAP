@@ -690,6 +690,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Volume Snaplock Type information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSecuritySnapLockVol
+                                if (Get-Ncvol | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}) {
+                                    Section -Style Heading6 'Snaplock Volume Attributes Information' {
+                                        Paragraph "The following section provides the Snaplock Volume Attributes information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapSecuritySnapLockVollAttr
+                                    }
+                                }
                             }
                         }
                     }
