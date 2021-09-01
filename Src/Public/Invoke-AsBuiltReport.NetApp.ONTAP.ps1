@@ -648,7 +648,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                     if (Get-NcSecurityKeyManagerKeyStore -ErrorAction SilentlyContinue) {
-                        Section -Style Heading3 'Security Key Management Service (KMS) Summary' {
+                        Section -Style Heading3 'Key Management Service (KMS) Summary' {
                             Paragraph "The following section provides the Key Management Service type on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapSecurityKMS
@@ -667,14 +667,29 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                     if (Get-NcAggr) {
-                        Section -Style Heading3 'Security Aggregate Encryption (NAE) Summary' {
+                        Section -Style Heading3 'Aggregate Encryption (NAE) Summary' {
                             Paragraph "The following section provides the Aggregate Encryption (NAE) information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapSecurityNAE
-                            Section -Style Heading4 'Security Volume Encryption (NVE) Summary' {
+                            Section -Style Heading4 'Volume Encryption (NVE) Summary' {
                                 Paragraph "The following section provides the Volume Encryption (NVE) information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSecurityNVE
+                            }
+                        }
+                    }
+                    Section -Style Heading3 'Snaplock Compliance Clock Information Summary' {
+                        Paragraph "The following section provides the Snaplock Compliance Clock information on $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        Get-AbrOntapSecuritySnapLockClock
+                        Section -Style Heading4 'Aggregate Snaplock Type Information' {
+                            Paragraph "The following section provides the Aggregate Snaplock Type information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecuritySnapLockAggr
+                            Section -Style Heading5 'Volume Snaplock Type Information' {
+                                Paragraph "The following section provides the Volume Snaplock Type information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSecuritySnapLockVol
                             }
                         }
                     }
