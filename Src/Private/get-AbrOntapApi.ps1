@@ -5,7 +5,7 @@ function Get-AbrOntapApi {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.1.0
+        Version:        0.3.0
         Author:         Tim Carman
         Editor:         Jonathan Colon
         Twitter:        @jcolonfzenpr

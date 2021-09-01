@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiInitiator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.1.0
+        Version:        0.3.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
