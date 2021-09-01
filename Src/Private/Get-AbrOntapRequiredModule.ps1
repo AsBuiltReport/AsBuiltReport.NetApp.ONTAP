@@ -21,5 +21,7 @@ function Get-AbrOntapRequiredModule {
     } elseif ($OntapModuleVersion -lt $OntapRequiredVersion) {
         Write-Warning -Message "Netapp PSTK $OntapRequiredVersion or higher is required to run the NetApp Ontap As Built Report. Run 'Update-Module -Name Netapp.Ontap -MinimumVersion $OntapRequiredVersion' to update Netapp.Ontapp modules."
         break
+    } elseif (Import-Module NetApp.ONTAP) {
+        Import-Module NetApp.ONTAP
     }
 }
