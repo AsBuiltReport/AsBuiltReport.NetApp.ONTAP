@@ -7,8 +7,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .NOTES
         Version:        0.3.0
         Author:         Jonathan Colon Feliciano
-        Twitter:
-        Github:
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
         Credits:        Iain Brighton (@iainbrighton) - PScribo module
 
     .LINK
@@ -683,7 +683,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             #                                 System Configuration Section                                #
             #---------------------------------------------------------------------------------------------#
-            Write-PScriboMessage "Efficiency InfoLevel set at $($InfoLevel.System)."
+            Write-PScriboMessage "System Configuration InfoLevel set at $($InfoLevel.System)."
             if ($InfoLevel.System -gt 0) {
                 if (Get-NcTime) {
                     Section -Style Heading2 'System Configuration Summary' {
