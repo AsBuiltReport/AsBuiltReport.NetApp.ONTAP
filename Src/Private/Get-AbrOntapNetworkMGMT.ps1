@@ -23,35 +23,37 @@ function Get-AbrOntapNetworkMgmt {
     }
 
     process {
-        Section -Style Heading6 'Cluster Network Interfaces Summary' {
-            Paragraph "The following section provides the Cluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
-            BlankLine
-            $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'cluster'}
-            $ClusterObj = @()
-            if ($ClusterData) {
-                foreach ($Item in $ClusterData) {
-                    $inObj = [ordered] @{
-                        'Cluster Interface' = $Item.InterfaceName
-                        'Status' = $Item.OpStatus.ToString().ToUpper()
-                        'Data Protocols' = $Item.DataProtocols
-                        'Address' = $Item.Address
-                        'Vserver' = $Item.Vserver
+        if (Get-NcNetInterface | Where-Object {$_.Role -eq 'cluster'}) {
+            Section -Style Heading6 'Cluster Network Interfaces Summary' {
+                Paragraph "The following section provides the Cluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
+                BlankLine
+                $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'cluster'}
+                $ClusterObj = @()
+                if ($ClusterData) {
+                    foreach ($Item in $ClusterData) {
+                        $inObj = [ordered] @{
+                            'Cluster Interface' = $Item.InterfaceName
+                            'Status' = $Item.OpStatus.ToString().ToUpper()
+                            'Data Protocols' = $Item.DataProtocols
+                            'Address' = $Item.Address
+                            'Vserver' = $Item.Vserver
+                        }
+                        $ClusterObj += [pscustomobject]$inobj
                     }
-                    $ClusterObj += [pscustomobject]$inobj
-                }
-                if ($Healthcheck.Network.Interface) {
-                    $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
-                }
+                    if ($Healthcheck.Network.Interface) {
+                        $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
+                    }
 
-                $TableParams = @{
-                    Name = "Cluster Network Information - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 35, 8, 21, 18, 18
+                    $TableParams = @{
+                        Name = "Cluster Network Information - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 35, 8, 21, 18, 18
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $ClusterObj | Table @TableParams
                 }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $ClusterObj | Table @TableParams
             }
         }
         Section -Style Heading6 'Management Network Interfaces Summary' {
@@ -85,35 +87,37 @@ function Get-AbrOntapNetworkMgmt {
                 $ClusterObj | Table @TableParams
             }
         }
-        Section -Style Heading6 'Intercluster Network Interfaces Summary' {
-            Paragraph "The following section provides the Intercluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
-            BlankLine
-            $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'intercluster'}
-            $ClusterObj = @()
-            if ($ClusterData) {
-                foreach ($Item in $ClusterData) {
-                    $inObj = [ordered] @{
-                        'Intercluster Interface' = $Item.InterfaceName
-                        'Status' = $Item.OpStatus.ToString().ToUpper()
-                        'Data Protocols' = $Item.DataProtocols
-                        'Address' = $Item.Address
-                        'Vserver' = $Item.Vserver
+        if (Get-NcNetInterface | Where-Object {$_.Role -eq 'intercluster'}) {
+            Section -Style Heading6 'Intercluster Network Interfaces Summary' {
+                Paragraph "The following section provides the Intercluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
+                BlankLine
+                $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'intercluster'}
+                $ClusterObj = @()
+                if ($ClusterData) {
+                    foreach ($Item in $ClusterData) {
+                        $inObj = [ordered] @{
+                            'Intercluster Interface' = $Item.InterfaceName
+                            'Status' = $Item.OpStatus.ToString().ToUpper()
+                            'Data Protocols' = $Item.DataProtocols
+                            'Address' = $Item.Address
+                            'Vserver' = $Item.Vserver
+                        }
+                        $ClusterObj += [pscustomobject]$inobj
                     }
-                    $ClusterObj += [pscustomobject]$inobj
-                }
-                if ($Healthcheck.Network.Interface) {
-                    $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
-                }
+                    if ($Healthcheck.Network.Interface) {
+                        $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
+                    }
 
-                $TableParams = @{
-                    Name = "Intercluster Network Information - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 35, 8, 21, 18, 18
+                    $TableParams = @{
+                        Name = "Intercluster Network Information - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 35, 8, 21, 18, 18
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $ClusterObj | Table @TableParams
                 }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $ClusterObj | Table @TableParams
             }
         }
         Section -Style Heading6 'Data Network Interfaces Summary' {
