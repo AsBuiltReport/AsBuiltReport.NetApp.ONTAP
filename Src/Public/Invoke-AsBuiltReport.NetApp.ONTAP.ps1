@@ -61,7 +61,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         BlankLine
                         Get-AbrOntapClusterHA
                     }
-                    Section -Style Heading3 'Cluster Auto Support Status' {
+                    Section -Style Heading3 'Cluster AutoSupport Status' {
                         Paragraph "The following section provides a summary of the Cluster AutoSupport Status on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapClusterASUP
@@ -103,9 +103,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Node Section
-            if ($InfoLevel.Node -gt 0) {
-                PageBreak
-            }
 
         #region Storage
         #---------------------------------------------------------------------------------------------#
@@ -121,13 +118,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         BlankLine
                         Get-AbrOntapStorageAGGR
                         if (Get-NcAggrObjectStore) {
-                            Section -Style Heading4 'Aggregate FabricPool Summary' {
+                            Section -Style Heading4 'FabricPool Summary' {
                                 Paragraph "The following section provides the FabricPool information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapStorageFabricPool
                                 if (Get-NcAggrObjectStoreConfig) {
-                                    Section -Style Heading5 'Aggregate  FabriPool Object Store Configuration Summary' {
-                                        Paragraph "The following section provides the  FabriPool Object Store Configuration on $($ClusterInfo.ClusterName)."
+                                    Section -Style Heading5 'FabriPool Object Store Configuration Summary' {
+                                        Paragraph "The following section provides the FabriPool Object Store Configuration on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapEfficiencyAggrConfig
                                     }
@@ -170,9 +167,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Storage Section
-            if ($InfoLevel.Storage -gt 0) {
-                PageBreak
-            }
             #region License Section
         #---------------------------------------------------------------------------------------------#
         #                                 License Section                                             #
@@ -194,9 +188,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion License Section
-            if ($InfoLevel.License -gt 0) {
-                PageBreak
-            }
             #region Network Section
         #---------------------------------------------------------------------------------------------#
         #                                 Network Section                                             #
@@ -206,7 +197,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 Section -Style Heading2 'Network Summary' {
                     Paragraph "The following section provides a summary of the networking features on $($ClusterInfo.ClusterName)."
                     BlankLine
-                    Section -Style Heading3 'Network IPSpace Summary' {
+                    Section -Style Heading3 'IPSpace Summary' {
                         Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNetworkIpSpace
@@ -266,9 +257,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Network Section
-            if ($InfoLevel.Network -gt 0) {
-                PageBreak
-            }
             #region Vserver Section
         #---------------------------------------------------------------------------------------------#
         #                                 Vserver Section                                             #
@@ -296,12 +284,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 BlankLine
                                                 Get-AbrOntapVserverVolumesQosGPFixed
                                             }
-                                            Section -Style Heading6 'Vserver Volumes Adaptive QoS Policy' {
+                                            Section -Style Heading6 'Volumes Adaptive QoS Policy' {
                                                 Paragraph "The following section provides the Volumes Adaptive QoS Group information on $($ClusterInfo.ClusterName)."
                                                 BlankLine
                                                 Get-AbrOntapVserverVolumesQosGPAdaptive
                                             }
-                                            Section -Style Heading6 'Vserver per Volumes QoS Policy Summary' {
+                                            Section -Style Heading6 'Per Volumes QoS Policy Summary' {
                                                 Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($ClusterInfo.ClusterName)."
                                                 BlankLine
                                                 Get-AbrOntapVserverVolumesQos
@@ -309,21 +297,21 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                     if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
-                                        Section -Style Heading5 'Vserver FlexGroup Volumes Summary' {
+                                        Section -Style Heading5 'FlexGroup Volumes Summary' {
                                             Paragraph "The following section provides the Vserver FlexGroup Volumes Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesFlexgroup
                                         }
                                     }
                                     if (Get-NcVolClone) {
-                                        Section -Style Heading5 'Vserver Flexclone Volumes Summary' {
+                                        Section -Style Heading5 'Flexclone Volumes Summary' {
                                             Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesFlexclone
                                         }
                                     }
                                     if ((Get-NcFlexcacheConnectedCache) -or (Get-NcFlexcache)) {
-                                        Section -Style Heading5 'Vserver Flexcache Volumes Summary' {
+                                        Section -Style Heading5 'Flexcache Volumes Summary' {
                                             Paragraph "The following section provides the Vserver Flexcache Volumes Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesFlexcache
@@ -331,7 +319,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     }
 
                                     if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcSnapshot) {
-                                        Section -Style Heading5 'Vserver Volumes Snapshot Configuration Summary' {
+                                        Section -Style Heading5 'Volumes Snapshot Configuration Summary' {
                                             Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumeSnapshot
@@ -343,7 +331,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                     if (Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}) {
-                                        Section -Style Heading5 'Vserver Qtree Summary' {
+                                        Section -Style Heading5 'Qtree Summary' {
                                             Paragraph "The following section provides the Vserver Volumes Qtree Information on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesQtree
@@ -356,7 +344,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             }
                                         }
                                     if (Get-NcQuota) {
-                                        Section -Style Heading5 'Vserver Volume Quota Summary' {
+                                        Section -Style Heading5 'Volume Quota Summary' {
                                             Paragraph "The following section provides the Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesQuota
@@ -366,9 +354,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    if ($InfoLevel.Vserver -gt 0) {
-                        PageBreak
-                    }
+
             #---------------------------------------------------------------------------------------------#
             #                                 Vserver Protocol Section                                    #
             #---------------------------------------------------------------------------------------------#
@@ -524,9 +510,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }#endregion Vserver Section
-                if ($InfoLevel.Vserver -gt 0) {
-                    PageBreak
-                }
                 #region Replication Section
         #---------------------------------------------------------------------------------------------#
         #                                 Replication Section                                         #
@@ -578,9 +561,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }#endregion Replication Section
-            if ($InfoLevel.Replication -gt 0) {
-                PageBreak
-            }
 
             #---------------------------------------------------------------------------------------------#
             #                                 Efficiency Section                                          #
@@ -617,9 +597,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }
-            if ($InfoLevel.Efficiency -gt 0) {
-                PageBreak
             }
 
             #---------------------------------------------------------------------------------------------#
@@ -702,9 +679,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }
-            if ($InfoLevel.Security -gt 0) {
-                PageBreak
-            }
+
             #---------------------------------------------------------------------------------------------#
             #                                 System Configuration Section                                #
             #---------------------------------------------------------------------------------------------#
