@@ -25,7 +25,7 @@ function Get-AbrOntapVserverVolumesQuota {
 
     process {
         Section -Style Heading6 'Vserver Volume Quota Status' {
-            Paragraph "The following section provides the Vserver Volumes Quota Status Information on $($ClusterInfo.ClusterName)."
+            Paragraph "The following section provides the Volumes Quota Status Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $VserverQuotaStatus = Get-NcQuotaStatus
             $VserverObj = @()
@@ -59,7 +59,7 @@ function Get-AbrOntapVserverVolumesQuota {
             }
         }
         Section -Style Heading6 'Vserver Volume Quota Information' {
-            Paragraph "The following section provides the Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
+            Paragraph "The following section provides the Volumes Quota Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $VserverQuota = Get-NcQuota
             $VserverObj = @()
@@ -69,10 +69,22 @@ function Get-AbrOntapVserverVolumesQuota {
                         'Volume' = $Item.Volume
                         'Type' = $Item.QuotaType
                         'Target' = $Item.QuotaTarget
-                        'Disk Limit' = $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                        'File Limit' = $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
-                        'Soft Disk Limit' = $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                        'Soft File Limit' = $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
+                        'Disk Limit' = Switch ($Item.DiskLimit) {
+                            "-" { $Item.DiskLimit }
+                            default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
+                        }
+                        'File Limit' = Switch ($Item.FileLimit) {
+                            "-" { $Item.FileLimit }
+                            default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
+                        }
+                        'Soft Disk Limit' = Switch ($Item.SoftDiskLimit) {
+                            "-" { $Item.SoftDiskLimit }
+                            default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
+                        }
+                        'Soft File Limit' = Switch ($Item.SoftFileLimit) {
+                            "-" { $Item.SoftFileLimit }
+                            default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
+                        }
                         'Vserver' = $Item.Vserver
                     }
                     $VserverObj += [pscustomobject]$inobj
@@ -97,7 +109,7 @@ function Get-AbrOntapVserverVolumesQuota {
             }
         }
         Section -Style Heading6 'Vserver Volume Quota Report (Disk) Summary' {
-            Paragraph "The following section provides the Vserver Volumes Quota Report (Disk) Information on $($ClusterInfo.ClusterName)."
+            Paragraph "The following section provides the Volumes Quota Report (Disk) Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $VserverQuotaReport = Get-NcQuotaReport
             $VserverObj = @()
@@ -107,8 +119,14 @@ function Get-AbrOntapVserverVolumesQuota {
                         'Volume' = $Item.Volume
                         'Quota Target' = $Item.QuotaTarget
                         'Qtree' = $Item.Qtree
-                        'Disk Limit' = $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                        'Soft Disk Limit' = $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                        'Disk Limit' = Switch ($Item.DiskLimit) {
+                            "-" { $Item.DiskLimit }
+                            default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
+                        }
+                        'Soft Disk Limit' = Switch ($Item.SoftDiskLimit) {
+                            "-" { $Item.SoftDiskLimit }
+                            default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
+                        }
                         'Disk Used' = $Item.DiskUsed | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                         'Vserver' = $Item.Vserver
                     }
@@ -133,7 +151,7 @@ function Get-AbrOntapVserverVolumesQuota {
             }
         }
         Section -Style Heading6 'Vserver Volume Quota Report (File) Summary' {
-            Paragraph "The following section provides the Vserver Volumes Quota Report (File) Information on $($ClusterInfo.ClusterName)."
+            Paragraph "The following section provides the Volumes Quota Report (File) Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $VserverQuotaReport = Get-NcQuotaReport
             $VserverObj = @()
@@ -143,8 +161,14 @@ function Get-AbrOntapVserverVolumesQuota {
                         'Volume' = $Item.Volume
                         'Quota Target' = $Item.QuotaTarget
                         'Qtree' = $Item.Qtree
-                        'Files Limit' = $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
-                        'Soft File Limit' = $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
+                        'File Limit' = Switch ($Item.FileLimit) {
+                            "-" { $Item.FileLimit }
+                            default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
+                        }
+                        'Soft File Limit' = Switch ($Item.SoftFileLimit) {
+                            "-" { $Item.SoftFileLimit }
+                            default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
+                        }
                         'Files Used' = $Item.FilesUsed | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
                         'Vserver' = $Item.Vserver
                     }
