@@ -25,7 +25,7 @@
 
     - Added per network interface routes information
 
-  - Added network interfaces (Cluster, Management, Intercluster & Data)
+  - Added network interfaces (Cluster, Management, Intercluster & Data) information and healthcheck
 
 - Added network section:
 
