@@ -33,7 +33,7 @@ function Get-AbrOntapNetworkMgmt {
                     foreach ($Item in $ClusterData) {
                         $inObj = [ordered] @{
                             'Cluster Interface' = $Item.InterfaceName
-                            'Status' = $Item.OpStatus.ToString().ToUpper()
+                            'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
                             'Data Protocols' = $Item.DataProtocols
                             'Address' = $Item.Address
                             'Vserver' = $Item.Vserver
@@ -65,7 +65,7 @@ function Get-AbrOntapNetworkMgmt {
                 foreach ($Item in $ClusterData) {
                     $inObj = [ordered] @{
                         'MGMT Interface' = $Item.InterfaceName
-                        'Status' = $Item.OpStatus.ToString().ToUpper()
+                        'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
                         'Data Protocols' = $Item.DataProtocols
                         'Address' = $Item.Address
                         'Vserver' = $Item.Vserver
@@ -97,7 +97,7 @@ function Get-AbrOntapNetworkMgmt {
                     foreach ($Item in $ClusterData) {
                         $inObj = [ordered] @{
                             'Intercluster Interface' = $Item.InterfaceName
-                            'Status' = $Item.OpStatus.ToString().ToUpper()
+                            'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
                             'Data Protocols' = $Item.DataProtocols
                             'Address' = $Item.Address
                             'Vserver' = $Item.Vserver
@@ -129,7 +129,7 @@ function Get-AbrOntapNetworkMgmt {
                 foreach ($Item in $ClusterData) {
                     $inObj = [ordered] @{
                         'Data Interface' = $Item.InterfaceName
-                        'Status' = $Item.OpStatus.ToString().ToUpper()
+                        'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
                         'Data Protocols' = [string]$Item.DataProtocols
                         'Address' = $Item.Address
                         'Vserver' = $Item.Vserver
@@ -149,6 +149,42 @@ function Get-AbrOntapNetworkMgmt {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ClusterObj | Table @TableParams
+            }
+        }
+        if ((Get-NcNetInterface | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}) -and $Healthcheck.Network.Interface) {
+            Section -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
+                Paragraph "The following section provides the LIF Home Status Information on $($ClusterInfo.ClusterName)."
+                BlankLine
+                $ClusterData = Get-NcNetInterface | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}
+                $ClusterObj = @()
+                if ($ClusterData) {
+                    foreach ($Item in $ClusterData) {
+                        $inObj = [ordered] @{
+                            'Network Interface' = $Item.InterfaceName
+                            'Home Port' = $Item.HomeNode + ":" + $Item.HomePort
+                            'Current Port' = $Item.CurrentNode + ":" + $Item.CurrentPort
+                            'IsHome' = Switch ($Item.IsHome) {
+                                "True" { 'Yes' }
+                                "False" { "No" }
+                            }
+                            'Vserver' = $Item.Vserver
+                        }
+                        $ClusterObj += [pscustomobject]$inobj
+                    }
+                    if ($Healthcheck.Network.Interface) {
+                        $ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' } | Set-Style -Style Warning -Property 'Network Interface','IsHome','Home Port','Current Port','Vserver'
+                    }
+
+                    $TableParams = @{
+                        Name = "Network Interface Home Status Information - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 20, 25, 25, 10, 20
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $ClusterObj | Table @TableParams
+                }
             }
         }
     }
