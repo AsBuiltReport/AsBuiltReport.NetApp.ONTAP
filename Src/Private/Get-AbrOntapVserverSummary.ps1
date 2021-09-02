@@ -85,33 +85,36 @@ function Get-AbrOntapVserverSummary {
                 $VserverObj | Table @TableParams
             }
         }
-        Section -Style Heading4 'Vserver Aggregate Resource Allocation Summary' {
-            Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($ClusterInfo.ClusterName)."
-            BlankLine
-            $VserverAGGR = Get-NcVserverAggr
-            $VserverObj = @()
-            if ($VserverAGGR) {
-                foreach ($Item in $VserverAGGR) {
-                    $inObj = [ordered] @{
-                        'Vserver' = $Item.VserverName
-                        'Aggregate' = $Item.AggregateName
-                        'Type' = $Item.AggregateType
-                        'SnapLock Type' = $Item.SnaplockType
-                        'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+        if (Get-NcVserverAggr) {
+            Section -Style Heading4 'Vserver Aggregate Resource Allocation Summary' {
+                Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($ClusterInfo.ClusterName)."
+                BlankLine
+                $VserverAGGR = Get-NcVserverAggr
+                $VserverObj = @()
+                if ($VserverAGGR) {
+                    foreach ($Item in $VserverAGGR) {
+                        $inObj = [ordered] @{
+                            'Vserver' = $Item.VserverName
+                            'Aggregate' = $Item.AggregateName
+                            'Type' = $Item.AggregateType
+                            'SnapLock Type' = $Item.SnaplockType
+                            'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        }
+                        $VserverObj += [pscustomobject]$inobj
                     }
-                    $VserverObj += [pscustomobject]$inobj
-                }
 
-                $TableParams = @{
-                    Name = "Vserver Aggregate Resource Allocation Information - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 25, 30, 10, 20, 15
+                    $TableParams = @{
+                        Name = "Vserver Aggregate Resource Allocation Information - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 25, 30, 10, 20, 15
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $VserverObj | Table @TableParams
                 }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $VserverObj | Table @TableParams
             }
+
         }
     }
 
