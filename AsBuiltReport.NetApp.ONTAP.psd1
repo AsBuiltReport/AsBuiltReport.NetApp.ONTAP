@@ -55,6 +55,10 @@ RequiredModules = @(
     @{
         ModuleName = 'AsBuiltReport.Core';
         ModuleVersion = '1.1.0'
+    },
+    @{
+        ModuleName = 'NetApp.ONTAP';
+        ModuleVersion = '9.9.1'
     }
 )
 
