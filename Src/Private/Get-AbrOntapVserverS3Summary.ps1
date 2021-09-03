@@ -23,7 +23,7 @@ function Get-AbrOntapVserverS3Summary {
     }
 
     process {
-        $VserverData = Get-AbrOntapApi -uri "/api/protocols/s3/services?"
+        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/services?"
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -33,9 +33,10 @@ function Get-AbrOntapVserverS3Summary {
                     'HTTP Port' = $Item.port
                     'HTTPS' = $Item.is_https_enabled
                     'HTTPS Port' = $Item.secure_port
-                    'Status' = switch ($Item.enabled) {
+                    'Status' = Switch ($Item.enabled) {
                         'True' { 'UP' }
                         'False' { 'Down' }
+                        default { $Item.enabled }
                     }
                 }
                 $VserverObj += [pscustomobject]$inobj
@@ -44,6 +45,7 @@ function Get-AbrOntapVserverS3Summary {
             $TableParams = @{
                 Name = "Vserver S3 Service Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 31, 12, 15, 12, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

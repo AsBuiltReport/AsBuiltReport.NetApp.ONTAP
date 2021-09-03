@@ -23,7 +23,7 @@ function Get-AbrOntapVserverS3Bucket {
     }
 
     process {
-        $VserverData = Get-AbrOntapApi -uri "/api/protocols/s3/buckets?"
+        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/buckets?"
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
