@@ -21,9 +21,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         [PSCredential] $Credential
     )
 
-    # Check if the required version of Modules are installed
-    Get-AbrOntapRequiredModule
-
     # Import Report Configuration
     $Report = $ReportConfig.Report
     $InfoLevel = $ReportConfig.InfoLevel
@@ -490,7 +487,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             #                                 S3 Section                                                  #
             #---------------------------------------------------------------------------------------------#
-                                if (Get-AbrOntapApi -uri "/api/protocols/s3/services?") {
+                                if (Get-NetAppOntapAPI -uri "/api/protocols/s3/services?") {
                                     Section -Style Heading4 'S3 Services Summary' {
                                         Paragraph "The following section provides the S3 Service Information on $($ClusterInfo.ClusterName)."
                                         BlankLine
@@ -549,7 +546,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         Get-AbrOntapRepDestinations
                                     }
                                 }
-                                if (Get-AbrOntapApi -uri "/api/cluster/mediators?") {
+                                if (Get-NetAppOntapAPI -uri "/api/cluster/mediators?") {
                                     Section -Style Heading4 'Ontap Mediator Information' {
                                         Paragraph "The following section provides the SnapMirror Mediator information on $($ClusterInfo.ClusterName)."
                                         BlankLine
