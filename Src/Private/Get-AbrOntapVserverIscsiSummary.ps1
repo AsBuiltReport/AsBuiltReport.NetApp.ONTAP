@@ -45,6 +45,7 @@ function Get-AbrOntapVserverIscsiSummary {
             $TableParams = @{
                 Name = "Vserver ISCSI Service Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 65, 12, 8
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

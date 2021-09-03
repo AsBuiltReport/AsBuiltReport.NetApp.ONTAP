@@ -1,4 +1,4 @@
-function Get-AbrOntapApi {
+function Get-NetAppOntapAPI {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Rest API Calls from the Cluster Management Network

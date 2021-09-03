@@ -40,6 +40,7 @@ function Get-AbrOntapNetworkBdomain {
             $TableParams = @{
                 Name = "Network Broadcast Domain Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 20, 20, 20, 10, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

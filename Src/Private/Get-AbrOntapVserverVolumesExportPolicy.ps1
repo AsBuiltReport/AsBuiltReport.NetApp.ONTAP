@@ -42,6 +42,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
             $TableParams = @{
                 Name = "Vserver Volume Export Policy Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 20, 10, 20, 10, 10, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

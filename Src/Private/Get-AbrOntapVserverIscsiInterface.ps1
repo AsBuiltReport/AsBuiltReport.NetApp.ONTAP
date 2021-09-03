@@ -29,11 +29,12 @@ function Get-AbrOntapVserverIscsiInterface {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Interface Name' = $Item.InterfaceName
-                    'Ip Address' = $Item.IpAddress
+                    'IP Address' = $Item.IpAddress
                     'Port' = $Item.IpPort
                     'Status' = Switch ($Item.IsInterfaceEnabled) {
                         'True' { 'Up' }
                         'False' { 'Down' }
+                        default { $Item.IsInterfaceEnabled }
                     }
                     'Vserver' = $Item.Vserver
                 }
@@ -46,6 +47,7 @@ function Get-AbrOntapVserverIscsiInterface {
             $TableParams = @{
                 Name = "ISCSI Interface Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 35, 25, 10, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -41,6 +41,7 @@ function Get-AbrOntapVserverCIFSDC {
             $TableParams = @{
                 Name = "CIFS Connected Domain Controller Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 20, 20, 20, 12, 13, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -37,6 +37,7 @@ function Get-AbrOntapDiskType {
             $TableParams = @{
                 Name = "Disk Container Type Summary - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 50, 50
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

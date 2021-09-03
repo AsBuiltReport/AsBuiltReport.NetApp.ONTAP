@@ -38,6 +38,7 @@ function Get-AbrOntapVserverIscsiInitiator {
             $TableParams = @{
                 Name = "ISCSI Client Initiator Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 55, 30, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

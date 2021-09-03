@@ -38,6 +38,7 @@ function Get-AbrOntapNetworkFailoverGroup {
             $TableParams = @{
                 Name = "Network Failover Group Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 30, 30, 40
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
