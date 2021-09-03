@@ -1,5 +1,5 @@
-# NetApp Ontap Storage As Built Report Changelog
-## [0.3] - 2021-09-01
+# :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
+## [0.3.0] - 2021-09-01
 
 ### Changed
 
@@ -85,7 +85,7 @@
 
 - Add fix for powershell v6+ support
 
-## [0.2] - 2021-06-26
+## [0.2.0] - 2021-06-26
 
 ### Changed
 
@@ -97,7 +97,7 @@
 
 - Add Report Sample Images and HTML file
 
-## [0.1] - 2021-06-14
+## [0.1.0] - 2021-06-14
 
 ### Changed
 

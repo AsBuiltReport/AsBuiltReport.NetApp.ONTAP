@@ -12,7 +12,7 @@
 RootModule = 'AsBuiltReport.NetApp.ONTAP.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '0.3.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -24,7 +24,7 @@ GUID = '0ca28a0b-504a-4754-af90-199b59da68f0'
 Author = 'Jonathan Colon Feliciano'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+# CompanyName = 'Unknown'
 
 # Copyright statement for this module
 Copyright = '(c) 2021 Jonathan Colon Feliciano. All rights reserved.'
@@ -33,7 +33,7 @@ Copyright = '(c) 2021 Jonathan Colon Feliciano. All rights reserved.'
 Description = 'A PowerShell module to generate an as built report on the configuration of NetApp ONTAP.'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '5.1'
+# PowerShellVersion = '5.1'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -81,13 +81,13 @@ RequiredModules = @(
 FunctionsToExport = @('Invoke-AsBuiltReport.NetApp.ONTAP')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+# CmdletsToExport = '*'
 
 # Variables to export from this module
-VariablesToExport = '*'
+# VariablesToExport = '*'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+# AliasesToExport = '*'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -104,7 +104,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'AsBuiltReport', 'Report', 'NetApp', 'Ontap', 'Documentation', 'PScribo', 'Windows', 'Linux', 'MacOS', 'PSEdition_Desktop', 'PSEdition_Core'
+        Tags = 'AsBuiltReport', 'Report', 'NetApp', 'ONTAP', 'Documentation', 'PScribo', 'Windows', 'Linux', 'MacOS', 'PSEdition_Desktop', 'PSEdition_Core'
 
         # A URL to the license for this module.
         LicenseUri = 'https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/master/LICENSE'

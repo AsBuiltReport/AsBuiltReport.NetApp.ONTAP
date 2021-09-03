@@ -1,9 +1,9 @@
 {
     "Report": {
         "Name": "NetApp ONTAP As Built Report",
-        "Version": "0.3.0",
+        "Version": "1.0",
         "Status": "Released",
-        "ShowCoverPageImage": false,
+        "ShowCoverPageImage": true,
         "ShowTableOfContents": true,
         "ShowHeaderFooter": true,
         "ShowTableCaptions": true
