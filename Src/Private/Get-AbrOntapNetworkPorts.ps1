@@ -28,21 +28,26 @@ function Get-AbrOntapNetworkPorts {
             $PhysicalNic = foreach ($Nics in $PhysicalPorts) {
                 [PSCustomObject] @{
                     'Port Name' = $Nics.Port
-                    'Role' = $Nics.Role
-                    'Link Status' = $Nics.LinkStatus
+                    'Role' = $TextInfo.ToTitleCase($Nics.Role)
                     'Node Owner' = $Nics.Node
                     'Mac Address' = $Nics.MacAddress
                     'MTU' = $Nics.MTU
-                    'Admin State' = $Nics.IsAdministrativeUp
+                    'Link Status' = $TextInfo.ToTitleCase($Nics.LinkStatus)
+                    'Admin Status' = Switch ($Nics.IsAdministrativeUp) {
+                        "True" { 'Up' }
+                        "False" { 'Down' }
+                        default { $Nics.IsAdministrativeUp }
+                    }
                 }
             }
             if ($Healthcheck.Network.Port) {
-                $PhysicalNic | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin State' -like 'True' } | Set-Style -Style Warning -Property 'Link Status'
+                $PhysicalNic | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' } | Set-Style -Style Warning -Property 'Link Status'
             }
 
             $TableParams = @{
                 Name = "Physical Port Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 15, 15, 22, 20, 10, 8, 10
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

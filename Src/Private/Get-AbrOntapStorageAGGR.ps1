@@ -46,6 +46,7 @@ function Get-AbrOntapStorageAGGR {
             $TableParams = @{
                 Name = "Aggregate Summary - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 27, 10, 10, 10, 10, 8, 15, 10
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

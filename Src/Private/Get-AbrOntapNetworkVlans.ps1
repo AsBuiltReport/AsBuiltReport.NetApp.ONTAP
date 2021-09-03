@@ -28,9 +28,9 @@ function Get-AbrOntapNetworkVlans {
         if ($Vlan) {
             foreach ($Item in $Vlan) {
                 $inObj = [ordered] @{
-                    'InterfaceName' = $Item.InterfaceName
-                    'ParentInterface' = $Item.ParentInterface
-                    'VlanID' = $Item.VlanID
+                    'Interface Name' = $Item.InterfaceName
+                    'Parent Interface' = $Item.ParentInterface
+                    'Vlan ID' = $Item.VlanID
                     'Node' = $Item.Node
                 }
                 $VlanObj += [pscustomobject]$inobj
@@ -39,6 +39,7 @@ function Get-AbrOntapNetworkVlans {
             $TableParams = @{
                 Name = "Network VLAN Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 25, 25, 25, 25
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

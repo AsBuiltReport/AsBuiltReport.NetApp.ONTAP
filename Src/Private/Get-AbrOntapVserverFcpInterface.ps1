@@ -39,6 +39,7 @@ function Get-AbrOntapVserverFcpInterface {
             $TableParams = @{
                 Name = "FCP Interface Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 30, 30, 15, 25
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

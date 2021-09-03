@@ -39,6 +39,7 @@ function Get-AbrOntapNetworkRoutes {
             $TableParams = @{
                 Name = "Network Route Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 30, 30, 10, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

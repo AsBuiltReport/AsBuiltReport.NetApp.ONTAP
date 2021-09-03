@@ -43,6 +43,7 @@ function Get-AbrOntapClusterLicense {
             $TableParams = @{
                 Name = "License Summary - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 30, 20, 10, 28, 12
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

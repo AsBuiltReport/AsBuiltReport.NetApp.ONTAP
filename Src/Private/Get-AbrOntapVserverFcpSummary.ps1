@@ -44,6 +44,7 @@ function Get-AbrOntapVserverFcpSummary {
             $TableParams = @{
                 Name = "Vserver FCP Service Information - $($ClusterInfo.ClusterName)"
                 List = $false
+                ColumnWidths = 25, 55, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
