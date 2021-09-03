@@ -10,9 +10,9 @@ Style -Name 'Title 3' -Size 12 -Color '58595B' -Align Left
 Style -Name 'Heading 1' -Size 16 -Color '0067C5'
 Style -Name 'Heading 2' -Size 14 -Color '0067C5'
 Style -Name 'Heading 3' -Size 12 -Color '0067C5'
-Style -Name 'Heading 4' -Size 11 -Color '58595B'
-Style -Name 'Heading 5' -Size 10 -Color '58595B'
-Style -Name 'Heading 6' -Size 10 -Color '58595B'
+Style -Name 'Heading 4' -Size 11 -Color '0067C5'
+Style -Name 'Heading 5' -Size 10 -Color '0067C5'
+Style -Name 'Heading 6' -Size 10 -Color '0067C5'
 Style -Name 'Normal' -Size 10 -Color '565656' -Default
 Style -Name 'Caption' -Size 10 -Color '565656' -Italic -Align Center
 Style -Name 'Header' -Size 10 -Color '565656' -Align Center
