@@ -4,33 +4,33 @@
 DocumentOption -EnableSectionNumbering -PageSize A4 -DefaultFont 'Arial' -MarginLeftAndRight 71 -MarginTopAndBottom 71 -Orientation $Orientation
 
 # Configure Heading and Font Styles
-Style -Name 'Title' -Size 24 -Color '0076CE' -Align Center
-Style -Name 'Title 2' -Size 18 -Color '00447C' -Align Center
-Style -Name 'Title 3' -Size 12 -Color '00447C' -Align Left
-Style -Name 'Heading 1' -Size 16 -Color '00447C'
-Style -Name 'Heading 2' -Size 14 -Color '00447C'
-Style -Name 'Heading 3' -Size 12 -Color '00447C'
-Style -Name 'Heading 4' -Size 11 -Color '00447C'
-Style -Name 'Heading 5' -Size 10 -Color '00447C'
-Style -Name 'Heading 6' -Size 10 -Color '00447C'
+Style -Name 'Title' -Size 24 -Color '0067C5' -Align Center
+Style -Name 'Title 2' -Size 18 -Color '58595B' -Align Center
+Style -Name 'Title 3' -Size 12 -Color '58595B' -Align Left
+Style -Name 'Heading 1' -Size 16 -Color '0067C5'
+Style -Name 'Heading 2' -Size 14 -Color '0067C5'
+Style -Name 'Heading 3' -Size 12 -Color '0067C5'
+Style -Name 'Heading 4' -Size 11 -Color '0067C5'
+Style -Name 'Heading 5' -Size 10 -Color '0067C5'
+Style -Name 'Heading 6' -Size 10 -Color '0067C5'
 Style -Name 'Normal' -Size 10 -Color '565656' -Default
 Style -Name 'Caption' -Size 10 -Color '565656' -Italic -Align Center
 Style -Name 'Header' -Size 10 -Color '565656' -Align Center
 Style -Name 'Footer' -Size 10 -Color '565656' -Align Center
-Style -Name 'TOC' -Size 16 -Color '00447C'
-Style -Name 'TableDefaultHeading' -Size 10 -Color 'FAFAFA' -BackgroundColor '0076CE'
+Style -Name 'TOC' -Size 16 -Color '0067C5'
+Style -Name 'TableDefaultHeading' -Size 10 -Color 'FFFFFF' -BackgroundColor '0067C5'
 Style -Name 'TableDefaultRow' -Size 10 -Color '565656'
-Style -Name 'Critical' -Size 10 -BackgroundColor 'F5DBD9'
-Style -Name 'Warning' -Size 10 -BackgroundColor 'FEF3B5'
-Style -Name 'Info' -Size 10 -BackgroundColor 'E1F1F6'
-Style -Name 'OK' -Size 10 -BackgroundColor 'DFF0D0'
+Style -Name 'Critical' -Size 10 -BackgroundColor 'F1655C'
+Style -Name 'Warning' -Size 10 -BackgroundColor 'F4A71C'
+Style -Name 'Info' -Size 10 -BackgroundColor '5AC0ED'
+Style -Name 'OK' -Size 10 -BackgroundColor '81BC50'
 
 # Configure Table Styles
 $TableDefaultProperties = @{
     Id = 'TableDefault'
     HeaderStyle = 'TableDefaultHeading'
     RowStyle = 'TableDefaultRow'
-    BorderColor = '0076CE'
+    BorderColor = '0067C5'
     Align = 'Left'
     CaptionStyle = 'Caption'
     CaptionLocation = 'Below'
@@ -69,9 +69,16 @@ if ($Orientation -eq 'Portrait') {
 }
 
 # NetApp Logo Image
+# NETAPP DO NOT PERMIT THE USE OF THEIR LOGO WITHOUT WRITTEN AUTHORIZATION
+<#
 if ($ReportConfig.Report.ShowCoverPageImage) {
-    Image -Text 'NetApp Logo' -Align 'Center' -Percent 5 -Base64 ""
+    Try {
+        Image -Text 'NetApp Logo' -Align 'Center' -Percent 5 -Base64 ""
+    } Catch {
+        Write-PScriboMessage -Message ".NET Core is required for cover page image support. Please install .NET Core or disable 'ShowCoverPageImage' in the report JSON configuration file."
+    }
 }
+#>
 
 # Add Report Name
 Paragraph -Style Title $ReportConfig.Report.Name
