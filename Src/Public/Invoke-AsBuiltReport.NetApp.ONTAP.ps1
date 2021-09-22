@@ -33,14 +33,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     foreach ($OntapArray in $Target) {
         Try {
             Write-PScriboMessage "Connecting to NetApp Storage '$OntapArray'."
-            $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop
+            $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS
         } Catch {
             Write-Verbose "Unable to connect to the $OntapArray Array"
             throw
         }
         $ClusterInfo = Get-NcCluster
 
-        #region Cluster
         #---------------------------------------------------------------------------------------------#
         #                                 Cluster Section                                             #
         #---------------------------------------------------------------------------------------------#
@@ -65,8 +64,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     }
                 }
             }
-        #endregion Cluster Section
-        #region Node
+
         #---------------------------------------------------------------------------------------------#
         #                                 Node Section                                                #
         #---------------------------------------------------------------------------------------------#
@@ -99,9 +97,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion Node Section
+            }
 
-        #region Storage
         #---------------------------------------------------------------------------------------------#
         #                                 Storage Section                                             #
         #---------------------------------------------------------------------------------------------#
@@ -163,8 +160,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion Storage Section
-            #region License Section
+            }
+
         #---------------------------------------------------------------------------------------------#
         #                                 License Section                                             #
         #---------------------------------------------------------------------------------------------#
@@ -184,8 +181,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion License Section
-            #region Network Section
+            }
+
         #---------------------------------------------------------------------------------------------#
         #                                 Network Section                                             #
         #---------------------------------------------------------------------------------------------#
@@ -253,8 +250,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion Network Section
-            #region Vserver Section
+            }
+
         #---------------------------------------------------------------------------------------------#
         #                                 Vserver Section                                             #
         #---------------------------------------------------------------------------------------------#
@@ -506,8 +503,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                }#endregion Vserver Section
-                #region Replication Section
+                }
+
         #---------------------------------------------------------------------------------------------#
         #                                 Replication Section                                         #
         #---------------------------------------------------------------------------------------------#
@@ -557,7 +554,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
-            }#endregion Replication Section
+            }
 
             #---------------------------------------------------------------------------------------------#
             #                                 Efficiency Section                                          #
