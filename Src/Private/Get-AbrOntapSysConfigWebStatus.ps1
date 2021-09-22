@@ -29,16 +29,10 @@ function Get-AbrOntapSysConfigWebStatus {
             foreach ($Item in $Data) {
                 $inObj = [ordered] @{
                     'Node' = $Item.Node
-                    'Http Enabled' = Switch ($Item.HttpEnabled) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Http Enabled' = ConvertTo-TextYN $Item.HttpEnabled
                     'Http Port' = $Item.HttpPort
                     'Https Port' = $Item.HttpsPort
-                    'External' = Switch ($Item.External) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'External' = ConvertTo-TextYN $Item.External
                     'Status' = $TextInfo.ToTitleCase($Item.Status)
                     'Status Code' = $Item.StatusCode
                 }

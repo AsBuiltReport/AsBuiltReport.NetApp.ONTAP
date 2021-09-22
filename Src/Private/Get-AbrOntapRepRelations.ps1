@@ -43,6 +43,7 @@ function Get-AbrOntapRepRelationship {
                         'transition_data_protection' { 'TDP' }
                         'restore' { 'RST' }
                         'load_sharing' { 'LS' }
+                        default {$Item.RelationshipType}
                     }
                     'Policy' = $Item.Policy
                     'Policy Type' = $Item.PolicyType

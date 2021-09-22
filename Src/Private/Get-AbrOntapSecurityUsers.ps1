@@ -32,10 +32,7 @@ function Get-AbrOntapSecurityUsers {
                     'Application' = $TextInfo.ToTitleCase($Item.Application)
                     'Auth Method' = $Item.AuthMethod
                     'RoleName' = $Item.RoleName
-                    'Locked' = Switch ($Item.IsLocked) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Locked' = ConvertTo-TextYN $Item.IsLocked
                     'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj

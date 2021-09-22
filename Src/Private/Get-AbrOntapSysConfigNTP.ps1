@@ -30,14 +30,8 @@ function Get-AbrOntapSysConfigNTP {
                 $inObj = [ordered] @{
                     'Server Name' = $Item.ServerName
                     'NTP Version' = $TextInfo.ToTitleCase($Item.Version)
-                    'Preferred' = Switch ($Item.IsPreferred) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
-                    'Authentication Enabled' = Switch ($Item.IsAuthenticationEnabled) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Preferred' = ConvertTo-TextYN $Item.IsPreferred
+                    'Authentication Enabled' = ConvertTo-TextYN $Item.IsAuthenticationEnabled
                 }
                 $OutObj += [pscustomobject]$inobj
             }

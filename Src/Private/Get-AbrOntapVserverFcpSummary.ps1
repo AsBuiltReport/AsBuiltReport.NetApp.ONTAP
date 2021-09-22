@@ -33,6 +33,7 @@ function Get-AbrOntapVserverFcpSummary {
                     'Status' = Switch ($Item.IsAvailable) {
                         'True' { 'Up' }
                         'False' { 'Down' }
+                        default {$Item.IsAvailable}
                     }
                 }
                 $VserverObj += [pscustomobject]$inobj

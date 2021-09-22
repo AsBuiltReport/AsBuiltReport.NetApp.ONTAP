@@ -23,9 +23,6 @@ function Get-AbrOntapSysConfigTZ {
     }
 
     process {
-        function Get-UnixDate ($UnixDate) {
-            [timezone]::CurrentTimeZone.ToLocalTime(([datetime]'1/1/1970').AddSeconds($UnixDate))
-         }
         $Data =  Get-NcTimezone
         $OutObj = @()
         if ($Data) {

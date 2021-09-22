@@ -30,14 +30,8 @@ function Get-AbrOntapSysConfigImage {
                 $inObj = [ordered] @{
                     'Node' = $Item.Node
                     'Location' = $Item.Image
-                    'Is Current' = Switch ($Item.IsCurrent) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
-                    'Is Default' = Switch ($Item.IsDefault) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Is Current' = ConvertTo-TextYN $Item.IsCurrent
+                    'Is Default' = ConvertTo-TextYN $Item.IsDefault
                     'Install Time' = $Item.InstallTimeDT
                     'Version' = $Item.Version
                 }

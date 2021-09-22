@@ -29,10 +29,7 @@ function Get-AbrOntapVserverNFSSummary {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Vserver' = $Item.Vserver
-                    'General Access' = Switch ($Item.GeneralAccess) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'General Access' = ConvertTo-TextYN $Item.GeneralAccess
                     'Nfs v3' = Switch ($Item.IsNfsv3) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }

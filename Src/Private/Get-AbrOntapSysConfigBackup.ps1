@@ -33,10 +33,7 @@ function Get-AbrOntapSysConfigBackup {
                     'Created' = $Item.Created
                     'Size' = $Item.BackupSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Schedule' = $Item.Schedule
-                    'Is Auto' = Switch ($Item.IsAuto) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Is Auto' = ConvertTo-TextYN $Item.IsAuto
                 }
                 $OutObj += [pscustomobject]$inobj
             }

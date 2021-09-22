@@ -32,10 +32,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
                     'Policy Name' = $Item.PolicyGroup
                     'Max Throughput' = $Item.MaxThroughput
                     'Min Throughput' = $Item.MinThroughput
-                    'Is Shared' = Switch ($Item.IsShared) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Is Shared' = ConvertTo-TextYN $Item.IsShared
                     'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj

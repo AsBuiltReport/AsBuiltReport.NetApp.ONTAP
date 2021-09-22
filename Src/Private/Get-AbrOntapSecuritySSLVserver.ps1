@@ -30,14 +30,8 @@ function Get-AbrOntapSecuritySSLVserver {
                 $inObj = [ordered] @{
                     'Common Name' = $Item.CommonName
                     'Certificate Authority' = $Item.CertificateAuthority
-                    'Client Auth' = Switch ($Item.ClientAuth) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
-                    'Server Auth' = Switch ($Item.ServerAuth) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Client Auth' = ConvertTo-TextYN $Item.ClientAuth
+                    'Server Auth' = ConvertTo-TextYN $Item.ServerAuth
                     'Serial Number' = $Item.CertificateSerialNumber
                     'Vserver' = $Item.Vserver
                 }

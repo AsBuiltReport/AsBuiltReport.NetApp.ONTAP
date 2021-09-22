@@ -30,10 +30,7 @@ function Get-AbrOntapSecurityNVE {
                 $inObj = [ordered] @{
                     'Name' = $Item.Name
                     'Aggregate' = $Item.Aggregate
-                    'Encrypted' = Switch ($Item.Encrypt) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Encrypted' = ConvertTo-TextYN $Item.Encrypt
                     'State' = $TextInfo.ToTitleCase($Item.State)
                 }
                 $OutObj += [pscustomobject]$inobj

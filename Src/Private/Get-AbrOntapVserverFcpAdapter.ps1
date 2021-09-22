@@ -35,6 +35,7 @@ function Get-AbrOntapVserverFcpAdapter {
                     'Status' = Switch ($Item.State) {
                         'online' { 'Up' }
                         'offline' { 'Down' }
+                        default {$Item.State}
                     }
                 }
                 $VserverObj += [pscustomobject]$inobj

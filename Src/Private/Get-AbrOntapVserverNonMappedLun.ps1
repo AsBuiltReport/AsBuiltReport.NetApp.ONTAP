@@ -31,14 +31,8 @@ function Get-AbrOntapVserverNonMappedLun {
                 $inObj = [ordered] @{
                     'Volume Name' = $Item.Volume
                     'Lun Name' = $lunname
-                    'Online' = Switch ($Item.Online) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
-                    'Mapped' = Switch ($Item.Mapped) {
-                        'True' { 'Yes' }
-                        'False' { 'No' }
-                    }
+                    'Online' = ConvertTo-TextYN $Item.Online
+                    'Mapped' = ConvertTo-TextYN $Item.Mapped
                     'Lun Format' = $Item.Protocol
                     'Vserver' = $Item.Vserver
                 }
