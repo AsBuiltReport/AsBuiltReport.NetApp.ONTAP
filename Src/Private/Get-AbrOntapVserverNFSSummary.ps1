@@ -33,14 +33,17 @@ function Get-AbrOntapVserverNFSSummary {
                     'Nfs v3' = Switch ($Item.IsNfsv3) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
+                        default {$Item.IsNfsv3}
                     }
                     'Nfs v4' = Switch ($Item.IsNfsv4) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
+                        default {$Item.IsNfsv4}
                     }
                     'Nfs v41' = Switch ($Item.IsNfsv41) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
+                        default {$Item.IsNfsv41}
                     }
                 }
                 $VserverObj += [pscustomobject]$inobj

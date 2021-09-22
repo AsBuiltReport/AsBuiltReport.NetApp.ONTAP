@@ -33,6 +33,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                     'State' = Switch ($Item.State) {
                         'enabled' { 'Enabled' }
                         'disabled' { 'Disabled' }
+                        default {$Item.State}
                     }
                     'Status' = $Item.Status
                     'Schedule Or Policy' = $Item.ScheduleOrPolicy

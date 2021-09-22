@@ -34,6 +34,7 @@ function Get-AbrOntapRepMediator {
                     'Status' = Switch ($Item.reachable) {
                         'True' { 'Reachable' }
                         'False' { 'Unreachable' }
+                        default {$Item.reachable}
                     }
                 }
                 $ReplicaObj += [pscustomobject]$inobj

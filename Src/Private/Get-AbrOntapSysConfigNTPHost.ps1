@@ -35,6 +35,7 @@ function Get-AbrOntapSysConfigNTPHost {
                     'Peer Status' = Switch ($Item.IsPeerReachable) {
                         'True' { 'Reachable' }
                         'False' { 'Unreachable' }
+                        default {$Item.IsPeerReachable}
                     }
                 }
                 $OutObj += [pscustomobject]$inobj

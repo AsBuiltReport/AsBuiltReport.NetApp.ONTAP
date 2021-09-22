@@ -48,15 +48,18 @@ function Get-AbrOntapVserverLunStorage {
                     'Space Allocation' = Switch ($Item.IsSpaceAllocEnabled) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
+                        default {$Item.IsSpaceAllocEnabled}
                     }
                     'Space Reservation' = Switch ($Item.IsSpaceReservationEnabled) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
+                        default {$Item.IsSpaceReservationEnabled}
                     }
                     'IsMapped' = ConvertTo-TextYN $Item.Mapped
                     'Status' = Switch ($Item.Online) {
                         'True' { 'Up' }
                         'False' { 'Down' }
+                        default {$Item.Online}
                     }
                 }
                 $VserverObj += [pscustomobject]$inobj

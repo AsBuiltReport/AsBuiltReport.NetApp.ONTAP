@@ -41,6 +41,7 @@ function Get-AbrOntapRepDestinations {
                         'transition_data_protection' { 'TDP' }
                         'restore' { 'RST' }
                         'load_sharing' { 'LS' }
+                        default {$Item.RelationshipType}
                     }
                     'Policy Type' = $Item.PolicyType
                     'Status' = Switch ($Item.RelationshipStatus) {

@@ -34,14 +34,22 @@ function Get-AbrOntapNodesHW {
                     'Total Memory' = "$($NodeHWs.MemorySize / 1024)GB"
                     'Vendor' = $NodeHWs.VendorId
                     'AFF/FAS' = $NodeHWs.ProdType
-                    'All Flash Optimized' = $NodeInfo.IsAllFlashOptimized
-                    'Epsilon' = $NodeInfo.IsEpsilonNode
-                    'System Healthy' = $NodeInfo.IsNodeHealthy.ToString().Replace("False", "UnHealthy").Replace("True", "Healthy")
+                    'All Flash Optimized' = ConvertTo-TextYN $NodeInfo.IsAllFlashOptimized
+                    'Epsilon' = ConvertTo-TextYN $NodeInfo.IsEpsilonNode
+                    'System Healthy' = Switch ($NodeInfo.IsNodeHealthy) {
+                        "True" {"Healthy"}
+                        "False" {"UnHealthy"}
+                        default {$NodeInfo.IsNodeHealthy}
+                    }
                     'Failed Fan Count' = $NodeInfo.EnvFailedFanCount
                     'Failed Fan Error' = $NodeInfo.EnvFailedFanMessage
                     'Failed PowerSupply Count' = $NodeInfo.EnvFailedPowerSupplyCount
                     'Failed PowerSupply Error' = $NodeInfo.EnvFailedPowerSupplyMessage
-                    'Over Temperature' = $NodeInfo.EnvOverTemperature.ToString().Replace("False", "Normal Temperature").Replace("True", "High Temperature")
+                    'Over Temperature' = Switch ($NodeInfo.EnvOverTemperature) {
+                        "True" {"High Temperature"}
+                        "False" {"Normal Temperature"}
+                        default {$NodeInfo.EnvOverTemperature}
+                    }
                     'NVRAM Battery Healthy' = $NodeInfo.NvramBatteryStatus
                 }
             }

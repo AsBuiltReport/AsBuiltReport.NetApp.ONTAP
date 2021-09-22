@@ -36,6 +36,7 @@ function Get-AbrOntapSysConfigSNMP {
                     'Status' = Switch ($Item.IsTrapEnabled) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
+                        default {$Item.IsTrapEnabled}
                     }
                 }
                 $OutObj += [pscustomobject]$inobj
