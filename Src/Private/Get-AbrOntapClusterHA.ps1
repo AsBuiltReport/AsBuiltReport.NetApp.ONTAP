@@ -30,7 +30,7 @@ function Get-AbrOntapClusterHA {
                 [PSCustomObject] @{
                     'Name' = $Nodes.Node
                     'Partner' = $ClusterHa.Partner
-                    'TakeOver Possible' = $ClusterHa.TakeoverPossible
+                    'TakeOver Possible' = ConvertTo-TextYN $ClusterHa.TakeoverPossible
                     'TakeOver State' = $ClusterHa.TakeoverState
                     'HA Mode' = $ClusterHa.CurrentMode.ToUpper()
                     'HA State' = $ClusterHa.State.ToUpper()

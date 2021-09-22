@@ -29,19 +29,19 @@ function Get-AbrOntapVserverNFSOptions {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Vserver' = $Item.Vserver
-                    'Allow Idle Connection' = $Item.AllowIdleConnection
+                    'Allow Idle Connection' = ConvertTo-TextYN $Item.AllowIdleConnection
                     'Idle Connection Timeout' = $Item.IdleConnectionTimeout
-                    'Ignore NtAcl For Root' = $Item.IgnoreNtAclForRoot
-                    'Enable Ejukebox' = $Item.EnableEjukebox
-                    'Nfs Access Enabled' = $Item.IsNfsAccessEnabled
-                    'Nfs Rootonly Enabled' = $Item.IsNfsRootonlyEnabled
-                    'Nfsv2 Enabled' = $Item.IsNfsv2Enabled
-                    'Nfsv3 Enabled' = $Item.IsNfsv3Enabled
-                    'Nfsv3 64bit Identifiers Enabled' = $Item.IsNfsv364bitIdentifiersEnabled
-                    'Nfsv3 Connection Drop Enabled' = $Item.IsNfsv3ConnectionDropEnabled
-                    'Nfsv3 Fsid Change Enabled' = $Item.IsNfsv3FsidChangeEnabled
-                    'Nfsv40 Acl Enabled' = $Item.IsNfsv40AclEnabled
-                    'Nfsv40 Enabled' = $Item.IsNfsv40Enabled
+                    'Ignore NtAcl For Root' = ConvertTo-TextYN $Item.IgnoreNtAclForRoot
+                    'Enable Ejukebox' = ConvertTo-TextYN $Item.EnableEjukebox
+                    'Nfs Access Enabled' = ConvertTo-TextYN $Item.IsNfsAccessEnabled
+                    'Nfs Rootonly Enabled' = ConvertTo-TextYN $Item.IsNfsRootonlyEnabled
+                    'Nfsv2 Enabled' = ConvertTo-TextYN $Item.IsNfsv2Enabled
+                    'Nfsv3 Enabled' = ConvertTo-TextYN $Item.IsNfsv3Enabled
+                    'Nfsv3 64bit Identifiers Enabled' = ConvertTo-TextYN $Item.IsNfsv364bitIdentifiersEnabled
+                    'Nfsv3 Connection Drop Enabled' = ConvertTo-TextYN $Item.IsNfsv3ConnectionDropEnabled
+                    'Nfsv3 Fsid Change Enabled' = ConvertTo-TextYN $Item.IsNfsv3FsidChangeEnabled
+                    'Nfsv40 Acl Enabled' = ConvertTo-TextYN $Item.IsNfsv40AclEnabled
+                    'Nfsv40 Enabled' = ConvertTo-TextYN $Item.IsNfsv40Enabled
                 }
                 $VserverObj += [pscustomobject]$inobj
             }

@@ -65,7 +65,7 @@ function Get-AbrOntapVserverSummary {
                         'TotalSize' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                         'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                         'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                        'Dedup' = $Item.Dedupe
+                        'Dedup' = ConvertTo-TextYN $Item.Dedupe
                         'Aggregate' = $Item.Aggregate
                     }
                     $VserverObj += [pscustomobject]$inobj

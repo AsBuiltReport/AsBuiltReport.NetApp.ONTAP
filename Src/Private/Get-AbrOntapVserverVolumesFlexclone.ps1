@@ -34,7 +34,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
                     'Volume Type' = $Item.VolumeType.ToUpper()
                     'Parent Snapshot' = $Item.ParentSnapshot
                     'Space Reserve' = $Item.SpaceReserve
-                    'Space Guarantee' = $Item.SpaceGuaranteeEnabled
+                    'Space Guarantee' = ConvertTo-TextYN $Item.SpaceGuaranteeEnabled
                     'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                     'Available' = $Item.Size - $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                     'Used' = $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue

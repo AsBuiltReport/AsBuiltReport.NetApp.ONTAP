@@ -33,7 +33,7 @@ function Get-AbrOntapStorageAGGR {
                     'Available' = $Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Used' = $Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                     'Disk Count' = $Aggr.Disks
-                    'Root' = $RootAggr
+                    'Root' = ConvertTo-TextYN $RootAggr
                     'Raid Type' = ($Aggr.RaidType.Split(",")[0]).ToUpper()
                     'State' = $Aggr.State
                 }

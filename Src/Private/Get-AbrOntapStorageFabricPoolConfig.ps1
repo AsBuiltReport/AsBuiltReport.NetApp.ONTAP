@@ -32,7 +32,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
                     'S3 Name' = $Item.S3Name
                     'Server FQDN' = $Item.Server
                     'Port' = $Item.Port
-                    'SSL Enabled' = $Item.SslEnabled
+                    'SSL Enabled' = ConvertTo-TextYN $Item.SslEnabled
                     'Provider Type' = $Item.ProviderType
                     'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString "0.0" -ErrorAction SilentlyContinue
                 }

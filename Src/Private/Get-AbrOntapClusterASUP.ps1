@@ -29,7 +29,7 @@ function Get-AbrOntapClusterASUP {
                 [PSCustomObject] @{
                     'Node Name' = $NodesAUTO.NodeName
                     'Protocol' = $NodesAUTO.Transport
-                    'Enabled' = $NodesAUTO.IsEnabled
+                    'Enabled' = ConvertTo-TextYN $NodesAUTO.IsEnabled
                     'Last Time Stamp' = $NodesAUTO.LastTimestampDT
                     'Last Subject' = $NodesAUTO.LastSubject
                 }

@@ -35,9 +35,9 @@ function Get-AbrOntapVserverCIFSSecurity {
                             'Kerberos Clock Skew' = $SVM.KerberosClockSkew
                             'Kerberos Renew Age' = $SVM.KerberosRenewAge
                             'Kerberos Ticket Age' = $SVM.KerberosTicketAge
-                            'Aes Encryption Enabled' = $SVM.IsAesEncryptionEnabled
-                            'Signing Required' = $SVM.IsSigningRequired
-                            'Smb Encryption Required' = $SVM.IsSmbEncryptionRequired
+                            'Aes Encryption Enabled' = ConvertTo-TextYN $SVM.IsAesEncryptionEnabled
+                            'Signing Required' = ConvertTo-TextYN $SVM.IsSigningRequired
+                            'Smb Encryption Required' = ConvertTo-TextYN $SVM.IsSmbEncryptionRequired
                             'Lm Compatibility Level' = $SVM.LmCompatibilityLevel
                         }
                         $VserverObj += [pscustomobject]$inobj

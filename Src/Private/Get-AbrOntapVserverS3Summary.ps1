@@ -29,9 +29,9 @@ function Get-AbrOntapVserverS3Summary {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Vserver' = $Item.Name
-                    'HTTP' = $Item.is_http_enabled
+                    'HTTP' = ConvertTo-TextYN $Item.is_http_enabled
                     'HTTP Port' = $Item.port
-                    'HTTPS' = $Item.is_https_enabled
+                    'HTTPS' = ConvertTo-TextYN $Item.is_https_enabled
                     'HTTPS Port' = $Item.secure_port
                     'Status' = Switch ($Item.enabled) {
                         'True' { 'UP' }
