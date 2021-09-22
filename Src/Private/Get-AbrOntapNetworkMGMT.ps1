@@ -33,7 +33,11 @@ function Get-AbrOntapNetworkMgmt {
                     foreach ($Item in $ClusterData) {
                         $inObj = [ordered] @{
                             'Cluster Interface' = $Item.InterfaceName
-                            'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
+                            'Status' = Switch ($Item.OpStatus) {
+                                "" {"Unknown"}
+                                $Null {"Unknown"}
+                                default {$Item.OpStatus.ToString().ToUpper()}
+                            }
                             'Data Protocols' = $Item.DataProtocols
                             'Address' = $Item.Address
                             'Vserver' = $Item.Vserver
@@ -65,7 +69,11 @@ function Get-AbrOntapNetworkMgmt {
                 foreach ($Item in $ClusterData) {
                     $inObj = [ordered] @{
                         'MGMT Interface' = $Item.InterfaceName
-                        'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
+                        'Status' = Switch ($Item.OpStatus) {
+                            "" {"Unknown"}
+                            $Null {"Unknown"}
+                            default {$Item.OpStatus.ToString().ToUpper()}
+                        }
                         'Data Protocols' = $Item.DataProtocols
                         'Address' = $Item.Address
                         'Vserver' = $Item.Vserver
@@ -97,7 +105,11 @@ function Get-AbrOntapNetworkMgmt {
                     foreach ($Item in $ClusterData) {
                         $inObj = [ordered] @{
                             'Intercluster Interface' = $Item.InterfaceName
-                            'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
+                            'Status' = Switch ($Item.OpStatus) {
+                                "" {"Unknown"}
+                                $Null {"Unknown"}
+                                default {$Item.OpStatus.ToString().ToUpper()}
+                            }
                             'Data Protocols' = $Item.DataProtocols
                             'Address' = $Item.Address
                             'Vserver' = $Item.Vserver
@@ -129,7 +141,11 @@ function Get-AbrOntapNetworkMgmt {
                 foreach ($Item in $ClusterData) {
                     $inObj = [ordered] @{
                         'Data Interface' = $Item.InterfaceName
-                        'Status' = if ($Item.OpStatus) {$Item.OpStatus.ToString().ToUpper()}
+                        'Status' = Switch ($Item.OpStatus) {
+                            "" {"Unknown"}
+                            $Null {"Unknown"}
+                            default {$Item.OpStatus.ToString().ToUpper()}
+                        }
                         'Data Protocols' = [string]$Item.DataProtocols
                         'Address' = $Item.Address
                         'Vserver' = $Item.Vserver
@@ -166,6 +182,7 @@ function Get-AbrOntapNetworkMgmt {
                             'IsHome' = Switch ($Item.IsHome) {
                                 "True" { 'Yes' }
                                 "False" { "No" }
+                                default {$Item.IsHome}
                             }
                             'Vserver' = $Item.Vserver
                         }
