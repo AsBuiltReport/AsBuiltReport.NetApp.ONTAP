@@ -85,11 +85,10 @@ These modules may also be manually installed.
 
 ### :package: Module Installation
 
-Open a Windows PowerShell terminal window and install each of the required modules as follows;
+Open a PowerShell terminal window and install each of the required modules as follows;
 
 ```powershell
-Install-Module NetApp.ONTAP
-Install-Module AsBuiltReport
+Install-Module AsBuiltReport.NetApp.ONTAP
 ```
 
 Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP#wrench-system-requirements) also.
@@ -148,16 +147,12 @@ The **Options** schema allows certain options within the report to be toggled on
 
 The **InfoLevel** schema allows configuration of each section of the report at a granular level. The following sections can be set.
 
-There are 6 levels (0-5) of detail granularity for each section as follows;
+There are 2 levels (0-1) of detail granularity for each section as follows;
 
 | Setting | InfoLevel         | Description                                                                                                                                |
 |:-------:|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 |    0    | Disabled          | Does not collect or display any information                                                                                                |
-|    1    | Enabled / Summary | Provides summarised information for a collection of objects                                                                                |
-|    2    | Adv Summary       | Provides condensed, detailed information for a collection of objects                                                                       |
-|    3    | Detailed          | Provides detailed information for individual objects                                                                                       |
-|    4    | Adv Detailed      | Provides detailed information for individual objects, as well as information for associated objects                                        |
-|    5    | Comprehensive     | Provides comprehensive information for individual objects, such as advanced configuration settings                                         |
+|    1    | Enabled | Provides condensed, detailed information for a collection of objects                                                                                 |
 
 ### Healthcheck
 
@@ -172,5 +167,3 @@ There is one example listed below on running the AsBuiltReport script against a 
 ```powershell
 PS C:\>New-AsBuiltReport -Report NetApp.ONTAP -Target 10.10.30.20 -Credential (Get-Credential) -Format HTML,Word -OutputPath C:\scripts\
 ```
-
-## :x: Known Issues
