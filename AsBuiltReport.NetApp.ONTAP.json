@@ -1,0 +1,80 @@
+{
+    "Report": {
+        "Name": "NetApp ONTAP As Built Report",
+        "Version": "1.0",
+        "Status": "Released",
+        "ShowCoverPageImage": true,
+        "ShowTableOfContents": true,
+        "ShowHeaderFooter": true,
+        "ShowTableCaptions": true
+    },
+    "Options": {
+
+    },
+    "InfoLevel": {
+        "_comment_": "0 = Disabled, 1 = Enabled",
+        "Cluster": 1,
+        "Node": 1,
+        "Storage": 1,
+        "License": 1,
+        "Network": 1,
+        "Vserver": 1,
+        "Replication": 1,
+        "Efficiency": 1,
+        "Security": 1,
+        "System": 1
+    },
+    "HealthCheck": {
+        "Cluster": {
+            "Summary": true,
+            "HA": true,
+            "AutoSupport": true
+        },
+        "Node": {
+            "HW": true,
+            "ServiceProcessor": true
+        },
+        "Storage": {
+            "Aggr": true,
+            "DiskStatus": true,
+            "ShelfStatus": true,
+            "Efficiency": true,
+            "FabricPool": true
+        },
+        "Network": {
+            "Port": true,
+            "Interface": true
+        },
+        "License": {
+            "RiskSummary": true,
+            "ServiceProcessor": true
+        },
+        "Vserver": {
+            "Status": true,
+            "Iscsi": true,
+            "FCP": true,
+            "NFS": true,
+            "Quota": true,
+            "CIFS": true,
+            "Snapshot": true
+        },
+        "Replication": {
+            "Status": true,
+            "ClusterPeer": true,
+            "VserverPeer": true,
+            "Relationship": true,
+            "History": true,
+            "Mediator": true
+        },
+        "System": {
+            "NTP": true,
+            "DNS": true,
+            "EMS": true,
+            "Backup": true
+        },
+        "Security": {
+            "Users": true,
+            "KMS": true
+    }
+    }
+}
