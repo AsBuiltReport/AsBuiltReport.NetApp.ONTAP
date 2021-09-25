@@ -17,6 +17,10 @@ jobs:
         shell: pwsh
         run: |
           Install-Module -Name AsBuiltReport.Core -Repository PSGallery -Force
+      - name: Install NetApp.ONTAP module
+        shell: pwsh
+        run: |
+          Install-Module -Name NetApp.ONTAP -Repository PSGallery -Force
       - name: Test Module Manifest
         shell: pwsh
         run: |
