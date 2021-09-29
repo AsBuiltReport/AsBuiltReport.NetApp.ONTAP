@@ -2,8 +2,7 @@
 
 ## [0.4.0] - 2021-09-22
 
-- Add aditional halthCheck section support
-
+- Add aditional health check section support
 - Added function to convert from True/False to Yes/No
 - Implement a function to convert from T/F to Y/N
 - Use HTTPS to connect to the Array (by Default)

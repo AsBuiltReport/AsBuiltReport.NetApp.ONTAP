@@ -105,6 +105,7 @@ Ensure you repeat the following steps for the [system requirements](https://gith
 5. Close and reopen the PowerShell terminal window.
 
 _Note: You are not limited to installing the module to those example paths, you can add a new entry to the environment variable PSModulePath if you want to use another path._
+
 ### :closed_lock_with_key: Required Privileges
 
 To generate a NetApp ONTAP Array report, a user account with the readonly role of higher on the AFF/FAS is required.
@@ -160,10 +161,20 @@ The **Healthcheck** schema is used to toggle health checks on or off.
 
 ## :computer: Examples
 
-There is one example listed below on running the AsBuiltReport script against a NetApp ONTAP Array target. Refer to the `README.md` file in the main AsBuiltReport project repository for more examples.
-
-- The following creates a NetApp ONTAP Array As-Built report in HTML & Word formats in the folder C:\scripts\.
+There are a few examples listed below on running the AsBuiltReport script against a NetApp ONTAP Array target. Refer to the `README.md` file in the main AsBuiltReport project repository for more examples.
 
 ```powershell
-PS C:\>New-AsBuiltReport -Report NetApp.ONTAP -Target 10.10.30.20 -Credential (Get-Credential) -Format HTML,Word -OutputPath C:\scripts\
+# Generate a NetApp ONTAP As Built Report for Cluster array '192.168.7.60' using specified credentials. Export report to HTML & DOCX formats. Use default report style. Append timestamp to report filename. Save reports to 'C:\Users\Jon\Documents'
+PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'admin' -Password 'P@ssw0rd' -Format Html,Word -OutputFolderPath 'C:\Users\Jon\Documents' -Timestamp
+
+# Generate a NetApp ONTAP As Built Report for Cluster array 192.168.7.60 using specified credentials and report configuration file. Export report to Text, HTML & DOCX formats. Use default report style. Save reports to 'C:\Users\Jon\Documents'. Display verbose messages to the console.
+PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'admin' -Password 'P@ssw0rd' -Format Text,Html,Word -OutputFolderPath 'C:\Users\Jon\Documents' -ReportConfigFilePath 'C:\Users\Jon\AsBuiltReport\AsBuiltReport.NetApp.ONTAP.json' -Verbose
+
+# Generate a NetApp ONTAP As Built Report for Cluster array 192.168.7.60 using stored credentials. Export report to HTML & Text formats. Use default report style. Highlight environment issues within the report. Save reports to 'C:\Users\Jon\Documents'.
+PS C:\> $Creds = Get-Credential
+PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Credential $Creds -Format Html,Text -OutputFolderPath 'C:\Users\Jon\Documents' -EnableHealthCheck
+
+# Generate a NetApp ONTAP As Built Report for Cluster array 192.168.7.60 using stored credentials. Export report to HTML & DOCX formats. Use default report style. Reports are saved to the user profile folder by default. Attach and send reports via e-mail.
+PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'admin' -Password 'P@ssw0rd' -Format Html,Word -OutputFolderPath 'C:\Users\Jon\Documents' -SendEmail
+
 ```
