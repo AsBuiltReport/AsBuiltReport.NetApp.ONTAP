@@ -14,8 +14,12 @@ function Get-AbrOntapNetworkRoutes {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapNetworkRoutes {
     }
 
     process {
-        $Routes = Get-NcNetRoute
+        $Routes = Get-NcNetRoute -VserverContext $Vserver
         $RoutesObj = @()
         if ($Routes) {
             foreach ($Item in $Routes) {
@@ -31,15 +35,15 @@ function Get-AbrOntapNetworkRoutes {
                     'Destination' = $Item.Destination
                     'Gateway' = $Item.Gateway
                     'Metric' = $Item.Metric
-                    'Vserver' = $Item.Vserver
+                    'Address Family' = $Item.AddressFamily.ToString().ToUpper()
                 }
                 $RoutesObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "Network Route Information - $($ClusterInfo.ClusterName)"
+                Name = "Network Route Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 30, 30, 10, 30
+                ColumnWidths = 30, 30, 20, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

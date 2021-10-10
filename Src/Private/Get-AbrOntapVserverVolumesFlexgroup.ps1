@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     }
 
     process {
-        $Data = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}
+        $Data = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -31,7 +35,6 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                     'Volume' = $Item.Name
                     'Status' = $Item.State
                     'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                    'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj
             }
@@ -40,9 +43,9 @@ function Get-AbrOntapVserverVolumesFlexgroup {
             }
 
             $TableParams = @{
-                Name = "Vserver Flexgroup Volume Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Flexgroup Volume Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 30, 20, 20, 30
+                ColumnWidths = 50, 25, 25
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
