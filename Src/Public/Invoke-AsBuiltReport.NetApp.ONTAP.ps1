@@ -129,10 +129,18 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading3 'Disk Summary' {
                         Paragraph "The following section provides the disk summary information on controller $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Section -Style Heading4 'Assigned Disk Summary' {
+                        Section -Style Heading4 'Per Node Disk Assignment Summary' {
                             Paragraph "The following section provides the number of disks assigned to each controller on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapDiskAssign
+                        }
+                        $Nodes = Get-NcNode
+                        foreach ($Node in $Nodes) {
+                            Section -Style Heading4 "Disk Owned by Node $Node Summary" {
+                                Paragraph "The following section provides the inventory of disks owned by each controller on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapDiskOwner -Node $Node
+                            }
                         }
                         Section -Style Heading4 'Disk Container Type Summary' {
                             Paragraph "The following section provides a summary of disk status on $($ClusterInfo.ClusterName)."
@@ -170,15 +178,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 Section -Style Heading2 'Licenses Summary' {
                     Paragraph "The following section provides a summary of the license usage on $($ClusterInfo.ClusterName)."
                     BlankLine
-                    Section -Style Heading3 'License Usage Summary' {
-                        Paragraph "The following section provides the installed licenses on $($ClusterInfo.ClusterName)."
+                    Get-AbrOntapClusterLicense
+                    Section -Style Heading4 'License Feature Summary' {
+                        Paragraph "The following section provides the License Feature Usage on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Get-AbrOntapClusterLicense
-                        Section -Style Heading4 'License Feature Summary' {
-                            Paragraph "The following section provides the License Feature Usage on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapClusterLicenseUsage
-                        }
+                        Get-AbrOntapClusterLicenseUsage
                     }
                 }
             }
@@ -195,23 +199,30 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNetworkIpSpace
-                        Section -Style Heading4 'Network Ports Summary' {
-                            Paragraph "The following section provides the physical ports on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapNetworkPorts
-                        }
-                        if (Get-NcNetPortIfgrp) {
-                            Section -Style Heading4 'Network Link Aggregation Group Summary' {
-                                Paragraph "The following section provides the IFGRP Aggregated Ports on $($ClusterInfo.ClusterName)."
+                        $Nodes = Get-NcNode
+                        foreach ($Node in $Nodes) {
+                            Section -Style Heading4 "$Node Network Ports Summary" {
+                                Paragraph "The following section provides per ode physical ports on $($ClusterInfo.ClusterName)."
                                 BlankLine
-                                Get-AbrOntapNetworkIfgrp
+                                Get-AbrOntapNetworkPort -Node $Node
                             }
                         }
-                        if (Get-NcNetPortVlan) {
-                            Section -Style Heading4 'Vlan Summary' {
-                                Paragraph "The following section provides the Vlan information on $($ClusterInfo.ClusterName)."
-                                BlankLine
-                                Get-AbrOntapNetworkVlans
+                        foreach ($Node in $Nodes) {
+                            if (Get-NcNetPortIfgrp -Node $Node) {
+                                Section -Style Heading4 "$Node Network Link Aggregation Group Summary" {
+                                    Paragraph "The following section provides per Node IFGRP Aggregated Ports on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapNetworkIfgrp -Node $Node
+                                }
+                            }
+                        }
+                        foreach ($Node in $Nodes) {
+                            if (Get-NcNetPortVlan -Node $Node) {
+                                Section -Style Heading4 "$Node Vlan Summary" {
+                                    Paragraph "The following section provides the Vlan information on $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapNetworkVlans -Node $Node
+                                }
                             }
                         }
                         Section -Style Heading4 'Broadcast Domain Summary' {
@@ -231,15 +242,18 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapNetworkSubnet
                             }
                         }
-                        if (Get-NcNetRoute) {
-                            Section -Style Heading4 'Routes Summary' {
-                                Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
-                                BlankLine
-                                Get-AbrOntapNetworkRoutes
-                                Section -Style Heading5 'Per Network Interface Routes Summary' {
-                                    Paragraph "The following section provides the Per Network Interface Routes information on $($ClusterInfo.ClusterName)."
+                        $Vservers = Get-NcVserver | Where-Object { $_.VserverType -ne "node" -and $_.VserverType -ne "system" } | Select-Object -ExpandProperty Vserver
+                        foreach ($SVM in $Vservers) {
+                            if (Get-NcNetRoute -VserverContext $SVM) {
+                                Section -Style Heading4 "$SVM Vserver Routes Summary" {
+                                    Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapNetworkRouteLifs
+                                    Get-AbrOntapNetworkRoutes -Vserver $SVM
+                                    Section -Style Heading5 "$SVM Per Vserver Network Interface Routes Summary" {
+                                        Paragraph "The following section provides the Per Network Interface Routes information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapNetworkRouteLifs -Vserver $SVM
+                                    }
                                 }
                             }
                         }
@@ -265,83 +279,88 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides a summary of the configured vserver on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapVserverSummary
-                            if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}) {
-                                Section -Style Heading4 'Vserver Storage Volumes Summary' {
-                                    Paragraph "The following section provides the Vserver Volumes Information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapVserverVolumes
-                                    if (Get-NcVol | Select-Object -ExpandProperty VolumeQosAttributes) {
-                                        Section -Style Heading5 'Vserver Volumes QoS Policy Summary' {
-                                            Paragraph "The following section provides the Vserver QoS Configuration on $($ClusterInfo.ClusterName)."
-                                            Section -Style Heading6 'Vserver Volumes Fixed QoS Policy' {
-                                                Paragraph "The following section provides the Volume Fixed QoS Group information on $($ClusterInfo.ClusterName)."
+                            if (Get-NcVol | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                Section -Style Heading4 'Vserver Volumes QoS Policy Summary' {
+                                    Paragraph "The following section provides the Vserver QoS Configuration on $($ClusterInfo.ClusterName)."
+                                    Section -Style Heading5 'Vserver Volumes Fixed QoS Policy' {
+                                        Paragraph "The following section provides the Volume Fixed QoS Group information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverVolumesQosGPFixed
+                                    }
+                                    Section -Style Heading5 'Volumes Adaptive QoS Policy' {
+                                        Paragraph "The following section provides the Volumes Adaptive QoS Group information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverVolumesQosGPAdaptive
+                                    }
+                                }
+                            }
+                            $Vservers = Get-NcVserver | Where-Object { $_.VserverType -ne "node" -and $_.VserverType -ne "system" } | Select-Object -ExpandProperty Vserver
+                            foreach ($SVM in $Vservers) {
+                                if (Get-NcVol -VserverContext $SVM| Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}) {
+                                    Section -Style Heading4 "Vserver $SVM Storage Volumes Summary" {
+                                        Paragraph "The following section provides $SVM Volumes Information on $($ClusterInfo.ClusterName)."
+                                        BlankLine
+                                        Get-AbrOntapVserverVolumes -Vserver $SVM
+                                        if (Get-NcVol -VserverContext $SVM | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                            Section -Style Heading5 "$SVM Per Volumes QoS Policy Summary" {
+                                                Paragraph "The following section provides the $SVM per Volumes QoS Configuration on $($ClusterInfo.ClusterName)."
                                                 BlankLine
-                                                Get-AbrOntapVserverVolumesQosGPFixed
+                                                Get-AbrOntapVserverVolumesQos -Vserver $SVM
                                             }
-                                            Section -Style Heading6 'Volumes Adaptive QoS Policy' {
-                                                Paragraph "The following section provides the Volumes Adaptive QoS Group information on $($ClusterInfo.ClusterName)."
+                                        }
+                                        if (Get-NcVol -VserverContext $SVM | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
+                                            Section -Style Heading5 "$SVM FlexGroup Volumes Summary" {
+                                                Paragraph "The following section provides the $SVM FlexGroup Volumes Configuration on $($ClusterInfo.ClusterName)."
                                                 BlankLine
-                                                Get-AbrOntapVserverVolumesQosGPAdaptive
+                                                Get-AbrOntapVserverVolumesFlexgroup -Vserver $SVM
                                             }
-                                            Section -Style Heading6 'Per Volumes QoS Policy Summary' {
-                                                Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($ClusterInfo.ClusterName)."
+                                        }
+                                        if (Get-NcVolClone) {
+                                            Section -Style Heading5 'Flexclone Volumes Summary' {
+                                                Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($ClusterInfo.ClusterName)."
                                                 BlankLine
-                                                Get-AbrOntapVserverVolumesQos
+                                                #Get-AbrOntapVserverVolumesFlexclone
                                             }
                                         }
-                                    }
-                                    if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
-                                        Section -Style Heading5 'FlexGroup Volumes Summary' {
-                                            Paragraph "The following section provides the Vserver FlexGroup Volumes Configuration on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesFlexgroup
+                                        if ((Get-NcFlexcacheConnectedCache) -or (Get-NcFlexcache)) {
+                                            Section -Style Heading5 'Flexcache Volumes Summary' {
+                                                Paragraph "The following section provides the Vserver Flexcache Volumes Configuration on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                #Get-AbrOntapVserverVolumesFlexcache
+                                            }
                                         }
-                                    }
-                                    if (Get-NcVolClone) {
-                                        Section -Style Heading5 'Flexclone Volumes Summary' {
-                                            Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesFlexclone
-                                        }
-                                    }
-                                    if ((Get-NcFlexcacheConnectedCache) -or (Get-NcFlexcache)) {
-                                        Section -Style Heading5 'Flexcache Volumes Summary' {
-                                            Paragraph "The following section provides the Vserver Flexcache Volumes Configuration on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesFlexcache
-                                        }
-                                    }
 
-                                    if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcSnapshot) {
-                                        Section -Style Heading5 'Volumes Snapshot Configuration Summary' {
-                                            Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumeSnapshot
-                                            if ($HealthCheck.Vserver.Snapshot) {
-                                                Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck on $($ClusterInfo.ClusterName)."
+                                        if (Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcSnapshot) {
+                                            Section -Style Heading5 'Volumes Snapshot Configuration Summary' {
+                                                Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($ClusterInfo.ClusterName)."
                                                 BlankLine
-                                                Get-AbrOntapVserverVolumeSnapshotHealth
-                                            }
-                                        }
-                                    }
-                                    if (Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}) {
-                                        Section -Style Heading5 'Qtree Summary' {
-                                            Paragraph "The following section provides the Vserver Volumes Qtree Information on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesQtree
-                                            if (Get-NcExportRule) {
-                                                Section -Style Heading6 'Vserver Export Policy Summary' {
-                                                    Paragraph "The following section provides the Vserver Volumes Export policy Information on $($ClusterInfo.ClusterName)."
+                                                #Get-AbrOntapVserverVolumeSnapshot
+                                                if ($HealthCheck.Vserver.Snapshot) {
+                                                    Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck on $($ClusterInfo.ClusterName)."
                                                     BlankLine
-                                                    Get-AbrOntapVserverVolumesExportPolicy
+                                                    #Get-AbrOntapVserverVolumeSnapshotHealth
                                                 }
                                             }
                                         }
-                                    if (Get-NcQuota) {
-                                        Section -Style Heading5 'Volume Quota Summary' {
-                                            Paragraph "The following section provides the Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesQuota
+                                        if (Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}) {
+                                            Section -Style Heading5 'Qtree Summary' {
+                                                Paragraph "The following section provides the Vserver Volumes Qtree Information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                #Get-AbrOntapVserverVolumesQtree
+                                                if (Get-NcExportRule) {
+                                                    Section -Style Heading6 'Vserver Export Policy Summary' {
+                                                        Paragraph "The following section provides the Vserver Volumes Export policy Information on $($ClusterInfo.ClusterName)."
+                                                        BlankLine
+                                                        #Get-AbrOntapVserverVolumesExportPolicy
+                                                    }
+                                                }
+                                            }
+                                        if (Get-NcQuota) {
+                                            Section -Style Heading5 'Volume Quota Summary' {
+                                                Paragraph "The following section provides the Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                #Get-AbrOntapVserverVolumesQuota
+                                            }
                                         }
                                     }
                                 }
