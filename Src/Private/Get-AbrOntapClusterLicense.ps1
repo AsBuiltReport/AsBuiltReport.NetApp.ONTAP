@@ -23,32 +23,37 @@ function Get-AbrOntapClusterLicense {
     }
 
     process {
-        $License = Get-NcLicense
-        if ($License) {
-            $LicenseSummary = foreach ($Licenses in $License) {
-                $EntitlementRisk = Get-NcLicenseEntitlementRisk -Package $Licenses.Package
-                [PSCustomObject] @{
-                    'Name' = $Licenses.Owner
-                    'Package' = $Licenses.Package
-                    'Type' = $Licenses.Type
-                    'Description' = $Licenses.Description
-                    'Risk' = $EntitlementRisk.Risk
+        $Nodes = Get-NcNode
+        foreach ($Node in $Nodes) {
+            Section -Style Heading3 "$Node License Usage Summary" {
+                Paragraph "The following section provides per node installed licenses on $($ClusterInfo.ClusterName)."
+                BlankLine
+                $License = Get-NcLicense -Owner $Node
+                if ($License) {
+                    $LicenseSummary = foreach ($Licenses in $License) {
+                        $EntitlementRisk = Get-NcLicenseEntitlementRisk -Package $Licenses.Package
+                        [PSCustomObject] @{
+                            'License' = $TextInfo.ToTitleCase($Licenses.Package)
+                            'Type' = $TextInfo.ToTitleCase($Licenses.Type)
+                            'Description' = $Licenses.Description
+                            'Risk' = ConvertTo-EmptyToFiller $EntitlementRisk.Risk
+                        }
+                    }
+                    if ($Healthcheck.License.RiskSummary) {
+                        $LicenseSummary | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' } | Set-Style -Style Warning -Property 'Risk'
+                        $LicenseSummary | Where-Object { $_.'Risk' -like 'High' } | Set-Style -Style Critical -Property 'Risk'
+                    }
+                    $TableParams = @{
+                        Name = "License Usage Summary - $($Node)"
+                        List = $false
+                        ColumnWidths = 25, 15, 38, 22
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $LicenseSummary | Table @TableParams
                 }
             }
-            if ($Healthcheck.License.RiskSummary) {
-                $LicenseSummary | Where-Object { $_.'Risk' -like 'low' } | Set-Style -Style Ok -Property 'Risk'
-                $LicenseSummary | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' } | Set-Style -Style Warning -Property 'Risk'
-                $LicenseSummary | Where-Object { $_.'Risk' -like 'High' } | Set-Style -Style Critical -Property 'Risk'
-            }
-            $TableParams = @{
-                Name = "License Summary - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 30, 20, 10, 28, 12
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $LicenseSummary | Table @TableParams
         }
     }
 

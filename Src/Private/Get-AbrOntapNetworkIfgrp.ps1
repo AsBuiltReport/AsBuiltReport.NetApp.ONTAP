@@ -14,8 +14,12 @@ function Get-AbrOntapNetworkIfgrp {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Node
     )
 
     begin {
@@ -23,18 +27,17 @@ function Get-AbrOntapNetworkIfgrp {
     }
 
     process {
-        $IFGRPPorts = Get-NcNetPortIfgrp
+        $IFGRPPorts = Get-NcNetPortIfgrp -Node $Node
         $AggregatePorts = @()
         if ($IFGRPPorts) {
             foreach ($Nics in $IFGRPPorts) {
                 if ($Nics.DownPorts) {
                     $UPPort = "$($Nics.UpPorts) $($Nics.DownPorts)(Down)"
-                }Else {$UPPort = [String]$Nics.UpPorts}
+                }else {$UPPort = [String]$Nics.UpPorts}
                 $inObj = [ordered] @{
                     'Port Name' = $Nics.IfgrpName
                     'Distribution Function' = $Nics.DistributionFunction
                     'Mode' = $Nics.Mode
-                    'Node Owner' = $Nics.Node
                     'Port' = $UPPort
                     'Mac Address' = $Nics.MacAddress
                     'Port Participation' = $Nics.PortParticipation
@@ -48,9 +51,9 @@ function Get-AbrOntapNetworkIfgrp {
 
 
             $TableParams = @{
-                Name = "Link Aggregation Group Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 25, 75
+                Name = "Link Aggregation Group Information - $($Node)"
+                List = $false
+                ColumnWidths = 15, 15, 15 ,20 ,20, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

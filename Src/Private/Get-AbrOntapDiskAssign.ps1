@@ -41,29 +41,6 @@ function Get-AbrOntapDiskAssign {
             }
             $DiskSummary | Table @TableParams
         }
-        $Node = Get-NcNode
-        if ($Node) {
-            $DiskSummary = foreach ($Nodes in $Node) {
-                $DiskOwner = Get-NcDiskOwner -Node $Nodes.Node
-                [PSCustomObject] @{
-                    'Disk' = $DiskOwner.Name
-                    'Owner' = $DiskOwner.Owner
-                    'Owner Id' = $DiskOwner.OwnerId
-                    'Home' = $DiskOwner.Home
-                    'Home Id' = $DiskOwner.HomeId
-                    'Type' = $DiskOwner.Type
-                    }
-            }
-            $TableParams = @{
-                Name = "Disk Owner Summary - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 20, 20, 15, 20, 15, 10
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $DiskSummary | Table @TableParams
-        }
     }
 
     end {}

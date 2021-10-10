@@ -1,4 +1,4 @@
-function Get-AbrOntapNetworkPorts {
+function Get-AbrOntapNetworkPort {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP physical interface port information from the Cluster Management Network
@@ -14,8 +14,12 @@ function Get-AbrOntapNetworkPorts {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Node
     )
 
     begin {
@@ -23,13 +27,12 @@ function Get-AbrOntapNetworkPorts {
     }
 
     process {
-        $PhysicalPorts = Get-NcNetPort | Where-Object {$_.PortType -like 'physical'}
+        $PhysicalPorts = Get-NcNetPort -Node $Node | Where-Object {$_.PortType -like 'physical'}
         if ($PhysicalPorts) {
             $PhysicalNic = foreach ($Nics in $PhysicalPorts) {
                 [PSCustomObject] @{
                     'Port Name' = $Nics.Port
                     'Role' = $TextInfo.ToTitleCase($Nics.Role)
-                    'Node Owner' = $Nics.Node
                     'Mac Address' = $Nics.MacAddress
                     'MTU' = $Nics.MTU
                     'Link Status' = $TextInfo.ToTitleCase($Nics.LinkStatus)
@@ -45,9 +48,9 @@ function Get-AbrOntapNetworkPorts {
             }
 
             $TableParams = @{
-                Name = "Physical Port Information - $($ClusterInfo.ClusterName)"
+                Name = "Physical Port Information - $($Node)"
                 List = $false
-                ColumnWidths = 15, 15, 22, 20, 10, 8, 10
+                ColumnWidths = 20, 20, 30, 10, 10, 10
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
