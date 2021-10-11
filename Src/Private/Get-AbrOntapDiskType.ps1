@@ -44,7 +44,7 @@ function Get-AbrOntapDiskType {
             }
             $DiskType | Table @TableParams
         }
-        $Node = Get-NcNode
+        $Node = Get-NcNode | Where-Object {$_.IsNodeHealthy -eq "True"}
         if ($Node -and (Confirm-NcAggrSpareLow | Where-Object {$_.Value -eq "True"})) {
             $OutObj = foreach ($Item in $Node) {
                 $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node
