@@ -14,8 +14,12 @@ function Get-AbrOntapVserverNFSExport {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverNFSExport {
     }
 
     process {
-        $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($SVM in $VserverData) {
@@ -38,7 +42,7 @@ function Get-AbrOntapVserverNFSExport {
         }
 
             $TableParams = @{
-                Name = "Vserver NFS Service Volume Export Summary - $($ClusterInfo.ClusterName)"
+                Name = "Vserver NFS Service Volume Export Summary - $($Vserver)"
                 List = $false
                 ColumnWidths = 35, 65
             }

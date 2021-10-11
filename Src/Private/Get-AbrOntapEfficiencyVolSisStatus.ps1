@@ -14,8 +14,12 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     }
 
     process {
-        $Data = Get-NcSis | Where-Object {$_.Path -notlike '*vol0*'}
+        $Data = Get-NcSis -VserverContext $Vserver | Where-Object {$_.Path -notlike '*vol0*'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -43,7 +47,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
             }
 
             $TableParams = @{
-                Name = "Volume Deduplication Information - $($ClusterInfo.ClusterName)"
+                Name = "Volume Deduplication Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 15, 15, 20, 20
             }

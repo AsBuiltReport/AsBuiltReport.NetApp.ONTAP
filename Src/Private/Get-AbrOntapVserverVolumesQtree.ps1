@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumesQtree {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverVolumesQtree {
     }
 
     process {
-        $VserverQtree = Get-NcQtree | Where-Object {$NULL -ne $_.Qtree}
+        $VserverQtree = Get-NcQtree -VserverContext $Vserver | Where-Object {$NULL -ne $_.Qtree}
         $VserverObj = @()
         if ($VserverQtree) {
             foreach ($Item in $VserverQtree) {
@@ -33,7 +37,6 @@ function Get-AbrOntapVserverVolumesQtree {
                     'Status' = $Item.Status
                     'Security Style' = $Item.SecurityStyle
                     'Export Policy' = $Item.ExportPolicy
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
@@ -42,9 +45,9 @@ function Get-AbrOntapVserverVolumesQtree {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume Qtree Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Volume Qtree Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 22, 28, 10, 10, 15, 15
+                ColumnWidths = 27, 28, 15, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

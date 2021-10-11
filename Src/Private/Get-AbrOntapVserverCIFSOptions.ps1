@@ -14,8 +14,12 @@ function Get-AbrOntapVserverCIFSOptions {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,14 +27,13 @@ function Get-AbrOntapVserverCIFSOptions {
     }
 
     process {
-        $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($SVM in $VserverData) {
                 $CIFSSVM = Get-NcCifsOption -VserverContext $SVM.Vserver
                 foreach ($Item in $CIFSSVM) {
                     $inObj = [ordered] @{
-                        'Vserver' = $Item.Vserver
                         'Client Session Timeout' = $Item.ClientSessionTimeout
                         'DefaultUnixUser' = $Item.DefaultUnixUser
                         'Client Version Reporting Enabled' = ConvertTo-TextYN $Item.IsClientVersionReportingEnabled
@@ -65,7 +68,7 @@ function Get-AbrOntapVserverCIFSOptions {
             }
 
             $TableParams = @{
-                Name = "Vserver CIFS Service Options Summary - $($ClusterInfo.ClusterName)"
+                Name = "Vserver CIFS Service Options Summary - $($Vserver)"
                 List = $true
                 ColumnWidths = 50, 50
             }

@@ -14,8 +14,12 @@ function Get-AbrOntapVserverIscsiInitiator {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,22 +27,21 @@ function Get-AbrOntapVserverIscsiInitiator {
     }
 
     process {
-        $VserverData = Get-NcIscsiInitiator
+        $VserverData = Get-NcIscsiInitiator -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Initiator Name' = $Item.InitiatorNodeName
                     'Target Port Group' = $Item.TpGroupName
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "ISCSI Client Initiator Information - $($ClusterInfo.ClusterName)"
+                Name = "ISCSI Client Initiator Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 55, 30, 15
+                ColumnWidths = 60, 40
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

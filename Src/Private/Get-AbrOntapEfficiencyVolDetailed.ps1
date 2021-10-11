@@ -14,8 +14,12 @@ function Get-AbrOntapEfficiencyVolDetailed {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
     }
 
     process {
-        $Data =  Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online"}
+        $Data =  Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -42,7 +46,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
             }
 
             $TableParams = @{
-                Name = "Volume Efficiency Savings Detailed Information - $($ClusterInfo.ClusterName)"
+                Name = "Volume Efficiency Savings Detailed Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 10, 10, 11, 10, 12, 12, 15
             }

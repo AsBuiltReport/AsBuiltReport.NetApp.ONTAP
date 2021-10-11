@@ -14,8 +14,12 @@ function Get-AbrOntapVserverNFSOptions {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,12 +27,11 @@ function Get-AbrOntapVserverNFSOptions {
     }
 
     process {
-        $VserverData = Get-NcNfsService
+        $VserverData = Get-NcNfsService -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver' = $Item.Vserver
                     'Allow Idle Connection' = ConvertTo-TextYN $Item.AllowIdleConnection
                     'Idle Connection Timeout' = $Item.IdleConnectionTimeout
                     'Ignore NtAcl For Root' = ConvertTo-TextYN $Item.IgnoreNtAclForRoot
@@ -47,7 +50,7 @@ function Get-AbrOntapVserverNFSOptions {
             }
 
             $TableParams = @{
-                Name = "Vserver NFS Service Options Summary - $($ClusterInfo.ClusterName)"
+                Name = "Vserver NFS Service Options Summary - $($Vserver)"
                 List = $true
                 ColumnWidths = 50, 50
             }

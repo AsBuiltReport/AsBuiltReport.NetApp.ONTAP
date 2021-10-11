@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     }
 
     process {
-        $VserverData = Get-NcExportRule
+        $VserverData = Get-NcExportRule -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -31,18 +35,17 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                     'Policy Name' = $Item.PolicyName
                     'Rule Index' = $Item.RuleIndex
                     'Client Match' = $Item.ClientMatch
-                    'Protocol' = $Item.Protocol
+                    'Protocol' = $Item.Protocol -join ", "
                     'Ro Rule' = $Item.RoRule
                     'Rw Rule' = $Item.RwRule
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "Vserver Volume Export Policy Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Volume Export Policy Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 20, 10, 20, 10, 10, 10, 20
+                ColumnWidths = 20, 15, 20, 15, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

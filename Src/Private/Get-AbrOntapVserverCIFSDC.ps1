@@ -14,8 +14,12 @@ function Get-AbrOntapVserverCIFSDC {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverCIFSDC {
     }
 
     process {
-        $VserverData = Get-NcCifsDomainServer
+        $VserverData = Get-NcCifsDomainServer -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -39,7 +43,7 @@ function Get-AbrOntapVserverCIFSDC {
             }
 
             $TableParams = @{
-                Name = "CIFS Connected Domain Controller Information - $($ClusterInfo.ClusterName)"
+                Name = "CIFS Connected Domain Controller Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 20, 20, 12, 13, 15
             }

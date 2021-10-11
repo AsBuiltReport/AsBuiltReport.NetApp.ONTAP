@@ -14,8 +14,12 @@ function Get-AbrOntapVserverLunIgroup {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverLunIgroup {
     }
 
     process {
-        $VserverIgroup = Get-NcIgroup
+        $VserverIgroup = Get-NcIgroup -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverIgroup) {
             foreach ($Item in $VserverIgroup) {
@@ -38,7 +42,6 @@ function Get-AbrOntapVserverLunIgroup {
                     'Igroup Name' = $Item.Name
                     'Type' = $Item.Type
                     'Protocol' = $Item.Protocol
-                    'Vserver' = $Item.Vserver
                     'Initiators' = $Item.Initiators.InitiatorName
                     'Mapped Lun' = $MappedLun
                     'Reporting Nodes' = $reportingnodes

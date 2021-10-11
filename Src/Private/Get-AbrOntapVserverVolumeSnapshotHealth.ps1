@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -25,7 +29,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     process {
         $SnapshotDays = 7
         $Now=Get-Date
-        $VserverFilter = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $VserverFilter = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $SnapShotData = get-ncsnapshot -Volume $VserverFilter | Where-Object {$_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays)}
         $VserverObj = @()
         if ($SnapShotData) {
@@ -35,15 +39,14 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                     'Snapshot Name' = $Item.Name
                     'Created Time' = $Item.Created
                     'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "HealthCheck - Volume Snapshot over 7 days only - $($ClusterInfo.ClusterName)"
+                Name = "HealthCheck - Volume Snapshot over 7 days only - $($Vserver)"
                 List = $false
-                ColumnWidths = 20, 30, 25, 10, 15
+                ColumnWidths = 25, 35, 25, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

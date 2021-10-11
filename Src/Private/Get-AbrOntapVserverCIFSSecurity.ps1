@@ -14,8 +14,12 @@ function Get-AbrOntapVserverCIFSSecurity {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverCIFSSecurity {
     }
 
     process {
-        $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -31,7 +35,6 @@ function Get-AbrOntapVserverCIFSSecurity {
                 foreach ($SVM in $CIFSSVM) {
                     if ($SVM.KerberosClockSkew) {
                         $inObj = [ordered] @{
-                            'Vserver' = $SVM.Vserver
                             'Kerberos Clock Skew' = $SVM.KerberosClockSkew
                             'Kerberos Renew Age' = $SVM.KerberosRenewAge
                             'Kerberos Ticket Age' = $SVM.KerberosTicketAge
@@ -47,7 +50,7 @@ function Get-AbrOntapVserverCIFSSecurity {
             }
 
             $TableParams = @{
-                Name = "Vserver CIFS Service Security Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver CIFS Service Security Information - $($Vserver)"
                 List = $true
                 ColumnWidths = 35, 65
             }

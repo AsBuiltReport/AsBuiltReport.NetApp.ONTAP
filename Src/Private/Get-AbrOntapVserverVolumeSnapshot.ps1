@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumeSnapshot {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     }
 
     process {
-        $VolumeFilter = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $VolumeFilter = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
         if ($VolumeFilter) {
             foreach ($Item in $VolumeFilter) {
@@ -36,7 +40,6 @@ function Get-AbrOntapVserverVolumeSnapshot {
                     'Reserve Available' = $SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Used' = $SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Policy' = $SnapPolicy.SnapshotPolicy
-                    'Vserver' = $Item.Vserver
                 }
 
                 $VserverObj += [pscustomobject]$inobj
@@ -46,9 +49,9 @@ function Get-AbrOntapVserverVolumeSnapshot {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume SnapShot Configuration Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Volume SnapShot Configuration Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 20, 14, 12, 12, 12, 15, 15
+                ColumnWidths = 25, 15, 15, 15, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

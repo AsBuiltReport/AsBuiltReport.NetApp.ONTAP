@@ -14,8 +14,12 @@ function Get-AbrOntapVserverIscsiSummary {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,14 +27,17 @@ function Get-AbrOntapVserverIscsiSummary {
     }
 
     process {
-        $VserverData = Get-NcIscsiService
+        $VserverData = Get-NcIscsiService -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver' = $Item.Vserver
                     'IQN Name' = $Item.NodeName
                     'Alias Name' = $Item.AliasName
+                    'Tcp Window Size' = $Item.TcpWindowSize
+                    'Max Cmds Per Session' = $Item.MaxCmdsPerSession
+                    'Max Conn Per Session' = $Item.MaxConnPerSession
+                    'Login Timeout' = $Item.LoginTimeout
                     'Status' = Switch ($Item.IsAvailable) {
                         'True' { 'Up' }
                         'False' { 'Down' }
@@ -44,9 +51,9 @@ function Get-AbrOntapVserverIscsiSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver ISCSI Service Information - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 15, 65, 12, 8
+                Name = "Vserver ISCSI Service Information - $($Vserver)"
+                List = $true
+                ColumnWidths = 40, 60
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

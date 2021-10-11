@@ -14,8 +14,12 @@ function Get-AbrOntapVserverFcpInterface {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverFcpInterface {
     }
 
     process {
-        $VserverData = Get-NcFcpInterface
+        $VserverData = Get-NcFcpInterface -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -31,15 +35,14 @@ function Get-AbrOntapVserverFcpInterface {
                     'Interface Name' = $Item.InterfaceName
                     'FCP WWPN' = $Item.PortName
                     'Home Port' = $Item.CurrentPort
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "FCP Interface Information - $($ClusterInfo.ClusterName)"
+                Name = "FCP Interface Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 30, 30, 15, 25
+                ColumnWidths = 35, 35, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

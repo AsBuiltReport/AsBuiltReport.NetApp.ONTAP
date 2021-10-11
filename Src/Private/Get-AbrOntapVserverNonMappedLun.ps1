@@ -14,8 +14,12 @@ function Get-AbrOntapVserverNonMappedLun {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverNonMappedLun {
     }
 
     process {
-        $LunFilter = Get-NcLun | Where-Object {$_.Mapped -ne "True"}
+        $LunFilter = Get-NcLun -VserverContext $Vserver | Where-Object {$_.Mapped -ne "True"}
         $OutObj = @()
         if ($LunFilter) {
             foreach ($Item in $LunFilter) {
@@ -33,19 +37,17 @@ function Get-AbrOntapVserverNonMappedLun {
                     'Lun Name' = $lunname
                     'Online' = ConvertTo-TextYN $Item.Online
                     'Mapped' = ConvertTo-TextYN $Item.Mapped
-                    'Lun Format' = $Item.Protocol
-                    'Vserver' = $Item.Vserver
-                }
+                    'Lun Format' = $Item.Protocol                }
                 $OutObj += [pscustomobject]$inobj
             }
             if ($Healthcheck.Vserver.Status) {
-                $OutObj | Set-Style -Style Warning -Property 'Volume Name','Lun Name','Online','Mapped','Lun Format','Vserver'
+                $OutObj | Set-Style -Style Warning
             }
 
             $TableParams = @{
-                Name = "HealthCheck - Non-Mapped Lun - $($ClusterInfo.ClusterName)"
+                Name = "HealthCheck - Non-Mapped Lun - $($Vserver)"
                 List = $false
-                ColumnWidths = 25, 25, 10, 10, 15, 15
+                ColumnWidths = 30, 30, 10, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

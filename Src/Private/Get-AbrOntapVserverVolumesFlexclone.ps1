@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumesFlexclone {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,13 +27,12 @@ function Get-AbrOntapVserverVolumesFlexclone {
     }
 
     process {
-        $VserverClonedVol = Get-NcVolClone
+        $VserverClonedVol = Get-NcVolClone -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverClonedVol) {
             foreach ($Item in $VserverClonedVol) {
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
-                    'Vserver' = $Item.Vserver
                     'ParentVolume' = $Item.ParentVolume
                     'Volume Type' = $Item.VolumeType.ToUpper()
                     'Parent Snapshot' = $Item.ParentSnapshot
@@ -47,7 +50,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
             }
 
             $TableParams = @{
-                Name = "Vserver Cloned Volumes Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Cloned Volumes Information - $($Vserver)"
                 List = $true
                 ColumnWidths = 25, 75
             }

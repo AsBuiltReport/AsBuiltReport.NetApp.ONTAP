@@ -14,8 +14,12 @@ function Get-AbrOntapVserverFcpSummary {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,12 +27,11 @@ function Get-AbrOntapVserverFcpSummary {
     }
 
     process {
-        $VserverData = Get-NcFcpService
+        $VserverData = Get-NcFcpService -VserverContext $Vserver
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver' = $Item.Vserver
                     'FCP WWNN' = $Item.NodeName
                     'Status' = Switch ($Item.IsAvailable) {
                         'True' { 'Up' }
@@ -43,9 +46,9 @@ function Get-AbrOntapVserverFcpSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver FCP Service Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver FCP Service Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 25, 55, 20
+                ColumnWidths = 70, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

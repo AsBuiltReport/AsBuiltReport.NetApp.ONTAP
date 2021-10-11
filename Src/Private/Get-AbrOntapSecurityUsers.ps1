@@ -14,8 +14,12 @@ function Get-AbrOntapSecurityUsers {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapSecurityUsers {
     }
 
     process {
-        $Data =  Get-NcUser
+        $Data =  Get-NcUser -Vserver $Vserver
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -33,7 +37,6 @@ function Get-AbrOntapSecurityUsers {
                     'Auth Method' = $Item.AuthMethod
                     'RoleName' = $Item.RoleName
                     'Locked' = ConvertTo-TextYN $Item.IsLocked
-                    'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj
             }
@@ -42,9 +45,9 @@ function Get-AbrOntapSecurityUsers {
             }
 
             $TableParams = @{
-                Name = "Security Local Users information  - $($ClusterInfo.ClusterName)"
+                Name = "Security Local Users information  - $($Vserver)"
                 List = $false
-                ColumnWidths = 20, 14, 14, 20, 12, 20
+                ColumnWidths = 25, 15, 15, 30, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
