@@ -53,7 +53,7 @@ function Get-AbrOntapVserverIscsiSummary {
             $TableParams = @{
                 Name = "Vserver ISCSI Service Information - $($Vserver)"
                 List = $true
-                ColumnWidths = 40, 60
+                ColumnWidths = 30, 70
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
