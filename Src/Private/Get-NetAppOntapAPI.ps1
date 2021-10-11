@@ -64,7 +64,7 @@ function Get-NetAppOntapAPI {
         $password = $Credential.GetNetworkCredential().Password
         $auth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($username + ":" + $password ))
         $ClusterIP = $ClusterInfo.NcController.Address.IPAddressToString
-        $fields = 'fields=*&return_records=true&return_timeout=15'
+        #$fields = 'fields=*&return_records=true&return_timeout=15'
         $api = "https://" + $($ClusterIP)
         $headers = @{
             'Accept'        = 'application/json'
@@ -75,7 +75,7 @@ function Get-NetAppOntapAPI {
 
     Process {
         Try {
-            $response = Invoke-RestMethod -Method Get -Uri ($api + $uri + $fields) -Headers $headers -SkipCertificateCheck
+            $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers -SkipCertificateCheck
             $response.records
         } Catch {
             Write-Verbose -Message $_

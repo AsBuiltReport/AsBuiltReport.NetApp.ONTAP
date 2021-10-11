@@ -23,7 +23,7 @@ function Get-AbrOntapRepMediator {
     }
 
     process {
-        $ReplicaData = Get-NetAppOntapAPI -uri "/api/cluster/mediators?"
+        $ReplicaData = Get-NetAppOntapAPI -uri "/api/cluster/mediators?fields=*&return_records=true&return_timeout=15"
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {
