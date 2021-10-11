@@ -35,7 +35,7 @@ function Get-AbrOntapClusterASUP {
                 }
             }
             if ($Healthcheck.Cluster.AutoSupport) {
-                $AutoSupportSummary | Where-Object { $_.'Enabled' -like 'False' } | Set-Style -Style Warning -Property 'Enabled'
+                $AutoSupportSummary | Where-Object { $_.'Enabled' -like 'No' } | Set-Style -Style Warning -Property 'Enabled'
             }
 
             $TableParams = @{
