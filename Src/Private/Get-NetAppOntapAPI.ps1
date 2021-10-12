@@ -5,7 +5,7 @@ function Get-NetAppOntapAPI {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Tim Carman
         Editor:         Jonathan Colon
         Twitter:        @jcolonfzenpr

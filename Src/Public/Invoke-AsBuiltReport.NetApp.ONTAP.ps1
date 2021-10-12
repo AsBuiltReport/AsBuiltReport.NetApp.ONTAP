@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
