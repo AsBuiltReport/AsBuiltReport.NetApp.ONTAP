@@ -381,7 +381,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     BlankLine
                                                     Get-AbrOntapVserverNFSOptions -Vserver $SVM
                                                 }
-                                                if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport -Controller $Array) {
+                                                if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport) {
                                                     Section -Style Heading6 "NFS Volume Export Summary" {
                                                         Paragraph "The following section provides the VServer NFS Service Exports Information on $($SVM)."
                                                         BlankLine
