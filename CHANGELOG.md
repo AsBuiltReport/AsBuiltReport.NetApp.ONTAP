@@ -1,5 +1,21 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+## [0.5.0] - 2021-10-11
+
+### Added
+
+- Added function to convert from empty content to "-".
+
+### Changed
+
+- Changed main report to use per Node/Vserver filtering.
+- Changed Get-NetAppOntapAPI function to allow per Vserver Filtering.
+
+### Fixed
+
+- Fix to better detect unhealthy node.
+- Fix for ASUP Health Check.
+
 ## [0.4.0] - 2021-09-22
 
 - Add additional health check section support
