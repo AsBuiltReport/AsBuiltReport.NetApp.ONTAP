@@ -27,7 +27,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     }
 
     process {
-        $VserverData = Get-NcExportRule -VserverContext $Vserver
+        $VserverData = Get-NcExportRule -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

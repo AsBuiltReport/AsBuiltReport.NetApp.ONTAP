@@ -23,7 +23,7 @@ function Get-AbrOntapNodesSP {
     }
 
     process {
-        $ServiceProcessor = Get-NcServiceProcessor
+        $ServiceProcessor = Get-NcServiceProcessor -Controller $Array
         if ($ServiceProcessor) {
             $NodeServiceProcessor = foreach ($NodeSPs in $ServiceProcessor) {
                 [PSCustomObject] @{

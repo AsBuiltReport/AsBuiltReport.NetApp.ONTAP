@@ -27,7 +27,7 @@ function Get-AbrOntapNetworkRouteLifs {
     }
 
     process {
-        $Routes = Get-NcNetRouteLif -VserverContext $Vserver
+        $Routes = Get-NcNetRouteLif -VserverContext $Vserver -Controller $Array
         $RoutesObj = @()
         if ($Routes) {
             foreach ($Item in $Routes) {

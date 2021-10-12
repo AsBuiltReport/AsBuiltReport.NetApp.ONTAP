@@ -23,7 +23,7 @@ function Get-AbrOntapDiskAssign {
     }
 
     process {
-        $NodeDiskCount = get-ncdisk | ForEach-Object{ $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
+        $NodeDiskCount = get-ncdisk -Controller $Array | ForEach-Object{ $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
         if ($NodeDiskCount) {
             $DiskSummary = foreach ($Disks in $NodeDiskCount) {
                 [PSCustomObject] @{

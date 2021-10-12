@@ -27,7 +27,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     }
 
     process {
-        $Data = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}
+        $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

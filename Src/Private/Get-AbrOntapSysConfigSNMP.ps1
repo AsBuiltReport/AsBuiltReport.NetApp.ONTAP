@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigSNMP {
     }
 
     process {
-        $Data =  Get-NcSnmp
+        $Data =  Get-NcSnmp -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

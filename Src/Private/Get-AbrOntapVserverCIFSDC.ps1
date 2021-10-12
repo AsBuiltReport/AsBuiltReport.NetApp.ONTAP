@@ -27,7 +27,7 @@ function Get-AbrOntapVserverCIFSDC {
     }
 
     process {
-        $VserverData = Get-NcCifsDomainServer -VserverContext $Vserver
+        $VserverData = Get-NcCifsDomainServer -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

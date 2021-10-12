@@ -27,7 +27,7 @@ function Get-AbrOntapSysConfigEMS {
     }
 
     process {
-        $Data =  Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert"
+        $Data =  Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

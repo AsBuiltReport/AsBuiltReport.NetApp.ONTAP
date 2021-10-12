@@ -23,7 +23,7 @@ function Get-AbrOntapClusterASUP {
     }
 
     process {
-        $AutoSupport = Get-NcAutoSupportConfig
+        $AutoSupport = Get-NcAutoSupportConfig -Controller $Array
         if ($AutoSupport) {
             $AutoSupportSummary = foreach ($NodesAUTO in $AutoSupport) {
                 [PSCustomObject] @{

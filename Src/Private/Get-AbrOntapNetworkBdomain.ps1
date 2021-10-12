@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkBdomain {
     }
 
     process {
-        $BDomain = Get-NcNetPortBroadcastDomain
+        $BDomain = Get-NcNetPortBroadcastDomain -Controller $Array
         $BDomainObj = @()
         if ($BDomain) {
             foreach ($Item in $BDomain) {

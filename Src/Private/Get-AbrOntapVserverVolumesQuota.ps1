@@ -31,7 +31,7 @@ function Get-AbrOntapVserverVolumesQuota {
         Section -Style Heading6 "$Vserver Vserver Volume Quota Status" {
             Paragraph "The following section provides the $Vserver Volumes Quota Status Information on $($ClusterInfo.ClusterName)."
             BlankLine
-            $VserverQuotaStatus = Get-NcQuotaStatus -VserverContext $Vserver
+            $VserverQuotaStatus = Get-NcQuotaStatus -VserverContext $Vserver -Controller $Array
             $VserverObj = @()
             if ($VserverQuotaStatus) {
                 foreach ($Item in $VserverQuotaStatus) {
@@ -64,7 +64,7 @@ function Get-AbrOntapVserverVolumesQuota {
         Section -Style Heading6 "$Vserver Vserver Volume Quota Information" {
             Paragraph "The following section provides the $Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
             BlankLine
-            $VserverQuota = Get-NcQuota -VserverContext $Vserver
+            $VserverQuota = Get-NcQuota -VserverContext $Vserver -Controller $Array
             $VserverObj = @()
             if ($VserverQuota) {
                 foreach ($Item in $VserverQuota) {
@@ -113,7 +113,7 @@ function Get-AbrOntapVserverVolumesQuota {
         Section -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk) Summary" {
             Paragraph "The following section provides the $Vserver Volumes Quota Report (Disk) Information on $($ClusterInfo.ClusterName)."
             BlankLine
-            $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver
+            $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
             $VserverObj = @()
             if ($VserverQuotaReport) {
                 foreach ($Item in $VserverQuotaReport) {
@@ -154,7 +154,7 @@ function Get-AbrOntapVserverVolumesQuota {
         Section -Style Heading6 "$Vserver Vserver Volume Quota Report (File) Summary" {
             Paragraph "The following section provides the $Vserver Volumes Quota Report (File) Information on $($ClusterInfo.ClusterName)."
             BlankLine
-            $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver
+            $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
             $VserverObj = @()
             if ($VserverQuotaReport) {
                 foreach ($Item in $VserverQuotaReport) {

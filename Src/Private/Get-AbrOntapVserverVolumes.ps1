@@ -27,7 +27,7 @@ function Get-AbrOntapVserverVolumes {
     }
 
     process {
-        $VserverRootVol = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $VserverRootVol = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
         if ($VserverRootVol) {
             foreach ($Item in $VserverRootVol) {

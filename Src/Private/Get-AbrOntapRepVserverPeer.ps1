@@ -23,7 +23,7 @@ function Get-AbrOntapRepVserverPeer {
     }
 
     process {
-        $ReplicaData = Get-NcVserverPeer
+        $ReplicaData = Get-NcVserverPeer -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

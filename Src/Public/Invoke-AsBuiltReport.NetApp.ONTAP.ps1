@@ -38,7 +38,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             Write-Verbose "Unable to connect to the $OntapArray Array"
             throw
         }
-        $ClusterInfo = Get-NcCluster
+        $ClusterInfo = Get-NcCluster -Controller $Array
 
         #---------------------------------------------------------------------------------------------#
         #                                 Cluster Section                                             #
@@ -88,7 +88,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapNodesHW
                         }
-                        if (Get-NcServiceProcessor | Where-Object {$NULL -ne $_.IpAddress -and $NULL -ne $_.MacAddress}) {
+                        if (Get-NcServiceProcessor  -Controller $Array | Where-Object {$NULL -ne $_.IpAddress -and $NULL -ne $_.MacAddress}) {
                             Section -Style Heading4 'Node Service-Processor Inventory' {
                                 Paragraph "The following section provides the node service-processor information on $($ClusterInfo.ClusterName)."
                                 BlankLine
@@ -111,12 +111,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the Aggregates on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapStorageAGGR
-                        if (Get-NcAggrObjectStore) {
+                        if (Get-NcAggrObjectStore -Controller $Array) {
                             Section -Style Heading4 'FabricPool Summary' {
                                 Paragraph "The following section provides the FabricPool information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapStorageFabricPool
-                                if (Get-NcAggrObjectStoreConfig) {
+                                if (Get-NcAggrObjectStoreConfig -Controller $Array) {
                                     Section -Style Heading5 'FabriPool Object Store Configuration Summary' {
                                         Paragraph "The following section provides the FabriPool Object Store Configuration on $($ClusterInfo.ClusterName)."
                                         BlankLine
@@ -134,7 +134,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapDiskAssign
                         }
-                        $Nodes = Get-NcNode
+                        $Nodes = Get-NcNode -Controller $Array
                         foreach ($Node in $Nodes) {
                             Section -Style Heading4 "Disk Owned by Node $Node Summary" {
                                 Paragraph "The following section provides the inventory of disks owned by each controller on $($ClusterInfo.ClusterName)."
@@ -147,14 +147,14 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapDiskType
                         }
-                        if (Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }) {
+                        if (Get-NcDisk -Controller $Array | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }) {
                             Section -Style Heading4 'Failed Disk Summary' {
                                 Paragraph "The following section show failed disks on cluster $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapDiskBroken
                             }
                         }
-                        If (Get-NcNode | Select-Object Node | Get-NcShelf -ErrorAction SilentlyContinue) {
+                        If (Get-NcNode -Controller $Array | Select-Object Node | Get-NcShelf -Controller $Array -ErrorAction SilentlyContinue) {
                             Section -Style Heading3 'Shelf Inventory' {
                                 Paragraph "The following section provides the available Shelf on $($ClusterInfo.ClusterName)."
                                 BlankLine
@@ -199,7 +199,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNetworkIpSpace
-                        $Nodes = Get-NcNode
+                        $Nodes = Get-NcNode -Controller $Array
                         foreach ($Node in $Nodes) {
                             Section -Style Heading4 "$Node Network Ports Summary" {
                                 Paragraph "The following section provides per ode physical ports on $($ClusterInfo.ClusterName)."
@@ -208,7 +208,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                         foreach ($Node in $Nodes) {
-                            if (Get-NcNetPortIfgrp -Node $Node) {
+                            if (Get-NcNetPortIfgrp -Node $Node -Controller $Array) {
                                 Section -Style Heading4 "$Node Network Link Aggregation Group Summary" {
                                     Paragraph "The following section provides per Node IFGRP Aggregated Ports on $($ClusterInfo.ClusterName)."
                                     BlankLine
@@ -217,7 +217,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                         foreach ($Node in $Nodes) {
-                            if (Get-NcNetPortVlan -Node $Node) {
+                            if (Get-NcNetPortVlan -Node $Node -Controller $Array) {
                                 Section -Style Heading4 "$Node Vlan Summary" {
                                     Paragraph "The following section provides the Vlan information on $($ClusterInfo.ClusterName)."
                                     BlankLine
@@ -235,16 +235,16 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapNetworkFailoverGroup
                         }
-                        if (Get-NcNetSubnet) {
+                        if (Get-NcNetSubnet -Controller $Array) {
                             Section -Style Heading4 'Subnet Summary' {
                                 Paragraph "The following section provides the Subnet information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapNetworkSubnet
                             }
                         }
-                        $Vservers = Get-NcVserver | Where-Object { $_.VserverType -ne "node" -and $_.VserverType -ne "system" } | Select-Object -ExpandProperty Vserver
+                        $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -ne "node" -and $_.VserverType -ne "system" } | Select-Object -ExpandProperty Vserver
                         foreach ($SVM in $Vservers) {
-                            if (Get-NcNetRoute -VserverContext $SVM) {
+                            if (Get-NcNetRoute -VserverContext $SVM -Controller $Array) {
                                 Section -Style Heading4 "$SVM Vserver Routes Summary" {
                                     Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
                                     BlankLine
@@ -271,17 +271,17 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Vserver InfoLevel set at $($InfoLevel.Vserver)."
             if ($InfoLevel.Vserver -gt 0) {
-                if (Get-NcVserver | Where-Object { $_.VserverType -eq "data"}) {
+                if (Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data"}) {
                     Section -Style Heading2 'Vserver Summary' {
                         Paragraph "The following section provides a summary of the vserver information on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        $Vservers = Get-NcVserver | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
+                        $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
                         foreach ($SVM in $Vservers) {
                             Section -Style Heading3 "$SVM Vserver Configuration Summary" {
                                 Paragraph "The following section provides the configuration of the vserver $($SVM)."
                                 BlankLine
                                 Get-AbrOntapVserverSummary -Vserver $SVM
-                                if (Get-NcVol | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                if (Get-NcVol -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
                                     Section -Style Heading4 'Volumes QoS Policy Summary' {
                                         Paragraph "The following section provides the Vserver QoS Configuration on $($ClusterInfo.ClusterName)."
                                         Section -Style Heading5 'Volumes Fixed QoS Policy' {
@@ -296,33 +296,33 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                 }
-                                if (Get-NcVol -VserverContext $SVM | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}) {
+                                if (Get-NcVol -VserverContext $SVM  -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}) {
                                     Section -Style Heading4 "Storage Volumes Summary" {
                                         Paragraph "The following section provides $SVM Volumes Information on $($SVM)."
                                         BlankLine
                                         Get-AbrOntapVserverVolumes -Vserver $SVM
-                                        if (Get-NcVol -VserverContext $SVM | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                        if (Get-NcVol -VserverContext $SVM -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
                                             Section -Style Heading4 "Per Volumes QoS Policy Summary" {
                                                 Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverVolumesQos -Vserver $SVM
                                             }
                                         }
-                                        if (Get-NcVol -VserverContext $SVM | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
+                                        if (Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
                                             Section -Style Heading4 "FlexGroup Volumes Summary" {
                                                 Paragraph "The following section provides the Vserver FlexGroup Volumes Configuration on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverVolumesFlexgroup -Vserver $SVM
                                             }
                                         }
-                                        if (Get-NcVolClone -VserverContext $SVM) {
+                                        if (Get-NcVolClone -VserverContext $SVM -Controller $Array) {
                                             Section -Style Heading4 "Flexclone Volumes Summary" {
                                                 Paragraph "The following section provides the Vserver Flexclone Volumes Configuration on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverVolumesFlexclone -Vserver $SVM
                                             }
                                         }
-                                        if ((Get-NcFlexcacheConnectedCache -VserverContext $SVM) -or (Get-NcFlexcache)) {
+                                        if ((Get-NcFlexcacheConnectedCache -VserverContext $SVM -Controller $Array) -or (Get-NcFlexcache -Controller $Array)) {
                                             Section -Style Heading4 "Flexcache Volumes Summary" {
                                                 Paragraph "The following section provides the Vserver Flexcache Volumes Configuration on $($SVM)."
                                                 BlankLine
@@ -330,7 +330,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             }
                                         }
                                     }
-                                    if (Get-NcVol -VserverContext $SVM | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcSnapshot) {
+                                    if (Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'} | Get-NcSnapshot -Controller $Array) {
                                         Section -Style Heading4 "Volumes Snapshot Configuration Summary" {
                                             Paragraph "The following section provides the Vserver Volumes Snapshot Configuration on $($SVM)."
                                             BlankLine
@@ -344,21 +344,21 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             }
                                         }
                                     }
-                                    if (Get-NcExportRule -VserverContext $SVM) {
+                                    if (Get-NcExportRule -VserverContext $SVM -Controller $Array) {
                                         Section -Style Heading4 "Export Policy Summary" {
                                             Paragraph "The following section provides the Vserver Volumes Export policy Information on $($SVM)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesExportPolicy -Vserver $SVM
                                         }
                                     }
-                                    if (Get-NcQtree -VserverContext $SVM | Where-Object {$NULL -ne $_.Qtree}) {
+                                    if (Get-NcQtree -VserverContext $SVM -Controller $Array | Where-Object {$NULL -ne $_.Qtree}) {
                                         Section -Style Heading4 "Qtree Summary" {
                                             Paragraph "The following section provides the Vserver Volumes Qtree Information on $($SVM)."
                                             BlankLine
                                             Get-AbrOntapVserverVolumesQtree -Vserver $SVM
                                         }
                                     }
-                                    if (Get-NcQuota -VserverContext $SVM) {
+                                    if (Get-NcQuota -VserverContext $SVM -Controller $Array) {
                                         Section -Style Heading4 "Volume Quota Summary" {
                                             Paragraph "The following section provides the Vserver Volumes Quota Information on $($SVM)."
                                             BlankLine
@@ -371,7 +371,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 NFS Section                                                 #
                                         #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcNfsService -VserverContext $SVM) {
+                                        if (Get-NcNfsService -VserverContext $SVM -Controller $Array) {
                                             Section -Style Heading5 "NFS Services Summary" {
                                                 Paragraph "The following section provides the NFS Service Information on $($SVM)."
                                                 BlankLine
@@ -381,7 +381,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     BlankLine
                                                     Get-AbrOntapVserverNFSOptions -Vserver $SVM
                                                 }
-                                                if (Get-NcVserver -VserverContext $SVM | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport) {
+                                                if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport -Controller $Array) {
                                                     Section -Style Heading6 "NFS Volume Export Summary" {
                                                         Paragraph "The following section provides the VServer NFS Service Exports Information on $($SVM)."
                                                         BlankLine
@@ -393,7 +393,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 CIFS Section                                                #
                                         #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcVserver -VserverContext $SVM | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus) {
+                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array) {
                                             Section -Style Heading5 "CIFS Services Summary" {
                                                 Paragraph "The following section provides the CIFS Service Information on $($SVM)."
                                                 BlankLine
@@ -436,7 +436,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 ISCSI Section                                               #
                                         #---------------------------------------------------------------------------------------------#
-                                        if ( Get-NcIscsiService | Where-Object {$_.Vserver -eq $SVM} ) {
+                                        if ( Get-NcIscsiService  -Controller $Array| Where-Object {$_.Vserver -eq $SVM} ) {
                                             Section -Style Heading5 "ISCSI Services Summary" {
                                                 Paragraph "The following section provides the ISCSI Service Information on $($SVM)."
                                                 BlankLine
@@ -446,7 +446,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     BlankLine
                                                     Get-AbrOntapVserverIscsiInterface -Vserver $SVM
                                                 }
-                                                if (Get-NcIscsiInitiator -VS $SVM) {
+                                                if (Get-NcIscsiInitiator -VS $SVM -Controller $Array) {
                                                     Section -Style Heading6 "ISCSI Client Initiator Summary" {
                                                         Paragraph "The following section provides the ISCSI Interface Information on $($SVM)."
                                                         BlankLine
@@ -458,7 +458,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 FCP Section                                                 #
                                         #---------------------------------------------------------------------------------------------#
-                                        if ( Get-NcFcpService | Where-Object {$_.Vserver -eq $SVM} ) {
+                                        if ( Get-NcFcpService -Controller $Array | Where-Object {$_.Vserver -eq $SVM} ) {
                                             Section -Style Heading5 'FCP Services Summary' {
                                                 Paragraph "The following section provides the FCP Service Information on $($SVM)."
                                                 BlankLine
@@ -475,12 +475,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 }
                                             }
                                         }
-                                        if (Get-NcLun | Where-Object {$_.Vserver -eq $SVM}) {
+                                        if (Get-NcLun -Controller $Array | Where-Object {$_.Vserver -eq $SVM}) {
                                             Section -Style Heading5 'FCP/ISCSI Lun Storage Summary' {
                                                 Paragraph "The following section provides the Lun Storage Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverLunStorage -Vserver $SVM
-                                                if (Get-NcIgroup -Vserver $SVM) {
+                                                if (Get-NcIgroup -Vserver $SVM -Controller $Array) {
                                                     Section -Style Heading6 'Igroup Mapping Summary' {
                                                         Paragraph "The following section provides the Igroup Mapping Information on $($SVM)."
                                                         BlankLine
@@ -525,7 +525,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Replication InfoLevel set at $($InfoLevel.Replication)."
             if ($InfoLevel.Replication -gt 0) {
-                if (Get-NcClusterPeer) {
+                if (Get-NcClusterPeer -Controller $Array) {
                     Section -Style Heading2 'Replication Summary' {
                         Paragraph "The following section provides a summary of the replication information on $($ClusterInfo.ClusterName)."
                         BlankLine
@@ -534,12 +534,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapRepClusterPeer
                         }
-                        if (Get-NcVserverPeer) {
+                        if (Get-NcVserverPeer -Controller $Array) {
                             Section -Style Heading3 'Vserver Peer Information' {
                                 Paragraph "The following section provides the Vserver Peer information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapRepVserverPeer
-                                if (Get-NcSnapmirror) {
+                                if (Get-NcSnapmirror -Controller $Array) {
                                     Section -Style Heading4 'SnapMirror Relationship Information' {
                                         Paragraph "The following section provides the SnapMirror Relationship information on $($ClusterInfo.ClusterName)."
                                         BlankLine
@@ -551,7 +551,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                 }
-                                if (Get-NcSnapmirrorDestination) {
+                                if (Get-NcSnapmirrorDestination -Controller $Array) {
                                     Section -Style Heading4 'SnapMirror Destinations Information' {
                                         Paragraph "The following section provides the SnapMirror (List-Destination) information on $($ClusterInfo.ClusterName)."
                                         BlankLine
@@ -576,8 +576,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Efficiency InfoLevel set at $($InfoLevel.Efficiency)."
             if ($InfoLevel.Efficiency -gt 0) {
-                $Vservers = Get-NcVserver | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
-                if (Get-NcAggrEfficiency) {
+                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
+                if (Get-NcAggrEfficiency -Controller $Array) {
                     Section -Style Heading2 'Efficiency Summary' {
                         Paragraph "The following section provides the Storage Efficiency Saving information on $($ClusterInfo.ClusterName)."
                         BlankLine
@@ -587,8 +587,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapEfficiencyAggr
                             foreach ($SVM in $Vservers) {
-                                $VolFilter = Get-ncvol -VserverContext $SVM | Where-Object {$_.State -eq "online"}
-                                if (Get-NcEfficiency -Volume $VolFilter.Name | Where-Object {$_.Name -ne "vol0"}) {
+                                $VolFilter = Get-ncvol -VserverContext $SVM -Controller $Array | Where-Object {$_.State -eq "online"}
+                                if (Get-NcEfficiency -Volume $VolFilter.Name -Controller $Array | Where-Object {$_.Name -ne "vol0"}) {
                                     Section -Style Heading4 "$SVM Vserver Volume Deduplication Summary" {
                                         Paragraph "The following section provides the Volume Deduplication Summary on $($SVM)."
                                         BlankLine
@@ -616,12 +616,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Security InfoLevel set at $($InfoLevel.Security)."
             if ($InfoLevel.Security -gt 0) {
-                $Vservers = Get-NcVserver | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
+                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
                 Section -Style Heading2 'Security Summary' {
                     Paragraph "The following section provides the Security related information on $($ClusterInfo.ClusterName)."
                     BlankLine
                     foreach ($SVM in $Vservers) {
-                        if (Get-NcUser -Vserver $SVM) {
+                        if (Get-NcUser -Vserver $SVM -Controller $Array) {
                             Section -Style Heading3 "$SVM Vserver Local User Summary" {
                                 Paragraph "The following section provides the Local User information on $($SVM)."
                                 BlankLine
@@ -629,7 +629,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    if (Get-NcSecuritySsl) {
+                    if (Get-NcSecuritySsl -Controller $Array) {
                         Section -Style Heading3 'Vserver SSL Certificate Summary' {
                             Paragraph "The following section provides the Vserver SSL Certificates information on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -639,12 +639,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Get-AbrOntapSecuritySSLDetailed
                         }
                     }
-                    if (Get-NcSecurityKeyManagerKeyStore -ErrorAction SilentlyContinue) {
+                    if (Get-NcSecurityKeyManagerKeyStore -ErrorAction SilentlyContinue -Controller $Array) {
                         Section -Style Heading3 'Key Management Service (KMS) Summary' {
                             Paragraph "The following section provides the Key Management Service type on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapSecurityKMS
-                            if (Get-NcSecurityKeyManagerExternal) {
+                            if (Get-NcSecurityKeyManagerExternal -Controller $Array) {
                                 Section -Style Heading4 'External Key Management Service (KMS) Summary' {
                                     Paragraph "The following section provides the External KMS information on $($ClusterInfo.ClusterName)."
                                     BlankLine
@@ -658,7 +658,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    if (Get-NcAggr) {
+                    if (Get-NcAggr -Controller $Array) {
                         Section -Style Heading3 'Aggregate Encryption (NAE) Summary' {
                             Paragraph "The following section provides the Aggregate Encryption (NAE) information on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -682,7 +682,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Volume Snaplock Type information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSecuritySnapLockVol
-                                if (Get-Ncvol | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}) {
+                                if (Get-Ncvol -Controller $Array | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}) {
                                     Section -Style Heading6 'Snaplock Volume Attributes Information' {
                                         Paragraph "The following section provides the Snaplock Volume Attributes information on $($ClusterInfo.ClusterName)."
                                         BlankLine
@@ -704,42 +704,42 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading2 'System Configuration Summary' {
                         Paragraph "The following section provides the Cluster System Configuration on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        if (Get-NcSystemImage) {
+                        if (Get-NcSystemImage -Controller $Array) {
                             Section -Style Heading3 'System Image Configuration Summary' {
                                 Paragraph "The following section provides the System Image Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigImage
                             }
                         }
-                        if (Get-NcSystemServicesWebNode) {
+                        if (Get-NcSystemServicesWebNode -Controller $Array) {
                             Section -Style Heading3 'System Web Service Summary' {
                                 Paragraph "The following section provides the System Web Service Status on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigWebStatus
                             }
                         }
-                        if (Get-NcNetDns) {
+                        if (Get-NcNetDns -Controller $Array) {
                             Section -Style Heading3 'DNS Configuration Summary' {
                                 Paragraph "The following section provides the DNS Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigDNS
                             }
                         }
-                        if (Get-NcSnmp | Where-Object { $NULL -ne $_.Traphost -and $NULL -ne $_.Communities}) {
+                        if (Get-NcSnmp -Controller $Array | Where-Object { $NULL -ne $_.Traphost -and $NULL -ne $_.Communities}) {
                             Section -Style Heading3 'SNMP Configuration Summary' {
                                 Paragraph "The following section provides the SNMP Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigSNMP
                             }
                         }
-                        if (Get-NcConfigBackupUrl) {
+                        if (Get-NcConfigBackupUrl -Controller $Array) {
                             Section -Style Heading3 'Configuration Backup Setting Summary' {
                                 Paragraph "The following section provides the Configuration Backup Setting on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigBackupURL
-                                $Nodes = Get-NcNode
+                                $Nodes = Get-NcNode -Controller $Array
                                 foreach ($Node in $Nodes) {
-                                    if (Get-NcConfigBackup -Node $Node) {
+                                    if (Get-NcConfigBackup -Node $Node -Controller $Array) {
                                         Section -Style Heading4 "$Node Configuration Backup Items Summary" {
                                             Paragraph "The following section provides the Configuration Backup Items on $($ClusterInfo.ClusterName)."
                                             BlankLine
@@ -749,14 +749,14 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
-                        if (Get-NcEmsDestination) {
+                        if (Get-NcEmsDestination -Controller $Array) {
                             Section -Style Heading3 'EMS Configuration Summary' {
                                 Paragraph "The following section provides the EMS Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigEMSSettings
-                                $Nodes = Get-NcNode
+                                $Nodes = Get-NcNode -Controller $Array
                                 foreach ($Node in $Nodes) {
-                                    if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert")) {
+                                    if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
                                         Section -Style Heading4 "$Node Emergency and Alert Messages Summary" {
                                             Paragraph "The following section provides Cluster Emergency and Alert Messages  on $($ClusterInfo.ClusterName)."
                                             BlankLine
@@ -766,12 +766,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
-                        if (Get-NcTimezone) {
+                        if (Get-NcTimezone -Controller $Array) {
                             Section -Style Heading3 'System Timezone Configuration Summary' {
                                 Paragraph "The following section provides the System Timezone Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigTZ
-                                if (Get-NcNtpServer) {
+                                if (Get-NcNtpServer -Controller $Array) {
                                     Section -Style Heading4 'Network Time Protocol Configuration' {
                                         Paragraph "The following section provides the Network Time Protocol Configuration on $($ClusterInfo.ClusterName)."
                                         BlankLine

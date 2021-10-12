@@ -23,7 +23,7 @@ function Get-AbrOntapClusterLicenseUsage {
     }
 
     process {
-        $LicenseFeature = Get-NcFeatureStatus
+        $LicenseFeature = Get-NcFeatureStatus -Controller $Array
         if ($LicenseFeature) {
             $LicenseFeature = foreach ($NodeLFs in $LicenseFeature) {
                 [PSCustomObject] @{

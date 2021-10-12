@@ -27,7 +27,7 @@ function Get-AbrOntapVserverNonMappedLun {
     }
 
     process {
-        $LunFilter = Get-NcLun -VserverContext $Vserver | Where-Object {$_.Mapped -ne "True"}
+        $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object {$_.Mapped -ne "True"}
         $OutObj = @()
         if ($LunFilter) {
             foreach ($Item in $LunFilter) {

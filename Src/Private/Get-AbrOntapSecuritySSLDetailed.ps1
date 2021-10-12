@@ -23,7 +23,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     }
 
     process {
-        $Data =  Get-NcSecurityCertificate | Where-Object {$_.Type -eq "server"}
+        $Data =  Get-NcSecurityCertificate -Controller $Array | Where-Object {$_.Type -eq "server"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

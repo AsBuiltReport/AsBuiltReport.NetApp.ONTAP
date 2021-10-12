@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigDNS {
     }
 
     process {
-        $Data =  Get-NcNetDns
+        $Data =  Get-NcNetDns -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

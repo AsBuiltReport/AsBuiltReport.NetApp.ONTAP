@@ -27,7 +27,7 @@ function Get-AbrOntapVserverCIFSLocalGroup {
     }
 
     process {
-        $VserverData = Get-NcCifsLocalGroup -VserverContext $Vserver
+        $VserverData = Get-NcCifsLocalGroup -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

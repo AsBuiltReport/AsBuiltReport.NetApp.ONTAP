@@ -27,7 +27,7 @@ function Get-AbrOntapVserverIscsiInterface {
     }
 
     process {
-        $VserverData = Get-NcIscsiInterface -VserverContext $Vserver
+        $VserverData = Get-NcIscsiInterface -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

@@ -27,7 +27,7 @@ function Get-AbrOntapNetworkVlans {
     }
 
     process {
-        $Vlan = Get-NcNetPortVlan -Node $Node
+        $Vlan = Get-NcNetPortVlan -Node $Node -Controller $Array
         $VlanObj = @()
         if ($Vlan) {
             foreach ($Item in $Vlan) {

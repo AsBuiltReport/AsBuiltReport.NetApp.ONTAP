@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigImage {
     }
 
     process {
-        $Data =  Get-NcSystemImage
+        $Data =  Get-NcSystemImage -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

@@ -27,7 +27,7 @@ function Get-AbrOntapVserverVolumesQtree {
     }
 
     process {
-        $VserverQtree = Get-NcQtree -VserverContext $Vserver | Where-Object {$NULL -ne $_.Qtree}
+        $VserverQtree = Get-NcQtree -VserverContext $Vserver -Controller $Array | Where-Object {$NULL -ne $_.Qtree}
         $VserverObj = @()
         if ($VserverQtree) {
             foreach ($Item in $VserverQtree) {

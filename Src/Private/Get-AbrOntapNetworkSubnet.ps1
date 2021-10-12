@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkSubnet {
     }
 
     process {
-        $Subnet = Get-NcNetSubnet
+        $Subnet = Get-NcNetSubnet -Controller $Array
         $SubnetObj = @()
         if ($Subnet) {
             foreach ($Item in $Subnet) {

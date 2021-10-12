@@ -27,12 +27,12 @@ function Get-AbrOntapVserverVolumeSnapshot {
     }
 
     process {
-        $VolumeFilter = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
         if ($VolumeFilter) {
             foreach ($Item in $VolumeFilter) {
-                $SnapReserve = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSpaceAttributes
-                $SnapPolicy = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeSnapshotAttributes
+                $SnapReserve = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSpaceAttributes
+                $SnapPolicy = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnapshotAttributes
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
                     'Snapshot Enabled' = ConvertTo-TextYN $SnapPolicy.AutoSnapshotsEnabled

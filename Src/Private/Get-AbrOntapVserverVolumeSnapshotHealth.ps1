@@ -28,9 +28,9 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
 
     process {
         $SnapshotDays = 7
-        $Now=Get-Date
-        $VserverFilter = Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
-        $SnapShotData = get-ncsnapshot -Volume $VserverFilter | Where-Object {$_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays)}
+        $Now = Get-Date
+        $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $SnapShotData = get-ncsnapshot -Volume $VserverFilter -Controller $Array | Where-Object {$_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays)}
         $VserverObj = @()
         if ($SnapShotData) {
             foreach ($Item in $SnapShotData) {

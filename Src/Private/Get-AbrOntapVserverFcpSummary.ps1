@@ -27,7 +27,7 @@ function Get-AbrOntapVserverFcpSummary {
     }
 
     process {
-        $VserverData = Get-NcFcpService -VserverContext $Vserver
+        $VserverData = Get-NcFcpService -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

@@ -23,7 +23,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     }
 
     process {
-        $Data = Get-NcSecurityKeyManager
+        $Data = Get-NcSecurityKeyManager -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

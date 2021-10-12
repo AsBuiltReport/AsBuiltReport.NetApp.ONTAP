@@ -27,11 +27,11 @@ function Get-AbrOntapVserverVolumesQos {
     }
 
     process {
-        $VolumeFilter =  Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True"}
+        $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True"}
         $OutObj = @()
         if ($VolumeFilter) {
             foreach ($Item in $VolumeFilter) {
-                $VolQoS = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeQosAttributes
+                $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
                     'Fixed Policy Name' = Switch ($VolQoS.PolicyGroupName) {

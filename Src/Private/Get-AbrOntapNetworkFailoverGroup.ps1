@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     }
 
     process {
-        $FG = Get-NcNetFailoverGroup
+        $FG = Get-NcNetFailoverGroup -Controller $Array
         $FGObj = @()
         if ($FG) {
             foreach ($Item in $FG) {

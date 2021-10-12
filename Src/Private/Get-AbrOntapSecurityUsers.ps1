@@ -27,7 +27,7 @@ function Get-AbrOntapSecurityUsers {
     }
 
     process {
-        $Data =  Get-NcUser -Vserver $Vserver
+        $Data =  Get-NcUser -Vserver $Vserver -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

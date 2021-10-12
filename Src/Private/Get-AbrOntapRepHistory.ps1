@@ -23,7 +23,7 @@ function Get-AbrOntapRepHistory {
     }
 
     process {
-        $ReplicaData = Get-NcSnapmirrorHistory
+        $ReplicaData = Get-NcSnapmirrorHistory -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

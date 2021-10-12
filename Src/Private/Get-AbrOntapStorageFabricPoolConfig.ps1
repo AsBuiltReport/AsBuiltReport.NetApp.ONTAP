@@ -23,7 +23,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
     }
 
     process {
-        $Data =  Get-NcAggrObjectStoreConfig
+        $Data =  Get-NcAggrObjectStoreConfig -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

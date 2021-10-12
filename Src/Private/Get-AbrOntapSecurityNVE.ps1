@@ -23,7 +23,7 @@ function Get-AbrOntapSecurityNVE {
     }
 
     process {
-        $Data =  Get-NcVol |Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True"}  | Select-Object -Property vserver,name,aggregate,state,@{Label = "Node"; expression = {$_.VolumeIdAttributes.Nodes}},encrypt,@{Label = "encryptionstate"; expression = {(Get-NcVolumeEncryptionConversion -Vserver $_.vserver -Volume $_.name).status}}
+        $Data =  Get-NcVol -Controller $Array |Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True"}  | Select-Object -Property vserver,name,aggregate,state,@{Label = "Node"; expression = {$_.VolumeIdAttributes.Nodes}},encrypt,@{Label = "encryptionstate"; expression = {(Get-NcVolumeEncryptionConversion -Vserver $_.vserver -Volume $_.name -Controller $Array).status}}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

@@ -23,11 +23,11 @@ function Get-AbrOntapNetworkMgmt {
     }
 
     process {
-        if (Get-NcNetInterface | Where-Object {$_.Role -eq 'cluster'}) {
+        if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}) {
             Section -Style Heading6 'Cluster Network Interfaces Summary' {
                 Paragraph "The following section provides the Cluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
                 BlankLine
-                $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'cluster'}
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}
                 $ClusterObj = @()
                 if ($ClusterData) {
                     foreach ($Item in $ClusterData) {
@@ -63,7 +63,7 @@ function Get-AbrOntapNetworkMgmt {
         Section -Style Heading6 'Management Network Interfaces Summary' {
             Paragraph "The following section provides the Management Network Interfaces Information on $($ClusterInfo.ClusterName)."
             BlankLine
-            $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt'}
+            $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt'}
             $ClusterObj = @()
             if ($ClusterData) {
                 foreach ($Item in $ClusterData) {
@@ -95,11 +95,11 @@ function Get-AbrOntapNetworkMgmt {
                 $ClusterObj | Table @TableParams
             }
         }
-        if (Get-NcNetInterface | Where-Object {$_.Role -eq 'intercluster'}) {
+        if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}) {
             Section -Style Heading6 'Intercluster Network Interfaces Summary' {
                 Paragraph "The following section provides the Intercluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
                 BlankLine
-                $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'intercluster'}
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}
                 $ClusterObj = @()
                 if ($ClusterData) {
                     foreach ($Item in $ClusterData) {
@@ -135,7 +135,7 @@ function Get-AbrOntapNetworkMgmt {
         Section -Style Heading6 'Data Network Interfaces Summary' {
             Paragraph "The following section provides the Data Network Interfaces Information on $($ClusterInfo.ClusterName)."
             BlankLine
-            $ClusterData = Get-NcNetInterface | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp'}
+            $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp'}
             $ClusterObj = @()
             if ($ClusterData) {
                 foreach ($Item in $ClusterData) {
@@ -167,11 +167,11 @@ function Get-AbrOntapNetworkMgmt {
                 $ClusterObj | Table @TableParams
             }
         }
-        if ((Get-NcNetInterface | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}) -and $Healthcheck.Network.Interface) {
+        if ((Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}) -and $Healthcheck.Network.Interface) {
             Section -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
                 Paragraph "The following section provides the LIF Home Status Information on $($ClusterInfo.ClusterName)."
                 BlankLine
-                $ClusterData = Get-NcNetInterface | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}
                 $ClusterObj = @()
                 if ($ClusterData) {
                     foreach ($Item in $ClusterData) {

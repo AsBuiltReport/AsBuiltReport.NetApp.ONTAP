@@ -27,7 +27,7 @@ function Get-AbrOntapVserverCIFSShareProp {
     }
 
     process {
-        $VserverData = Get-NcCifsShare -VserverContext $Vserver
+        $VserverData = Get-NcCifsShare -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

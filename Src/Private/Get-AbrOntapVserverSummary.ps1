@@ -91,7 +91,7 @@ function Get-AbrOntapVserverSummary {
             Section -Style Heading4 'Aggregate Resource Allocation Summary' {
                 Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($Vserver)."
                 BlankLine
-                $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver
+                $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
                 $VserverObj = @()
                 if ($VserverAGGR) {
                     foreach ($Item in $VserverAGGR) {

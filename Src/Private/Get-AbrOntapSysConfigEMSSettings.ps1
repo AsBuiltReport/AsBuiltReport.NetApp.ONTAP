@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigEMSSettings {
     }
 
     process {
-        $Data =  Get-NcEmsDestination
+        $Data =  Get-NcEmsDestination -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

@@ -23,7 +23,7 @@ function Get-AbrOntapRepRelationship {
     }
 
     process {
-        $ReplicaData = Get-NcSnapmirror
+        $ReplicaData = Get-NcSnapmirror -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

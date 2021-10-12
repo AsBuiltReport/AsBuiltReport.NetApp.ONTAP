@@ -30,7 +30,7 @@ function Get-AbrOntapDiskOwner {
     process {
         if ($Node) {
             $DiskSummary = foreach ($Owner in $Node) {
-                $DiskOwner = Get-NcDiskOwner -Node $Owner
+                $DiskOwner = Get-NcDiskOwner -Node $Owner -Controller $Array
                 foreach ($Disk in $DiskOwner) {
                     [PSCustomObject] @{
                         'Disk' = $Disk.Name

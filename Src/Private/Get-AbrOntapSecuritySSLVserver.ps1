@@ -23,7 +23,7 @@ function Get-AbrOntapSecuritySSLVserver {
     }
 
     process {
-        $Data =  Get-NcSecuritySsl
+        $Data =  Get-NcSecuritySsl -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

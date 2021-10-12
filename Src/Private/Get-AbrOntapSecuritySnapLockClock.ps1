@@ -23,11 +23,11 @@ function Get-AbrOntapSecuritySnapLockClock {
     }
 
     process {
-        $Data =  Get-NcNode
+        $Data =  Get-NcNode -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $SnapLockClock = Get-NcSnaplockComplianceClock $Item.Node
+                $SnapLockClock = Get-NcSnaplockComplianceClock $Item.Node -Controller $Array
                 $inObj = [ordered] @{
                     'Node Name' = $Item.Node
                     'Compliance Clock' = Switch ($SnapLockClock.FormattedSnaplockComplianceClock) {

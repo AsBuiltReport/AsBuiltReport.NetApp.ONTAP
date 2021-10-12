@@ -27,7 +27,7 @@ function Get-AbrOntapVserverNFSSummary {
     }
 
     process {
-        $VserverData = Get-NcNfsService -VserverContext $Vserver
+        $VserverData = Get-NcNfsService -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

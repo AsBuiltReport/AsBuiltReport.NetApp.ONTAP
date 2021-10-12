@@ -23,15 +23,15 @@ function Get-AbrOntapClusterLicense {
     }
 
     process {
-        $Nodes = Get-NcNode
+        $Nodes = Get-NcNode -Controller $Array
         foreach ($Node in $Nodes) {
             Section -Style Heading3 "$Node License Usage Summary" {
                 Paragraph "The following section provides per node installed licenses on $($ClusterInfo.ClusterName)."
                 BlankLine
-                $License = Get-NcLicense -Owner $Node
+                $License = Get-NcLicense -Owner $Node -Controller $Array
                 if ($License) {
                     $LicenseSummary = foreach ($Licenses in $License) {
-                        $EntitlementRisk = Get-NcLicenseEntitlementRisk -Package $Licenses.Package
+                        $EntitlementRisk = Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array
                         [PSCustomObject] @{
                             'License' = $TextInfo.ToTitleCase($Licenses.Package)
                             'Type' = $TextInfo.ToTitleCase($Licenses.Type)

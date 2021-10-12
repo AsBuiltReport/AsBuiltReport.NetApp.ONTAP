@@ -23,7 +23,7 @@ function Get-AbrOntapStorageFabricPool {
     }
 
     process {
-        $Data =  Get-NcAggrObjectStore
+        $Data =  Get-NcAggrObjectStore -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

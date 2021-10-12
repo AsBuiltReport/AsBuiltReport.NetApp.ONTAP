@@ -27,11 +27,11 @@ function Get-AbrOntapVserverNFSExport {
     }
 
     process {
-        $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($SVM in $VserverData) {
-                $NFSVserver = Get-NcNfsExport -VS $SVM.Vserver
+                $NFSVserver = Get-NcNfsExport -VS $SVM.Vserver -Controller $Array
                 foreach ($Item in $NFSVserver) {
                     $inObj = [ordered] @{
                         'Vserver' = $SVM.Vserver

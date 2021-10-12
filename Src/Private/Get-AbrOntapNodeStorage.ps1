@@ -23,7 +23,7 @@ function Get-AbrOntapNodeStorage {
     }
 
     process {
-        $Data = Get-NcVol | Where-Object {$_.Name -eq 'vol0'}
+        $Data = Get-NcVol -Controller $Array | Where-Object {$_.Name -eq 'vol0'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

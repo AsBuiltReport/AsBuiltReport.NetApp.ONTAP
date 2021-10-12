@@ -23,7 +23,7 @@ function Get-AbrOntapSecurityKMS {
     }
 
     process {
-        $Data = Get-NcSecurityKeyManagerKeyStore
+        $Data = Get-NcSecurityKeyManagerKeyStore -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

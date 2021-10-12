@@ -23,7 +23,7 @@ function Get-AbrOntapRepClusterPeer {
     }
 
     process {
-        $ReplicaData = Get-NcClusterPeer
+        $ReplicaData = Get-NcClusterPeer -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

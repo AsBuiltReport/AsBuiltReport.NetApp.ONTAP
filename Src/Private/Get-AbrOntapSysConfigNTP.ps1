@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigNTP {
     }
 
     process {
-        $Data =  Get-NcNtpServer
+        $Data =  Get-NcNtpServer -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

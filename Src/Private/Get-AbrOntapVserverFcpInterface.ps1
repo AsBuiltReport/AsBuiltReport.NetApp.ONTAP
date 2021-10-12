@@ -27,7 +27,7 @@ function Get-AbrOntapVserverFcpInterface {
     }
 
     process {
-        $VserverData = Get-NcFcpInterface -VserverContext $Vserver
+        $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {

@@ -27,7 +27,7 @@ function Get-AbrOntapNetworkIfgrp {
     }
 
     process {
-        $IFGRPPorts = Get-NcNetPortIfgrp -Node $Node
+        $IFGRPPorts = Get-NcNetPortIfgrp -Node $Node -Controller $Array
         $AggregatePorts = @()
         if ($IFGRPPorts) {
             foreach ($Nics in $IFGRPPorts) {

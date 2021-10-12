@@ -23,12 +23,12 @@ function Get-AbrOntapEfficiencyConfig {
     }
 
     process {
-        $Data =  Get-NcAggr | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+        $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $Saving = Get-NcAggr -Aggregate $Item.Name | Select-Object -ExpandProperty AggrSpaceAttributes
-                $TotalStorageEfficiencyRatio = Get-NcAggrEfficiency -Aggregate $Item.Name |  Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo
+                $Saving = Get-NcAggr -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSpaceAttributes
+                $TotalStorageEfficiencyRatio = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array |  Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo
                 $inObj = [ordered] @{
                     'Aggregate' = $Item.Name
                     'Used %' = $Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue

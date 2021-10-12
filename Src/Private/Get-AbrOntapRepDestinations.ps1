@@ -23,7 +23,7 @@ function Get-AbrOntapRepDestinations {
     }
 
     process {
-        $ReplicaData = Get-NcSnapmirrorDestination
+        $ReplicaData = Get-NcSnapmirrorDestination -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

@@ -27,7 +27,7 @@ function Get-AbrOntapSysConfigBackup {
     }
 
     process {
-        $Data =  Get-NcConfigBackup -Node $Node
+        $Data =  Get-NcConfigBackup -Node $Node -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

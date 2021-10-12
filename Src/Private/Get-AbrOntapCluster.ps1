@@ -23,12 +23,12 @@ function Get-AbrOntapCluster {
     }
 
     process {
-        $ClusterInfo = Get-NcCluster
+        $ClusterInfo = Get-NcCluster -Controller $Array
         if ($ClusterInfo) {
-            $ClusterDiag = Get-NcDiagnosisStatus
-            $ClusterVersion = Get-NcSystemVersion
-            $ArrayAggr = Get-NcAggr
-            $ArrayVolumes = Get-NcVol
+            $ClusterDiag = Get-NcDiagnosisStatus -Controller $Array
+            $ClusterVersion = Get-NcSystemVersion -Controller $Array
+            $ArrayAggr = Get-NcAggr -Controller $Array
+            $ArrayVolumes = Get-NcVol -Controller $Array
             $ClusterSummary = [PSCustomObject] @{
                 'Cluster Name' = $ClusterInfo.ClusterName
                 'Cluster UUID' = $ClusterInfo.ClusterUuid

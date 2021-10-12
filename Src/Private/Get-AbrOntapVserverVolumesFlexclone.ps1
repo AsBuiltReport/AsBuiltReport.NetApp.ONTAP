@@ -27,7 +27,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
     }
 
     process {
-        $VserverClonedVol = Get-NcVolClone -VserverContext $Vserver
+        $VserverClonedVol = Get-NcVolClone -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverClonedVol) {
             foreach ($Item in $VserverClonedVol) {

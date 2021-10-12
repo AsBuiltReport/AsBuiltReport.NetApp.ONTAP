@@ -28,11 +28,11 @@ function Get-AbrOntapVserverVolumesFlexcache {
 
     process {
         #Vserver Flexcache Volume Connected Cache Information
-        $Data = Get-NcFlexcacheConnectedCache -VserverContext $Vserver
+        $Data = Get-NcFlexcacheConnectedCache -VserverContext $Vserver -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $VolumeUsage = Get-NcVol -Name $Item.OriginVolume
+                $VolumeUsage = Get-NcVol -Name $Item.OriginVolume -Controller $Array
                 $inObj = [ordered] @{
                     'Cache Cluster' = $Item.CacheCluster
                     'Cache Vserver' = $Item.CacheVserver
@@ -55,7 +55,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
             $OutObj | Table @TableParams
         }
         #Vserver Flexcache Volume Information
-        $Data = Get-NcFlexcache -VserverContext $Vserver
+        $Data = Get-NcFlexcache -VserverContext $Vserver -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

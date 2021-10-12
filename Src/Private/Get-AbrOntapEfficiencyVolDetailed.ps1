@@ -27,11 +27,11 @@ function Get-AbrOntapEfficiencyVolDetailed {
     }
 
     process {
-        $Data =  Get-NcVol -VserverContext $Vserver | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online"}
+        $Data =  Get-NcVol -VserverContext $Vserver -Controller $Array| Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $Saving = Get-NcEfficiency -Volume $Item.Name
+                $Saving = Get-NcEfficiency -Volume $Item.Name -Controller $Array
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
                     'Capacity' = $Saving.Capacity | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue

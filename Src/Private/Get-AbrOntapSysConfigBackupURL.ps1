@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigBackupURL {
     }
 
     process {
-        $Data =  Get-NcConfigBackupUrl
+        $Data =  Get-NcConfigBackupUrl -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

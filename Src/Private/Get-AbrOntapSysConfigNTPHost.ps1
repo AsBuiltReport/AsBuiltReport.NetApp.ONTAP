@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigNTPHost {
     }
 
     process {
-        $Data =  Get-NcNtpServerStatus
+        $Data =  Get-NcNtpServerStatus -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

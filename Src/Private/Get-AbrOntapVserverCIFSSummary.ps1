@@ -27,11 +27,11 @@ function Get-AbrOntapVserverCIFSSummary {
     }
 
     process {
-        $VserverData = Get-NcVserver -VserverContext $Vserver| Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
-                $CIFSSVM = Get-NcCifsServerStatus -VserverName $Item.Vserver
+                $CIFSSVM = Get-NcCifsServerStatus -VserverName $Item.Vserver -Controller $Array
                 foreach ($SVM in $CIFSSVM) {
                     $inObj = [ordered] @{
                         'Node Name' = $SVM.NodeName

@@ -27,11 +27,11 @@ function Get-AbrOntapVserverCIFSOptions {
     }
 
     process {
-        $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($SVM in $VserverData) {
-                $CIFSSVM = Get-NcCifsOption -VserverContext $SVM.Vserver
+                $CIFSSVM = Get-NcCifsOption -VserverContext $SVM.Vserver -Controller $Array
                 foreach ($Item in $CIFSSVM) {
                     $inObj = [ordered] @{
                         'Client Session Timeout' = $Item.ClientSessionTimeout

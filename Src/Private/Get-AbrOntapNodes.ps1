@@ -23,7 +23,7 @@ function Get-AbrOntapNodes {
     }
 
     process {
-        $NodeSum = Get-NcNode
+        $NodeSum = Get-NcNode -Controller $Array
         if ($NodeSum) {
             $NodeSummary = foreach ($Nodes in $NodeSum) {
                 [PSCustomObject] @{

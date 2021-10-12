@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigWebStatus {
     }
 
     process {
-        $Data =  Get-NcSystemServicesWebNode
+        $Data =  Get-NcSystemServicesWebNode -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

@@ -27,7 +27,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     }
 
     process {
-        $Data = Get-NcSis -VserverContext $Vserver | Where-Object {$_.Path -notlike '*vol0*'}
+        $Data = Get-NcSis -VserverContext $Vserver -Controller $Array | Where-Object {$_.Path -notlike '*vol0*'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

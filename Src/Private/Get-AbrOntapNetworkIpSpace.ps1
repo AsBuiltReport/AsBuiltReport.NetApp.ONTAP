@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkIpSpace {
     }
 
     process {
-        $IPSpace = Get-NcNetIpspace
+        $IPSpace = Get-NcNetIpspace -Controller $Array
         $IPSpaceObj = @()
         if ($IPsPace) {
             foreach ($Item in $IPSpace) {

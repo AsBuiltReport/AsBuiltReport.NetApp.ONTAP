@@ -23,10 +23,10 @@ function Get-AbrOntapStorageAGGR {
     }
 
     process {
-        $AggrSpace = Get-NcAggr
+        $AggrSpace = Get-NcAggr -Controller $Array
         if ($AggrSpace) {
             $AggrSpaceSummary = foreach ($Aggr in $AggrSpace) {
-            $RootAggr = Get-NcAggr $Aggr.Name | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
+            $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
                 [PSCustomObject] @{
                     'Name' = $Aggr.Name
                     'Capacity' = $Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue

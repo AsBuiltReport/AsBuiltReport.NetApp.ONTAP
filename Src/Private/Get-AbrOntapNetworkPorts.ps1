@@ -27,7 +27,7 @@ function Get-AbrOntapNetworkPort {
     }
 
     process {
-        $PhysicalPorts = Get-NcNetPort -Node $Node | Where-Object {$_.PortType -like 'physical'}
+        $PhysicalPorts = Get-NcNetPort -Node $Node -Controller $Array | Where-Object {$_.PortType -like 'physical'}
         if ($PhysicalPorts) {
             $PhysicalNic = foreach ($Nics in $PhysicalPorts) {
                 [PSCustomObject] @{

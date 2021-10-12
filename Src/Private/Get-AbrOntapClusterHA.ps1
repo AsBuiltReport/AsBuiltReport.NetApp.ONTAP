@@ -23,10 +23,10 @@ function Get-AbrOntapClusterHA {
     }
 
     process {
-        $NodeSum = Get-NcNode | Where-Object { $null -ne $_.NodeModel }
+        $NodeSum = Get-NcNode -Controller $Array | Where-Object { $null -ne $_.NodeModel }
         if ($NodeSum) {
             $NodeSummary = foreach ($Nodes in $NodeSum) {
-                $ClusterHa = Get-NcClusterHa -Node $Nodes.Node
+                $ClusterHa = Get-NcClusterHa -Node $Nodes.Node -Controller $Array
                 [PSCustomObject] @{
                     'Name' = $Nodes.Node
                     'Partner' = $ClusterHa.Partner

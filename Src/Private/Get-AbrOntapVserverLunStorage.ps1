@@ -27,11 +27,11 @@ function Get-AbrOntapVserverLunStorage {
     }
 
     process {
-        $VserverLun = get-nclun -VserverContext $Vserver
+        $VserverLun = get-nclun -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverLun) {
             foreach ($Item in $VserverLun) {
-                $lunmap = Get-NcLunMap -Path $Item.Path | Select-Object -ExpandProperty InitiatorGroup
+                $lunmap = Get-NcLunMap -Path $Item.Path -Controller $Array | Select-Object -ExpandProperty InitiatorGroup
                 $lunpath = $Item.Path.split('/')
                 $lun = $lunpath[3]
                 $available = $Item.Size - $Item.SizeUsed

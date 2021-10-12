@@ -23,7 +23,7 @@ function Get-AbrOntapDiskType {
     }
 
     process {
-        $NodeDiskContainerType = Get-NcDisk | ForEach-Object{ $_.DiskRaidInfo.ContainerType } | Group-Object
+        $NodeDiskContainerType = Get-NcDisk -Controller $Array | ForEach-Object{ $_.DiskRaidInfo.ContainerType } | Group-Object
         if ($NodeDiskContainerType) {
             $DiskType = foreach ($DiskContainers in $NodeDiskContainerType) {
                 [PSCustomObject] @{
