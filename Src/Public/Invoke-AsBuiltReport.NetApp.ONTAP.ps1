@@ -179,8 +179,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Paragraph "The following section provides a summary of the license usage on $($ClusterInfo.ClusterName)."
                     BlankLine
                     Get-AbrOntapClusterLicense
-                    Section -Style Heading4 'License Feature' {
-                        Paragraph "The following section provides the License Feature Usage on $($ClusterInfo.ClusterName)."
+                    Section -Style Heading4 'License Features' {
+                        Paragraph "The following section provides the License Features Usage on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapClusterLicenseUsage
                     }
@@ -230,13 +230,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapNetworkBdomain
                         }
-                        Section -Style Heading4 'Failover Group' {
+                        Section -Style Heading4 'Failover Groups' {
                             Paragraph "The following section provides the Failover Group information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapNetworkFailoverGroup
                         }
                         if (Get-NcNetSubnet -Controller $Array) {
-                            Section -Style Heading4 'Network Subnet' {
+                            Section -Style Heading4 'Network Subnets' {
                                 Paragraph "The following section provides the Subnet information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapNetworkSubnet
@@ -433,17 +433,17 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #                                 ISCSI Section                                               #
                                         #---------------------------------------------------------------------------------------------#
                                         if ( Get-NcIscsiService  -Controller $Array| Where-Object {$_.Vserver -eq $SVM} ) {
-                                            Section -Style Heading5 "ISCSI Services Summary" {
+                                            Section -Style Heading5 "ISCSI Services" {
                                                 Paragraph "The following section provides the ISCSI Service Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverIscsiSummary -Vserver $SVM
-                                                Section -Style Heading6 "ISCSI Interface" {
+                                                Section -Style Heading6 "ISCSI Interfaces" {
                                                     Paragraph "The following section provides the ISCSI Interface Information on $($SVM)."
                                                     BlankLine
                                                     Get-AbrOntapVserverIscsiInterface -Vserver $SVM
                                                 }
                                                 if (Get-NcIscsiInitiator -VS $SVM -Controller $Array) {
-                                                    Section -Style Heading6 "ISCSI Client Initiator" {
+                                                    Section -Style Heading6 "ISCSI Client Initiators" {
                                                         Paragraph "The following section provides the ISCSI Interface Information on $($SVM)."
                                                         BlankLine
                                                         Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
@@ -525,22 +525,22 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading2 'Replication Summary' {
                         Paragraph "The following section provides a summary of the replication information on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Section -Style Heading3 'Cluster Peer Information' {
+                        Section -Style Heading3 'Cluster Peer' {
                             Paragraph "The following section provides the Cluster Peer information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapRepClusterPeer
                         }
                         if (Get-NcVserverPeer -Controller $Array) {
-                            Section -Style Heading3 'Vserver Peer Information' {
+                            Section -Style Heading3 'Vserver Peer' {
                                 Paragraph "The following section provides the Vserver Peer information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapRepVserverPeer
                                 if (Get-NcSnapmirror -Controller $Array) {
-                                    Section -Style Heading4 'SnapMirror Relationship Information' {
+                                    Section -Style Heading4 'SnapMirror Relationship' {
                                         Paragraph "The following section provides the SnapMirror Relationship information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapRepRelationship
-                                        Section -Style Heading5 'SnapMirror Replication History Information' {
+                                        Section -Style Heading5 'SnapMirror Replication History' {
                                             Paragraph "The following section provides the SnapMirror Operation information on $($ClusterInfo.ClusterName)."
                                             BlankLine
                                             Get-AbrOntapRepHistory
@@ -548,14 +548,14 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     }
                                 }
                                 if (Get-NcSnapmirrorDestination -Controller $Array) {
-                                    Section -Style Heading4 'SnapMirror Destinations Information' {
+                                    Section -Style Heading4 'SnapMirror Destinations' {
                                         Paragraph "The following section provides the SnapMirror (List-Destination) information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapRepDestinations
                                     }
                                 }
                                 if (Get-NetAppOntapAPI -uri "/api/cluster/mediators?") {
-                                    Section -Style Heading4 'Ontap Mediator Information' {
+                                    Section -Style Heading4 'Ontap Mediator' {
                                         Paragraph "The following section provides the SnapMirror Mediator information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapRepMediator
@@ -594,7 +594,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             BlankLine
                                             Get-AbrOntapEfficiencyVol -Vserver $SVM
                                         }
-                                        Section -Style Heading5 "Volume Efficiency Detail" {
+                                        Section -Style Heading5 "Volume Efficiency Detailed" {
                                             Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($SVM)."
                                             BlankLine
                                             Get-AbrOntapEfficiencyVolDetailed -Vserver $SVM
@@ -666,20 +666,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    Section -Style Heading3 'Snaplock Compliance Clock Information' {
+                    Section -Style Heading3 'Snaplock Compliance Clock' {
                         Paragraph "The following section provides the Snaplock Compliance Clock information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapSecuritySnapLockClock
-                        Section -Style Heading4 'Aggregate Snaplock Type Information' {
+                        Section -Style Heading4 'Aggregate Snaplock Type' {
                             Paragraph "The following section provides the Aggregate Snaplock Type information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapSecuritySnapLockAggr
-                            Section -Style Heading5 'Volume Snaplock Type Information' {
+                            Section -Style Heading5 'Volume Snaplock Type' {
                                 Paragraph "The following section provides the Volume Snaplock Type information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSecuritySnapLockVol
                                 if (Get-Ncvol -Controller $Array | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}) {
-                                    Section -Style Heading6 'Snaplock Volume Attributes Information' {
+                                    Section -Style Heading6 'Snaplock Volume Attributes' {
                                         Paragraph "The following section provides the Snaplock Volume Attributes information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapSecuritySnapLockVollAttr
