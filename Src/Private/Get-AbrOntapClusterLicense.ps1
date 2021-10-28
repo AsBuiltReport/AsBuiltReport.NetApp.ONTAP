@@ -25,7 +25,7 @@ function Get-AbrOntapClusterLicense {
     process {
         $Nodes = Get-NcNode -Controller $Array
         foreach ($Node in $Nodes) {
-            Section -Style Heading3 "$Node License Usage Summary" {
+            Section -Style Heading3 "$Node License Usage" {
                 Paragraph "The following section provides per node installed licenses on $($ClusterInfo.ClusterName)."
                 BlankLine
                 $License = Get-NcLicense -Owner $Node -Controller $Array
@@ -44,7 +44,7 @@ function Get-AbrOntapClusterLicense {
                         $LicenseSummary | Where-Object { $_.'Risk' -like 'High' } | Set-Style -Style Critical -Property 'Risk'
                     }
                     $TableParams = @{
-                        Name = "License Usage Summary - $($Node)"
+                        Name = "License Usage - $($Node)"
                         List = $false
                         ColumnWidths = 25, 15, 38, 22
                     }

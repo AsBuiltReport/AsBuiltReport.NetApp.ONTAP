@@ -44,7 +44,7 @@ function Get-AbrOntapStorageAGGR {
                 $AggrSpaceSummary | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
             }
             $TableParams = @{
-                Name = "Aggregate Summary - $($ClusterInfo.ClusterName)"
+                Name = "Aggregates - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 27, 10, 10, 10, 10, 8, 15, 10
             }

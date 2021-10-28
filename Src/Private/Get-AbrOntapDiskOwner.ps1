@@ -42,7 +42,7 @@ function Get-AbrOntapDiskOwner {
                 }
             }
             $TableParams = @{
-                Name = "Disk Owner Summary - $($Node)"
+                Name = "Node Disk Owner - $($Node)"
                 List = $false
                 ColumnWidths = 20, 20, 25, 20, 15
             }

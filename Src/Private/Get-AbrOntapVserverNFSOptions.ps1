@@ -50,7 +50,7 @@ function Get-AbrOntapVserverNFSOptions {
             }
 
             $TableParams = @{
-                Name = "Vserver NFS Service Options Summary - $($Vserver)"
+                Name = "Vserver NFS Service Options - $($Vserver)"
                 List = $true
                 ColumnWidths = 50, 50
             }

@@ -110,7 +110,7 @@ function Get-AbrOntapVserverVolumesQuota {
                 $VserverObj | Table @TableParams
             }
         }
-        Section -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk) Summary" {
+        Section -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk)" {
             Paragraph "The following section provides the $Vserver Volumes Quota Report (Disk) Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
@@ -151,7 +151,7 @@ function Get-AbrOntapVserverVolumesQuota {
                 $VserverObj | Table @TableParams
             }
         }
-        Section -Style Heading6 "$Vserver Vserver Volume Quota Report (File) Summary" {
+        Section -Style Heading6 "$Vserver Vserver Volume Quota Report (File)" {
             Paragraph "The following section provides the $Vserver Volumes Quota Report (File) Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array

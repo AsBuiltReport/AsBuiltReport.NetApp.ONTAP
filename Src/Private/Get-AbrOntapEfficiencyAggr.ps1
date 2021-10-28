@@ -52,7 +52,7 @@ function Get-AbrOntapEfficiencyAggr {
         $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
         $Savingfilter = (Get-NcAggrEfficiency -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
         if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
-            Section -Style Heading4 'HealthCheck - Volume efficiency opportunities for improvement' {
+            Section -Style Heading4 'HealthCheck - Volume without deduplication enabled' {
                 Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
                 BlankLine
                 $OutObj = @()
@@ -72,7 +72,7 @@ function Get-AbrOntapEfficiencyAggr {
                 }
 
                 $TableParams = @{
-                    Name = "HealthCheck - Volume efficiency opportunities for improvement - $($ClusterInfo.ClusterName)"
+                    Name = "HealthCheck - Volume without deduplication - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 45, 55
                 }

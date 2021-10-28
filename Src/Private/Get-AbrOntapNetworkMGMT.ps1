@@ -24,7 +24,7 @@ function Get-AbrOntapNetworkMgmt {
 
     process {
         if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}) {
-            Section -Style Heading6 'Cluster Network Interfaces Summary' {
+            Section -Style Heading6 'Cluster Network Interfaces' {
                 Paragraph "The following section provides the Cluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
                 BlankLine
                 $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}
@@ -60,7 +60,7 @@ function Get-AbrOntapNetworkMgmt {
                 }
             }
         }
-        Section -Style Heading6 'Management Network Interfaces Summary' {
+        Section -Style Heading6 'Management Network Interfaces' {
             Paragraph "The following section provides the Management Network Interfaces Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt'}
@@ -96,7 +96,7 @@ function Get-AbrOntapNetworkMgmt {
             }
         }
         if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}) {
-            Section -Style Heading6 'Intercluster Network Interfaces Summary' {
+            Section -Style Heading6 'Intercluster Network Interfaces' {
                 Paragraph "The following section provides the Intercluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
                 BlankLine
                 $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}
@@ -132,7 +132,7 @@ function Get-AbrOntapNetworkMgmt {
                 }
             }
         }
-        Section -Style Heading6 'Data Network Interfaces Summary' {
+        Section -Style Heading6 'Data Network Interfaces' {
             Paragraph "The following section provides the Data Network Interfaces Information on $($ClusterInfo.ClusterName)."
             BlankLine
             $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp'}

@@ -35,7 +35,7 @@ function Get-AbrOntapDiskType {
                     $DiskType | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
                 }
             $TableParams = @{
-                Name = "Disk Container Type Summary - $($ClusterInfo.ClusterName)"
+                Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 50, 50
             }

@@ -35,7 +35,7 @@ function Get-AbrOntapNodes {
                 }
             }
             $TableParams = @{
-                Name = "Node Summary - $($ClusterInfo.ClusterName)"
+                Name = "Node Information - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 27, 27, 17, 17, 12
             }

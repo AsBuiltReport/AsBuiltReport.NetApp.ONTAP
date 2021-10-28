@@ -38,7 +38,7 @@ function Get-AbrOntapDiskBroken {
                         $DiskFailed | Set-Style -Style Critical -Property 'Disk Name','Shelf','Bay','Pool','Disk Paths'
                     }
             $TableParams = @{
-                Name = "Failed Disk Summary - $($ClusterInfo.ClusterName)"
+                Name = "Failed Disk - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 26, 13, 13, 13, 35
             }

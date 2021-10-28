@@ -36,7 +36,7 @@ function Get-AbrOntapClusterLicenseUsage {
                 }
             }
             $TableParams = @{
-                Name = "License Feature Summary - $($ClusterInfo.ClusterName)"
+                Name = "License Feature - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 40, 20, 40
             }

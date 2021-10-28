@@ -32,7 +32,7 @@ function Get-AbrOntapDiskAssign {
                     }
             }
             $TableParams = @{
-                Name = "Assigned Disk Summary - $($ClusterInfo.ClusterName)"
+                Name = "Assigned Disk - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 50, 50
             }

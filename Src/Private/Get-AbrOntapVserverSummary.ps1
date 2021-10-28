@@ -45,7 +45,7 @@ function Get-AbrOntapVserverSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver Summary Information - $($Vserver)"
+                Name = "Vserver Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 20, 20, 20, 20
             }
@@ -54,7 +54,7 @@ function Get-AbrOntapVserverSummary {
             }
             $VserverObj | Table @TableParams
         }
-        Section -Style Heading4 'Root Volume Summary' {
+        Section -Style Heading4 'Root Volume' {
             Paragraph "The following section provides the Vserver Root Volume Information on $($Vserver)."
             BlankLine
             $VserverRootVol = Get-NcVol -VserverContext $Vserver| Where-Object {$_.JunctionPath -eq '/'}
@@ -88,7 +88,7 @@ function Get-AbrOntapVserverSummary {
             }
         }
         if (Get-NcVserverAggr) {
-            Section -Style Heading4 'Aggregate Resource Allocation Summary' {
+            Section -Style Heading4 'Aggregate Resource Allocation' {
                 Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($Vserver)."
                 BlankLine
                 $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
