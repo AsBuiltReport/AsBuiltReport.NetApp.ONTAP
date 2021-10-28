@@ -1,4 +1,4 @@
-function Get-AbrOntapSecurityUsers {
+function Get-AbrOntapSecurityUser {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Security Local Users information from the Cluster Management Network

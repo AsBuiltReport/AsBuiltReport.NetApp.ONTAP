@@ -1,4 +1,4 @@
-function Get-AbrOntapRepDestinations {
+function Get-AbrOntapRepDestination {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP SnapMirror Destination relationship information from the Cluster Management Network

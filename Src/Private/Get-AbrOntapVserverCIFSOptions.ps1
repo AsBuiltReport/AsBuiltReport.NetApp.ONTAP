@@ -1,4 +1,4 @@
-function Get-AbrOntapVserverCIFSOptions {
+function Get-AbrOntapVserverCIFSOption {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Options information from the Cluster Management Network

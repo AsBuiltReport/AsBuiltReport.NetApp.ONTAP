@@ -1,4 +1,4 @@
-function Get-AbrOntapVserverCIFSLGMembers {
+function Get-AbrOntapVserverCIFSLGMember {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Local Group Members information from the Cluster Management Network

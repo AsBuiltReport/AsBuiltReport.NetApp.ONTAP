@@ -1,4 +1,4 @@
-function Get-AbrOntapNodes {
+function Get-AbrOntapNode {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP System Nodes information from the Cluster Management Network

@@ -1,4 +1,4 @@
-function Get-AbrOntapSysConfigEMSSettings {
+function Get-AbrOntapSysConfigEMSSetting {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP System EMS Settings information from the Cluster Management Network

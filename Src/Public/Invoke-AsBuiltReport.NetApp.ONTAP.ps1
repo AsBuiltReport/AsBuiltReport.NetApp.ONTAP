@@ -77,7 +77,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading3 'Node Inventory' {
                         Paragraph "The following section provides the node inventory on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Get-AbrOntapNodes
+                        Get-AbrOntapNode
                         Section -Style Heading4 'Node Vol0 Inventory' {
                             Paragraph "The following section provides the node vol0 inventory on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -411,12 +411,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     BlankLine
                                                     Paragraph "The following section provides the Cifs Service Local Group Memeber Information on $($SVM)."
                                                     BlankLine
-                                                    Get-AbrOntapVserverCIFSLGMembers -Vserver $SVM
+                                                    Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
                                                 }
                                                 Section -Style Heading6 'CIFS Options' {
                                                     Paragraph "The following section provides the CIFS Service Options Information on $($SVM)."
                                                     BlankLine
-                                                    Get-AbrOntapVserverCIFSOptions -Vserver $SVM
+                                                    Get-AbrOntapVserverCIFSOption -Vserver $SVM
                                                 }
                                                 Section -Style Heading6 'CIFS Share' {
                                                     Paragraph "The following section provides the CIFS Service Shares Information on $($SVM)."
@@ -551,7 +551,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Section -Style Heading4 'SnapMirror Destinations' {
                                         Paragraph "The following section provides the SnapMirror (List-Destination) information on $($ClusterInfo.ClusterName)."
                                         BlankLine
-                                        Get-AbrOntapRepDestinations
+                                        Get-AbrOntapRepDestination
                                     }
                                 }
                                 if (Get-NetAppOntapAPI -uri "/api/cluster/mediators?") {
@@ -621,7 +621,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Section -Style Heading3 "$SVM Vserver Local User" {
                                 Paragraph "The following section provides the Local User information on $($SVM)."
                                 BlankLine
-                                Get-AbrOntapSecurityUsers -Vserver $SVM
+                                Get-AbrOntapSecurityUser -Vserver $SVM
                             }
                         }
                     }
@@ -749,7 +749,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Section -Style Heading3 'EMS Configuration' {
                                 Paragraph "The following section provides the EMS Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
-                                Get-AbrOntapSysConfigEMSSettings
+                                Get-AbrOntapSysConfigEMSSetting
                                 $Nodes = Get-NcNode -Controller $Array
                                 foreach ($Node in $Nodes) {
                                     if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
