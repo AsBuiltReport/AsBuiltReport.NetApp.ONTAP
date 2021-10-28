@@ -1,4 +1,4 @@
-function Get-AbrOntapNetworkVlans {
+function Get-AbrOntapNetworkVlan {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Interface VLAN information from the Cluster Management Network

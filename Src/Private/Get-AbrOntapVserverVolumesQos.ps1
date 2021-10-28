@@ -1,4 +1,4 @@
-function Get-AbrOntapVserverVolumesQos {
+function Get-AbrOntapVserverVolumesQosSetting {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos information from the Cluster Management Network

@@ -1,4 +1,4 @@
-function Get-AbrOntapNetworkRouteLifs {
+function Get-AbrOntapNetworkRouteLif {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP network route per lif information from the Cluster Management Network

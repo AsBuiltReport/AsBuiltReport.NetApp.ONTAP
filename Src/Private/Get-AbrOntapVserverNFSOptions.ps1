@@ -1,4 +1,4 @@
-function Get-AbrOntapVserverNFSOptions {
+function Get-AbrOntapVserverNFSOption {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Vserver NFS Options information from the Cluster Management Network

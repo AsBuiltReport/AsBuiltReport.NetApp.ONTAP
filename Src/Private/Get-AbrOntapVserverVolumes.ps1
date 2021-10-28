@@ -1,4 +1,4 @@
-function Get-AbrOntapVserverVolumes {
+function Get-AbrOntapVserverVolume {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP vserver volumes information from the Cluster Management Network

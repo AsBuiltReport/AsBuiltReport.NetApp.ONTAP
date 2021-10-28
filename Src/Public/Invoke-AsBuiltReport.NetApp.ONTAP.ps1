@@ -221,7 +221,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Section -Style Heading4 "$Node Vlans" {
                                     Paragraph "The following section provides the Vlan information on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapNetworkVlans -Node $Node
+                                    Get-AbrOntapNetworkVlan -Node $Node
                                 }
                             }
                         }
@@ -248,11 +248,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Section -Style Heading4 "$SVM Vserver Routes" {
                                     Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
                                     BlankLine
-                                    Get-AbrOntapNetworkRoutes -Vserver $SVM
+                                    Get-AbrOntapNetworkRoute -Vserver $SVM
                                     Section -Style Heading5 "Network Interface Routes" {
                                         Paragraph "The following section provides the Per Network Interface Routes information on $($SVM)."
                                         BlankLine
-                                        Get-AbrOntapNetworkRouteLifs -Vserver $SVM
+                                        Get-AbrOntapNetworkRouteLif -Vserver $SVM
                                     }
                                 }
                             }
@@ -300,12 +300,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Section -Style Heading4 "Storage Volumes" {
                                         Paragraph "The following section provides $SVM Volumes Information on $($SVM)."
                                         BlankLine
-                                        Get-AbrOntapVserverVolumes -Vserver $SVM
+                                        Get-AbrOntapVserverVolume -Vserver $SVM
                                         if (Get-NcVol -VserverContext $SVM -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
                                             Section -Style Heading4 "Per Volumes QoS Policy" {
                                                 Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($SVM)."
                                                 BlankLine
-                                                Get-AbrOntapVserverVolumesQos -Vserver $SVM
+                                                Get-AbrOntapVserverVolumesQosSetting -Vserver $SVM
                                             }
                                         }
                                         if (Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
@@ -375,7 +375,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Section -Style Heading6 "NFS Options" {
                                                     Paragraph "The following section provides the NFS Service Options Information on $($SVM)."
                                                     BlankLine
-                                                    Get-AbrOntapVserverNFSOptions -Vserver $SVM
+                                                    Get-AbrOntapVserverNFSOption -Vserver $SVM
                                                 }
                                                 if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport) {
                                                     Section -Style Heading6 "NFS Volume Export" {

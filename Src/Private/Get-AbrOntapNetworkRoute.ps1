@@ -1,4 +1,4 @@
-function Get-AbrOntapNetworkRoutes {
+function Get-AbrOntapNetworkRoute {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP network Route information from the Cluster Management Network
