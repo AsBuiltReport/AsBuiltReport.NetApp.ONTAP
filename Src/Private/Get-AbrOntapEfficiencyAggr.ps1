@@ -33,7 +33,7 @@ function Get-AbrOntapEfficiencyAggr {
                     'Logical Used' = $Saving.AggrLogicalUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Physical Used' = $Saving.AggrPhysicalUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Compaction Saved' = $Saving.AggrCompactionSaved | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                    'Data reduction' = $Saving.AggrDataReductionStorageEfficiencyRatio
+                    'Data Reduction' = $Saving.AggrDataReductionStorageEfficiencyRatio
 
                 }
                 $OutObj += [pscustomobject]$inobj

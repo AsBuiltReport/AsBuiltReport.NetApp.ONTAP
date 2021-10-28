@@ -29,9 +29,9 @@ function Get-AbrOntapNetworkBdomain {
             foreach ($Item in $BDomain) {
                 $inObj = [ordered] @{
                     'Name' = $Item.BroadcastDomain
-                    'Ipspace' = $Item.Ipspace
+                    'IPSpace' = $Item.Ipspace
                     'Failover Groups' = $Item.FailoverGroups
-                    'Mtu' = $Item.Mtu
+                    'MTU' = $Item.Mtu
                     'Ports' = $Item.Ports
                 }
                 $BDomainObj += [pscustomobject]$inobj

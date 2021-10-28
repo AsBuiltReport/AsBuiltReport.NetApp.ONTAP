@@ -41,7 +41,7 @@ function Get-AbrOntapVserverCIFSOption {
                         'Copy Offload Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadEnabled
                         'Dac Enabled' = ConvertTo-TextYN $Item.IsDacEnabled
                         'Export Policy Enabled' = ConvertTo-TextYN $Item.IsExportpolicyEnabled
-                        'Large Mtu Enabled' = ConvertTo-TextYN $Item.IsLargeMtuEnabled
+                        'Large MTU Enabled' = ConvertTo-TextYN $Item.IsLargeMtuEnabled
                         'Local Auth Enabled' = ConvertTo-TextYN $Item.IsLocalAuthEnabled
                         'Local Users And Groups Enabled' = ConvertTo-TextYN $Item.IsLocalUsersAndGroupsEnabled
                         'Multi Channel Enabled' = ConvertTo-TextYN $Item.IsMultichannelEnabled

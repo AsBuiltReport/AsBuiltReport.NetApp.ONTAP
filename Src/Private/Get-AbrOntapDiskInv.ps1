@@ -41,7 +41,7 @@ function Get-AbrOntapDiskInv {
                     'Bay' = $Disks.Bay
                     'Capacity' = $Disks.Capacity | ConvertTo-FormattedNumber -Type Disksize -ErrorAction SilentlyContinue
                     'Model' = $Disks.Model
-                    'SerialNumber' = $DiskType.SerialNumber
+                    'Serial Number' = $DiskType.SerialNumber
                     'Type' = $DiskType.DiskType
                 }
             }

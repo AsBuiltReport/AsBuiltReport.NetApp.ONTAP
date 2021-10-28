@@ -43,7 +43,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         #---------------------------------------------------------------------------------------------#
         #                                 Cluster Section                                             #
         #---------------------------------------------------------------------------------------------#
-        Section -Style Heading1 "Report for Cluster $($ClusterInfo.ClusterName)" {
+        Section -Style Heading1 "$($ClusterInfo.ClusterName) Cluster Report" {
             Paragraph "The following section provides a summary of the array configuration for $($ClusterInfo.ClusterName)."
             BlankLine
             #region Cluster Section
@@ -594,7 +594,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             BlankLine
                                             Get-AbrOntapEfficiencyVol -Vserver $SVM
                                         }
-                                        Section -Style Heading5 "Volume Efficiency Detailed" {
+                                        Section -Style Heading5 "Detailed Volume Efficiency" {
                                             Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($SVM)."
                                             BlankLine
                                             Get-AbrOntapEfficiencyVolDetailed -Vserver $SVM

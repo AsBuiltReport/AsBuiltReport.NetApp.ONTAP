@@ -35,7 +35,7 @@ function Get-AbrOntapVserverSummary {
                     'Vserver Type' = $Item.VserverType
                     'Allowed Protocols' = [string]$Item.AllowedProtocols
                     'Disallowed Protocols' = [string]$Item.DisallowedProtocols
-                    'IP Space' = $Item.Ipspace
+                    'IPSpace' = $Item.Ipspace
                     'Status' = $Item.State
                 }
                 $VserverObj += [pscustomobject]$inobj
@@ -64,7 +64,7 @@ function Get-AbrOntapVserverSummary {
                     $inObj = [ordered] @{
                         'Root Volume' = $Item.Name
                         'Status' = $Item.State
-                        'TotalSize' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        'Total Size' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                         'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                         'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                         'Dedup' = ConvertTo-TextYN $Item.Dedupe

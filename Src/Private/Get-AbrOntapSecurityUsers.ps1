@@ -35,7 +35,7 @@ function Get-AbrOntapSecurityUser {
                     'User Name' = $Item.UserName
                     'Application' = $TextInfo.ToTitleCase($Item.Application)
                     'Auth Method' = $Item.AuthMethod
-                    'RoleName' = $Item.RoleName
+                    'Role Name' = $Item.RoleName
                     'Locked' = ConvertTo-TextYN $Item.IsLocked
                 }
                 $OutObj += [pscustomobject]$inobj

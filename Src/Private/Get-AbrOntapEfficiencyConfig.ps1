@@ -35,7 +35,7 @@ function Get-AbrOntapEfficiencyConfig {
                     'Capacity Tier Used' = $Saving.CapacityTierUsed | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString "0.0" -ErrorAction SilentlyContinue
                     'Compaction Saved %' = $Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                     'Deduplication Saved %' = $Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                    'Total Data reduction' = $TotalStorageEfficiencyRatio.TotalStorageEfficiencyRatio
+                    'Total Data Reduction' = $TotalStorageEfficiencyRatio.TotalStorageEfficiencyRatio
 
                 }
                 $OutObj += [pscustomobject]$inobj

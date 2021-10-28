@@ -47,7 +47,7 @@ function Get-AbrOntapVserverLunStorage {
                     'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                     'OS Type' = $Item.Protocol
-                    'IsThin' = ConvertTo-TextYN $Item.Thin
+                    'Is Thin' = ConvertTo-TextYN $Item.Thin
                     'Space Allocation' = Switch ($Item.IsSpaceAllocEnabled) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
@@ -58,7 +58,7 @@ function Get-AbrOntapVserverLunStorage {
                         'False' { 'Disabled' }
                         default {$Item.IsSpaceReservationEnabled}
                     }
-                    'IsMapped' = ConvertTo-TextYN $Item.Mapped
+                    'Is Mapped' = ConvertTo-TextYN $Item.Mapped
                     'Status' = Switch ($Item.Online) {
                         'True' { 'Up' }
                         'False' { 'Down' }
