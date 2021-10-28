@@ -34,8 +34,8 @@ function Get-AbrOntapCluster {
                 'Cluster UUID' = $ClusterInfo.ClusterUuid
                 'Cluster Serial' = $ClusterInfo.ClusterSerialNumber
                 'Cluster Controller' = $ClusterInfo.NcController
-                'Cluster Contact' = $ClusterInfo.ClusterContact
-                'Cluster Location' = $ClusterInfo.ClusterLocation
+                'Cluster Contact' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterContact
+                'Cluster Location' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterLocation
                 'Ontap Version' = $ClusterVersion.value
                 'Number of Aggregates' = $ArrayAggr.count
                 'Number of Volumes' = $ArrayVolumes.count
