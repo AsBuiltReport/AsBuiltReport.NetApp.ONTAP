@@ -27,32 +27,41 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     }
 
     process {
-        $SnapshotDays = 7
-        $Now = Get-Date
-        $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
-        $SnapShotData = get-ncsnapshot -Volume $VserverFilter -Controller $Array | Where-Object {$_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays)}
-        $VserverObj = @()
-        if ($SnapShotData) {
-            foreach ($Item in $SnapShotData) {
-                $inObj = [ordered] @{
-                    'Volume Name' = $Item.Volume
-                    'Snapshot Name' = $Item.Name
-                    'Created Time' = $Item.Created
-                    'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+        try {
+            $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+            $SnapShotData = get-ncsnapshot -Volume $VserverFilter -Controller $Array | Where-Object {$_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays)}
+            if ($SnapShotData) {
+                Section -Style Heading4 "HealthCheck - Volumes Snapshot" {
+                    Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck on $($SVM)."
+                    BlankLine
+                    $SnapshotDays = 7
+                    $Now = Get-Date
+                    $VserverObj = @()
+                    foreach ($Item in $SnapShotData) {
+                        $inObj = [ordered] @{
+                            'Volume Name' = $Item.Volume
+                            'Snapshot Name' = $Item.Name
+                            'Created Time' = $Item.Created
+                            'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+
+                    $TableParams = @{
+                        Name = "HealthCheck - Volume Snapshot over 7 days - $($Vserver)"
+                        List = $false
+                        ColumnWidths = 25, 35, 25, 15
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+
+                    $VserverObj | Table @TableParams
                 }
-                $VserverObj += [pscustomobject]$inobj
             }
-
-            $TableParams = @{
-                Name = "HealthCheck - Volume Snapshot over 7 days only - $($Vserver)"
-                List = $false
-                ColumnWidths = 25, 35, 25, 15
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 
