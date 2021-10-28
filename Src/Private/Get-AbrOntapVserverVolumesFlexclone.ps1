@@ -33,7 +33,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
             foreach ($Item in $VserverClonedVol) {
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
-                    'ParentVolume' = $Item.ParentVolume
+                    'Parent Volume' = $Item.ParentVolume
                     'Volume Type' = $Item.VolumeType.ToUpper()
                     'Parent Snapshot' = $Item.ParentSnapshot
                     'Space Reserve' = $Item.SpaceReserve

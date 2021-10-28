@@ -35,7 +35,7 @@ function Get-AbrOntapVserverCIFSOption {
                 foreach ($Item in $CIFSSVM) {
                     $inObj = [ordered] @{
                         'Client Session Timeout' = $Item.ClientSessionTimeout
-                        'DefaultUnixUser' = $Item.DefaultUnixUser
+                        'Default Unix User' = $Item.DefaultUnixUser
                         'Client Version Reporting Enabled' = ConvertTo-TextYN $Item.IsClientVersionReportingEnabled
                         'Copy Offload Direct Copy Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadDirectCopyEnabled
                         'Copy Offload Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadEnabled
