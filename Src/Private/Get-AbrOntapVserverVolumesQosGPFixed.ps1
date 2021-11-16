@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     }
 
     process {
-        $QoSFilter = Get-NcQosPolicyGroup | Where-Object {$_.PolicyGroupClass -eq "user_defined"}
+        $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object {$_.PolicyGroupClass -eq "user_defined"}
         $OutObj = @()
         if ($QoSFilter) {
             foreach ($Item in $QoSFilter) {
-                $VolQoS = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeQosAttributes
+                $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                 $inObj = [ordered] @{
                     'Policy Name' = $Item.PolicyGroup
                     'Max Throughput' = $Item.MaxThroughput

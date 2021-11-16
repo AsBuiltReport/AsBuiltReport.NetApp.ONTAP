@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapSysConfigBackup {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Node
     )
 
     begin {
@@ -23,12 +27,11 @@ function Get-AbrOntapSysConfigBackup {
     }
 
     process {
-        $Data =  Get-NcConfigBackup
+        $Data =  Get-NcConfigBackup -Node $Node -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
                 $inObj = [ordered] @{
-                    'Node' = $Item.Node
                     'Backup Name' = $Item.BackupName
                     'Created' = $Item.Created
                     'Size' = $Item.BackupSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
@@ -39,9 +42,9 @@ function Get-AbrOntapSysConfigBackup {
             }
 
             $TableParams = @{
-                Name = "System Configuration Backups Information - $($ClusterInfo.ClusterName)"
+                Name = "System Configuration Backups Information - $($Node)"
                 List = $false
-                ColumnWidths = 22, 34, 12, 10, 12, 10
+                ColumnWidths = 40, 15, 15, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

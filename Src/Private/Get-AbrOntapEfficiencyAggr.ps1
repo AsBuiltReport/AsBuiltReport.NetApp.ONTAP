@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,17 +23,17 @@ function Get-AbrOntapEfficiencyAggr {
     }
 
     process {
-        $Data =  Get-NcAggr | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+        $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name | Select-Object -ExpandProperty AggrEfficiencyAggrInfo
+                $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAggrInfo
                 $inObj = [ordered] @{
                     'Aggregate' = $Item.Name
                     'Logical Used' = $Saving.AggrLogicalUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Physical Used' = $Saving.AggrPhysicalUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Compaction Saved' = $Saving.AggrCompactionSaved | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                    'Data reduction' = $Saving.AggrDataReductionStorageEfficiencyRatio
+                    'Data Reduction' = $Saving.AggrDataReductionStorageEfficiencyRatio
 
                 }
                 $OutObj += [pscustomobject]$inobj
@@ -49,16 +49,16 @@ function Get-AbrOntapEfficiencyAggr {
             }
             $OutObj | Table @TableParams
         }
-        $Data =  Get-NcAggr | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
-        $Savingfilter = (Get-NcAggrEfficiency | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
+        $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+        $Savingfilter = (Get-NcAggrEfficiency -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
         if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
-            Section -Style Heading4 'HealthCheck - Volume efficiency opportunities for improvement' {
+            Section -Style Heading4 'HealthCheck - Volume without deduplication enabled' {
                 Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
                 BlankLine
                 $OutObj = @()
                 foreach ($Item in $Data) {
-                    $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo
-                    $VolInAggr = Get-NcVol -Aggregate $Item.Name
+                    $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo
+                    $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array
                     $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True"}
                     $inObj = [ordered] @{
                         'Aggregate' = $Item.Name
@@ -72,7 +72,7 @@ function Get-AbrOntapEfficiencyAggr {
                 }
 
                 $TableParams = @{
-                    Name = "HealthCheck - Volume efficiency opportunities for improvement - $($ClusterInfo.ClusterName)"
+                    Name = "HealthCheck - Volume without deduplication - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 45, 55
                 }

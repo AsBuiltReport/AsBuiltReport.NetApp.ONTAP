@@ -5,7 +5,7 @@ function Get-AbrOntapDiskBroken {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapDiskBroken {
     }
 
     process {
-        $NodeDiskBroken = Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
+        $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
         if ($NodeDiskBroken) {
             $DiskFailed = foreach ($DiskBroken in $NodeDiskBroken) {
                     [PSCustomObject] @{
@@ -38,7 +38,7 @@ function Get-AbrOntapDiskBroken {
                         $DiskFailed | Set-Style -Style Critical -Property 'Disk Name','Shelf','Bay','Pool','Disk Paths'
                     }
             $TableParams = @{
-                Name = "Failed Disk Summary - $($ClusterInfo.ClusterName)"
+                Name = "Failed Disk - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 26, 13, 13, 13, 35
             }

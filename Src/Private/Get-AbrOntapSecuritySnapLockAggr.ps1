@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapSecuritySnapLockAggr {
     }
 
     process {
-        $Data =  Get-NcAggr | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+        $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $SnapLockType = Get-NcAggr $Item.Name | Select-Object -ExpandProperty AggrSnaplockAttributes
+                $SnapLockType = Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes
                 $inObj = [ordered] @{
                     'Aggregate Name' = $Item.Name
                     'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)

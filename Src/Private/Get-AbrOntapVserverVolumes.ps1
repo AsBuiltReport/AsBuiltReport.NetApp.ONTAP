@@ -1,11 +1,11 @@
-function Get-AbrOntapVserverVolumes {
+function Get-AbrOntapVserverVolume {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP vserver volumes information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumes {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,13 +27,12 @@ function Get-AbrOntapVserverVolumes {
     }
 
     process {
-        $VserverRootVol = Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $VserverRootVol = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $VserverObj = @()
         if ($VserverRootVol) {
             foreach ($Item in $VserverRootVol) {
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
-                    'Vserver' = $Item.Vserver
                     'Status' = $Item.State
                     'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                     'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
@@ -43,9 +46,9 @@ function Get-AbrOntapVserverVolumes {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Volume Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 27, 15, 10, 10, 10, 8, 20
+                ColumnWidths = 34, 12, 12, 12, 10, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

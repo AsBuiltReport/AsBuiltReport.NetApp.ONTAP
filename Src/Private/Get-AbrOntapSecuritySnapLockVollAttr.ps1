@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,14 +23,14 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     }
 
     process {
-        $Data =  Get-NcVserver | Where-Object {$_.VserverType -eq "data"}
-        $VolumeFilter = Get-Ncvol | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}
+        $Data =  Get-NcVserver -Controller $Array | Where-Object {$_.VserverType -eq "data"}
+        $VolumeFilter = Get-Ncvol -Controller $Array | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}
         $OutObj = @()
         if ($Data -and $VolumeFilter) {
             foreach ($Item in $Data) {
-                $VolumeFilter = Get-Ncvol -VserverContext $Item.Vserver | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}
+                $VolumeFilter = Get-Ncvol -VserverContext $Item.Vserver -Controller $Array | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}
                 foreach ($vol in $VolumeFilter) {
-                    $SnapLockVolAttr = Get-NcSnaplockVolAttr -Volume $vol.Name -VserverContext $Item.VserverName
+                    $SnapLockVolAttr = Get-NcSnaplockVolAttr -Volume $vol.Name -VserverContext $Item.VserverName -Controller $Array
                     $inObj = [ordered] @{
                         'Volume' = $vol.Name
                         'Aggregate' = $vol.Aggregate

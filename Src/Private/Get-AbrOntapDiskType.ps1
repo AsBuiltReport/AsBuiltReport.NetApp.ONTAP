@@ -5,7 +5,7 @@ function Get-AbrOntapDiskType {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapDiskType {
     }
 
     process {
-        $NodeDiskContainerType = Get-NcDisk | ForEach-Object{ $_.DiskRaidInfo.ContainerType } | Group-Object
+        $NodeDiskContainerType = Get-NcDisk -Controller $Array | ForEach-Object{ $_.DiskRaidInfo.ContainerType } | Group-Object
         if ($NodeDiskContainerType) {
             $DiskType = foreach ($DiskContainers in $NodeDiskContainerType) {
                 [PSCustomObject] @{
@@ -35,7 +35,7 @@ function Get-AbrOntapDiskType {
                     $DiskType | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
                 }
             $TableParams = @{
-                Name = "Disk Container Type Summary - $($ClusterInfo.ClusterName)"
+                Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 50, 50
             }
@@ -44,7 +44,7 @@ function Get-AbrOntapDiskType {
             }
             $DiskType | Table @TableParams
         }
-        $Node = Get-NcNode
+        $Node = Get-NcNode | Where-Object {$_.IsNodeHealthy -eq "True"}
         if ($Node -and (Confirm-NcAggrSpareLow | Where-Object {$_.Value -eq "True"})) {
             $OutObj = foreach ($Item in $Node) {
                 $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node

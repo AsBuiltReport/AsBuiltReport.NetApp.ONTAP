@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverLunStorage {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,11 +27,11 @@ function Get-AbrOntapVserverLunStorage {
     }
 
     process {
-        $VserverLun = get-nclun
+        $VserverLun = get-nclun -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverLun) {
             foreach ($Item in $VserverLun) {
-                $lunmap = Get-NcLunMap -Path $Item.Path | Select-Object -ExpandProperty InitiatorGroup
+                $lunmap = Get-NcLunMap -Path $Item.Path -Controller $Array | Select-Object -ExpandProperty InitiatorGroup
                 $lunpath = $Item.Path.split('/')
                 $lun = $lunpath[3]
                 $available = $Item.Size - $Item.SizeUsed
@@ -39,12 +43,11 @@ function Get-AbrOntapVserverLunStorage {
                     'Serial Number' = $Item.SerialNumber
                     'Initiator Group' = $lunmap
                     'Home Node ' = $Item.Node
-                    'Vserver' = $Item.Vserver
                     'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                     'OS Type' = $Item.Protocol
-                    'IsThin' = ConvertTo-TextYN $Item.Thin
+                    'Is Thin' = ConvertTo-TextYN $Item.Thin
                     'Space Allocation' = Switch ($Item.IsSpaceAllocEnabled) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
@@ -55,7 +58,7 @@ function Get-AbrOntapVserverLunStorage {
                         'False' { 'Disabled' }
                         default {$Item.IsSpaceReservationEnabled}
                     }
-                    'IsMapped' = ConvertTo-TextYN $Item.Mapped
+                    'Is Mapped' = ConvertTo-TextYN $Item.Mapped
                     'Status' = Switch ($Item.Online) {
                         'True' { 'Up' }
                         'False' { 'Down' }
@@ -70,7 +73,7 @@ function Get-AbrOntapVserverLunStorage {
             }
 
             $TableParams = @{
-                Name = "Vserver Lun Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Lun Information - $($Vserver)"
                 List = $true
                 ColumnWidths = 25, 75
             }

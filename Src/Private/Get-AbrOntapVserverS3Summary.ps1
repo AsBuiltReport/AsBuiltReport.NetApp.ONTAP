@@ -5,7 +5,7 @@ function Get-AbrOntapVserverS3Summary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverS3Summary {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,12 +27,11 @@ function Get-AbrOntapVserverS3Summary {
     }
 
     process {
-        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/services?"
+        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/services?svm=$Vserver&fields=*&return_records=true&return_timeout=15"
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver' = $Item.Name
                     'HTTP' = ConvertTo-TextYN $Item.is_http_enabled
                     'HTTP Port' = $Item.port
                     'HTTPS' = ConvertTo-TextYN $Item.is_https_enabled
@@ -43,9 +46,9 @@ function Get-AbrOntapVserverS3Summary {
             }
 
             $TableParams = @{
-                Name = "Vserver S3 Service Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver S3 Service Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 31, 12, 15, 12, 15, 15
+                ColumnWidths = 20, 20, 20, 20, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

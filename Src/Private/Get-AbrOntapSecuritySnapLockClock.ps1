@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockClock {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapSecuritySnapLockClock {
     }
 
     process {
-        $Data =  Get-NcNode
+        $Data =  Get-NcNode -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $SnapLockClock = Get-NcSnaplockComplianceClock $Item.Node
+                $SnapLockClock = Get-NcSnaplockComplianceClock $Item.Node -Controller $Array
                 $inObj = [ordered] @{
                     'Node Name' = $Item.Node
                     'Compliance Clock' = Switch ($SnapLockClock.FormattedSnaplockComplianceClock) {

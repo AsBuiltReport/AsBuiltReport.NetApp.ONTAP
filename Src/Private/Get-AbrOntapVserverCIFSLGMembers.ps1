@@ -1,11 +1,11 @@
-function Get-AbrOntapVserverCIFSLGMembers {
+function Get-AbrOntapVserverCIFSLGMember {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Local Group Members information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverCIFSLGMembers {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,22 +27,21 @@ function Get-AbrOntapVserverCIFSLGMembers {
     }
 
     process {
-        $VserverData = Get-NcCifsLocalGroupMember
+        $VserverData = Get-NcCifsLocalGroupMember -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
                     'Group Name' = $Item.GroupName
                     'Description' = $Item.Member
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "CIFS Connected Local Group Members Information - $($ClusterInfo.ClusterName)"
+                Name = "CIFS Connected Local Group Members Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 40, 40, 20
+                ColumnWidths = 50, 50
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

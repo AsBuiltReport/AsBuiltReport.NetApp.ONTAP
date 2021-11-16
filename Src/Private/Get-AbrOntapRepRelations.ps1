@@ -5,7 +5,7 @@ function Get-AbrOntapRepRelationship {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapRepRelationship {
     }
 
     process {
-        $ReplicaData = Get-NcSnapmirror
+        $ReplicaData = Get-NcSnapmirror -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

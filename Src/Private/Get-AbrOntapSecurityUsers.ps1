@@ -1,11 +1,11 @@
-function Get-AbrOntapSecurityUsers {
+function Get-AbrOntapSecurityUser {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Security Local Users information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapSecurityUsers {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapSecurityUsers {
     }
 
     process {
-        $Data =  Get-NcUser
+        $Data =  Get-NcUser -Vserver $Vserver -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -31,9 +35,8 @@ function Get-AbrOntapSecurityUsers {
                     'User Name' = $Item.UserName
                     'Application' = $TextInfo.ToTitleCase($Item.Application)
                     'Auth Method' = $Item.AuthMethod
-                    'RoleName' = $Item.RoleName
+                    'Role Name' = $Item.RoleName
                     'Locked' = ConvertTo-TextYN $Item.IsLocked
-                    'Vserver' = $Item.Vserver
                 }
                 $OutObj += [pscustomobject]$inobj
             }
@@ -42,9 +45,9 @@ function Get-AbrOntapSecurityUsers {
             }
 
             $TableParams = @{
-                Name = "Security Local Users information  - $($ClusterInfo.ClusterName)"
+                Name = "Security Local Users information  - $($Vserver)"
                 List = $false
-                ColumnWidths = 20, 14, 14, 20, 12, 20
+                ColumnWidths = 25, 15, 15, 30, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

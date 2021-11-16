@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigEMS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapSysConfigEMS {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Node
     )
 
     begin {
@@ -23,23 +27,22 @@ function Get-AbrOntapSysConfigEMS {
     }
 
     process {
-        $Data =  Get-NcEmsMessage  -Count 30 -Severity "emergency","alert"
+        $Data =  Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
                 $inObj = [ordered] @{
-                    'Node' = $Item.Node
-                    'Severity' = $Item.Severity
                     'TimeDT' = $Item.TimeDT
+                    'Severity' = $Item.Severity
                     'Event' = $Item.Event
                 }
                 $OutObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "HealtCheck - System EMS Messages Information - $($ClusterInfo.ClusterName)"
+                Name = "HealtCheck - System EMS Messages Information - $($Node)"
                 List = $false
-                ColumnWidths = 20, 12, 23, 45
+                ColumnWidths = 25, 20, 55
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigImage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigImage {
     }
 
     process {
-        $Data =  Get-NcSystemImage
+        $Data =  Get-NcSystemImage -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverVolumesFlexcache {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -24,11 +28,11 @@ function Get-AbrOntapVserverVolumesFlexcache {
 
     process {
         #Vserver Flexcache Volume Connected Cache Information
-        $Data = Get-NcFlexcacheConnectedCache
+        $Data = Get-NcFlexcacheConnectedCache -VserverContext $Vserver -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $VolumeUsage = Get-NcVol -Name $Item.OriginVolume
+                $VolumeUsage = Get-NcVol -Name $Item.OriginVolume -Controller $Array
                 $inObj = [ordered] @{
                     'Cache Cluster' = $Item.CacheCluster
                     'Cache Vserver' = $Item.CacheVserver
@@ -41,7 +45,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
             }
 
             $TableParams = @{
-                Name = "Vserver Flexcache Volume Connected Cache Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Flexcache Volume Connected Cache Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 15, 15, 20, 15, 15
             }
@@ -51,7 +55,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
             $OutObj | Table @TableParams
         }
         #Vserver Flexcache Volume Information
-        $Data = Get-NcFlexcache
+        $Data = Get-NcFlexcache -VserverContext $Vserver -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -67,7 +71,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
             }
 
             $TableParams = @{
-                Name = "Vserver Flexcache Volume Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Flexcache Volume Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 15, 15, 20, 15, 15
             }

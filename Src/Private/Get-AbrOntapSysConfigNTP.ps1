@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigNTP {
     }
 
     process {
-        $Data =  Get-NcNtpServer
+        $Data =  Get-NcNtpServer -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

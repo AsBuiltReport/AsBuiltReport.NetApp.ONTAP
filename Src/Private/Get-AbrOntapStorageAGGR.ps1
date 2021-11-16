@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAGGR {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,10 +23,10 @@ function Get-AbrOntapStorageAGGR {
     }
 
     process {
-        $AggrSpace = Get-NcAggr
+        $AggrSpace = Get-NcAggr -Controller $Array
         if ($AggrSpace) {
             $AggrSpaceSummary = foreach ($Aggr in $AggrSpace) {
-            $RootAggr = Get-NcAggr $Aggr.Name | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
+            $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
                 [PSCustomObject] @{
                     'Name' = $Aggr.Name
                     'Capacity' = $Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
@@ -44,7 +44,7 @@ function Get-AbrOntapStorageAGGR {
                 $AggrSpaceSummary | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
             }
             $TableParams = @{
-                Name = "Aggregate Summary - $($ClusterInfo.ClusterName)"
+                Name = "Aggregates - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 27, 10, 10, 10, 10, 8, 15, 10
             }

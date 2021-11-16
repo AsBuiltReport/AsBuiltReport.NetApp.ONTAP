@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverSummary {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,17 +27,16 @@ function Get-AbrOntapVserverSummary {
     }
 
     process {
-        $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq "data" }
+        $VserverData = Get-NcVserver -VserverContext $Vserver| Where-Object { $_.VserverType -eq "data" }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver Name' = $Item.Vserver
-                    'Status' = $Item.State
                     'Vserver Type' = $Item.VserverType
                     'Allowed Protocols' = [string]$Item.AllowedProtocols
                     'Disallowed Protocols' = [string]$Item.DisallowedProtocols
-                    'IP Space' = $Item.Ipspace
+                    'IPSpace' = $Item.Ipspace
+                    'Status' = $Item.State
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
@@ -42,27 +45,26 @@ function Get-AbrOntapVserverSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver Summary Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 15, 15, 15, 20, 20, 15
+                ColumnWidths = 20, 20, 20, 20, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
             $VserverObj | Table @TableParams
         }
-        Section -Style Heading4 'Vserver Root Volume Summary' {
-            Paragraph "The following section provides the Vserver Root Volume Information on $($ClusterInfo.ClusterName)."
+        Section -Style Heading4 'Root Volume' {
+            Paragraph "The following section provides the Vserver Root Volume Information on $($Vserver)."
             BlankLine
-            $VserverRootVol = Get-NcVol | Where-Object {$_.JunctionPath -eq '/'}
+            $VserverRootVol = Get-NcVol -VserverContext $Vserver| Where-Object {$_.JunctionPath -eq '/'}
             $VserverObj = @()
             if ($VserverRootVol) {
                 foreach ($Item in $VserverRootVol) {
                     $inObj = [ordered] @{
                         'Root Volume' = $Item.Name
-                        'Vserver' = $Item.Vserver
                         'Status' = $Item.State
-                        'TotalSize' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        'Total Size' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                         'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                         'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                         'Dedup' = ConvertTo-TextYN $Item.Dedupe
@@ -75,9 +77,9 @@ function Get-AbrOntapVserverSummary {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Root Volume Information - $($ClusterInfo.ClusterName)"
+                    Name = "Vserver Root Volume Information - $($Vserver)"
                     List = $false
-                    ColumnWidths = 15, 15, 10, 10, 10, 10, 10, 20
+                    ColumnWidths = 20, 10, 10, 10, 10, 10, 30
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -86,15 +88,14 @@ function Get-AbrOntapVserverSummary {
             }
         }
         if (Get-NcVserverAggr) {
-            Section -Style Heading4 'Vserver Aggregate Resource Allocation Summary' {
-                Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($ClusterInfo.ClusterName)."
+            Section -Style Heading4 'Aggregate Resource Allocation' {
+                Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($Vserver)."
                 BlankLine
-                $VserverAGGR = Get-NcVserverAggr
+                $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
                 $VserverObj = @()
                 if ($VserverAGGR) {
                     foreach ($Item in $VserverAGGR) {
                         $inObj = [ordered] @{
-                            'Vserver' = $Item.VserverName
                             'Aggregate' = $Item.AggregateName
                             'Type' = $Item.AggregateType
                             'SnapLock Type' = $Item.SnaplockType
@@ -104,9 +105,9 @@ function Get-AbrOntapVserverSummary {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Aggregate Resource Allocation Information - $($ClusterInfo.ClusterName)"
+                        Name = "Vserver Aggregate Resource Allocation Information - $($Vserver)"
                         List = $false
-                        ColumnWidths = 25, 30, 10, 20, 15
+                        ColumnWidths = 40, 15, 25, 20
                     }
                     if ($Report.ShowTableCaptions) {
                         $TableParams['Caption'] = "- $($TableParams.Name)"

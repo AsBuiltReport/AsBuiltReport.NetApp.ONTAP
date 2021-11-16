@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSShare {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverCIFSShare {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,12 +27,11 @@ function Get-AbrOntapVserverCIFSShare {
     }
 
     process {
-        $VserverData = Get-NcCifsShare
+        $VserverData = Get-NcCifsShare -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver Name' = $Item.CifsServer
                     'Share Name' = $Item.ShareName
                     'Volume' = $Item.Volume
                     'Path' = $Item.Path
@@ -37,9 +40,9 @@ function Get-AbrOntapVserverCIFSShare {
             }
 
             $TableParams = @{
-                Name = "Vserver CIFS Share Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver CIFS Share Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 20, 20, 20, 40
+                ColumnWidths = 25, 25, 50
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

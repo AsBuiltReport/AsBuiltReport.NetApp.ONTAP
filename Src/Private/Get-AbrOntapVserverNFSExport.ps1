@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSExport {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverNFSExport {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,11 +27,11 @@ function Get-AbrOntapVserverNFSExport {
     }
 
     process {
-        $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($SVM in $VserverData) {
-                $NFSVserver = Get-NcNfsExport -VS $SVM.Vserver
+                $NFSVserver = Get-NcNfsExport -VS $SVM.Vserver -Controller $Array
                 foreach ($Item in $NFSVserver) {
                     $inObj = [ordered] @{
                         'Vserver' = $SVM.Vserver
@@ -38,7 +42,7 @@ function Get-AbrOntapVserverNFSExport {
         }
 
             $TableParams = @{
-                Name = "Vserver NFS Service Volume Export Summary - $($ClusterInfo.ClusterName)"
+                Name = "Vserver NFS Service Volume Export - $($Vserver)"
                 List = $false
                 ColumnWidths = 35, 65
             }

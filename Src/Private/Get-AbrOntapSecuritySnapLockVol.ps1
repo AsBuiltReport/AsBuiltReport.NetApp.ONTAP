@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapSecuritySnapLockVol {
     }
 
     process {
-        $Data =  Get-NcVol | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+        $Data =  Get-NcVol -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $SnapLockType = Get-Ncvol $Item.Name | Select-Object -ExpandProperty VolumeSnaplockAttributes
+                $SnapLockType = Get-Ncvol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes
                 $inObj = [ordered] @{
                     'Volume' = $Item.Name
                     'Aggregate' = $Item.Aggregate

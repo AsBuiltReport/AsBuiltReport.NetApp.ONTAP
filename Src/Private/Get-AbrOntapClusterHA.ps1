@@ -5,7 +5,7 @@ function Get-AbrOntapClusterHA {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,10 +23,10 @@ function Get-AbrOntapClusterHA {
     }
 
     process {
-        $NodeSum = Get-NcNode | Where-Object { $null -ne $_.NodeModel }
+        $NodeSum = Get-NcNode -Controller $Array | Where-Object { $null -ne $_.NodeModel }
         if ($NodeSum) {
             $NodeSummary = foreach ($Nodes in $NodeSum) {
-                $ClusterHa = Get-NcClusterHa -Node $Nodes.Node
+                $ClusterHa = Get-NcClusterHa -Node $Nodes.Node -Controller $Array
                 [PSCustomObject] @{
                     'Name' = $Nodes.Node
                     'Partner' = $ClusterHa.Partner

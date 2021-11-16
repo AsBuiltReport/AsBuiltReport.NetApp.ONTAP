@@ -1,11 +1,11 @@
-function Get-AbrOntapVserverCIFSOptions {
+function Get-AbrOntapVserverCIFSOption {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Options information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverCIFSOptions {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,22 +27,21 @@ function Get-AbrOntapVserverCIFSOptions {
     }
 
     process {
-        $VserverData = Get-NcVserver | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
+        $VserverData = Get-NcVserver -VserverContext $Vserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($SVM in $VserverData) {
-                $CIFSSVM = Get-NcCifsOption -VserverContext $SVM.Vserver
+                $CIFSSVM = Get-NcCifsOption -VserverContext $SVM.Vserver -Controller $Array
                 foreach ($Item in $CIFSSVM) {
                     $inObj = [ordered] @{
-                        'Vserver' = $Item.Vserver
                         'Client Session Timeout' = $Item.ClientSessionTimeout
-                        'DefaultUnixUser' = $Item.DefaultUnixUser
+                        'Default Unix User' = $Item.DefaultUnixUser
                         'Client Version Reporting Enabled' = ConvertTo-TextYN $Item.IsClientVersionReportingEnabled
                         'Copy Offload Direct Copy Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadDirectCopyEnabled
                         'Copy Offload Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadEnabled
                         'Dac Enabled' = ConvertTo-TextYN $Item.IsDacEnabled
                         'Export Policy Enabled' = ConvertTo-TextYN $Item.IsExportpolicyEnabled
-                        'Large Mtu Enabled' = ConvertTo-TextYN $Item.IsLargeMtuEnabled
+                        'Large MTU Enabled' = ConvertTo-TextYN $Item.IsLargeMtuEnabled
                         'Local Auth Enabled' = ConvertTo-TextYN $Item.IsLocalAuthEnabled
                         'Local Users And Groups Enabled' = ConvertTo-TextYN $Item.IsLocalUsersAndGroupsEnabled
                         'Multi Channel Enabled' = ConvertTo-TextYN $Item.IsMultichannelEnabled
@@ -65,7 +68,7 @@ function Get-AbrOntapVserverCIFSOptions {
             }
 
             $TableParams = @{
-                Name = "Vserver CIFS Service Options Summary - $($ClusterInfo.ClusterName)"
+                Name = "Vserver CIFS Service Options - $($Vserver)"
                 List = $true
                 ColumnWidths = 50, 50
             }

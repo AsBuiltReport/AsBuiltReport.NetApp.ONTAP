@@ -5,7 +5,7 @@ function Get-AbrOntapNodesSP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNodesSP {
     }
 
     process {
-        $ServiceProcessor = Get-NcServiceProcessor
+        $ServiceProcessor = Get-NcServiceProcessor -Controller $Array
         if ($ServiceProcessor) {
             $NodeServiceProcessor = foreach ($NodeSPs in $ServiceProcessor) {
                 [PSCustomObject] @{

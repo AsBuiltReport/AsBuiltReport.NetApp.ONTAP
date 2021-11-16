@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunIgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverLunIgroup {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,12 +27,12 @@ function Get-AbrOntapVserverLunIgroup {
     }
 
     process {
-        $VserverIgroup = Get-NcIgroup
+        $VserverIgroup = Get-NcIgroup -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverIgroup) {
             foreach ($Item in $VserverIgroup) {
-                $lunmap = get-nclunmap | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -ExpandProperty Path
-                $reportingnodes = get-nclunmap | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -Unique -ExpandProperty ReportingNodes
+                $lunmap = get-nclunmap -Controller $Array | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -ExpandProperty Path
+                $reportingnodes = get-nclunmap -Controller $Array | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -Unique -ExpandProperty ReportingNodes
                 $MappedLun = @()
                 foreach ($lun in $lunmap) {
                     $lunname = $lun.split('/')
@@ -38,7 +42,6 @@ function Get-AbrOntapVserverLunIgroup {
                     'Igroup Name' = $Item.Name
                     'Type' = $Item.Type
                     'Protocol' = $Item.Protocol
-                    'Vserver' = $Item.Vserver
                     'Initiators' = $Item.Initiators.InitiatorName
                     'Mapped Lun' = $MappedLun
                     'Reporting Nodes' = $reportingnodes

@@ -1,11 +1,11 @@
-function Get-AbrOntapRepDestinations {
+function Get-AbrOntapRepDestination {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP SnapMirror Destination relationship information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapRepDestinations {
     }
 
     process {
-        $ReplicaData = Get-NcSnapmirrorDestination
+        $ReplicaData = Get-NcSnapmirrorDestination -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

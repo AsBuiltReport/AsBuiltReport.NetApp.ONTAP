@@ -5,7 +5,7 @@ function Get-AbrOntapDiskAssign {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapDiskAssign {
     }
 
     process {
-        $NodeDiskCount = get-ncdisk | ForEach-Object{ $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
+        $NodeDiskCount = get-ncdisk -Controller $Array | ForEach-Object{ $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
         if ($NodeDiskCount) {
             $DiskSummary = foreach ($Disks in $NodeDiskCount) {
                 [PSCustomObject] @{
@@ -32,32 +32,9 @@ function Get-AbrOntapDiskAssign {
                     }
             }
             $TableParams = @{
-                Name = "Assigned Disk Summary - $($ClusterInfo.ClusterName)"
+                Name = "Assigned Disk - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 50, 50
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $DiskSummary | Table @TableParams
-        }
-        $Node = Get-NcNode
-        if ($Node) {
-            $DiskSummary = foreach ($Nodes in $Node) {
-                $DiskOwner = Get-NcDiskOwner -Node $Nodes.Node
-                [PSCustomObject] @{
-                    'Disk' = $DiskOwner.Name
-                    'Owner' = $DiskOwner.Owner
-                    'Owner Id' = $DiskOwner.OwnerId
-                    'Home' = $DiskOwner.Home
-                    'Home Id' = $DiskOwner.HomeId
-                    'Type' = $DiskOwner.Type
-                    }
-            }
-            $TableParams = @{
-                Name = "Disk Owner Summary - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 20, 20, 15, 20, 15, 10
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

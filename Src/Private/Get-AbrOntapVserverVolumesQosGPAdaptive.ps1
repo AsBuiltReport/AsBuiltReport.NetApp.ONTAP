@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     }
 
     process {
-        $QoSFilter = Get-NcQosAdaptivePolicyGroup
+        $QoSFilter = Get-NcQosAdaptivePolicyGroup -Controller $Array
         $OutObj = @()
         if ($QoSFilter) {
             foreach ($Item in $QoSFilter) {
-                $VolQoS = Get-NcVol $Item.Name | Select-Object -ExpandProperty VolumeQosAttributes
+                $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                 $inObj = [ordered] @{
                     'Policy Name' = $Item.PolicyGroup
                     'Peak Iops' = $Item.PeakIops

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpAdapter {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverFcpAdapter {
     }
 
     process {
-        $VserverData = Get-NcFcpAdapter | Where-Object {$_.PhysicalProtocol -ne 'ethernet' }
+        $VserverData = Get-NcFcpAdapter -Controller $Array | Where-Object {$_.PhysicalProtocol -ne 'ethernet' }
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
