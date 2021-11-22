@@ -199,29 +199,43 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the IPSpace information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNetworkIpSpace
-                        $Nodes = Get-NcNode -Controller $Array
-                        foreach ($Node in $Nodes) {
-                            Section -Style Heading4 "$Node Network Ports" {
-                                Paragraph "The following section provides per ode physical ports on $($ClusterInfo.ClusterName)."
-                                BlankLine
-                                Get-AbrOntapNetworkPort -Node $Node
-                            }
-                        }
-                        foreach ($Node in $Nodes) {
-                            if (Get-NcNetPortIfgrp -Node $Node -Controller $Array) {
-                                Section -Style Heading4 "$Node Network Link Aggregation Group" {
-                                    Paragraph "The following section provides per Node IFGRP Aggregated Ports on $($ClusterInfo.ClusterName)."
+                        Section -Style Heading3 'Network Ports' {
+                            Paragraph "The following section provides the physical network ports on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            $Nodes = Get-NcNode -Controller $Array
+                            foreach ($Node in $Nodes) {
+                                Section -Style Heading4 "$Node Ports" {
+                                    Paragraph "The following section provides per node network ports on $($Node)."
                                     BlankLine
-                                    Get-AbrOntapNetworkIfgrp -Node $Node
+                                    Get-AbrOntapNetworkPort -Node $Node
                                 }
                             }
                         }
-                        foreach ($Node in $Nodes) {
-                            if (Get-NcNetPortVlan -Node $Node -Controller $Array) {
-                                Section -Style Heading4 "$Node Vlans" {
-                                    Paragraph "The following section provides the Vlan information on $($ClusterInfo.ClusterName)."
-                                    BlankLine
-                                    Get-AbrOntapNetworkVlan -Node $Node
+                        Section -Style Heading3 'Network Link Aggregation Group' {
+                            Paragraph "The following section provides per Node IFGRP Aggregated Ports on  $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            $Nodes = Get-NcNode -Controller $Array
+                            foreach ($Node in $Nodes) {
+                                if (Get-NcNetPortIfgrp -Node $Node -Controller $Array) {
+                                    Section -Style Heading4 "$Node IFGRP" {
+                                        Paragraph "The following section provides per Node IFGRP Aggregated Ports on $($Node)."
+                                        BlankLine
+                                        Get-AbrOntapNetworkIfgrp -Node $Node
+                                    }
+                                }
+                            }
+                        }
+                        Section -Style Heading3 'Network VLANs' {
+                            Paragraph "The following section provides Network VLAN information on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            $Nodes = Get-NcNode -Controller $Array
+                            foreach ($Node in $Nodes) {
+                                if (Get-NcNetPortVlan -Node $Node -Controller $Array) {
+                                    Section -Style Heading4 "$Node Vlans" {
+                                        Paragraph "The following section provides per node VLAN information on $($Node)."
+                                        BlankLine
+                                        Get-AbrOntapNetworkVlan -Node $Node
+                                    }
                                 }
                             }
                         }
