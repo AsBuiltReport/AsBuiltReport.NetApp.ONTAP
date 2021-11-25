@@ -33,7 +33,7 @@ For detailed documentation around the whole project, please refer to the `README
 
 ### Sample Report - Custom Style 1
 
-Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/master/Samples/Sample%20NetApp%20As-Built%20Report.html)
+Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://technomyth.zenprsolutions.net/wp-content/uploads/2021/11/NetApp-ONTAP-As-Built-Report.html)
 
 Sample NetApp ONTAP As Built report with health checks, using custom report style.
 
