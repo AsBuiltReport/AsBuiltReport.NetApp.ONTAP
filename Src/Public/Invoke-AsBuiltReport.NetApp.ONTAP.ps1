@@ -57,10 +57,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         BlankLine
                         Get-AbrOntapClusterHA
                     }
-                    Section -Style Heading3 'Cluster AutoSupport Status' {
-                        Paragraph "The following section provides a summary of the Cluster AutoSupport Status on $($ClusterInfo.ClusterName)."
-                        BlankLine
-                        Get-AbrOntapClusterASUP
+                    if ($InfoLevel.Cluster -gt 2) {
+                        Section -Style Heading3 'Cluster AutoSupport Status' {
+                            Paragraph "The following section provides a summary of the Cluster AutoSupport Status on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapClusterASUP
+                        }
                     }
                 }
             }
@@ -83,10 +85,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapNodeStorage
                         }
-                        Section -Style Heading4 'Node Hardware Inventory' {
-                            Paragraph "The following section provides the node hardware inventory on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapNodesHW
+                        if ($InfoLevel.Node -gt 2) {
+                            Section -Style Heading4 'Node Hardware Inventory' {
+                                Paragraph "The following section provides the node hardware inventory on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapNodesHW
+                            }
                         }
                         if (Get-NcServiceProcessor  -Controller $Array | Where-Object {$NULL -ne $_.IpAddress -and $NULL -ne $_.MacAddress}) {
                             Section -Style Heading4 'Node Service-Processor Inventory' {
@@ -116,11 +120,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the FabricPool information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapStorageFabricPool
-                                if (Get-NcAggrObjectStoreConfig -Controller $Array) {
-                                    Section -Style Heading5 'FabriPool Object Store Configuration' {
-                                        Paragraph "The following section provides the FabriPool Object Store Configuration on $($ClusterInfo.ClusterName)."
-                                        BlankLine
-                                        Get-AbrOntapEfficiencyAggrConfig
+                                if ($InfoLevel.Storage -gt 2) {
+                                    if (Get-NcAggrObjectStoreConfig -Controller $Array) {
+                                        Section -Style Heading5 'FabriPool Object Store Configuration' {
+                                            Paragraph "The following section provides the FabriPool Object Store Configuration on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapEfficiencyAggrConfig
+                                        }
                                     }
                                 }
                             }
@@ -161,10 +167,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapDiskShelf
                             }
                         }
-                        Section -Style Heading4 'Disk Inventory' {
-                            Paragraph "The following section provides the Disks installed on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapDiskInv
+                        if ($InfoLevel.Storage -gt 2) {
+                            Section -Style Heading4 'Disk Inventory' {
+                                Paragraph "The following section provides the Disks installed on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapDiskInv
+                            }
                         }
                     }
                 }
@@ -179,10 +187,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Paragraph "The following section provides a summary of the license usage on $($ClusterInfo.ClusterName)."
                     BlankLine
                     Get-AbrOntapClusterLicense
-                    Section -Style Heading4 'License Features' {
-                        Paragraph "The following section provides the License Features Usage on $($ClusterInfo.ClusterName)."
-                        BlankLine
-                        Get-AbrOntapClusterLicenseUsage
+                    if ($InfoLevel.License -gt 0) {
+                        Section -Style Heading4 'License Features' {
+                            Paragraph "The following section provides the License Features Usage on $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapClusterLicenseUsage
+                        }
                     }
                 }
             }
@@ -263,10 +273,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                     Paragraph "The following section provides the Routes information on $($ClusterInfo.ClusterName)."
                                     BlankLine
                                     Get-AbrOntapNetworkRoute -Vserver $SVM
-                                    Section -Style Heading5 "Network Interface Routes" {
-                                        Paragraph "The following section provides the Per Network Interface Routes information on $($SVM)."
-                                        BlankLine
-                                        Get-AbrOntapNetworkRouteLif -Vserver $SVM
+                                    if ($InfoLevel.Network -gt 2) {
+                                        Section -Style Heading5 "Network Interface Routes" {
+                                            Paragraph "The following section provides the Per Network Interface Routes information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapNetworkRouteLif -Vserver $SVM
+                                        }
                                     }
                                 }
                             }
@@ -295,18 +307,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the configuration of the vserver $($SVM)."
                                 BlankLine
                                 Get-AbrOntapVserverSummary -Vserver $SVM
-                                if (Get-NcVol -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
-                                    Section -Style Heading4 'Volumes QoS Policy' {
-                                        Paragraph "The following section provides the Vserver QoS Configuration on $($ClusterInfo.ClusterName)."
-                                        Section -Style Heading5 'Volumes Fixed QoS Policy' {
-                                            Paragraph "The following section provides the Volume Fixed QoS Group information on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesQosGPFixed
-                                        }
-                                        Section -Style Heading5 'Volumes Adaptive QoS Policy' {
-                                            Paragraph "The following section provides the Volumes Adaptive QoS Group information on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapVserverVolumesQosGPAdaptive
+                                if ($InfoLevel.Vserver -gt 2) {
+                                    if (Get-NcVol -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                        Section -Style Heading4 'Volumes QoS Policy' {
+                                            Paragraph "The following section provides the Vserver QoS Configuration on $($ClusterInfo.ClusterName)."
+                                            Section -Style Heading5 'Volumes Fixed QoS Policy' {
+                                                Paragraph "The following section provides the Volume Fixed QoS Group information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapVserverVolumesQosGPFixed
+                                            }
+                                            Section -Style Heading5 'Volumes Adaptive QoS Policy' {
+                                                Paragraph "The following section provides the Volumes Adaptive QoS Group information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapVserverVolumesQosGPAdaptive
+                                            }
                                         }
                                     }
                                 }
@@ -315,11 +329,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         Paragraph "The following section provides $SVM Volumes Information on $($SVM)."
                                         BlankLine
                                         Get-AbrOntapVserverVolume -Vserver $SVM
-                                        if (Get-NcVol -VserverContext $SVM -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
-                                            Section -Style Heading4 "Per Volumes QoS Policy" {
-                                                Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverVolumesQosSetting -Vserver $SVM
+                                        if ($InfoLevel.Vserver -gt 2) {
+                                            if (Get-NcVol -VserverContext $SVM -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
+                                                Section -Style Heading4 "Per Volumes QoS Policy" {
+                                                    Paragraph "The following section provides the Vserver per Volumes QoS Configuration on $($SVM)."
+                                                    BlankLine
+                                                    Get-AbrOntapVserverVolumesQosSetting -Vserver $SVM
+                                                }
                                             }
                                         }
                                         if (Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}) {
@@ -386,10 +402,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Paragraph "The following section provides the NFS Service Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverNFSSummary -Vserver $SVM
-                                                Section -Style Heading6 "NFS Options" {
-                                                    Paragraph "The following section provides the NFS Service Options Information on $($SVM)."
-                                                    BlankLine
-                                                    Get-AbrOntapVserverNFSOption -Vserver $SVM
+                                                if ($InfoLevel.Vserver -gt 2) {
+                                                    Section -Style Heading6 "NFS Options" {
+                                                        Paragraph "The following section provides the NFS Service Options Information on $($SVM)."
+                                                        BlankLine
+                                                        Get-AbrOntapVserverNFSOption -Vserver $SVM
+                                                    }
                                                 }
                                                 if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport) {
                                                     Section -Style Heading6 "NFS Volume Export" {
@@ -408,10 +426,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Paragraph "The following section provides the CIFS Service Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverCIFSSummary -Vserver $SVM
-                                                Section -Style Heading6 'CIFS Service Configuration' {
-                                                    Paragraph "The following section provides the Cifs Service Configuration Information on $($SVM)."
-                                                    BlankLine
-                                                    Get-AbrOntapVserverCIFSSecurity -Vserver $SVM
+                                                if ($InfoLevel.Vserver -gt 2) {
+                                                    Section -Style Heading6 'CIFS Service Configuration' {
+                                                        Paragraph "The following section provides the Cifs Service Configuration Information on $($SVM)."
+                                                        BlankLine
+                                                        Get-AbrOntapVserverCIFSSecurity -Vserver $SVM
+                                                    }
                                                 }
                                                 Section -Style Heading6 'CIFS Domain Controller' {
                                                     Paragraph "The following section provides the Connected Domain Controller Information on $($SVM)."
@@ -427,10 +447,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     BlankLine
                                                     Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
                                                 }
-                                                Section -Style Heading6 'CIFS Options' {
-                                                    Paragraph "The following section provides the CIFS Service Options Information on $($SVM)."
-                                                    BlankLine
-                                                    Get-AbrOntapVserverCIFSOption -Vserver $SVM
+                                                if ($InfoLevel.Vserver -gt 2) {
+                                                    Section -Style Heading6 'CIFS Options' {
+                                                        Paragraph "The following section provides the CIFS Service Options Information on $($SVM)."
+                                                        BlankLine
+                                                        Get-AbrOntapVserverCIFSOption -Vserver $SVM
+                                                    }
                                                 }
                                                 Section -Style Heading6 'CIFS Share' {
                                                     Paragraph "The following section provides the CIFS Service Shares Information on $($SVM)."
@@ -554,10 +576,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         Paragraph "The following section provides the SnapMirror Relationship information on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapRepRelationship
-                                        Section -Style Heading5 'SnapMirror Replication History' {
-                                            Paragraph "The following section provides the SnapMirror Operation information on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapRepHistory
+                                        if ($InfoLevel.Replication -gt 0) {
+                                            Section -Style Heading5 'SnapMirror Replication History' {
+                                                Paragraph "The following section provides the SnapMirror Operation information on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapRepHistory
+                                            }
                                         }
                                     }
                                 }
@@ -608,10 +632,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             BlankLine
                                             Get-AbrOntapEfficiencyVol -Vserver $SVM
                                         }
-                                        Section -Style Heading5 "Detailed Volume Efficiency" {
-                                            Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($SVM)."
-                                            BlankLine
-                                            Get-AbrOntapEfficiencyVolDetailed -Vserver $SVM
+                                        if ($InfoLevel.Efficiency -gt 2) {
+                                            Section -Style Heading5 "Detailed Volume Efficiency" {
+                                                Paragraph "The following section provides the Volume Efficiency Saving Detailed information on $($SVM)."
+                                                BlankLine
+                                                Get-AbrOntapEfficiencyVolDetailed -Vserver $SVM
+                                            }
                                         }
                                     }
                                 }
@@ -692,11 +718,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Volume Snaplock Type information on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSecuritySnapLockVol
-                                if (Get-Ncvol -Controller $Array | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}) {
-                                    Section -Style Heading6 'Snaplock Volume Attributes' {
-                                        Paragraph "The following section provides the Snaplock Volume Attributes information on $($ClusterInfo.ClusterName)."
-                                        BlankLine
-                                        Get-AbrOntapSecuritySnapLockVollAttr
+                                if ($InfoLevel.Security -gt 2) {
+                                    if (Get-Ncvol -Controller $Array | Where-Object {$_.VolumeSnaplockAttributes.SnaplockType -in "enterprise","compliance"}) {
+                                        Section -Style Heading6 'Snaplock Volume Attributes' {
+                                            Paragraph "The following section provides the Snaplock Volume Attributes information on $($ClusterInfo.ClusterName)."
+                                            BlankLine
+                                            Get-AbrOntapSecuritySnapLockVollAttr
+                                        }
                                     }
                                 }
                             }
@@ -747,13 +775,15 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Configuration Backup Setting on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigBackupURL
-                                $Nodes = Get-NcNode -Controller $Array
-                                foreach ($Node in $Nodes) {
-                                    if (Get-NcConfigBackup -Node $Node -Controller $Array) {
-                                        Section -Style Heading4 "$Node Configuration Backup Items" {
-                                            Paragraph "The following section provides the Configuration Backup Items on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapSysConfigBackup -Node $Node
+                                if ($InfoLevel.System -gt 2) {
+                                    $Nodes = Get-NcNode -Controller $Array
+                                    foreach ($Node in $Nodes) {
+                                        if (Get-NcConfigBackup -Node $Node -Controller $Array) {
+                                            Section -Style Heading4 "$Node Configuration Backup Items" {
+                                                Paragraph "The following section provides the Configuration Backup Items on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapSysConfigBackup -Node $Node
+                                            }
                                         }
                                     }
                                 }
@@ -786,10 +816,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         Paragraph "The following section provides the Network Time Protocol Configuration on $($ClusterInfo.ClusterName)."
                                         BlankLine
                                         Get-AbrOntapSysConfigNTP
-                                        Section -Style Heading5 'Network Time Protocol Node Status Information' {
-                                            Paragraph "The following section provides the Network Time Protocol Node Status on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapSysConfigNTPHost
+                                        if ($InfoLevel.System -gt 2) {
+                                            Section -Style Heading5 'Network Time Protocol Node Status Information' {
+                                                Paragraph "The following section provides the Network Time Protocol Node Status on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapSysConfigNTPHost
+                                            }
                                         }
                                     }
                                 }
