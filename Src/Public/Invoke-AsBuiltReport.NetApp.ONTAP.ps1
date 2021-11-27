@@ -432,11 +432,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                         BlankLine
                                                         Get-AbrOntapVserverCIFSSecurity -Vserver $SVM
                                                     }
-                                                }
-                                                Section -Style Heading6 'CIFS Domain Controller' {
-                                                    Paragraph "The following section provides the Connected Domain Controller Information on $($SVM)."
-                                                    BlankLine
-                                                    Get-AbrOntapVserverCIFSDC -Vserver $SVM
+                                                    Section -Style Heading6 'CIFS Domain Controller' {
+                                                        Paragraph "The following section provides the Connected Domain Controller Information on $($SVM)."
+                                                        BlankLine
+                                                        Get-AbrOntapVserverCIFSDC -Vserver $SVM
+                                                    }
                                                 }
                                                 Section -Style Heading6 'CIFS Local Group' {
                                                     Paragraph "The following section provides the Cifs Service Local Group Information on $($SVM)."
