@@ -53,7 +53,7 @@ function Get-AbrOntapStorageAGGR {
             }
             $AggrSpaceSummary | Table @TableParams
         }
-        if ($InfoLevel.Storage -gt 2) {
+        if ($InfoLevel.Storage -ge 2) {
             Section -Style Heading4 'Aggregate Options' {
                 Paragraph "The following section provides the Aggregates Options on $($ClusterInfo.ClusterName)."
                 BlankLine
