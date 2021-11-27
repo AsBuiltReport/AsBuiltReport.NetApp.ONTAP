@@ -155,7 +155,6 @@ There are 4 levels (0-3) of detail granularity for each section as follows;
 |    0    | Disabled          | Does not collect or display any information                                                                                                |
 |    1    | Enabled | Provides condensed, detailed information for a collection of objects                                                                                 |
 |    2    | Adv Summary       | Provides condensed, detailed information for a collection of objects                                                                       |
-|    3    | Detailed          | Provides detailed information for individual objects                                                                                       |
 
 ### Healthcheck
 
