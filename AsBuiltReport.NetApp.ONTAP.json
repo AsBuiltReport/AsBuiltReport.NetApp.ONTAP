@@ -12,7 +12,7 @@
 
     },
     "InfoLevel": {
-        "_comment_": "0 = Disabled, 1 = Enabled",
+        "_comment_": "0 = Disabled, 1 = Enabled, 2 = Adv Summary",
         "Cluster": 1,
         "Node": 1,
         "Storage": 1,

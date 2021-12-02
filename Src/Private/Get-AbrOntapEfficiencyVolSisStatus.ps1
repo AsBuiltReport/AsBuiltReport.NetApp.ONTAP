@@ -40,8 +40,8 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                         default {$Item.State}
                     }
                     'Status' = $Item.Status
-                    'Schedule Or Policy' = $Item.ScheduleOrPolicy
-                    'Progress' = $Item.Progress
+                    'Schedule Or Policy' = ConvertTo-EmptyToFiller $Item.ScheduleOrPolicy
+                    'Progress' = ConvertTo-EmptyToFiller $Item.Progress
                 }
                 $OutObj += [pscustomobject]$inobj
             }
