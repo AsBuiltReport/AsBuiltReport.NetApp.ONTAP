@@ -442,7 +442,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Paragraph "The following section provides the Cifs Service Local Group Information on $($SVM)."
                                                     BlankLine
                                                     Get-AbrOntapVserverCIFSLocalGroup -Vserver $SVM
-                                                    BlankLine
+                                                }
+                                                Section -Style Heading6 'CIFS Local Group Members' {
                                                     Paragraph "The following section provides the Cifs Service Local Group Memeber Information on $($SVM)."
                                                     BlankLine
                                                     Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
@@ -458,10 +459,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Paragraph "The following section provides the CIFS Service Shares Information on $($SVM)."
                                                     BlankLine
                                                     Get-AbrOntapVserverCIFSShare -Vserver $SVM
-                                                    BlankLine
+                                                }
+                                                Section -Style Heading6 'CIFS Share Configuration' {
                                                     Paragraph "The following section provides the CIFS Shares Properties & Acl Information on $($SVM)."
                                                     BlankLine
                                                     Get-AbrOntapVserverCIFSShareProp -Vserver $SVM
+                                                }
+                                                if ($InfoLevel.Vserver -ge 2) {
+                                                    if (Get-NcCifsSession -VserverContext $SVM -Controller $Array) {
+                                                        Section -Style Heading6 'CIFS Sessions' {
+                                                            Paragraph "The following section provides the CIFS Sessions Information on $($SVM)."
+                                                            BlankLine
+                                                            Get-AbrOntapVserverCIFSSession -Vserver $SVM
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -670,9 +681,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Paragraph "The following section provides the Vserver SSL Certificates information on $($ClusterInfo.ClusterName)."
                             BlankLine
                             Get-AbrOntapSecuritySSLVserver
-                            Paragraph "The following section provides the Vserver SSL Certificates Detailed information on $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            Get-AbrOntapSecuritySSLDetailed
+                            Section -Style Heading4 'Vserver SSL Certificate Details' {
+                                Paragraph "The following section provides the Vserver SSL Certificates Detailed information on $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapSecuritySSLDetailed
+                            }
                         }
                     }
                     if (Get-NcSecurityKeyManagerKeyStore -ErrorAction SilentlyContinue -Controller $Array) {
@@ -794,13 +807,15 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the EMS Configuration on $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigEMSSetting
-                                $Nodes = Get-NcNode -Controller $Array
-                                foreach ($Node in $Nodes) {
-                                    if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
-                                        Section -Style Heading4 "$Node Emergency and Alert Messages" {
-                                            Paragraph "The following section provides Cluster Emergency and Alert Messages  on $($ClusterInfo.ClusterName)."
-                                            BlankLine
-                                            Get-AbrOntapSysConfigEMS -Node $Node
+                                if ($InfoLevel.System -ge 2) {
+                                    $Nodes = Get-NcNode -Controller $Array
+                                    foreach ($Node in $Nodes) {
+                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
+                                            Section -Style Heading4 "$Node Emergency and Alert Messages" {
+                                                Paragraph "The following section provides Cluster Emergency and Alert Messages  on $($ClusterInfo.ClusterName)."
+                                                BlankLine
+                                                Get-AbrOntapSysConfigEMS -Node $Node
+                                            }
                                         }
                                     }
                                 }
