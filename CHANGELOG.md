@@ -4,11 +4,11 @@
 
 ### Added
 
-- Updated Changelog to reflect v0.6.0 changes
+- None
 
 ### Changed
 
-- None
+- Updated Changelog to reflect v0.6.0 changes
 
 ### Fixed
 
