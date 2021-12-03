@@ -1,5 +1,36 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+## [0.6.1] - 2021-12-02
+
+### Added
+
+- Updated Changelog to reflect v0.6.0 changes
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+## [0.6.0] - 2021-12-02
+
+### Added
+
+- Added Vserver CIFS Client Session information.
+- Added Storage Aggregate Option Information.
+
+### Changed
+
+- The network section has been changed to show the content per node.
+- Updated HTML Sample Report.
+- Implemented the ability to specify the InfoLevel option.
+
+### Fixed
+
+- Fix Volume SnapShot Section logic to display content only when there are snapshots data available.
+
 ## [0.5.0] - 2021-10-11
 
 ### Added
