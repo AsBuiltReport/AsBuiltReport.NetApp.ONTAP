@@ -1,11 +1,11 @@
-function Get-AbrOntapNetworkVlans {
+function Get-AbrOntapNetworkVlan {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Interface VLAN information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapNetworkVlans {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Node
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapNetworkVlans {
     }
 
     process {
-        $Vlan = Get-NcNetPortVlan
+        $Vlan = Get-NcNetPortVlan -Node $Node -Controller $Array
         $VlanObj = @()
         if ($Vlan) {
             foreach ($Item in $Vlan) {
@@ -31,15 +35,14 @@ function Get-AbrOntapNetworkVlans {
                     'Interface Name' = $Item.InterfaceName
                     'Parent Interface' = $Item.ParentInterface
                     'Vlan ID' = $Item.VlanID
-                    'Node' = $Item.Node
                 }
                 $VlanObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "Network VLAN Information - $($ClusterInfo.ClusterName)"
+                Name = "Network VLAN Information - $($Node)"
                 List = $false
-                ColumnWidths = 25, 25, 25, 25
+                ColumnWidths = 34, 33, 33
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

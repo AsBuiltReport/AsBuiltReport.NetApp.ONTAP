@@ -5,7 +5,7 @@ function Get-AbrOntapCluster {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,19 +23,19 @@ function Get-AbrOntapCluster {
     }
 
     process {
-        $ClusterInfo = Get-NcCluster
+        $ClusterInfo = Get-NcCluster -Controller $Array
         if ($ClusterInfo) {
-            $ClusterDiag = Get-NcDiagnosisStatus
-            $ClusterVersion = Get-NcSystemVersion
-            $ArrayAggr = Get-NcAggr
-            $ArrayVolumes = Get-NcVol
+            $ClusterDiag = Get-NcDiagnosisStatus -Controller $Array
+            $ClusterVersion = Get-NcSystemVersion -Controller $Array
+            $ArrayAggr = Get-NcAggr -Controller $Array
+            $ArrayVolumes = Get-NcVol -Controller $Array
             $ClusterSummary = [PSCustomObject] @{
                 'Cluster Name' = $ClusterInfo.ClusterName
                 'Cluster UUID' = $ClusterInfo.ClusterUuid
                 'Cluster Serial' = $ClusterInfo.ClusterSerialNumber
                 'Cluster Controller' = $ClusterInfo.NcController
-                'Cluster Contact' = $ClusterInfo.ClusterContact
-                'Cluster Location' = $ClusterInfo.ClusterLocation
+                'Cluster Contact' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterContact
+                'Cluster Location' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterLocation
                 'Ontap Version' = $ClusterVersion.value
                 'Number of Aggregates' = $ArrayAggr.count
                 'Number of Volumes' = $ArrayVolumes.count

@@ -5,7 +5,7 @@ function Get-AbrOntapNodesHW {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,10 +23,10 @@ function Get-AbrOntapNodesHW {
     }
 
     process {
-        $NodeHW = Get-NcNodeInfo
+        $NodeHW = Get-NcNodeInfo -Controller $Array
         if ($NodeHW) {
             $NodeHardWare = foreach ($NodeHWs in $NodeHW) {
-                $NodeInfo = Get-NcNode -Node $NodeHWs.SystemName
+                $NodeInfo = Get-NcNode -Node $NodeHWs.SystemName -Controller $Array
                 [PSCustomObject] @{
                     'Name' = $NodeHWs.SystemName
                     'System Type' = $NodeHWs.SystemMachineType

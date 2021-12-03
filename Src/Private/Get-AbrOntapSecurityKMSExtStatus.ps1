@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     }
 
     process {
-        $Data = Get-NcSecurityKeyManager
+        $Data = Get-NcSecurityKeyManager -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
@@ -43,7 +43,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
             $TableParams = @{
                 Name = "External Key Management Service (KMS) Status information  - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 35, 25, 25, 15
+                ColumnWidths = 35, 25, 15, 25
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

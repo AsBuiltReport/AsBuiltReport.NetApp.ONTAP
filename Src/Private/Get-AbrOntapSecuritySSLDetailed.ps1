@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     }
 
     process {
-        $Data =  Get-NcSecurityCertificate | Where-Object {$_.Type -eq "server"}
+        $Data =  Get-NcSecurityCertificate -Controller $Array | Where-Object {$_.Type -eq "server"}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

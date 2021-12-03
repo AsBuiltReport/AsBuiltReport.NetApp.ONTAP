@@ -5,7 +5,7 @@ function Get-AbrOntapDiskShelf {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,10 +23,10 @@ function Get-AbrOntapDiskShelf {
     }
 
     process {
-        $NodeSum = Get-NcNode
+        $NodeSum = Get-NcNode -Controller $Array
         if ($NodeSum) {
             $ShelfInventory = foreach ($Nodes in $NodeSum) {
-                $Nodeshelf = Get-NcShelf -NodeName $Nodes.Node
+                $Nodeshelf = Get-NcShelf -NodeName $Nodes.Node -Controller $Array
                 if ($Nodeshelf) {
                     [PSCustomObject] @{
                         'Node Name' = $Nodeshelf.NodeName

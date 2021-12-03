@@ -5,7 +5,7 @@ function Get-AbrOntapDiskInv {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapDiskInv {
     }
 
     process {
-        $DiskInv = Get-NcDisk
-        $NodeDiskBroken = Get-NcDisk | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
+        $DiskInv = Get-NcDisk -Controller $Array
+        $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
         if ($DiskInv) {
             $DiskInventory = foreach ($Disks in $DiskInv) {
-                $DiskType = Get-NcDisk -Name $Disks.Name | ForEach-Object{ $_.DiskInventoryInfo }
+                $DiskType = Get-NcDisk -Controller $Array -Name $Disks.Name | ForEach-Object{ $_.DiskInventoryInfo }
                 $DiskFailed = $NodeDiskBroken | Where-Object { $_.'Name' -eq $Disks.Name }
                 if ($DiskFailed.Name -eq $Disks.Name ) {
                     $Disk = " $($DiskFailed.Name)(*)"
@@ -41,7 +41,7 @@ function Get-AbrOntapDiskInv {
                     'Bay' = $Disks.Bay
                     'Capacity' = $Disks.Capacity | ConvertTo-FormattedNumber -Type Disksize -ErrorAction SilentlyContinue
                     'Model' = $Disks.Model
-                    'SerialNumber' = $DiskType.SerialNumber
+                    'Serial Number' = $DiskType.SerialNumber
                     'Type' = $DiskType.DiskType
                 }
             }

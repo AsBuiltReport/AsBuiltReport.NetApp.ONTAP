@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverNFSSummary {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,13 +27,11 @@ function Get-AbrOntapVserverNFSSummary {
     }
 
     process {
-        $VserverData = Get-NcNfsService
+        $VserverData = Get-NcNfsService -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Vserver' = $Item.Vserver
-                    'General Access' = ConvertTo-TextYN $Item.GeneralAccess
                     'Nfs v3' = Switch ($Item.IsNfsv3) {
                         'True' { 'Enabled' }
                         'False' { 'Disabled' }
@@ -45,6 +47,8 @@ function Get-AbrOntapVserverNFSSummary {
                         'False' { 'Disabled' }
                         default {$Item.IsNfsv41}
                     }
+                    'General Access' = ConvertTo-TextYN $Item.GeneralAccess
+
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
@@ -57,7 +61,7 @@ function Get-AbrOntapVserverNFSSummary {
             $TableParams = @{
                 Name = "Vserver NFS Service Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 40, 15, 15, 15, 15
+                ColumnWidths = 25, 25, 25, 25
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

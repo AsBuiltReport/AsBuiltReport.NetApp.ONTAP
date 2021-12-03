@@ -5,7 +5,7 @@ function Get-AbrOntapClusterASUP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapClusterASUP {
     }
 
     process {
-        $AutoSupport = Get-NcAutoSupportConfig
+        $AutoSupport = Get-NcAutoSupportConfig -Controller $Array
         if ($AutoSupport) {
             $AutoSupportSummary = foreach ($NodesAUTO in $AutoSupport) {
                 [PSCustomObject] @{
@@ -35,7 +35,7 @@ function Get-AbrOntapClusterASUP {
                 }
             }
             if ($Healthcheck.Cluster.AutoSupport) {
-                $AutoSupportSummary | Where-Object { $_.'Enabled' -like 'False' } | Set-Style -Style Warning -Property 'Enabled'
+                $AutoSupportSummary | Where-Object { $_.'Enabled' -like 'No' } | Set-Style -Style Warning -Property 'Enabled'
             }
 
             $TableParams = @{

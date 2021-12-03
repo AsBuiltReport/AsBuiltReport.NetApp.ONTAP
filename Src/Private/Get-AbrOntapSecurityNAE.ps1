@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNAE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,11 +23,11 @@ function Get-AbrOntapSecurityNAE {
     }
 
     process {
-        $Data =  Get-NcAggr
+        $Data =  Get-NcAggr -Controller $Array
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {
-                $NAE = (Get-NcAggrOption -Name $Item.Name | Where-Object {$_.Name -eq "encrypt_with_aggr_key"}).Value
+                $NAE = (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object {$_.Name -eq "encrypt_with_aggr_key"}).Value
                 $inObj = [ordered] @{
                     'Aggregate' = $Item.Name
                     'Aggregate Encryption' = Switch ($NAE) {

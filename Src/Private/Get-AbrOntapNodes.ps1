@@ -1,11 +1,11 @@
-function Get-AbrOntapNodes {
+function Get-AbrOntapNode {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP System Nodes information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNodes {
     }
 
     process {
-        $NodeSum = Get-NcNode
+        $NodeSum = Get-NcNode -Controller $Array
         if ($NodeSum) {
             $NodeSummary = foreach ($Nodes in $NodeSum) {
                 [PSCustomObject] @{
@@ -35,7 +35,7 @@ function Get-AbrOntapNodes {
                 }
             }
             $TableParams = @{
-                Name = "Node Summary - $($ClusterInfo.ClusterName)"
+                Name = "Node Information - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 27, 27, 17, 17, 12
             }

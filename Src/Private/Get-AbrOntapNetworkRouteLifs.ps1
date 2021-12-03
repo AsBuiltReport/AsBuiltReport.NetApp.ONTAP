@@ -1,11 +1,11 @@
-function Get-AbrOntapNetworkRouteLifs {
+function Get-AbrOntapNetworkRouteLif {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP network route per lif information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapNetworkRouteLifs {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapNetworkRouteLifs {
     }
 
     process {
-        $Routes = Get-NcNetRouteLif
+        $Routes = Get-NcNetRouteLif -VserverContext $Vserver -Controller $Array
         $RoutesObj = @()
         if ($Routes) {
             foreach ($Item in $Routes) {
@@ -31,13 +35,13 @@ function Get-AbrOntapNetworkRouteLifs {
                     'Destination' = $Item.Destination
                     'Gateway' = $Item.Gateway
                     'Lif Names' = $Item.LifNames
-                    'Vserver' = $Item.Vserver
+                    'Address Family' = $Item.AddressFamily.ToString().ToUpper()
                 }
                 $RoutesObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "Per Network Interface Route Information - $($ClusterInfo.ClusterName)"
+                Name = "Per Network Interface Route Information - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 20, 40, 20
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapRepMediator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapRepMediator {
     }
 
     process {
-        $ReplicaData = Get-NetAppOntapAPI -uri "/api/cluster/mediators?"
+        $ReplicaData = Get-NetAppOntapAPI -uri "/api/cluster/mediators?fields=*&return_records=true&return_timeout=15"
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {

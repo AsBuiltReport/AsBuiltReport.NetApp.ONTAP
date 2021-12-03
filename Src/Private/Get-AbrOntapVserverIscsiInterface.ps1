@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverIscsiInterface {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverIscsiInterface {
     }
 
     process {
-        $VserverData = Get-NcIscsiInterface
+        $VserverData = Get-NcIscsiInterface -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -36,7 +40,6 @@ function Get-AbrOntapVserverIscsiInterface {
                         'False' { 'Down' }
                         default { $Item.IsInterfaceEnabled }
                     }
-                    'Vserver' = $Item.Vserver
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
@@ -45,9 +48,9 @@ function Get-AbrOntapVserverIscsiInterface {
             }
 
             $TableParams = @{
-                Name = "ISCSI Interface Information - $($ClusterInfo.ClusterName)"
+                Name = "ISCSI Interface Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 35, 25, 10, 10, 20
+                ColumnWidths = 40, 30, 15, 15
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

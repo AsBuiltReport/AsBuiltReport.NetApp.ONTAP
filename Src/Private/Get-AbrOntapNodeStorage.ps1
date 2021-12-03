@@ -5,7 +5,7 @@ function Get-AbrOntapNodeStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNodeStorage {
     }
 
     process {
-        $Data = Get-NcVol | Where-Object {$_.Name -eq 'vol0'}
+        $Data = Get-NcVol -Controller $Array | Where-Object {$_.Name -eq 'vol0'}
         $OutObj = @()
         if ($Data) {
             foreach ($Item in $Data) {

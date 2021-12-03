@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkBdomain {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,15 +23,15 @@ function Get-AbrOntapNetworkBdomain {
     }
 
     process {
-        $BDomain = Get-NcNetPortBroadcastDomain
+        $BDomain = Get-NcNetPortBroadcastDomain -Controller $Array
         $BDomainObj = @()
         if ($BDomain) {
             foreach ($Item in $BDomain) {
                 $inObj = [ordered] @{
                     'Name' = $Item.BroadcastDomain
-                    'Ipspace' = $Item.Ipspace
+                    'IPSpace' = $Item.Ipspace
                     'Failover Groups' = $Item.FailoverGroups
-                    'Mtu' = $Item.Mtu
+                    'MTU' = $Item.Mtu
                     'Ports' = $Item.Ports
                 }
                 $BDomainObj += [pscustomobject]$inobj

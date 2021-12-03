@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIpSpace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkIpSpace {
     }
 
     process {
-        $IPSpace = Get-NcNetIpspace
+        $IPSpace = Get-NcNetIpspace -Controller $Array
         $IPSpaceObj = @()
         if ($IPsPace) {
             foreach ($Item in $IPSpace) {

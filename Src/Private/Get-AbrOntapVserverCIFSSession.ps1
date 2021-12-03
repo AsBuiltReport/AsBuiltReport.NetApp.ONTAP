@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverIscsiInitiator {
+function Get-AbrOntapVserverCIFSSession {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver ISCSI ClientInitiators information from the Cluster Management Network
+    Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Sessions information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,25 +23,28 @@ function Get-AbrOntapVserverIscsiInitiator {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver ISCSI Client Initiators information."
+        Write-PscriboMessage "Collecting ONTAP CIFS Session information."
     }
 
     process {
-        $VserverData = Get-NcIscsiInitiator -VserverContext $Vserver -Controller $Array
+        $VserverData = Get-NcCifsSession -VserverContext $Vserver -Controller $Array
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
                 $inObj = [ordered] @{
-                    'Initiator Name' = $Item.InitiatorNodeName
-                    'Target Port Group' = $Item.TpGroupName
+                    'Lif Address' = $Item.LifAddress
+                    'Connected Time' = $Item.ConnectedTime
+                    'Protocol Version' = $Item.ProtocolVersion
+                    'Address' = $Item.Address
+                    'User' = $Item.WindowsUser
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "ISCSI Client Initiator Information - $($Vserver)"
+                Name = "Vserver CIFS Sessions Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 60, 40
+                ColumnWidths = 20, 15, 15, 20, 30
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

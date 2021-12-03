@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     }
 
     process {
-        $FG = Get-NcNetFailoverGroup
+        $FG = Get-NcNetFailoverGroup -Controller $Array
         $FGObj = @()
         if ($FG) {
             foreach ($Item in $FG) {

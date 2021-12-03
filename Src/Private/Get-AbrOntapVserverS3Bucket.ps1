@@ -5,7 +5,7 @@ function Get-AbrOntapVserverS3Bucket {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -14,8 +14,12 @@ function Get-AbrOntapVserverS3Bucket {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+            [string]
+            $Vserver
     )
 
     begin {
@@ -23,7 +27,7 @@ function Get-AbrOntapVserverS3Bucket {
     }
 
     process {
-        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/buckets?"
+        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/buckets?svm=$Vserver&fields=*&return_records=true&return_timeout=15"
         $VserverObj = @()
         if ($VserverData) {
             foreach ($Item in $VserverData) {
@@ -32,15 +36,14 @@ function Get-AbrOntapVserverS3Bucket {
                     'Volume' = $Item.volume.name
                     'Total' = $Item.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Used' = $Item.logical_used_size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                    'Vserver' = $Item.svm.name
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
 
             $TableParams = @{
-                Name = "Vserver S3 Bucket Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver S3 Bucket Information - $($Vserver)"
                 List = $false
-                ColumnWidths = 30, 25, 15, 15, 15
+                ColumnWidths = 30, 30, 20, 20
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"

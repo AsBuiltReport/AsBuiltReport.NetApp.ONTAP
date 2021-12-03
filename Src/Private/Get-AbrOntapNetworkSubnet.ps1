@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkSubnet {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkSubnet {
     }
 
     process {
-        $Subnet = Get-NcNetSubnet
+        $Subnet = Get-NcNetSubnet -Controller $Array
         $SubnetObj = @()
         if ($Subnet) {
             foreach ($Item in $Subnet) {

@@ -5,7 +5,7 @@ function Get-AbrOntapClusterLicenseUsage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapClusterLicenseUsage {
     }
 
     process {
-        $LicenseFeature = Get-NcFeatureStatus
+        $LicenseFeature = Get-NcFeatureStatus -Controller $Array
         if ($LicenseFeature) {
             $LicenseFeature = foreach ($NodeLFs in $LicenseFeature) {
                 [PSCustomObject] @{
@@ -36,7 +36,7 @@ function Get-AbrOntapClusterLicenseUsage {
                 }
             }
             $TableParams = @{
-                Name = "License Feature Summary - $($ClusterInfo.ClusterName)"
+                Name = "License Feature - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 40, 20, 40
             }

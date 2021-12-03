@@ -5,7 +5,7 @@ function Get-AbrOntapRepClusterPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.4.0
+        Version:        0.5.0
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapRepClusterPeer {
     }
 
     process {
-        $ReplicaData = Get-NcClusterPeer
+        $ReplicaData = Get-NcClusterPeer -Controller $Array
         $ReplicaObj = @()
         if ($ReplicaData) {
             foreach ($Item in $ReplicaData) {
@@ -44,7 +44,7 @@ function Get-AbrOntapRepClusterPeer {
             $TableParams = @{
                 Name = "Replication - Cluster Peer Information - $($ClusterInfo.ClusterName)"
                 List = $false
-                ColumnWidths = 20, 20, 20, 10, 15, 15
+                ColumnWidths = 20, 20, 19, 10, 15, 16
             }
             if ($Report.ShowTableCaptions) {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
