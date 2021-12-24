@@ -86,7 +86,7 @@ These modules may also be manually installed.
 ### Linux & macOS
 
 - .NET Core is required for cover page image support on Linux and macOS operating systems.
-  - [Installing .NET Coe.re for macOS](https://docs.microsoft.com/en-us/dotnet/core/install/macos)
+  - [Installing .NET Core for macOS](https://docs.microsoft.com/en-us/dotnet/core/install/macos)
   - [Installing .NET Core for Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
 
 ❗ If you are unable to install .NET Core, you must set `ShowCoverPageImage` to `False` in the report JSON configuration file.
