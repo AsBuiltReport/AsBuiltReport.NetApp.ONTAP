@@ -25,31 +25,17 @@
 
 # NetApp ONTAP Arrays AsBuiltReport
 
-NetApp ONTAP AsBuiltReport is a module of the parent "AsBuiltReport" [project](https://github.com/AsBuiltReport/AsBuiltReport). AsBuiltReport is a PowerShell module which generates As-Built documentation for many common datacentre infrastructure systems. Reports can be generated in Text, HTML and MS Word formats and can be presented with custom styling to align with your company/customer's brand.
+NetApp ONTAP As Built Report is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
 
-For detailed documentation around the whole project, please refer to the `README.md` file in the parent AsBuiltReport repository (linked to above). This README is specific only to the NetApp ONTAP Array repository.
+[AsBuiltReport](https://github.com/AsBuiltReport/AsBuiltReport) is an open-sourced community project which utilises PowerShell to produce as-built documentation in multiple document formats for multiple vendors and technologies.
+
+Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for more detailed information about this project.
 
 ## :books: Sample Reports
 
 ### Sample Report - Custom Style 1
 
 Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://technomyth.zenprsolutions.net/wp-content/uploads/2021/11/NetApp-ONTAP-As-Built-Report.html)
-
-Sample NetApp ONTAP As Built report with health checks, using custom report style.
-
-![Sample NetApp ONTAP As Built Report](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/raw/master/Samples/Sample_NetApp_Report_1.png "Sample NetApp ONTAP As Built Report")
-
-### Sample Report - Custom Style 2
-
-Sample NetApp ONTAP As Built report with health checks, using custom report style.
-
-![Sample NetApp ONTAP As Built Report](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/raw/master/Samples/Sample_NetApp_Report_2.png "Sample NetApp ONTAP As Built Report")
-
-### Sample Report - Custom Style 3
-
-Sample NetApp ONTAP As Built report with health checks, using custom report style.
-
-![Sample NetApp ONTAP As Built Report](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/raw/master/Samples/Sample_NetApp_Report_3.png "Sample NetApp ONTAP As Built Report")
 
 # :beginner: Getting Started
 
