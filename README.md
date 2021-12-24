@@ -77,7 +77,9 @@ These modules may also be manually installed.
 
 ❗ If you are unable to install .NET Core, you must set `ShowCoverPageImage` to `False` in the report JSON configuration file.
 
-### :package: Module Installation
+## :package: Module Installation
+
+### PowerShell
 
 Open a PowerShell terminal window and install each of the required modules as follows;
 
