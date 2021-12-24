@@ -83,6 +83,14 @@ These modules may also be manually installed.
 | AsBuiltReport.Core |          1.1.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
 | Netapp.ONTAP |          9.9.1           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
 
+### Linux & macOS
+
+- .NET Core is required for cover page image support on Linux and macOS operating systems.
+  - [Installing .NET Coe.re for macOS](https://docs.microsoft.com/en-us/dotnet/core/install/macos)
+  - [Installing .NET Core for Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
+
+❗ If you are unable to install .NET Core, you must set `ShowCoverPageImage` to `False` in the report JSON configuration file.
+
 ### :package: Module Installation
 
 Open a PowerShell terminal window and install each of the required modules as follows;
@@ -91,7 +99,9 @@ Open a PowerShell terminal window and install each of the required modules as fo
 Install-Module AsBuiltReport.NetApp.ONTAP
 ```
 
-Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP#wrench-system-requirements) also.
+### GitHub
+
+If you are unable to use the PowerShell Gallery, you can still install the module manually. Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP#wrench-system-requirements) also.
 
 1. Download the code package / [latest release](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/releases/latest) zip from GitHub
 2. Extract the zip file
