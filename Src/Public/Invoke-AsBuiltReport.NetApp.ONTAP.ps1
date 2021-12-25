@@ -221,16 +221,18 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
-                        Section -Style Heading3 'Network Link Aggregation Group' {
-                            Paragraph "The following section provides per Node IFGRP Aggregated Ports on  $($ClusterInfo.ClusterName)."
-                            BlankLine
-                            $Nodes = Get-NcNode -Controller $Array
-                            foreach ($Node in $Nodes) {
-                                if (Get-NcNetPortIfgrp -Node $Node -Controller $Array) {
-                                    Section -Style Heading4 "$Node IFGRP" {
-                                        Paragraph "The following section provides per Node IFGRP Aggregated Ports on $($Node)."
-                                        BlankLine
-                                        Get-AbrOntapNetworkIfgrp -Node $Node
+                        if (Get-NcNetPortIfgrp -Controller $Array) {
+                            Section -Style Heading3 'Network Link Aggregation Group' {
+                                Paragraph "The following section provides per Node IFGRP Aggregated Ports on  $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                $Nodes = Get-NcNode -Controller $Array
+                                foreach ($Node in $Nodes) {
+                                    if (Get-NcNetPortIfgrp -Node $Node -Controller $Array) {
+                                        Section -Style Heading4 "$Node IFGRP" {
+                                            Paragraph "The following section provides per Node IFGRP Aggregated Ports on $($Node)."
+                                            BlankLine
+                                            Get-AbrOntapNetworkIfgrp -Node $Node
+                                        }
                                     }
                                 }
                             }
