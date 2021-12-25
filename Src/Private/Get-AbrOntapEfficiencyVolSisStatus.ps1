@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -44,6 +44,9 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                     'Progress' = ConvertTo-EmptyToFiller $Item.Progress
                 }
                 $OutObj += [pscustomobject]$inobj
+            }
+            if ($Healthcheck.Storage.Efficiency) {
+                $OutObj | Where-Object { $_.'State' -like 'Disabled' } | Set-Style -Style Warning -Property 'State'
             }
 
             $TableParams = @{

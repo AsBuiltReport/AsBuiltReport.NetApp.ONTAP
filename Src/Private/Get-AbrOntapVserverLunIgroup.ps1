@@ -48,6 +48,9 @@ function Get-AbrOntapVserverLunIgroup {
                 }
                 $VserverObj += [pscustomobject]$inobj
             }
+            if ($Healthcheck.Vserver.Status) {
+                $VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 } | Set-Style -Style Warning -Property 'Reporting Nodes'
+            }
 
             $TableParams = @{
                 Name = "Vserver Igroup Information - $($ClusterInfo.ClusterName)"

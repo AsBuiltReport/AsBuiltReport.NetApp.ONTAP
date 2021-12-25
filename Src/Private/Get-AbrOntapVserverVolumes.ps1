@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolume {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,6 +43,7 @@ function Get-AbrOntapVserverVolume {
             }
             if ($Healthcheck.Vserver.Status) {
                 $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+                $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
             }
 
             $TableParams = @{

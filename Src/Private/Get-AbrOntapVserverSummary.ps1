@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -73,6 +73,7 @@ function Get-AbrOntapVserverSummary {
                     $VserverObj += [pscustomobject]$inobj
                 }
                 if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
                     $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
                 }
 
