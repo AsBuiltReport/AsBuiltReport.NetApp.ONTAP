@@ -47,19 +47,19 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                         'Default Retention Period' = $SnapLockVolAttr.DefaultRetentionPeriod
                         'Litigation Count' = $SnapLockVolAttr.LitigationCount
                     }
-                    $OutObj += [pscustomobject]$inobj
+                    $OutObj = [pscustomobject]$inobj
+
+                    $TableParams = @{
+                        Name = "Snaplock Volume Attributes - $($vol.Name)"
+                        List = $true
+                        ColumnWidths = 40, 60
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $OutObj | Table @TableParams
                 }
             }
-
-            $TableParams = @{
-                Name = "Snaplock Volume Attributes - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 40, 60
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
         }
     }
 
