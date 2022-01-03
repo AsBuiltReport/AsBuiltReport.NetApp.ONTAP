@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkSubnet {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapNetworkSubnet {
             }
 
             $TableParams = @{
-                Name = "Network Subnet Information - $($ClusterInfo.ClusterName)"
+                Name = "Network Subnet - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 20, 20, 10, 10, 20
             }

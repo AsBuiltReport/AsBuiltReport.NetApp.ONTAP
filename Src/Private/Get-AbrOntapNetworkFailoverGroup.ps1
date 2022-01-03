@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,7 +36,7 @@ function Get-AbrOntapNetworkFailoverGroup {
             }
 
             $TableParams = @{
-                Name = "Network Failover Group Information - $($ClusterInfo.ClusterName)"
+                Name = "Network Failover Group - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 30, 40
             }

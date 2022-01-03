@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkVlan {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapNetworkVlan {
             }
 
             $TableParams = @{
-                Name = "Network VLAN Information - $($Node)"
+                Name = "Network VLAN - $($Node)"
                 List = $false
                 ColumnWidths = 34, 33, 33
             }

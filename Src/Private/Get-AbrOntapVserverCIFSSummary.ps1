@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,23 +43,24 @@ function Get-AbrOntapVserverCIFSSummary {
                         'Status Details' = $SVM.StatusDetails
                         'Status' = $SVM.Status.ToString().ToUpper()
                     }
-                    $VserverObj += [pscustomobject]$inobj
+                    $VserverObj = [pscustomobject]$inobj
+
+                    if ($Healthcheck.Vserver.CIFS) {
+                        $VserverObj | Where-Object { $_.'Cifs Server Status' -notlike 'Running' } | Set-Style -Style Warning -Property 'Cifs Server Status'
+                        $VserverObj | Where-Object { $_.'Status' -like 'down' } | Set-Style -Style Critical -Property 'Status'
+                    }
+
+                    $TableParams = @{
+                        Name = "Vserver CIFS Service - $($SVM.NodeName)"
+                        List = $true
+                        ColumnWidths = 25, 75
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $VserverObj | Table @TableParams
                 }
             }
-            if ($Healthcheck.Vserver.CIFS) {
-                $VserverObj | Where-Object { $_.'Cifs Server Status' -notlike 'Running' } | Set-Style -Style Warning -Property 'Cifs Server Status'
-                $VserverObj | Where-Object { $_.'Status' -like 'down' } | Set-Style -Style Critical -Property 'Status'
-            }
-
-            $TableParams = @{
-                Name = "Vserver CIFS Service Information - $($Vserver)"
-                List = $true
-                ColumnWidths = 25, 75
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
         }
     }
 

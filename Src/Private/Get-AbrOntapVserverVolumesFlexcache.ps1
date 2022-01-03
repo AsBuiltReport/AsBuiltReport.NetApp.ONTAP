@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
             }
 
             $TableParams = @{
-                Name = "Vserver Flexcache Volume Connected Cache Information - $($Vserver)"
+                Name = "Vserver Flexcache Volume Connected Cache - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 15, 15, 20, 15, 15
             }
@@ -71,7 +71,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
             }
 
             $TableParams = @{
-                Name = "Vserver Flexcache Volume Information - $($Vserver)"
+                Name = "Vserver Flexcache Volume - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 15, 15, 20, 15, 15
             }

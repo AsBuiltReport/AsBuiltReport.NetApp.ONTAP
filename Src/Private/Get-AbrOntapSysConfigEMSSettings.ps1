@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigEMSSetting {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -54,7 +54,7 @@ function Get-AbrOntapSysConfigEMSSetting {
             }
 
             $TableParams = @{
-                Name = "System EMS Configuration Setting Information - $($ClusterInfo.ClusterName)"
+                Name = "System EMS Configuration Setting - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 17, 30, 15, 13, 15, 10
             }

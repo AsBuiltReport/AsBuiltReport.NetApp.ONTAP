@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNAE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -46,7 +46,7 @@ function Get-AbrOntapSecurityNAE {
             }
 
             $TableParams = @{
-                Name = "Aggregate Encryption (NAE) information  - $($ClusterInfo.ClusterName)"
+                Name = "Aggregate Encryption (NAE) - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 45, 27, 15, 13
             }

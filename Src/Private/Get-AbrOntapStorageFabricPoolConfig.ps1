@@ -36,18 +36,18 @@ function Get-AbrOntapEfficiencyAggrConfig {
                     'Provider Type' = $Item.ProviderType
                     'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString "0.0" -ErrorAction SilentlyContinue
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
+                $OutObj = [pscustomobject]$inobj
 
-            $TableParams = @{
-                Name = "Aggregate FabriPool Object Store Configuration - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 30, 70
+                $TableParams = @{
+                    Name = "Aggregate FabriPool Object Store Configuration - $($Item.ObjectStoreName)"
+                    List = $true
+                    ColumnWidths = 30, 70
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
         }
     }
 

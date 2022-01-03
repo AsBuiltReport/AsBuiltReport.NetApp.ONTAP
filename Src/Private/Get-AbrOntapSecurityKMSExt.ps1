@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityKMSExt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -38,7 +38,7 @@ function Get-AbrOntapSecurityKMSExt {
             }
 
             $TableParams = @{
-                Name = "External Key Management Service (KMS) information  - $($ClusterInfo.ClusterName)"
+                Name = "External Key Management Service (KMS) - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 20, 20, 10, 20
             }

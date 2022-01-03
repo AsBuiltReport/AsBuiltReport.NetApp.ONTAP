@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAGGR {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -55,13 +55,9 @@ function Get-AbrOntapStorageAGGR {
         }
         if ($InfoLevel.Storage -ge 2) {
             Section -Style Heading4 'Aggregate Options' {
-                Paragraph "The following section provides the Aggregates Options on $($ClusterInfo.ClusterName)."
-                BlankLine
                 $Aggregates = Get-NcAggr -Controller $Array | Where-Object {!$_.AggrRaidAttributes.HasLocalRoot}
                 foreach ($Aggregate in $Aggregates) {
                     Section -Style Heading5 "$($Aggregate.Name) Options" {
-                        Paragraph "The following section provides the Aggregates Options on $($Aggregate.Name)."
-                        BlankLine
                         $OutObj = @()
                         $Options = Get-NcAggrOption -Controller $Array -Name $Aggregate.Name
                         $Option = @{}

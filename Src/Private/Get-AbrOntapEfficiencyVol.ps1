@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-AbrOntapEfficiencyVol {
             }
 
             $TableParams = @{
-                Name = "Volume Efficiency Savings Information - $($Vserver)"
+                Name = "Volume Efficiency Savings - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 15, 10, 11, 10, 12 ,12
             }

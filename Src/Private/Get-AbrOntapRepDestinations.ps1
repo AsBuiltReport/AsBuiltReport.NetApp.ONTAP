@@ -5,7 +5,7 @@ function Get-AbrOntapRepDestination {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -49,21 +49,22 @@ function Get-AbrOntapRepDestination {
                         default { $Item.RelationshipStatus }
                     }
                 }
-                $ReplicaObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Replication.Relationship) {
-                $ReplicaObj | Where-Object { $_.'Status' -eq "Unknown" } | Set-Style -Style Warning -Property 'Status'
-            }
+                $ReplicaObj = [pscustomobject]$inobj
 
-            $TableParams = @{
-                Name = "Replication - SnapMirror Destination (List-Destinations) Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 30, 70
+                if ($Healthcheck.Replication.Relationship) {
+                    $ReplicaObj | Where-Object { $_.'Status' -eq "Unknown" } | Set-Style -Style Warning -Property 'Status'
+                }
+
+                $TableParams = @{
+                    Name = "SnapMirror Destination (List-Destinations) - $($Item.DestinationLocation)"
+                    List = $true
+                    ColumnWidths = 30, 70
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $ReplicaObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $ReplicaObj | Table @TableParams
         }
     }
 

@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIfgrp {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -51,7 +51,7 @@ function Get-AbrOntapNetworkIfgrp {
 
 
             $TableParams = @{
-                Name = "Link Aggregation Group Information - $($Node)"
+                Name = "Link Aggregation Group - $($Node)"
                 List = $false
                 ColumnWidths = 15, 15, 15 ,20 ,20, 15
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapRepVserverPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapRepVserverPeer {
             }
 
             $TableParams = @{
-                Name = "Replication - Vserver Peer Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver Peer - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 20, 20 ,20, 20
             }

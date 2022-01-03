@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -46,7 +46,7 @@ function Get-AbrOntapVserverFcpSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver FCP Service Information - $($Vserver)"
+                Name = "Vserver FCP Service - $($Vserver)"
                 List = $false
                 ColumnWidths = 70, 30
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -52,7 +52,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
             }
 
             $TableParams = @{
-                Name = "Snaplock Volume Attributes Information - $($ClusterInfo.ClusterName)"
+                Name = "Snaplock Volume Attributes - $($ClusterInfo.ClusterName)"
                 List = $true
                 ColumnWidths = 40, 60
             }

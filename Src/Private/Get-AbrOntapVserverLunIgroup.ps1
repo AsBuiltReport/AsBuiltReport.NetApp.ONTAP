@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunIgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,24 +43,30 @@ function Get-AbrOntapVserverLunIgroup {
                     'Type' = $Item.Type
                     'Protocol' = $Item.Protocol
                     'Initiators' = $Item.Initiators.InitiatorName
-                    'Mapped Lun' = $MappedLun
-                    'Reporting Nodes' = $reportingnodes
+                    'Mapped Lun' = Switch (($MappedLun).count) {
+                        0 {"None"}
+                        default {$MappedLun}
+                    }
+                    'Reporting Nodes' = Switch (($reportingnodes).count) {
+                        0 {"None"}
+                        default {$reportingnodes}
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 } | Set-Style -Style Warning -Property 'Reporting Nodes'
-            }
+                $VserverObj = [pscustomobject]$inobj
+                if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 } | Set-Style -Style Warning -Property 'Reporting Nodes'
+                }
 
-            $TableParams = @{
-                Name = "Vserver Igroup Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 25, 75
+                $TableParams = @{
+                    Name = "Vserver Igroup - $($Item.Name)"
+                    List = $true
+                    ColumnWidths = 25, 75
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
         }
     }
 

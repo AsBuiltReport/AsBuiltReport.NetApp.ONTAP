@@ -50,7 +50,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
             }
 
             $TableParams = @{
-                Name = "Volume Deduplication Information - $($Vserver)"
+                Name = "Volume Deduplication - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 15, 15, 20, 20
             }

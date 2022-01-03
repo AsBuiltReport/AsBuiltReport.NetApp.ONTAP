@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLVserver {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapSecuritySSLVserver {
             }
 
             $TableParams = @{
-                Name = "Per Vserver SSL information  - $($ClusterInfo.ClusterName)"
+                Name = "Per Vserver SSL - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 19, 8, 8, 25, 20
             }
