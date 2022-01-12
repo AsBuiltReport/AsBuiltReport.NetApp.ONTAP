@@ -6,7 +6,7 @@ function Get-AbrOntapVserverVolumesQuota {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -51,7 +51,7 @@ function Get-AbrOntapVserverVolumesQuota {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Volume Quota Status Information - $($Vserver)"
+                    Name = "Vserver Volume Quota Status - $($Vserver)"
                     List = $false
                     ColumnWidths = 50, 25, 25
                 }
@@ -61,7 +61,7 @@ function Get-AbrOntapVserverVolumesQuota {
                 $VserverObj | Table @TableParams
             }
         }
-        if ($InfoLevel.Vserver -gt 2) {
+        if ($InfoLevel.Vserver -ge 2) {
             Section -Style Heading6 "$Vserver Vserver Volume Quota Information" {
                 Paragraph "The following section provides the $Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
                 BlankLine
@@ -101,7 +101,7 @@ function Get-AbrOntapVserverVolumesQuota {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Volume Quota Information - $($Vserver)"
+                        Name = "Vserver Volume Quota - $($Vserver)"
                         List = $false
                         ColumnWidths = 15, 13, 20, 13, 13, 13, 13
                     }
@@ -142,7 +142,7 @@ function Get-AbrOntapVserverVolumesQuota {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Volume Quota Report (Disk) Information - $($Vserver)"
+                        Name = "Vserver Volume Quota Report (Disk) - $($Vserver)"
                         List = $false
                         ColumnWidths = 20, 20, 15, 15, 15, 15
                     }
@@ -177,7 +177,7 @@ function Get-AbrOntapVserverVolumesQuota {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Volume Quota Report (File) Information - $($Vserver)"
+                        Name = "Vserver Volume Quota Report (File) - $($Vserver)"
                         List = $false
                         ColumnWidths = 20, 20, 15, 15, 15, 15
                     }

@@ -25,31 +25,17 @@
 
 # NetApp ONTAP Arrays AsBuiltReport
 
-NetApp ONTAP AsBuiltReport is a module of the parent "AsBuiltReport" [project](https://github.com/AsBuiltReport/AsBuiltReport). AsBuiltReport is a PowerShell module which generates As-Built documentation for many common datacentre infrastructure systems. Reports can be generated in Text, HTML and MS Word formats and can be presented with custom styling to align with your company/customer's brand.
+NetApp ONTAP As Built Report is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
 
-For detailed documentation around the whole project, please refer to the `README.md` file in the parent AsBuiltReport repository (linked to above). This README is specific only to the NetApp ONTAP Array repository.
+[AsBuiltReport](https://github.com/AsBuiltReport/AsBuiltReport) is an open-sourced community project which utilises PowerShell to produce as-built documentation in multiple document formats for multiple vendors and technologies.
+
+Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for more detailed information about this project.
 
 ## :books: Sample Reports
 
 ### Sample Report - Custom Style 1
 
 Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://technomyth.zenprsolutions.net/wp-content/uploads/2021/11/NetApp-ONTAP-As-Built-Report.html)
-
-Sample NetApp ONTAP As Built report with health checks, using custom report style.
-
-![Sample NetApp ONTAP As Built Report](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/raw/master/Samples/Sample_NetApp_Report_1.png "Sample NetApp ONTAP As Built Report")
-
-### Sample Report - Custom Style 2
-
-Sample NetApp ONTAP As Built report with health checks, using custom report style.
-
-![Sample NetApp ONTAP As Built Report](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/raw/master/Samples/Sample_NetApp_Report_2.png "Sample NetApp ONTAP As Built Report")
-
-### Sample Report - Custom Style 3
-
-Sample NetApp ONTAP As Built report with health checks, using custom report style.
-
-![Sample NetApp ONTAP As Built Report](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/raw/master/Samples/Sample_NetApp_Report_3.png "Sample NetApp ONTAP As Built Report")
 
 # :beginner: Getting Started
 
@@ -83,7 +69,17 @@ These modules may also be manually installed.
 | AsBuiltReport.Core |          1.1.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
 | Netapp.ONTAP |          9.9.1           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
 
-### :package: Module Installation
+### Linux & macOS
+
+- .NET Core is required for cover page image support on Linux and macOS operating systems.
+  - [Installing .NET Core for macOS](https://docs.microsoft.com/en-us/dotnet/core/install/macos)
+  - [Installing .NET Core for Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
+
+❗ If you are unable to install .NET Core, you must set `ShowCoverPageImage` to `False` in the report JSON configuration file.
+
+## :package: Module Installation
+
+### PowerShell
 
 Open a PowerShell terminal window and install each of the required modules as follows;
 
@@ -91,7 +87,9 @@ Open a PowerShell terminal window and install each of the required modules as fo
 Install-Module AsBuiltReport.NetApp.ONTAP
 ```
 
-Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP#wrench-system-requirements) also.
+### GitHub
+
+If you are unable to use the PowerShell Gallery, you can still install the module manually. Ensure you repeat the following steps for the [system requirements](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP#wrench-system-requirements) also.
 
 1. Download the code package / [latest release](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/releases/latest) zip from GitHub
 2. Extract the zip file

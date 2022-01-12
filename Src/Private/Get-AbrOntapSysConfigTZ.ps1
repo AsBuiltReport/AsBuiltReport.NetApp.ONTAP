@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigTZ {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapSysConfigTZ {
             }
 
             $TableParams = @{
-                Name = "System TimeZone Information - $($ClusterInfo.ClusterName)"
+                Name = "System TimeZone - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 20, 20, 30
             }

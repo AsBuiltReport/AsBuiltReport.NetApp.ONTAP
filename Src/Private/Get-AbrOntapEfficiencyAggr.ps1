@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapEfficiencyAggr {
             }
 
             $TableParams = @{
-                Name = "Aggregate Efficiency Savings Information - $($ClusterInfo.ClusterName)"
+                Name = "Aggregate Efficiency Savings - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 35, 15, 15, 15, 20
             }

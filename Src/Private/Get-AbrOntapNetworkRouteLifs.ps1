@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkRouteLif {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapNetworkRouteLif {
             }
 
             $TableParams = @{
-                Name = "Per Network Interface Route Information - $($Vserver)"
+                Name = "Per Network Interface Route - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 20, 40, 20
             }

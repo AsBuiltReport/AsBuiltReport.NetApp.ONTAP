@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkPort {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -48,7 +48,7 @@ function Get-AbrOntapNetworkPort {
             }
 
             $TableParams = @{
-                Name = "Physical Port Information - $($Node)"
+                Name = "Physical Port - $($Node)"
                 List = $false
                 ColumnWidths = 20, 20, 30, 10, 10, 10
             }

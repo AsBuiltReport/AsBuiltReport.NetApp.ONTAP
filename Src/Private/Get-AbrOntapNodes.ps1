@@ -5,7 +5,7 @@ function Get-AbrOntapNode {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,7 +35,7 @@ function Get-AbrOntapNode {
                 }
             }
             $TableParams = @{
-                Name = "Node Information - $($ClusterInfo.ClusterName)"
+                Name = "Nodes - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 27, 27, 17, 17, 12
             }

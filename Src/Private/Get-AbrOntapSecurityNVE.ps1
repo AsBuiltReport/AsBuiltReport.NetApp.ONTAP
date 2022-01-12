@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNVE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapSecurityNVE {
             }
 
             $TableParams = @{
-                Name = "Volume Encryption (NVE) information  - $($ClusterInfo.ClusterName)"
+                Name = "Volume Encryption (NVE) - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 45, 35, 11, 9
             }

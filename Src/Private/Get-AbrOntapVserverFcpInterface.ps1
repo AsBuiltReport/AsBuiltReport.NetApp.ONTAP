@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapVserverFcpInterface {
             }
 
             $TableParams = @{
-                Name = "FCP Interface Information - $($Vserver)"
+                Name = "FCP Interface - $($Vserver)"
                 List = $false
                 ColumnWidths = 35, 35, 30
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverS3Bucket {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapVserverS3Bucket {
             }
 
             $TableParams = @{
-                Name = "Vserver S3 Bucket Information - $($Vserver)"
+                Name = "Vserver S3 Bucket - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 30, 20, 20
             }

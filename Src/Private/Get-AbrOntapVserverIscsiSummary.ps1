@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -51,7 +51,7 @@ function Get-AbrOntapVserverIscsiSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver ISCSI Service Information - $($Vserver)"
+                Name = "Vserver ISCSI Service - $($Vserver)"
                 List = $true
                 ColumnWidths = 30, 70
             }

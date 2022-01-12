@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpAdapter {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-AbrOntapVserverFcpAdapter {
             }
 
             $TableParams = @{
-                Name = "FCP Physical Adapter Information - $($ClusterInfo.ClusterName)"
+                Name = "FCP Physical Adapter - $($ClusterInfo.ClusterName)"
                 List = $false
             }
             if ($Report.ShowTableCaptions) {

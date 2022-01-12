@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSLGMember {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapVserverCIFSLGMember {
             }
 
             $TableParams = @{
-                Name = "CIFS Connected Local Group Members Information - $($Vserver)"
+                Name = "CIFS Connected Local Group Members - $($Vserver)"
                 List = $false
                 ColumnWidths = 50, 50
             }

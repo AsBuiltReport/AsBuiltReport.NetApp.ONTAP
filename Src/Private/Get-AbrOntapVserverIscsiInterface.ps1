@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -48,7 +48,7 @@ function Get-AbrOntapVserverIscsiInterface {
             }
 
             $TableParams = @{
-                Name = "ISCSI Interface Information - $($Vserver)"
+                Name = "ISCSI Interface - $($Vserver)"
                 List = $false
                 ColumnWidths = 40, 30, 15, 15
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -47,19 +47,19 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                         'Default Retention Period' = $SnapLockVolAttr.DefaultRetentionPeriod
                         'Litigation Count' = $SnapLockVolAttr.LitigationCount
                     }
-                    $OutObj += [pscustomobject]$inobj
+                    $OutObj = [pscustomobject]$inobj
+
+                    $TableParams = @{
+                        Name = "Snaplock Volume Attributes - $($vol.Name)"
+                        List = $true
+                        ColumnWidths = 40, 60
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $OutObj | Table @TableParams
                 }
             }
-
-            $TableParams = @{
-                Name = "Snaplock Volume Attributes Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 40, 60
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
         }
     }
 

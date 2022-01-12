@@ -5,7 +5,7 @@ function Get-AbrOntapVserverS3Summary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -46,7 +46,7 @@ function Get-AbrOntapVserverS3Summary {
             }
 
             $TableParams = @{
-                Name = "Vserver S3 Service Information - $($Vserver)"
+                Name = "Vserver S3 Service - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 20, 20, 20, 20
             }

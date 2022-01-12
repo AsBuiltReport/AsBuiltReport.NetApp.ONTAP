@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigImage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapSysConfigImage {
             }
 
             $TableParams = @{
-                Name = "System Image information - $($ClusterInfo.ClusterName)"
+                Name = "System Image - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 23, 15, 12, 12, 26, 12
             }

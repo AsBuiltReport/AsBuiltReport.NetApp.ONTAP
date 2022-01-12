@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQtree {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-AbrOntapVserverVolumesQtree {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume Qtree Information - $($Vserver)"
+                Name = "Vserver Volume Qtree - $($Vserver)"
                 List = $false
                 ColumnWidths = 27, 28, 15, 15, 15
             }

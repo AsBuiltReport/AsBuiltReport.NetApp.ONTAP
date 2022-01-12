@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkBdomain {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -38,7 +38,7 @@ function Get-AbrOntapNetworkBdomain {
             }
 
             $TableParams = @{
-                Name = "Network Broadcast Domain Information - $($ClusterInfo.ClusterName)"
+                Name = "Network Broadcast Domain - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 20, 20, 10, 30
             }

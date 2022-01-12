@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSDC {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapVserverCIFSDC {
             }
 
             $TableParams = @{
-                Name = "CIFS Connected Domain Controller Information - $($Vserver)"
+                Name = "CIFS Connected Domain Controller - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 20, 20, 12, 13, 15
             }

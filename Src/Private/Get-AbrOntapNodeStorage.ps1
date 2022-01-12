@@ -5,7 +5,7 @@ function Get-AbrOntapNodeStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapNodeStorage {
             }
 
             $TableParams = @{
-                Name = "Node Storage Information - $($ClusterInfo.ClusterName)"
+                Name = "Node Storage - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 30, 10, 10, 10, 10
             }

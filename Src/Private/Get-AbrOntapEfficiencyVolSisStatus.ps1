@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,9 +45,12 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                 }
                 $OutObj += [pscustomobject]$inobj
             }
+            if ($Healthcheck.Storage.Efficiency) {
+                $OutObj | Where-Object { $_.'State' -like 'Disabled' } | Set-Style -Style Warning -Property 'State'
+            }
 
             $TableParams = @{
-                Name = "Volume Deduplication Information - $($Vserver)"
+                Name = "Volume Deduplication - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 15, 15, 20, 20
             }
