@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -37,7 +37,7 @@ function Get-AbrOntapSecuritySnapLockVol {
             }
 
             $TableParams = @{
-                Name = "Volume Snaplock Type Information - $($ClusterInfo.ClusterName)"
+                Name = "Volume Snaplock Type - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 45, 35, 20
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosSetting {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -47,7 +47,7 @@ function Get-AbrOntapVserverVolumesQosSetting {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume QoS Information - $($Vserver)"
+                Name = "Vserver Volume QoS - $($Vserver)"
                 List = $false
                 ColumnWidths = 50, 25, 25
             }

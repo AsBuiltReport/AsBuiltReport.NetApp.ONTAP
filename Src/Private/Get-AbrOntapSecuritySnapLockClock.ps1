@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockClock {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapSecuritySnapLockClock {
             }
 
             $TableParams = @{
-                Name = "Snaplock Compliance Clock Information - $($ClusterInfo.ClusterName)"
+                Name = "Snaplock Compliance Clock - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 40, 60
             }

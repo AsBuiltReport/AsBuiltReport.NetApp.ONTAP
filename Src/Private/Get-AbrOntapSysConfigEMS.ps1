@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigEMS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapSysConfigEMS {
             }
 
             $TableParams = @{
-                Name = "HealtCheck - System EMS Messages Information - $($Node)"
+                Name = "HealtCheck - System EMS Messages - $($Node)"
                 List = $false
                 ColumnWidths = 25, 20, 55
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigWebStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -44,7 +44,7 @@ function Get-AbrOntapSysConfigWebStatus {
             }
 
             $TableParams = @{
-                Name = "System Web Service information - $($ClusterInfo.ClusterName)"
+                Name = "System Web Service - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 25, 12, 12, 12, 12, 15, 12
             }

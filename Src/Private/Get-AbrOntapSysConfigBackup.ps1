@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -42,7 +42,7 @@ function Get-AbrOntapSysConfigBackup {
             }
 
             $TableParams = @{
-                Name = "System Configuration Backups Information - $($Node)"
+                Name = "System Configuration Backups - $($Node)"
                 List = $false
                 ColumnWidths = 40, 15, 15, 15, 15
             }

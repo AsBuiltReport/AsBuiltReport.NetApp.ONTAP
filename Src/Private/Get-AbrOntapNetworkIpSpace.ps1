@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIpSpace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,23 +33,23 @@ function Get-AbrOntapNetworkIpSpace {
                     'Ports' = $Item.Ports -join '; '
                     'Broadcast Domains' = $Item.BroadcastDomains -join '; '
                 }
-                $IPSpaceObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Network.Port) {
-                $IPSpaceObj | Where-Object { $_.'Port' -match "Down" } | Set-Style -Style Warning -Property 'Port'
-                $IPSpaceObj | Where-Object { $_.'Port Participation' -ne "full" } | Set-Style -Style Warning -Property 'Port Participation'
-            }
+                $IPSpaceObj = [pscustomobject]$inobj
 
+                if ($Healthcheck.Network.Port) {
+                    $IPSpaceObj | Where-Object { $_.'Port' -match "Down" } | Set-Style -Style Warning -Property 'Port'
+                    $IPSpaceObj | Where-Object { $_.'Port Participation' -ne "full" } | Set-Style -Style Warning -Property 'Port Participation'
+                }
 
-            $TableParams = @{
-                Name = "Network IPSpace Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 25, 75
+                $TableParams = @{
+                    Name = "Network IPSpace - $($Item.Ipspace)"
+                    List = $true
+                    ColumnWidths = 25, 75
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $IPSpaceObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $IPSpaceObj | Table @TableParams
         }
     }
 

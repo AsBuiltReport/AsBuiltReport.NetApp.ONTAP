@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyConfig {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -42,7 +42,7 @@ function Get-AbrOntapEfficiencyConfig {
             }
 
             $TableParams = @{
-                Name = "Storage Efficiency Savings Information - $($ClusterInfo.ClusterName)"
+                Name = "Storage Efficiency Savings - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 10, 15, 15, 15, 15
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityUser {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-AbrOntapSecurityUser {
             }
 
             $TableParams = @{
-                Name = "Security Local Users information  - $($Vserver)"
+                Name = "Security Local Users - $($Vserver)"
                 List = $false
                 ColumnWidths = 25, 15, 15, 30, 15
             }

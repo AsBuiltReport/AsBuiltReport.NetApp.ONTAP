@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackupURL {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -47,7 +47,7 @@ function Get-AbrOntapSysConfigBackupURL {
             }
 
             $TableParams = @{
-                Name = "System Configuration Backup Setting Information - $($ClusterInfo.ClusterName)"
+                Name = "System Configuration Backup Setting - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 60, 20
             }

@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigSNMP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapSysConfigSNMP {
             }
 
             $TableParams = @{
-                Name = "System SNMP Configuration Information - $($ClusterInfo.ClusterName)"
+                Name = "System SNMP Configuration - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 18, 20, 15, 20, 15, 12
             }

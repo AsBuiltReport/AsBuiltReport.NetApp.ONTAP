@@ -5,7 +5,7 @@ function Get-AbrOntapRepHistory {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapRepHistory {
             }
 
             $TableParams = @{
-                Name = "Replication - SnapMirror Replication History Information - $($ClusterInfo.ClusterName)"
+                Name = "SnapMirror Replication History - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 25, 25, 15, 15, 20
             }

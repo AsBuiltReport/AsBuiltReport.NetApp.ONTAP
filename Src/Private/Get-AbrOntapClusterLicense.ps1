@@ -5,7 +5,7 @@ function Get-AbrOntapClusterLicense {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -26,8 +26,6 @@ function Get-AbrOntapClusterLicense {
         $Nodes = Get-NcNode -Controller $Array
         foreach ($Node in $Nodes) {
             Section -Style Heading3 "$Node License Usage" {
-                Paragraph "The following section provides per node installed licenses on $($ClusterInfo.ClusterName)."
-                BlankLine
                 $License = Get-NcLicense -Owner $Node -Controller $Array
                 if ($License) {
                     $LicenseSummary = foreach ($Licenses in $License) {

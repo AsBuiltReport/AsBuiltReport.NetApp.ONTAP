@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkRoute {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapNetworkRoute {
             }
 
             $TableParams = @{
-                Name = "Network Route Information - $($Vserver)"
+                Name = "Network Route - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 30, 20, 20
             }

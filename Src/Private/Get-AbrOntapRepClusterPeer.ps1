@@ -5,7 +5,7 @@ function Get-AbrOntapRepClusterPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -42,7 +42,7 @@ function Get-AbrOntapRepClusterPeer {
             }
 
             $TableParams = @{
-                Name = "Replication - Cluster Peer Information - $($ClusterInfo.ClusterName)"
+                Name = "Cluster Peer - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 20, 19, 10, 15, 16
             }

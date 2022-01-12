@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
             }
 
             $TableParams = @{
-                Name = "Volume Fixed QoS Group Information - $($ClusterInfo.ClusterName)"
+                Name = "Volume Fixed QoS Group - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 20, 24, 24, 12, 20
             }

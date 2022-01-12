@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTPHost {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-AbrOntapSysConfigNTPHost {
             }
 
             $TableParams = @{
-                Name = "System NTP Host Status Information - $($ClusterInfo.ClusterName)"
+                Name = "System NTP Host Status - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 10, 20, 20, 20
             }

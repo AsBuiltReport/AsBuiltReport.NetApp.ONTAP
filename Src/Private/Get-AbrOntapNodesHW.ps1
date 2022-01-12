@@ -5,7 +5,7 @@ function Get-AbrOntapNodesHW {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -25,9 +25,10 @@ function Get-AbrOntapNodesHW {
     process {
         $NodeHW = Get-NcNodeInfo -Controller $Array
         if ($NodeHW) {
-            $NodeHardWare = foreach ($NodeHWs in $NodeHW) {
+            $Outobj = @()
+            foreach ($NodeHWs in $NodeHW) {
                 $NodeInfo = Get-NcNode -Node $NodeHWs.SystemName -Controller $Array
-                [PSCustomObject] @{
+                $Inobj =  [ordered] @{
                     'Name' = $NodeHWs.SystemName
                     'System Type' = $NodeHWs.SystemMachineType
                     'CPU Count' = $NodeHWs.NumberOfProcessors
@@ -52,25 +53,27 @@ function Get-AbrOntapNodesHW {
                     }
                     'NVRAM Battery Healthy' = $NodeInfo.NvramBatteryStatus
                 }
-            }
-            if ($Healthcheck.Node.HW) {
-                $NodeHardWare | Where-Object { $_.'System Healthy' -like 'UnHealthy' } | Set-Style -Style Critical -Property 'System Healthy'
-                $NodeHardWare | Where-Object { $_.'Failed Fan Count' -gt 0 } | Set-Style -Style Critical -Property 'Failed Fan Count'
-                $NodeHardWare | Where-Object { $_.'Failed PowerSupply Count' -gt 0 } | Set-Style -Style Critical -Property 'Failed PowerSupply Count'
-                $NodeHardWare | Where-Object { $_.'Over Temperature' -like 'High Temperature' } | Set-Style -Style Critical -Property 'Over Temperature'
-                $NodeHardWare | Where-Object { $_.'NVRAM Battery Healthy' -notlike 'battery_ok' } | Set-Style -Style Critical -Property 'NVRAM Battery Healthy'
-            }
-        }
+                $Outobj = [PSCustomObject]$Inobj
 
-        $TableParams = @{
-            Name = "Node Hardware Information - $($ClusterInfo.ClusterName)"
-            List = $true
-            ColumnWidths = 40, 60
+                if ($Healthcheck.Node.HW) {
+                    $Outobj | Where-Object { $_.'System Healthy' -like 'UnHealthy' } | Set-Style -Style Critical -Property 'System Healthy'
+                    $Outobj | Where-Object { $_.'Failed Fan Count' -gt 0 } | Set-Style -Style Critical -Property 'Failed Fan Count'
+                    $Outobj | Where-Object { $_.'Failed PowerSupply Count' -gt 0 } | Set-Style -Style Critical -Property 'Failed PowerSupply Count'
+                    $Outobj | Where-Object { $_.'Over Temperature' -like 'High Temperature' } | Set-Style -Style Critical -Property 'Over Temperature'
+                    $Outobj | Where-Object { $_.'NVRAM Battery Healthy' -notlike 'battery_ok' } | Set-Style -Style Critical -Property 'NVRAM Battery Healthy'
+                }
+
+                $TableParams = @{
+                    Name = "Node Hardware - $($NodeHWs.SystemName)"
+                    List = $true
+                    ColumnWidths = 40, 60
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $Outobj | Table @TableParams
+            }
         }
-        if ($Report.ShowTableCaptions) {
-            $TableParams['Caption'] = "- $($TableParams.Name)"
-        }
-        $NodeHardWare | Table @TableParams
     }
 
     end {}

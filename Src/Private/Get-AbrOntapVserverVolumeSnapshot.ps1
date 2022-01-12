@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -49,7 +49,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume SnapShot Configuration Information - $($Vserver)"
+                Name = "Vserver Volume SnapShot Configuration - $($Vserver)"
                 List = $false
                 ColumnWidths = 25, 15, 15, 15, 15, 15
             }
