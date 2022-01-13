@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,7 @@ function Get-AbrOntapSecuritySSLDetailed {
             }
 
             $TableParams = @{
-                Name = "SSL Detailed information  - $($ClusterInfo.ClusterName)"
+                Name = "SSL Detailed - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 18, 10, 10, 25, 19, 18
             }

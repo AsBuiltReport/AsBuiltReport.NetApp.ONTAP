@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -37,7 +37,7 @@ function Get-AbrOntapSysConfigNTP {
             }
 
             $TableParams = @{
-                Name = "System Network Time Protocol Information - $($ClusterInfo.ClusterName)"
+                Name = "System Network Time Protocol - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 40, 20, 20, 20
             }

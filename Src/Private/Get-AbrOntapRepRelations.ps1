@@ -5,7 +5,7 @@ function Get-AbrOntapRepRelationship {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -54,21 +54,22 @@ function Get-AbrOntapRepRelationship {
                     'Lag Time' = $lagtime
                     'Status' = ($Item.Status).toUpper()
                 }
-                $ReplicaObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Replication.Relationship) {
-                $ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne "None" } | Set-Style -Style Warning -Property 'Unhealthy Reason'
-            }
+                $ReplicaObj = [pscustomobject]$inobj
 
-            $TableParams = @{
-                Name = "Replication - SnapMirror relationship Information - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 30, 70
+                if ($Healthcheck.Replication.Relationship) {
+                    $ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne "None" } | Set-Style -Style Warning -Property 'Unhealthy Reason'
+                }
+
+                $TableParams = @{
+                    Name = "SnapMirror relationship - $($Item.SourceLocation)"
+                    List = $true
+                    ColumnWidths = 30, 70
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $ReplicaObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $ReplicaObj | Table @TableParams
         }
     }
 

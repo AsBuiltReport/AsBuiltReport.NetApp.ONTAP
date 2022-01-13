@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -55,8 +55,6 @@ function Get-AbrOntapVserverSummary {
             $VserverObj | Table @TableParams
         }
         Section -Style Heading4 'Root Volume' {
-            Paragraph "The following section provides the Vserver Root Volume Information on $($Vserver)."
-            BlankLine
             $VserverRootVol = Get-NcVol -VserverContext $Vserver| Where-Object {$_.JunctionPath -eq '/'}
             $VserverObj = @()
             if ($VserverRootVol) {
@@ -73,11 +71,12 @@ function Get-AbrOntapVserverSummary {
                     $VserverObj += [pscustomobject]$inobj
                 }
                 if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
                     $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Root Volume Information - $($Vserver)"
+                    Name = "Vserver Root Volume - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 10, 10, 10, 10, 10, 30
                 }
@@ -89,8 +88,6 @@ function Get-AbrOntapVserverSummary {
         }
         if (Get-NcVserverAggr) {
             Section -Style Heading4 'Aggregate Resource Allocation' {
-                Paragraph "The following section provides the Vserver Aggregate Resource Allocation Information on $($Vserver)."
-                BlankLine
                 $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
                 $VserverObj = @()
                 if ($VserverAGGR) {
@@ -105,7 +102,7 @@ function Get-AbrOntapVserverSummary {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Aggregate Resource Allocation Information - $($Vserver)"
+                        Name = "Vserver Aggregate Resource Allocation - $($Vserver)"
                         List = $false
                         ColumnWidths = 40, 15, 25, 20
                     }

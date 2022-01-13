@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
             }
 
             $TableParams = @{
-                Name = "Vserver Volume Export Policy Information - $($Vserver)"
+                Name = "Vserver Volume Export Policy - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 15, 20, 15, 15, 15
             }

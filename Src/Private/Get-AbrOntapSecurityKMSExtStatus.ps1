@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
             }
 
             $TableParams = @{
-                Name = "External Key Management Service (KMS) Status information  - $($ClusterInfo.ClusterName)"
+                Name = "External Key Management Service (KMS) Status - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 35, 25, 15, 25
             }

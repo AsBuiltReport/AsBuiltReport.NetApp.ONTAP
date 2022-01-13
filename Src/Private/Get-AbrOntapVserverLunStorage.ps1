@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,10 @@ function Get-AbrOntapVserverLunStorage {
                     'Parent Volume' = $Item.Volume
                     'Path' = $Item.Path
                     'Serial Number' = $Item.SerialNumber
-                    'Initiator Group' = $lunmap
+                    'Initiator Group' = Switch (($lunmap).count) {
+                        0 {"None"}
+                        default {$lunmap}
+                    }
                     'Home Node ' = $Item.Node
                     'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                     'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
@@ -65,22 +68,24 @@ function Get-AbrOntapVserverLunStorage {
                         default {$Item.Online}
                     }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
-                $VserverObj | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
-            }
+                $VserverObj = [pscustomobject]$inobj
 
-            $TableParams = @{
-                Name = "Vserver Lun Information - $($Vserver)"
-                List = $true
-                ColumnWidths = 25, 75
+                if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
+                    $VserverObj | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
+                    $VserverObj | Where-Object { $_.'Is Mapped' -eq 'No' } | Set-Style -Style Warning -Property 'Is Mapped'
+                }
+
+                $TableParams = @{
+                    Name = "Vserver Lun - $($lun)"
+                    List = $true
+                    ColumnWidths = 25, 75
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
         }
     }
 

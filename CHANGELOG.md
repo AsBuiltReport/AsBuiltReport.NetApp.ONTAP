@@ -1,5 +1,19 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+## [0.6.2] - 2022-01-12
+
+### Added
+
+- Added more health check discovery.
+
+### Changed
+
+- Removes unneeded paragraph section.
+
+### Fixed
+
+- Fix for table caption error message "List table captions are only supported on tables with a single row"
+
 ## [0.6.1] - 2021-12-02
 
 ### Added

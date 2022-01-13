@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSession {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -42,7 +42,7 @@ function Get-AbrOntapVserverCIFSSession {
             }
 
             $TableParams = @{
-                Name = "Vserver CIFS Sessions Information - $($Vserver)"
+                Name = "Vserver CIFS Sessions - $($Vserver)"
                 List = $false
                 ColumnWidths = 20, 15, 15, 20, 30
             }

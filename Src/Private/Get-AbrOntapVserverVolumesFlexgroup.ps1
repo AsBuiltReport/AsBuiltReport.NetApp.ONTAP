@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
             }
 
             $TableParams = @{
-                Name = "Vserver Flexgroup Volume Information - $($Vserver)"
+                Name = "Vserver Flexgroup Volume - $($Vserver)"
                 List = $false
                 ColumnWidths = 50, 25, 25
             }

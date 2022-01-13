@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -59,7 +59,7 @@ function Get-AbrOntapVserverNFSSummary {
             }
 
             $TableParams = @{
-                Name = "Vserver NFS Service Information - $($ClusterInfo.ClusterName)"
+                Name = "Vserver NFS Service - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 25, 25, 25, 25
             }

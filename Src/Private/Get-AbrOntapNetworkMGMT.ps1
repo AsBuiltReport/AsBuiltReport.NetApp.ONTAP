@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkMgmt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -25,8 +25,6 @@ function Get-AbrOntapNetworkMgmt {
     process {
         if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}) {
             Section -Style Heading6 'Cluster Network Interfaces' {
-                Paragraph "The following section provides the Cluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
-                BlankLine
                 $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}
                 $ClusterObj = @()
                 if ($ClusterData) {
@@ -49,7 +47,7 @@ function Get-AbrOntapNetworkMgmt {
                     }
 
                     $TableParams = @{
-                        Name = "Cluster Network Information - $($ClusterInfo.ClusterName)"
+                        Name = "Cluster Network - $($ClusterInfo.ClusterName)"
                         List = $false
                         ColumnWidths = 35, 8, 21, 18, 18
                     }
@@ -61,8 +59,6 @@ function Get-AbrOntapNetworkMgmt {
             }
         }
         Section -Style Heading6 'Management Network Interfaces' {
-            Paragraph "The following section provides the Management Network Interfaces Information on $($ClusterInfo.ClusterName)."
-            BlankLine
             $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt'}
             $ClusterObj = @()
             if ($ClusterData) {
@@ -85,7 +81,7 @@ function Get-AbrOntapNetworkMgmt {
                 }
 
                 $TableParams = @{
-                    Name = "Management Network Information - $($ClusterInfo.ClusterName)"
+                    Name = "Management Network - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 35, 8, 21, 18, 18
                 }
@@ -97,8 +93,6 @@ function Get-AbrOntapNetworkMgmt {
         }
         if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}) {
             Section -Style Heading6 'Intercluster Network Interfaces' {
-                Paragraph "The following section provides the Intercluster Network Interfaces Information on $($ClusterInfo.ClusterName)."
-                BlankLine
                 $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}
                 $ClusterObj = @()
                 if ($ClusterData) {
@@ -121,7 +115,7 @@ function Get-AbrOntapNetworkMgmt {
                     }
 
                     $TableParams = @{
-                        Name = "Intercluster Network Information - $($ClusterInfo.ClusterName)"
+                        Name = "Intercluster Network - $($ClusterInfo.ClusterName)"
                         List = $false
                         ColumnWidths = 35, 8, 21, 18, 18
                     }
@@ -133,8 +127,6 @@ function Get-AbrOntapNetworkMgmt {
             }
         }
         Section -Style Heading6 'Data Network Interfaces' {
-            Paragraph "The following section provides the Data Network Interfaces Information on $($ClusterInfo.ClusterName)."
-            BlankLine
             $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp'}
             $ClusterObj = @()
             if ($ClusterData) {
@@ -157,7 +149,7 @@ function Get-AbrOntapNetworkMgmt {
                 }
 
                 $TableParams = @{
-                    Name = "Data Network Information - $($ClusterInfo.ClusterName)"
+                    Name = "Data Network - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 33, 10, 21, 18, 18
                 }
@@ -193,7 +185,7 @@ function Get-AbrOntapNetworkMgmt {
                     }
 
                     $TableParams = @{
-                        Name = "Network Interface Home Status Information - $($ClusterInfo.ClusterName)"
+                        Name = "Network Interface Home Status - $($ClusterInfo.ClusterName)"
                         List = $false
                         ColumnWidths = 20, 25, 25, 10, 20
                     }

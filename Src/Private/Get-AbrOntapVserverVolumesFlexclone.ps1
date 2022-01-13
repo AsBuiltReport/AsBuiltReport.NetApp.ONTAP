@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -28,7 +28,6 @@ function Get-AbrOntapVserverVolumesFlexclone {
 
     process {
         $VserverClonedVol = Get-NcVolClone -VserverContext $Vserver -Controller $Array
-        $VserverObj = @()
         if ($VserverClonedVol) {
             foreach ($Item in $VserverClonedVol) {
                 $inObj = [ordered] @{
@@ -43,21 +42,22 @@ function Get-AbrOntapVserverVolumesFlexclone {
                     'Used' = $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                     'Aggregate' = $Item.Aggregate
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
-            }
+                $VserverObj = [pscustomobject]$inobj
 
-            $TableParams = @{
-                Name = "Vserver Cloned Volumes Information - $($Vserver)"
-                List = $true
-                ColumnWidths = 25, 75
+                if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+                }
+
+                $TableParams = @{
+                    Name = "Vserver Cloned Volumes - $($Item.Name)"
+                    List = $true
+                    ColumnWidths = 25, 75
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
         }
     }
 

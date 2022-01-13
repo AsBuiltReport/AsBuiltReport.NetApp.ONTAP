@@ -5,7 +5,7 @@ function Get-AbrOntapRepMediator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -44,7 +44,7 @@ function Get-AbrOntapRepMediator {
             }
 
             $TableParams = @{
-                Name = "Replication - SnapMirror Mediator Information - $($ClusterInfo.ClusterName)"
+                Name = "SnapMirror Mediator - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 25, 25, 25, 25
             }

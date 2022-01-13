@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSShareProp {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapVserverCIFSShareProp {
             }
 
             $TableParams = @{
-                Name = "The CIFS Share Properties & Acl Information - $($Vserver)"
+                Name = "The CIFS Share Properties & Acl - $($Vserver)"
                 List = $false
                 ColumnWidths = 30, 35, 35
             }

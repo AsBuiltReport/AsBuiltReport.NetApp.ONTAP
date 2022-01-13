@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSecurity {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -50,7 +50,7 @@ function Get-AbrOntapVserverCIFSSecurity {
             }
 
             $TableParams = @{
-                Name = "Vserver CIFS Service Security Information - $($Vserver)"
+                Name = "Vserver CIFS Service Security - $($Vserver)"
                 List = $true
                 ColumnWidths = 35, 65
             }

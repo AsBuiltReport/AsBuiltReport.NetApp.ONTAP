@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigDNS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -42,7 +42,7 @@ function Get-AbrOntapSysConfigDNS {
             }
 
             $TableParams = @{
-                Name = "System DNS Configuration Information - $($ClusterInfo.ClusterName)"
+                Name = "System DNS Configuration - $($ClusterInfo.ClusterName)"
                 List = $false
                 ColumnWidths = 30, 15, 20, 20, 15
             }
