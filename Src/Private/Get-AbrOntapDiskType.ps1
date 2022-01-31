@@ -1,11 +1,11 @@
 function Get-AbrOntapDiskType {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP disk type information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP disk type information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,48 +23,63 @@ function Get-AbrOntapDiskType {
     }
 
     process {
-        $NodeDiskContainerType = Get-NcDisk -Controller $Array | ForEach-Object{ $_.DiskRaidInfo.ContainerType } | Group-Object
-        if ($NodeDiskContainerType) {
-            $DiskType = foreach ($DiskContainers in $NodeDiskContainerType) {
-                [PSCustomObject] @{
-                    'Container' = $DiskContainers.Name
-                    'Disk Count' = $DiskContainers | Select-Object -ExpandProperty Count
+        try {
+            $NodeDiskContainerType = Get-NcDisk -Controller $Array | ForEach-Object{ $_.DiskRaidInfo.ContainerType } | Group-Object
+            if ($NodeDiskContainerType) {
+                $DiskType = foreach ($DiskContainers in $NodeDiskContainerType) {
+                    try {
+                        [PSCustomObject] @{
+                            'Container' = $DiskContainers.Name
+                            'Disk Count' = $DiskContainers | Select-Object -ExpandProperty Count
+                            }
+                        }
+                        catch {
+                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        }
                     }
+                    if ($Healthcheck.Storage.DiskStatus) {
+                        $DiskType | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
+                    }
+                $TableParams = @{
+                    Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 50, 50
                 }
-                if ($Healthcheck.Storage.DiskStatus) {
-                    $DiskType | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-            $TableParams = @{
-                Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 50, 50
+                $DiskType | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
+            $Node = Get-NcNode | Where-Object {$_.IsNodeHealthy -eq "True"}
+            if ($Node -and (Confirm-NcAggrSpareLow | Where-Object {$_.Value -eq "True"})) {
+                $OutObj = foreach ($Item in $Node) {
+                    try {
+                        $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node
+                        [PSCustomObject] @{
+                            'Node' = $Item.Node
+                            'Aggregate Spare Low' = $DiskSpareLow.Value.ToString().Replace("True", "Yes").Replace("False","No")
+                            }
+                        }
+                        catch {
+                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        }
+                    }
+                    if ($Healthcheck.Storage.DiskStatus) {
+                        $OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' } | Set-Style -Style Critical -Property 'Node','Aggregate Spare Low'
+                    }
+                $TableParams = @{
+                    Name = "HealthCheck - Aggregate Disk Spare Low - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 50, 50
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            $DiskType | Table @TableParams
         }
-        $Node = Get-NcNode | Where-Object {$_.IsNodeHealthy -eq "True"}
-        if ($Node -and (Confirm-NcAggrSpareLow | Where-Object {$_.Value -eq "True"})) {
-            $OutObj = foreach ($Item in $Node) {
-                $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node
-                [PSCustomObject] @{
-                    'Node' = $Item.Node
-                    'Aggregate Spare Low' = $DiskSpareLow.Value.ToString().Replace("True", "Yes").Replace("False","No")
-                    }
-                }
-                if ($Healthcheck.Storage.DiskStatus) {
-                    $OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' } | Set-Style -Style Critical -Property 'Node','Aggregate Spare Low'
-                }
-            $TableParams = @{
-                Name = "HealthCheck - Aggregate Disk Spare Low - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 50, 50
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolumesFlexcache {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver flexcache volumes information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver flexcache volumes information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,58 +27,78 @@ function Get-AbrOntapVserverVolumesFlexcache {
     }
 
     process {
-        #Vserver Flexcache Volume Connected Cache Information
-        $Data = Get-NcFlexcacheConnectedCache -VserverContext $Vserver -Controller $Array
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $VolumeUsage = Get-NcVol -Name $Item.OriginVolume -Controller $Array
-                $inObj = [ordered] @{
-                    'Cache Cluster' = $Item.CacheCluster
-                    'Cache Vserver' = $Item.CacheVserver
-                    'Cache Volume' = $Item.CacheVolume
-                    'Origin Vserver' = $Item.OriginVserver
-                    'Origin Volume' = $Item.OriginVolume
-                    'Capacity' = $VolumeUsage.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+        try {
+            #Vserver Flexcache Volume Connected Cache Information
+            $Data = Get-NcFlexcacheConnectedCache -VserverContext $Vserver -Controller $Array
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $VolumeUsage = Get-NcVol -Name $Item.OriginVolume -Controller $Array
+                        $inObj = [ordered] @{
+                            'Cache Cluster' = $Item.CacheCluster
+                            'Cache Vserver' = $Item.CacheVserver
+                            'Cache Volume' = $Item.CacheVolume
+                            'Origin Vserver' = $Item.OriginVserver
+                            'Origin Volume' = $Item.OriginVolume
+                            'Capacity' = $VolumeUsage.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Vserver Flexcache Volume Connected Cache - $($Vserver)"
-                List = $false
-                ColumnWidths = 20, 15, 15, 20, 15, 15
+                $TableParams = @{
+                    Name = "Vserver Flexcache Volume Connected Cache - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 20, 15, 15, 20, 15, 15
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
+            #Vserver Flexcache Volume Information
+            try {
+                $Data = Get-NcFlexcache -VserverContext $Vserver -Controller $Array
+                $OutObj = @()
+                if ($Data) {
+                    foreach ($Item in $Data) {
+                        try {
+                            $inObj = [ordered] @{
+                                'Origin Cluster' = $Item.OriginCluster
+                                'Origin Vserver' = $Item.OriginVserver
+                                'Origin Volume' = $Item.OriginVolume
+                                'Cache Vserver' = $Item.Vserver
+                                'Cache Volume' = $Item.Volume
+                                'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            }
+                            $OutObj += [pscustomobject]$inobj
+                        }
+                        catch {
+                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        }
+                    }
+
+                    $TableParams = @{
+                        Name = "Vserver Flexcache Volume - $($Vserver)"
+                        List = $false
+                        ColumnWidths = 20, 15, 15, 20, 15, 15
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $OutObj | Table @TableParams
+                }
             }
-            $OutObj | Table @TableParams
+            catch {
+                Write-PscriboMessage -IsWarning $_.Exception.Message
+            }
         }
-        #Vserver Flexcache Volume Information
-        $Data = Get-NcFlexcache -VserverContext $Vserver -Controller $Array
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $inObj = [ordered] @{
-                    'Origin Cluster' = $Item.OriginCluster
-                    'Origin Vserver' = $Item.OriginVserver
-                    'Origin Volume' = $Item.OriginVolume
-                    'Cache Vserver' = $Item.Vserver
-                    'Cache Volume' = $Item.Volume
-                    'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                }
-                $OutObj += [pscustomobject]$inobj
-            }
-
-            $TableParams = @{
-                Name = "Vserver Flexcache Volume - $($Vserver)"
-                List = $false
-                ColumnWidths = 20, 15, 15, 20, 15, 15
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverFcpInterface {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver FCP interface information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver FCP interface information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,27 +27,37 @@ function Get-AbrOntapVserverFcpInterface {
     }
 
     process {
-        $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'Interface Name' = $Item.InterfaceName
-                    'FCP WWPN' = $Item.PortName
-                    'Home Port' = $Item.CurrentPort
+        try {
+            $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Interface Name' = $Item.InterfaceName
+                            'FCP WWPN' = $Item.PortName
+                            'Home Port' = $Item.CurrentPort
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "FCP Interface - $($Vserver)"
-                List = $false
-                ColumnWidths = 35, 35, 30
+                $TableParams = @{
+                    Name = "FCP Interface - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 35, 35, 30
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

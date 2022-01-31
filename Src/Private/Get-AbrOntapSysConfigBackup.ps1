@@ -1,11 +1,11 @@
 function Get-AbrOntapSysConfigBackup {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP System Configuration Backup nformation from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP System Configuration Backup nformation from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,29 +27,39 @@ function Get-AbrOntapSysConfigBackup {
     }
 
     process {
-        $Data =  Get-NcConfigBackup -Node $Node -Controller $Array
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $inObj = [ordered] @{
-                    'Backup Name' = $Item.BackupName
-                    'Created' = $Item.Created
-                    'Size' = $Item.BackupSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                    'Schedule' = $Item.Schedule
-                    'Is Auto' = ConvertTo-TextYN $Item.IsAuto
+        try {
+            $Data =  Get-NcConfigBackup -Node $Node -Controller $Array
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Backup Name' = $Item.BackupName
+                            'Created' = $Item.Created
+                            'Size' = $Item.BackupSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            'Schedule' = $Item.Schedule
+                            'Is Auto' = ConvertTo-TextYN $Item.IsAuto
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "System Configuration Backups - $($Node)"
-                List = $false
-                ColumnWidths = 40, 15, 15, 15, 15
+                $TableParams = @{
+                    Name = "System Configuration Backups - $($Node)"
+                    List = $false
+                    ColumnWidths = 40, 15, 15, 15, 15
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

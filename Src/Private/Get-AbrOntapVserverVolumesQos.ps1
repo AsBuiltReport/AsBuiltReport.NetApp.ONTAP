@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolumesQosSetting {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,34 +27,44 @@ function Get-AbrOntapVserverVolumesQosSetting {
     }
 
     process {
-        $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True"}
-        $OutObj = @()
-        if ($VolumeFilter) {
-            foreach ($Item in $VolumeFilter) {
-                $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
-                $inObj = [ordered] @{
-                    'Volume' = $Item.Name
-                    'Fixed Policy Name' = Switch ($VolQoS.PolicyGroupName) {
-                        $Null { 'None' }
-                        default { $VolQoS.PolicyGroupName }
+        try {
+            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True"}
+            $OutObj = @()
+            if ($VolumeFilter) {
+                foreach ($Item in $VolumeFilter) {
+                    try {
+                        $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
+                        $inObj = [ordered] @{
+                            'Volume' = $Item.Name
+                            'Fixed Policy Name' = Switch ($VolQoS.PolicyGroupName) {
+                                $Null { 'None' }
+                                default { $VolQoS.PolicyGroupName }
+                            }
+                            'Adaptive Policy Name' = Switch ($VolQoS.AdaptivePolicyGroupName) {
+                                $Null { 'None' }
+                                default { $VolQoS.AdaptivePolicyGroupName }
+                            }
+                        }
+                        $OutObj += [pscustomobject]$inobj
                     }
-                    'Adaptive Policy Name' = Switch ($VolQoS.AdaptivePolicyGroupName) {
-                        $Null { 'None' }
-                        default { $VolQoS.AdaptivePolicyGroupName }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Vserver Volume QoS - $($Vserver)"
-                List = $false
-                ColumnWidths = 50, 25, 25
+                $TableParams = @{
+                    Name = "Vserver Volume QoS - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 50, 25, 25
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 
