@@ -1,5 +1,11 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+## [0.6.3] - 2022-01-31
+
+### Changed
+
+- Implemented better error handling.
+
 ## [0.6.2] - 2022-01-12
 
 ### Added
