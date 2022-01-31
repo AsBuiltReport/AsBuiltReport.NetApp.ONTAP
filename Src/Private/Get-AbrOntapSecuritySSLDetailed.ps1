@@ -1,11 +1,11 @@
 function Get-AbrOntapSecuritySSLDetailed {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Security Vserver SSL Detailed information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Security Vserver SSL Detailed information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,30 +23,40 @@ function Get-AbrOntapSecuritySSLDetailed {
     }
 
     process {
-        $Data =  Get-NcSecurityCertificate -Controller $Array | Where-Object {$_.Type -eq "server"}
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $inObj = [ordered] @{
-                    'Common Name' = $Item.CommonName
-                    'Protocol' = $Item.Protocol
-                    'Hash Function' = $Item.HashFunction
-                    'Serial Number' = $Item.SerialNumber
-                    'Expiration' = ($Item.ExpirationDateDT).ToString().Split(" ")[0]
-                    'Vserver' = $Item.Vserver
+        try {
+            $Data =  Get-NcSecurityCertificate -Controller $Array | Where-Object {$_.Type -eq "server"}
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Common Name' = $Item.CommonName
+                            'Protocol' = $Item.Protocol
+                            'Hash Function' = $Item.HashFunction
+                            'Serial Number' = $Item.SerialNumber
+                            'Expiration' = ($Item.ExpirationDateDT).ToString().Split(" ")[0]
+                            'Vserver' = $Item.Vserver
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "SSL Detailed - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 18, 10, 10, 25, 19, 18
+                $TableParams = @{
+                    Name = "SSL Detailed - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 18, 10, 10, 25, 19, 18
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolumesQosGPAdaptive {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos group adaptive information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver volumes qos group adaptive information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,30 +23,40 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     }
 
     process {
-        $QoSFilter = Get-NcQosAdaptivePolicyGroup -Controller $Array
-        $OutObj = @()
-        if ($QoSFilter) {
-            foreach ($Item in $QoSFilter) {
-                $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
-                $inObj = [ordered] @{
-                    'Policy Name' = $Item.PolicyGroup
-                    'Peak Iops' = $Item.PeakIops
-                    'Expected Iops' = $Item.ExpectedIops
-                    'Min Iops' = $Item.AbsoluteMinIops
-                    'Vserver' = $Item.Vserver
+        try {
+            $QoSFilter = Get-NcQosAdaptivePolicyGroup -Controller $Array
+            $OutObj = @()
+            if ($QoSFilter) {
+                foreach ($Item in $QoSFilter) {
+                    try {
+                        $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
+                        $inObj = [ordered] @{
+                            'Policy Name' = $Item.PolicyGroup
+                            'Peak Iops' = $Item.PeakIops
+                            'Expected Iops' = $Item.ExpectedIops
+                            'Min Iops' = $Item.AbsoluteMinIops
+                            'Vserver' = $Item.Vserver
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Volume Adaptive QoS Group - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 20, 24, 24, 12, 20
+                $TableParams = @{
+                    Name = "Volume Adaptive QoS Group - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 20, 24, 24, 12, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

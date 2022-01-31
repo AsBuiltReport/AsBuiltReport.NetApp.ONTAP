@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolumesQtree {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver volumes qtree information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver volumes qtree information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,32 +27,42 @@ function Get-AbrOntapVserverVolumesQtree {
     }
 
     process {
-        $VserverQtree = Get-NcQtree -VserverContext $Vserver -Controller $Array | Where-Object {$NULL -ne $_.Qtree}
-        $VserverObj = @()
-        if ($VserverQtree) {
-            foreach ($Item in $VserverQtree) {
-                $inObj = [ordered] @{
-                    'Qtree' = $Item.Qtree
-                    'Volume' = $Item.Volume
-                    'Status' = $Item.Status
-                    'Security Style' = $Item.SecurityStyle
-                    'Export Policy' = $Item.ExportPolicy
+        try {
+            $VserverQtree = Get-NcQtree -VserverContext $Vserver -Controller $Array | Where-Object {$NULL -ne $_.Qtree}
+            $VserverObj = @()
+            if ($VserverQtree) {
+                foreach ($Item in $VserverQtree) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Qtree' = $Item.Qtree
+                            'Volume' = $Item.Volume
+                            'Status' = $Item.Status
+                            'Security Style' = $Item.SecurityStyle
+                            'Export Policy' = $Item.ExportPolicy
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { $_.'Status' -notlike 'normal' } | Set-Style -Style Warning -Property 'Status'
-            }
+                if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Status' -notlike 'normal' } | Set-Style -Style Warning -Property 'Status'
+                }
 
-            $TableParams = @{
-                Name = "Vserver Volume Qtree - $($Vserver)"
-                List = $false
-                ColumnWidths = 27, 28, 15, 15, 15
+                $TableParams = @{
+                    Name = "Vserver Volume Qtree - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 27, 28, 15, 15, 15
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

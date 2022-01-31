@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverS3Bucket {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver S3 bucket information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver S3 bucket information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,28 +27,38 @@ function Get-AbrOntapVserverS3Bucket {
     }
 
     process {
-        $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/buckets?svm=$Vserver&fields=*&return_records=true&return_timeout=15"
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'Bucket' = $Item.Name
-                    'Volume' = $Item.volume.name
-                    'Total' = $Item.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                    'Used' = $Item.logical_used_size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+        try {
+            $VserverData = Get-NetAppOntapAPI -uri "/api/protocols/s3/buckets?svm=$Vserver&fields=*&return_records=true&return_timeout=15"
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Bucket' = $Item.Name
+                            'Volume' = $Item.volume.name
+                            'Total' = $Item.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            'Used' = $Item.logical_used_size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Vserver S3 Bucket - $($Vserver)"
-                List = $false
-                ColumnWidths = 30, 30, 20, 20
+                $TableParams = @{
+                    Name = "Vserver S3 Bucket - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 30, 30, 20, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

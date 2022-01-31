@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverCIFSLGMember {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Local Group Members information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Local Group Members information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,26 +27,36 @@ function Get-AbrOntapVserverCIFSLGMember {
     }
 
     process {
-        $VserverData = Get-NcCifsLocalGroupMember -VserverContext $Vserver -Controller $Array
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'Group Name' = $Item.GroupName
-                    'Description' = $Item.Member
+        try {
+            $VserverData = Get-NcCifsLocalGroupMember -VserverContext $Vserver -Controller $Array
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Group Name' = $Item.GroupName
+                            'Description' = $Item.Member
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "CIFS Connected Local Group Members - $($Vserver)"
-                List = $false
-                ColumnWidths = 50, 50
+                $TableParams = @{
+                    Name = "CIFS Connected Local Group Members - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 50, 50
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

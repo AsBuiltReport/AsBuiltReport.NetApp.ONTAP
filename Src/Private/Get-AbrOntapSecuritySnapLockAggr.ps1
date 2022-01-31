@@ -1,11 +1,11 @@
 function Get-AbrOntapSecuritySnapLockAggr {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Security Aggregate Snaplock Type information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Security Aggregate Snaplock Type information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,27 +23,37 @@ function Get-AbrOntapSecuritySnapLockAggr {
     }
 
     process {
-        $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $SnapLockType = Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes
-                $inObj = [ordered] @{
-                    'Aggregate Name' = $Item.Name
-                    'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
+        try {
+            $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $SnapLockType = Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes
+                        $inObj = [ordered] @{
+                            'Aggregate Name' = $Item.Name
+                            'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Aggregate Snaplock Type - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 40, 60
+                $TableParams = @{
+                    Name = "Aggregate Snaplock Type - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 40, 60
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

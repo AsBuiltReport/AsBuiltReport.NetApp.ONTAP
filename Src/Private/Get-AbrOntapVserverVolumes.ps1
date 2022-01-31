@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolume {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver volumes information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver volumes information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,34 +27,44 @@ function Get-AbrOntapVserverVolume {
     }
 
     process {
-        $VserverRootVol = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
-        $VserverObj = @()
-        if ($VserverRootVol) {
-            foreach ($Item in $VserverRootVol) {
-                $inObj = [ordered] @{
-                    'Volume' = $Item.Name
-                    'Status' = $Item.State
-                    'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                    'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                    'Aggregate' = $Item.Aggregate
+        try {
+            $VserverRootVol = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+            $VserverObj = @()
+            if ($VserverRootVol) {
+                foreach ($Item in $VserverRootVol) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Volume' = $Item.Name
+                            'Status' = $Item.State
+                            'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                            'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                            'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Aggregate' = $Item.Aggregate
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
-                $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
-            }
+                if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+                    $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
+                }
 
-            $TableParams = @{
-                Name = "Vserver Volume - $($Vserver)"
-                List = $false
-                ColumnWidths = 34, 12, 12, 12, 10, 20
+                $TableParams = @{
+                    Name = "Vserver Volume - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 34, 12, 12, 12, 10, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

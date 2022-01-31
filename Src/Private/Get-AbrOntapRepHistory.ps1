@@ -1,11 +1,11 @@
 function Get-AbrOntapRepHistory {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP SnapMirror replication history information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP SnapMirror replication history information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,32 +23,42 @@ function Get-AbrOntapRepHistory {
     }
 
     process {
-        $ReplicaData = Get-NcSnapmirrorHistory -Controller $Array
-        $ReplicaObj = @()
-        if ($ReplicaData) {
-            foreach ($Item in $ReplicaData) {
-                $inObj = [ordered] @{
-                    'Source Location' = $Item.SourceLocation
-                    'Destination Location' = $Item.DestinationLocation
-                    'Operation Type' = $Item.OperationType
-                    'Result' = $Item.Result
-                    'Start' = $Item.Start
+        try {
+            $ReplicaData = Get-NcSnapmirrorHistory -Controller $Array
+            $ReplicaObj = @()
+            if ($ReplicaData) {
+                foreach ($Item in $ReplicaData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Source Location' = $Item.SourceLocation
+                            'Destination Location' = $Item.DestinationLocation
+                            'Operation Type' = $Item.OperationType
+                            'Result' = $Item.Result
+                            'Start' = $Item.Start
+                        }
+                        $ReplicaObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $ReplicaObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Replication.History) {
-                $ReplicaObj | Where-Object { $_.'Result' -ne 'success'} | Set-Style -Style Warning -Property 'Result'
-            }
+                if ($Healthcheck.Replication.History) {
+                    $ReplicaObj | Where-Object { $_.'Result' -ne 'success'} | Set-Style -Style Warning -Property 'Result'
+                }
 
-            $TableParams = @{
-                Name = "SnapMirror Replication History - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 25, 25, 15, 15, 20
+                $TableParams = @{
+                    Name = "SnapMirror Replication History - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 25, 25, 15, 15, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $ReplicaObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $ReplicaObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

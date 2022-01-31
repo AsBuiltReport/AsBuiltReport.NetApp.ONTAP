@@ -1,11 +1,11 @@
 function Get-AbrOntapSysConfigNTP {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP System NTP information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP System NTP information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,28 +23,38 @@ function Get-AbrOntapSysConfigNTP {
     }
 
     process {
-        $Data =  Get-NcNtpServer -Controller $Array
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $inObj = [ordered] @{
-                    'Server Name' = $Item.ServerName
-                    'NTP Version' = $TextInfo.ToTitleCase($Item.Version)
-                    'Preferred' = ConvertTo-TextYN $Item.IsPreferred
-                    'Authentication Enabled' = ConvertTo-TextYN $Item.IsAuthenticationEnabled
+        try {
+            $Data =  Get-NcNtpServer -Controller $Array
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Server Name' = $Item.ServerName
+                            'NTP Version' = $TextInfo.ToTitleCase($Item.Version)
+                            'Preferred' = ConvertTo-TextYN $Item.IsPreferred
+                            'Authentication Enabled' = ConvertTo-TextYN $Item.IsAuthenticationEnabled
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "System Network Time Protocol - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 40, 20, 20, 20
+                $TableParams = @{
+                    Name = "System Network Time Protocol - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 40, 20, 20, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

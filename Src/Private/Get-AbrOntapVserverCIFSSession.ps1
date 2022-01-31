@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverCIFSSession {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Sessions information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver CIFS Sessions information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,29 +27,39 @@ function Get-AbrOntapVserverCIFSSession {
     }
 
     process {
-        $VserverData = Get-NcCifsSession -VserverContext $Vserver -Controller $Array
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'Lif Address' = $Item.LifAddress
-                    'Connected Time' = $Item.ConnectedTime
-                    'Protocol Version' = $Item.ProtocolVersion
-                    'Address' = $Item.Address
-                    'User' = $Item.WindowsUser
+        try {
+            $VserverData = Get-NcCifsSession -VserverContext $Vserver -Controller $Array
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Lif Address' = $Item.LifAddress
+                            'Connected Time' = $Item.ConnectedTime
+                            'Protocol Version' = $Item.ProtocolVersion
+                            'Address' = $Item.Address
+                            'User' = $Item.WindowsUser
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Vserver CIFS Sessions - $($Vserver)"
-                List = $false
-                ColumnWidths = 20, 15, 15, 20, 30
+                $TableParams = @{
+                    Name = "Vserver CIFS Sessions - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 20, 15, 15, 20, 30
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 
