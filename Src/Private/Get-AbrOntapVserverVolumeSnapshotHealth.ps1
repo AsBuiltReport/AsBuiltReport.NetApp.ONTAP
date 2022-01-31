@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolumeSnapshotHealth {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP vserver volumes snapshot healthcheck information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver volumes snapshot healthcheck information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -38,13 +38,18 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                     BlankLine
                     $VserverObj = @()
                     foreach ($Item in $SnapShotData) {
-                        $inObj = [ordered] @{
-                            'Volume Name' = $Item.Volume
-                            'Snapshot Name' = $Item.Name
-                            'Created Time' = $Item.Created
-                            'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                        try {
+                            $inObj = [ordered] @{
+                                'Volume Name' = $Item.Volume
+                                'Snapshot Name' = $Item.Name
+                                'Created Time' = $Item.Created
+                                'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            }
+                            $VserverObj += [pscustomobject]$inobj
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        catch {
+                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        }
                     }
 
                     $TableParams = @{

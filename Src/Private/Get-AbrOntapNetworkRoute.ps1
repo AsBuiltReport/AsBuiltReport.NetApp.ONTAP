@@ -1,11 +1,11 @@
 function Get-AbrOntapNetworkRoute {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP network Route information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP network Route information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,28 +27,38 @@ function Get-AbrOntapNetworkRoute {
     }
 
     process {
-        $Routes = Get-NcNetRoute -VserverContext $Vserver -Controller $Array
-        $RoutesObj = @()
-        if ($Routes) {
-            foreach ($Item in $Routes) {
-                $inObj = [ordered] @{
-                    'Destination' = $Item.Destination
-                    'Gateway' = $Item.Gateway
-                    'Metric' = $Item.Metric
-                    'Address Family' = $Item.AddressFamily.ToString().ToUpper()
+        try {
+            $Routes = Get-NcNetRoute -VserverContext $Vserver -Controller $Array
+            $RoutesObj = @()
+            if ($Routes) {
+                foreach ($Item in $Routes) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Destination' = $Item.Destination
+                            'Gateway' = $Item.Gateway
+                            'Metric' = $Item.Metric
+                            'Address Family' = $Item.AddressFamily.ToString().ToUpper()
+                        }
+                        $RoutesObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $RoutesObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Network Route - $($Vserver)"
-                List = $false
-                ColumnWidths = 30, 30, 20, 20
+                $TableParams = @{
+                    Name = "Network Route - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 30, 30, 20, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $RoutesObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $RoutesObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverSummary {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,92 +27,121 @@ function Get-AbrOntapVserverSummary {
     }
 
     process {
-        $VserverData = Get-NcVserver -VserverContext $Vserver| Where-Object { $_.VserverType -eq "data" }
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'Vserver Type' = $Item.VserverType
-                    'Allowed Protocols' = [string]$Item.AllowedProtocols
-                    'Disallowed Protocols' = [string]$Item.DisallowedProtocols
-                    'IPSpace' = $Item.Ipspace
-                    'Status' = $Item.State
-                }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.Status) {
-                $VserverObj | Where-Object { $_.'Status' -like 'stopped' } | Set-Style -Style Warning -Property 'Status'
-            }
-
-            $TableParams = @{
-                Name = "Vserver Information - $($Vserver)"
-                List = $false
-                ColumnWidths = 20, 20, 20, 20, 20
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
-        }
-        Section -Style Heading4 'Root Volume' {
-            $VserverRootVol = Get-NcVol -VserverContext $Vserver| Where-Object {$_.JunctionPath -eq '/'}
+        try {
+            $VserverData = Get-NcVserver -VserverContext $Vserver| Where-Object { $_.VserverType -eq "data" }
             $VserverObj = @()
-            if ($VserverRootVol) {
-                foreach ($Item in $VserverRootVol) {
-                    $inObj = [ordered] @{
-                        'Root Volume' = $Item.Name
-                        'Status' = $Item.State
-                        'Total Size' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                        'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                        'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                        'Dedup' = ConvertTo-TextYN $Item.Dedupe
-                        'Aggregate' = $Item.Aggregate
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Vserver Type' = $Item.VserverType
+                            'Allowed Protocols' = [string]$Item.AllowedProtocols
+                            'Disallowed Protocols' = [string]$Item.DisallowedProtocols
+                            'IPSpace' = $Item.Ipspace
+                            'Status' = $Item.State
+                        }
+                        $VserverObj += [pscustomobject]$inobj
                     }
-                    $VserverObj += [pscustomobject]$inobj
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
                 if ($Healthcheck.Vserver.Status) {
-                    $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
-                    $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+                    $VserverObj | Where-Object { $_.'Status' -like 'stopped' } | Set-Style -Style Warning -Property 'Status'
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Root Volume - $($Vserver)"
+                    Name = "Vserver Information - $($Vserver)"
                     List = $false
-                    ColumnWidths = 20, 10, 10, 10, 10, 10, 30
+                    ColumnWidths = 20, 20, 20, 20, 20
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        if (Get-NcVserverAggr) {
-            Section -Style Heading4 'Aggregate Resource Allocation' {
-                $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
-                $VserverObj = @()
-                if ($VserverAGGR) {
-                    foreach ($Item in $VserverAGGR) {
-                        $inObj = [ordered] @{
-                            'Aggregate' = $Item.AggregateName
-                            'Type' = $Item.AggregateType
-                            'SnapLock Type' = $Item.SnaplockType
-                            'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+            try {
+                Section -Style Heading4 'Root Volume' {
+                    $VserverRootVol = Get-NcVol -VserverContext $Vserver| Where-Object {$_.JunctionPath -eq '/'}
+                    $VserverObj = @()
+                    if ($VserverRootVol) {
+                        foreach ($Item in $VserverRootVol) {
+                            try {
+                                $inObj = [ordered] @{
+                                    'Root Volume' = $Item.Name
+                                    'Status' = $Item.State
+                                    'Total Size' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                                    'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                    'Dedup' = ConvertTo-TextYN $Item.Dedupe
+                                    'Aggregate' = $Item.Aggregate
+                                }
+                                $VserverObj += [pscustomobject]$inobj
+                            }
+                            catch {
+                                Write-PscriboMessage -IsWarning $_.Exception.Message
+                            }
                         }
-                        $VserverObj += [pscustomobject]$inobj
-                    }
+                        if ($Healthcheck.Vserver.Status) {
+                            $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
+                            $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
+                        }
 
-                    $TableParams = @{
-                        Name = "Vserver Aggregate Resource Allocation - $($Vserver)"
-                        List = $false
-                        ColumnWidths = 40, 15, 25, 20
+                        $TableParams = @{
+                            Name = "Vserver Root Volume - $($Vserver)"
+                            List = $false
+                            ColumnWidths = 20, 10, 10, 10, 10, 10, 30
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $VserverObj | Table @TableParams
                     }
-                    if ($Report.ShowTableCaptions) {
-                        $TableParams['Caption'] = "- $($TableParams.Name)"
-                    }
-                    $VserverObj | Table @TableParams
                 }
             }
+            catch {
+                Write-PscriboMessage -IsWarning $_.Exception.Message
+            }
+            try {
+                if (Get-NcVserverAggr) {
+                    Section -Style Heading4 'Aggregate Resource Allocation' {
+                        $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
+                        $VserverObj = @()
+                        if ($VserverAGGR) {
+                            foreach ($Item in $VserverAGGR) {
+                                try {
+                                    $inObj = [ordered] @{
+                                        'Aggregate' = $Item.AggregateName
+                                        'Type' = $Item.AggregateType
+                                        'SnapLock Type' = $Item.SnaplockType
+                                        'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                    }
+                                    $VserverObj += [pscustomobject]$inobj
+                                }
+                                catch {
+                                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                                }
+                            }
 
+                            $TableParams = @{
+                                Name = "Vserver Aggregate Resource Allocation - $($Vserver)"
+                                List = $false
+                                ColumnWidths = 40, 15, 25, 20
+                            }
+                            if ($Report.ShowTableCaptions) {
+                                $TableParams['Caption'] = "- $($TableParams.Name)"
+                            }
+                            $VserverObj | Table @TableParams
+                        }
+                    }
+                }
+            }
+            catch {
+                Write-PscriboMessage -IsWarning $_.Exception.Message
+            }
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverIscsiInitiator {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver ISCSI ClientInitiators information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver ISCSI ClientInitiators information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,26 +27,36 @@ function Get-AbrOntapVserverIscsiInitiator {
     }
 
     process {
-        $VserverData = Get-NcIscsiInitiator -VserverContext $Vserver -Controller $Array
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'Initiator Name' = $Item.InitiatorNodeName
-                    'Target Port Group' = $Item.TpGroupName
+        try {
+            $VserverData = Get-NcIscsiInitiator -VserverContext $Vserver -Controller $Array
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Initiator Name' = $Item.InitiatorNodeName
+                            'Target Port Group' = $Item.TpGroupName
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "ISCSI Client Initiator - $($Vserver)"
-                List = $false
-                ColumnWidths = 60, 40
+                $TableParams = @{
+                    Name = "ISCSI Client Initiator - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 60, 40
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -422,11 +422,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Paragraph "The following section provides the FCP Service Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverFcpSummary -Vserver $SVM
-                                                Section -Style Heading6 'FCP Interfaces' {
-                                                    Get-AbrOntapVserverFcpInterface -Vserver $SVM
-                                                }
                                                 Section -Style Heading6 'FCP Physical Adapter' {
                                                     Get-AbrOntapVserverFcpAdapter
+                                                }
+                                                Section -Style Heading6 'FCP Interfaces' {
+                                                    Get-AbrOntapVserverFcpInterface -Vserver $SVM
                                                 }
                                             }
                                         }

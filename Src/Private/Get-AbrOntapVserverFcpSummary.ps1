@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverFcpSummary {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Vserver FCP information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver FCP information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -27,33 +27,43 @@ function Get-AbrOntapVserverFcpSummary {
     }
 
     process {
-        $VserverData = Get-NcFcpService -VserverContext $Vserver -Controller $Array
-        $VserverObj = @()
-        if ($VserverData) {
-            foreach ($Item in $VserverData) {
-                $inObj = [ordered] @{
-                    'FCP WWNN' = $Item.NodeName
-                    'Status' = Switch ($Item.IsAvailable) {
-                        'True' { 'Up' }
-                        'False' { 'Down' }
-                        default {$Item.IsAvailable}
+        try {
+            $VserverData = Get-NcFcpService -VserverContext $Vserver -Controller $Array
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'FCP WWNN' = $Item.NodeName
+                            'Status' = Switch ($Item.IsAvailable) {
+                                'True' { 'Up' }
+                                'False' { 'Down' }
+                                default {$Item.IsAvailable}
+                            }
+                        }
+                        $VserverObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                $VserverObj += [pscustomobject]$inobj
-            }
-            if ($Healthcheck.Vserver.FCP) {
-                $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
-            }
+                if ($Healthcheck.Vserver.FCP) {
+                    $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
+                }
 
-            $TableParams = @{
-                Name = "Vserver FCP Service - $($Vserver)"
-                List = $false
-                ColumnWidths = 70, 30
+                $TableParams = @{
+                    Name = "Vserver FCP Service - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 70, 30
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $VserverObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 

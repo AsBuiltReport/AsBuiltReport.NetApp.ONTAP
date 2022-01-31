@@ -1,11 +1,11 @@
 function Get-AbrOntapSecuritySnapLockVol {
     <#
     .SYNOPSIS
-    Used by As Built Report to retrieve NetApp ONTAP Security Volume Snaplock Type information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Security Volume Snaplock Type information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.2
+        Version:        0.6.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,28 +23,38 @@ function Get-AbrOntapSecuritySnapLockVol {
     }
 
     process {
-        $Data =  Get-NcVol -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
-        $OutObj = @()
-        if ($Data) {
-            foreach ($Item in $Data) {
-                $SnapLockType = Get-Ncvol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes
-                $inObj = [ordered] @{
-                    'Volume' = $Item.Name
-                    'Aggregate' = $Item.Aggregate
-                    'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
+        try {
+            $Data =  Get-NcVol -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $SnapLockType = Get-Ncvol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes
+                        $inObj = [ordered] @{
+                            'Volume' = $Item.Name
+                            'Aggregate' = $Item.Aggregate
+                            'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
+                        }
+                        $OutObj += [pscustomobject]$inobj
+                    }
+                    catch {
+                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    }
                 }
-                $OutObj += [pscustomobject]$inobj
-            }
 
-            $TableParams = @{
-                Name = "Volume Snaplock Type - $($ClusterInfo.ClusterName)"
-                List = $false
-                ColumnWidths = 45, 35, 20
+                $TableParams = @{
+                    Name = "Volume Snaplock Type - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 45, 35, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
             }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $OutObj | Table @TableParams
+        }
+        catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
         }
     }
 
