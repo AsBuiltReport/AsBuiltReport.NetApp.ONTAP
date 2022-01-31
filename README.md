@@ -154,6 +154,21 @@ There are 3 levels (0-2) of detail granularity for each section as follows;
 |    1    | Enabled / Summary | Provides summarised information for a collection of objects                                                                                 |
 |    2    | Adv Summary       | Provides condensed, detailed information for a collection of objects                                                                       |
 
+The table below outlines the default and maximum **InfoLevel** settings for each section.
+
+| Sub-Schema   | Default Setting | Maximum Setting |
+|--------------|:---------------:|:---------------:|
+| Cluster       |        1        |        2        |
+| Node       |        1        |        2        |
+| Storage          |        1        |        2        |
+| Network         |        1        |        2        |
+| License           |        1        |        2        |
+| Vserver           |        1        |        2        |
+| Efficiency           |        1        |        2        |
+| Security           |        1        |        2        |
+| System           |        1        |        2        |
+| Replication           |        1        |        2        |
+
 ### Healthcheck
 
 The **Healthcheck** schema is used to toggle health checks on or off.
