@@ -647,7 +647,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapSysConfigWebStatus
                             }
                         }
-                        if (Get-NcNetDns -Controller $Array) {
+                        if (Get-NcNetDns -Controller $Array | Where-Object {$_.Vserver -notin $Options.Exclude.Vserver}) {
                             Section -Style Heading3 'DNS Configuration' {
                                 Get-AbrOntapSysConfigDNS
                             }
