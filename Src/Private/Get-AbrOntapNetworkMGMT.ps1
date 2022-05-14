@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkMgmt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.4
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -159,7 +159,7 @@ function Get-AbrOntapNetworkMgmt {
             }
             try {
                 Section -Style Heading6 'Data Network Interfaces' {
-                    $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp'}
+                    $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp' -and $_.Vserver -notin $options.Exclude.Vserver}
                     $ClusterObj = @()
                     if ($ClusterData) {
                         foreach ($Item in $ClusterData) {
