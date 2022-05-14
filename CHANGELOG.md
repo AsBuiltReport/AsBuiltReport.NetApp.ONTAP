@@ -1,10 +1,16 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
-## [0.6.4] - 2022-05-xx
+## [0.6.4] - 2022-05-14
+
+### Added
+
+- Added Option to allow Vserver (SVM) filtering.
 
 ### Changed
 
-- Implemented Vserver filtering.
+- Migrated Sample Report URL to htmlpreview.github.io
+- The minimum requirement for the AsBuiltReport.Core module has been increased to version 1.2.0.
+- The minimum requirement for the NetApp.ONTAP module has been increased to version 9.10.1.2111
 
 ## [0.6.3] - 2022-01-31
 
