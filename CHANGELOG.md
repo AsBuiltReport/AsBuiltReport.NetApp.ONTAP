@@ -1,5 +1,11 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+## [0.6.4] - 2022-05-xx
+
+### Changed
+
+- Implemented Vserver filtering.
+
 ## [0.6.3] - 2022-01-31
 
 ### Changed

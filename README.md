@@ -35,7 +35,7 @@ Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for m
 
 ### Sample Report - Custom Style 1
 
-Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://technomyth.zenprsolutions.net/wp-content/uploads/2021/11/NetApp-ONTAP-As-Built-Report.html)
+Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/dev/Samples/Sample%20NetApp%20As-Built%20Report.html)
 
 # :beginner: Getting Started
 
@@ -66,8 +66,8 @@ These modules may also be manually installed.
 | Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
 |--------------------|:------------------------:|:---------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
 | PScribo            |          0.9.1           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
-| AsBuiltReport.Core |          1.1.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP |          9.9.1           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
+| AsBuiltReport.Core |          1.2.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
+| Netapp.ONTAP |          9.10.1.2111           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
 
 ### Linux & macOS
 
@@ -84,7 +84,7 @@ These modules may also be manually installed.
 Open a PowerShell terminal window and install each of the required modules as follows;
 
 ```powershell
-Install-Module AsBuiltReport.NetApp.ONTAP
+Install-Module -Name AsBuiltReport.NetApp.ONTAP
 ```
 
 ### GitHub
@@ -141,6 +141,9 @@ The **Report** schema provides configuration of the NetApp ONTAP report informat
 ### Options
 
 The **Options** schema allows certain options within the report to be toggled on or off.
+| Sub-Schema      | Setting      | Default | Description |
+|-----------------|--------------|---------|-----------------------------------------------------------------|
+| Exclude: Vserver | Array List  | Empty    | Allow to filter on Vserver Name
 
 ### InfoLevel
 
@@ -151,7 +154,7 @@ There are 3 levels (0-2) of detail granularity for each section as follows;
 | Setting | InfoLevel         | Description                                                                                                                                |
 |:-------:|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 |    0    | Disabled          | Does not collect or display any information                                                                                                |
-|    1    | Enabled / Summary | Provides summarised information for a collection of objects                                                                                 |
+|    1    | Enabled / Summary | Provides summarised information for a collection of objects                                                                                |
 |    2    | Adv Summary       | Provides condensed, detailed information for a collection of objects                                                                       |
 
 The table below outlines the default and maximum **InfoLevel** settings for each section.

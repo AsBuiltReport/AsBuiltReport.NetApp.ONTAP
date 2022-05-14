@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.4
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -20,6 +20,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         [String[]] $Target,
         [PSCredential] $Credential
     )
+
+    Write-PScriboMessage -IsWarning "Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project."
+    Write-PScriboMessage -IsWarning "Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
+    Write-PScriboMessage -IsWarning "Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
 
     # Import Report Configuration
     $Report = $ReportConfig.Report
@@ -230,7 +234,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapNetworkSubnet
                             }
                         }
-                        $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -ne "node" -and $_.VserverType -ne "system" } | Select-Object -ExpandProperty Vserver
+                        $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -ne "node" -and $_.VserverType -ne "system" -and $_.Vserver -notin $Options.Exclude.Vserver} | Select-Object -ExpandProperty Vserver
                         foreach ($SVM in $Vservers) {
                             if (Get-NcNetRoute -VserverContext $SVM -Controller $Array) {
                                 Section -Style Heading4 "$SVM Vserver Routes" {
@@ -263,7 +267,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading2 'Vserver Information' {
                         Paragraph "The following section provides a summary of the vserver information on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
+                        $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -and $_.Vserver -notin $Options.Exclude.Vserver} | Select-Object -ExpandProperty Vserver
                         foreach ($SVM in $Vservers) {
                             Section -Style Heading3 "$SVM Vserver Configuration" {
                                 Paragraph "The following section provides the configuration of the vserver $($SVM)."
@@ -519,7 +523,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Efficiency InfoLevel set at $($InfoLevel.Efficiency)."
             if ($InfoLevel.Efficiency -gt 0) {
-                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
+                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -and $_.Vserver -notin $Options.Exclude.Vserver} | Select-Object -ExpandProperty Vserver
                 if (Get-NcAggrEfficiency -Controller $Array) {
                     Section -Style Heading2 'Efficiency Information' {
                         Paragraph "The following section provides the Storage Efficiency Saving information on $($ClusterInfo.ClusterName)."
@@ -555,7 +559,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Security InfoLevel set at $($InfoLevel.Security)."
             if ($InfoLevel.Security -gt 0) {
-                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" } | Select-Object -ExpandProperty Vserver
+                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -and $_.Vserver -notin $Options.Exclude.Vserver} | Select-Object -ExpandProperty Vserver
                 Section -Style Heading2 'Security Information' {
                     Paragraph "The following section provides the Security related information on $($ClusterInfo.ClusterName)."
                     BlankLine
