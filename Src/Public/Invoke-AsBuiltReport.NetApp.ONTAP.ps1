@@ -21,6 +21,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         [PSCredential] $Credential
     )
 
+    Write-PScriboMessage -IsWarning "Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project."
+    Write-PScriboMessage -IsWarning "Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
+    Write-PScriboMessage -IsWarning "Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
+
     # Import Report Configuration
     $Report = $ReportConfig.Report
     $InfoLevel = $ReportConfig.InfoLevel

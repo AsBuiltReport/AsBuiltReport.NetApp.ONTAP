@@ -35,7 +35,7 @@ Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for m
 
 ### Sample Report - Custom Style 1
 
-Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://technomyth.zenprsolutions.net/wp-content/uploads/2021/11/NetApp-ONTAP-As-Built-Report.html)
+Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/dev/Samples/Sample%20NetApp%20As-Built%20Report.html)
 
 # :beginner: Getting Started
 
