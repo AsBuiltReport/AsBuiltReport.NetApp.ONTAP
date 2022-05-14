@@ -12,7 +12,7 @@
 RootModule = 'AsBuiltReport.NetApp.ONTAP.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.6.3'
+ModuleVersion = '0.6.4'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -54,11 +54,11 @@ Description = 'A PowerShell module to generate an as built report on the configu
 RequiredModules = @(
     @{
         ModuleName = 'AsBuiltReport.Core';
-        ModuleVersion = '1.1.0'
+        ModuleVersion = '1.2.0'
     },
     @{
         ModuleName = 'NetApp.ONTAP';
-        ModuleVersion = '9.9.1'
+        ModuleVersion = '9.10.1.2111'
     }
 )
 

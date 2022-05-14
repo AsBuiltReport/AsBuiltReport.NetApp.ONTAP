@@ -66,8 +66,8 @@ These modules may also be manually installed.
 | Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
 |--------------------|:------------------------:|:---------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
 | PScribo            |          0.9.1           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
-| AsBuiltReport.Core |          1.1.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP |          9.9.1           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
+| AsBuiltReport.Core |          1.2.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
+| Netapp.ONTAP |          9.10.1.2111           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
 
 ### Linux & macOS
 
@@ -84,7 +84,7 @@ These modules may also be manually installed.
 Open a PowerShell terminal window and install each of the required modules as follows;
 
 ```powershell
-Install-Module AsBuiltReport.NetApp.ONTAP
+Install-Module -Name AsBuiltReport.NetApp.ONTAP
 ```
 
 ### GitHub
