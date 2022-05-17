@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigDNS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.4
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -24,7 +24,7 @@ function Get-AbrOntapSysConfigDNS {
 
     process {
         try {
-            $Data =  Get-NcNetDns -Controller $Array
+            $Data =  Get-NcNetDns -Controller $Array | Where-Object {$_.Vserver -notin $Options.Exclude.Vserver}
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {

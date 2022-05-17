@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLVserver {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.4
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -24,7 +24,7 @@ function Get-AbrOntapSecuritySSLVserver {
 
     process {
         try {
-            $Data =  Get-NcSecuritySsl -Controller $Array
+            $Data =  Get-NcSecuritySsl -Controller $Array | Where-Object {$_.Vserver -notin $Options.Exclude.Vserver}
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
