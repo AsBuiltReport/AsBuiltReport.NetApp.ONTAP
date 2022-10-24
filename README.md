@@ -56,9 +56,9 @@ The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 This report is compatible with the following PowerShell versions;
 
-| Windows PowerShell 5.1 | PowerShell Core | PowerShell 7 |
-|:----------------------:|:---------------:|:------------:|
-|   :white_check_mark:   |   :white_check_mark:    |  :white_check_mark:  |
+| PowerShell 5.1 | PowerShell 7 | 
+|:----------------------:|:---------------:|
+|   :white_check_mark:   |   :white_check_mark:|
 
 ## :wrench: System Requirements
 
@@ -71,14 +71,6 @@ These modules may also be manually installed.
 | PScribo            |          0.9.1           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
 | AsBuiltReport.Core |          1.2.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
 | Netapp.ONTAP |          9.10.1.2111           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
-
-### Linux & macOS
-
-- .NET Core is required for cover page image support on Linux and macOS operating systems.
-  - [Installing .NET Core for macOS](https://docs.microsoft.com/en-us/dotnet/core/install/macos)
-  - [Installing .NET Core for Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
-
-❗ If you are unable to install .NET Core, you must set `ShowCoverPageImage` to `False` in the report JSON configuration file.
 
 ## :package: Module Installation
 
