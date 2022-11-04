@@ -22,8 +22,25 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     )
 
     Write-PScriboMessage -IsWarning "Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project."
+    Write-PScriboMessage -IsWarning "Do not forget to update your report configuration file after each new version release."
     Write-PScriboMessage -IsWarning "Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
     Write-PScriboMessage -IsWarning "Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
+
+    # Check the current AsBuiltReport.NetApp.ONTAP module
+    Try {
+        $InstalledVersion = Get-Module -ListAvailable -Name AsBuiltReport.NetApp.ONTAP -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+
+        if ($InstalledVersion) {
+            Write-PScriboMessage -IsWarning "AsBuiltReport.NetApp.ONTAP $($InstalledVersion.ToString()) is currently installed."
+            $LatestVersion = Find-Module -Name AsBuiltReport.NetApp.ONTAP -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+            if ($LatestVersion -gt $InstalledVersion) {
+                Write-PScriboMessage -IsWarning "AsBuiltReport.NetApp.ONTAP $($LatestVersion.ToString()) is available."
+                Write-PScriboMessage -IsWarning "Run 'Update-Module -Name AsBuiltReport.NetApp.ONTAP -Force' to install the latest version."
+            }
+        }
+    } Catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
+        }
 
     # Import Report Configuration
     $Report = $ReportConfig.Report
@@ -36,8 +53,16 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     #Connect to Ontap Storage Array using supplied credentials
     foreach ($OntapArray in $Target) {
         Try {
+            $OntapModuleInstalledVersion = Get-Module -ListAvailable -Name NetApp.ONTAP -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
             Write-PScriboMessage "Connecting to NetApp Storage '$OntapArray'."
-            $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS
+            if ($OntapModuleInstalledVersion.Minor -gt 10) {
+                # Workaround for NetApp.ONTAP v9.11+ RESAPI Issues
+                Write-PScriboMessage "Detected NetApp.ONTAP module version $($OntapModuleInstalledVersion.toString()). Enabling ONTAPI option."
+                $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS -ONTAPI
+            } else {
+                Write-PScriboMessage "Detected NetApp.ONTAP module version $($OntapModuleInstalledVersion.toString()). Disabling ONTAPI option."
+                $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS
+            }
         } Catch {
             Write-Verbose "Unable to connect to the $OntapArray Array"
             throw
@@ -67,9 +92,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Node Section                                                #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Node Section                                                #
+            #---------------------------------------------------------------------------------------------#
 
             Write-PScriboMessage "Node InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Node -gt 0) {
@@ -97,9 +122,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Storage Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Storage Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Storage InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Storage -gt 0) {
                 Section -Style Heading2 'Storage Information' {
@@ -160,9 +185,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 License Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 License Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "License InfoLevel set at $($InfoLevel.License)."
             if ($InfoLevel.License -gt 0) {
                 Section -Style Heading2 'Licenses Information' {
@@ -177,9 +202,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Network Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Network Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
             if ($InfoLevel.Network -gt 0) {
                 Section -Style Heading2 'Network Information' {
@@ -260,9 +285,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Vserver Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Vserver Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Vserver InfoLevel set at $($InfoLevel.Vserver)."
             if ($InfoLevel.Vserver -gt 0) {
                 if (Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data"}) {
@@ -413,9 +438,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Section -Style Heading6 "ISCSI Interfaces" {
                                                     Get-AbrOntapVserverIscsiInterface -Vserver $SVM
                                                 }
-                                                if (Get-NcIscsiInitiator -VS $SVM -Controller $Array) {
+
+                                                $ISCSIClientInitiators = Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
+                                                if ($ISCSIClientInitiators) {
                                                     Section -Style Heading6 "ISCSI Client Initiators" {
-                                                        Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
+                                                        $ISCSIClientInitiators
                                                     }
                                                 }
                                             }
@@ -477,9 +504,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Replication Section                                         #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Replication Section                                         #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Replication InfoLevel set at $($InfoLevel.Replication)."
             if ($InfoLevel.Replication -gt 0) {
                 if (Get-NcClusterPeer -Controller $Array) {
@@ -520,9 +547,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-            #---------------------------------------------------------------------------------------------#
-            #                                 Efficiency Section                                          #
-            #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------y
             Write-PScriboMessage "Efficiency InfoLevel set at $($InfoLevel.Efficiency)."
             if ($InfoLevel.Efficiency -gt 0) {
                 $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -and $_.Vserver -notin $Options.Exclude.Vserver} | Select-Object -ExpandProperty Vserver
@@ -557,7 +582,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             }
 
             #---------------------------------------------------------------------------------------------#
-            #                                 Security Section                                          #
+            #                                 Security Section                                            #
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Security InfoLevel set at $($InfoLevel.Security)."
             if ($InfoLevel.Security -gt 0) {
@@ -682,7 +707,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 if ($InfoLevel.System -ge 2) {
                                     $Nodes = Get-NcNode -Controller $Array
                                     foreach ($Node in $Nodes) {
-                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array -ONTAPI)) {
+                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
                                             Section -Style Heading4 "$Node Emergency and Alert Messages" {
                                                 Get-AbrOntapSysConfigEMS -Node $Node
                                             }
