@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAGGR {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.5
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,12 +31,28 @@ function Get-AbrOntapStorageAGGR {
                         $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
                         [PSCustomObject] @{
                             'Name' = $Aggr.Name
-                            'Capacity' = $Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Available' = $Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Used' = $Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Capacity' = Switch ([string]::IsNullOrEmpty($Aggr.Totalsize)) {
+                                $true {'Unknown'}
+                                $false {$Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
+                                default {'Unknown'}
+                            }
+                            'Available' = Switch ([string]::IsNullOrEmpty($Aggr.Available)) {
+                                $true {'Unknown'}
+                                $false {$Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
+                                default {'Unknown'}
+                            }
+                            'Used' = Switch ([string]::IsNullOrEmpty($Aggr.Used)) {
+                                $true {'Unknown'}
+                                $false {$Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue}
+                                default {'Unknown'}
+                            }
                             'Disk Count' = $Aggr.Disks
                             'Root' = ConvertTo-TextYN $RootAggr
-                            'Raid Type' = ($Aggr.RaidType.Split(",")[0]).ToUpper()
+                            'Raid Type' = Switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
+                                $true {'Unknown'}
+                                $false {($Aggr.RaidType.Split(",")[0]).ToUpper()}
+                                default {'Unknown'}
+                            }
                             'State' = $Aggr.State
                         }
                     }

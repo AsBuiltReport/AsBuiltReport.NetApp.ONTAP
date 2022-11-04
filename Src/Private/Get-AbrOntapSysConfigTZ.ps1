@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigTZ {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.5
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -29,7 +29,7 @@ function Get-AbrOntapSysConfigTZ {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $Time = Get-NcTime -Controller $Array | Select-Object -ExpandProperty UtcTime
+                        $Time = (Get-NcTime -Controller $Array).UtcTime[0]
                         $CurrentTime = Get-UnixDate($Time)
                         $inObj = [ordered] @{
                             'Timezone' = $Item.Timezone
