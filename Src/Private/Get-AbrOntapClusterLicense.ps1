@@ -31,7 +31,7 @@ function Get-AbrOntapClusterLicense {
                         $License = Get-NcLicense -Owner $Node -Controller $Array
                         if ($License) {
                             $LicenseSummary = foreach ($Licenses in $License) {
-                                $EntitlementRisk = Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array
+                                $EntitlementRisk = Try {Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue} catch {Write-PscriboMessage -IsWarning $_.Exception.Message}
                                 [PSCustomObject] @{
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)

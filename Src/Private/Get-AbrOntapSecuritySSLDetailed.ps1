@@ -34,7 +34,11 @@ function Get-AbrOntapSecuritySSLDetailed {
                             'Protocol' = $Item.Protocol
                             'Hash Function' = $Item.HashFunction
                             'Serial Number' = $Item.SerialNumber
-                            'Expiration' = ($Item.ExpirationDateDT).ToString().Split(" ")[0]
+                            'Expiration' = Switch ([string]::IsNullOrEmpty($Item.ExpirationDateDT)) {
+                                $true {'-'}
+                                $false {($Item.ExpirationDateDT).ToString().Split(" ")[0]}
+                                default {'Unknown'}
+                            }
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject]$inobj

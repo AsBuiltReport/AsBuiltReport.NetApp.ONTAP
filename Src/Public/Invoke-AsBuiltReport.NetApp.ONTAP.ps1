@@ -707,7 +707,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 if ($InfoLevel.System -ge 2) {
                                     $Nodes = Get-NcNode -Controller $Array
                                     foreach ($Node in $Nodes) {
-                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
+                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Severity "emergency","alert" -Controller $Array | Select-Object -First 30)) {
                                             Section -Style Heading4 "$Node Emergency and Alert Messages" {
                                                 Get-AbrOntapSysConfigEMS -Node $Node
                                             }
