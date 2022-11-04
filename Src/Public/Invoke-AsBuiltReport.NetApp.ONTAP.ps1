@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.5
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -108,8 +108,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading3 'Aggregate Inventory' {
                         Paragraph "The following section provides the Aggregates on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Get-AbrOntapStorageAGGR
-                        if (Get-NcAggrObjectStore -Controller $Array) {
+                        if (Get-NcAggr -Controller $Array) {
+                            Get-AbrOntapStorageAGGR
+                        }
+                        if (Get-NcAggrObjectStore -Controller $Array -Aggregate (Get-NcAggr -Controller $Array).Name) {
                             Section -Style Heading4 'FabricPool' {
                                 Get-AbrOntapStorageFabricPool
                                 if ($InfoLevel.Storage -ge 2) {
@@ -680,7 +682,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 if ($InfoLevel.System -ge 2) {
                                     $Nodes = Get-NcNode -Controller $Array
                                     foreach ($Node in $Nodes) {
-                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
+                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array -ONTAPI)) {
                                             Section -Style Heading4 "$Node Emergency and Alert Messages" {
                                                 Get-AbrOntapSysConfigEMS -Node $Node
                                             }
