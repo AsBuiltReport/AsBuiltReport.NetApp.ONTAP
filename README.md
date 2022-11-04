@@ -190,3 +190,6 @@ PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Credential 
 PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'admin' -Password 'P@ssw0rd' -Format Html,Word -OutputFolderPath 'C:\Users\Jon\Documents' -SendEmail
 
 ```
+## :x: Known Issues
+
+- There are known issues with the NetApp.ONTAP module v9.11.1.2208. Therefore, the recommended version of the module is v9.10.1.2111.
