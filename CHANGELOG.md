@@ -2,6 +2,10 @@
 
 ## [0.6.5] - 2022-11-0x
 
+### Added
+
+- Added aggregate spare reporting. Close #26
+
 ### Fixed
 
 - Fix #22

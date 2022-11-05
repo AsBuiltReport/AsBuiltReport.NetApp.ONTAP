@@ -59,38 +59,42 @@ function Get-AbrOntapEfficiencyAggr {
                 $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
                 $Savingfilter = (Get-NcAggrEfficiency -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
                 if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
-                    Section -Style Heading4 'HealthCheck - Volume with Disabled Deduplication' {
-                        Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
-                        BlankLine
-                        $OutObj = @()
-                        foreach ($Item in $Data) {
-                            try {
-                                $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo
-                                $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array
-                                $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True"}
+                    $OutObj = @()
+                    foreach ($Item in $Data) {
+                        try {
+                            $Saving = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes
+                            $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array | Where-Object {$_.VolumeStateAttributes.IsVserverRoot -ne 'True'}
+                            $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True"}
+                            if ($Saving -ne 0 -and $VolFilter) {
                                 $inObj = [ordered] @{
                                     'Aggregate' = $Item.Name
-                                    'Volumes without Deduplication' = $VolFilter.Name
+                                    'Volumes without Deduplication' = $VolFilter.Name -join ", "
                                 }
                                 $OutObj += [pscustomobject]$inobj
                             }
-                            catch {
-                                Write-PscriboMessage -IsWarning $_.Exception.Message
-                            }
                         }
+                        catch {
+                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        }
+                    }
 
-                        if ($Healthcheck.Storage.Efficiency) {
-                            $OutObj | Set-Style -Style Warning -Property 'Aggregate','Volumes without Deduplication'
-                        }
+                    if ($Healthcheck.Storage.Efficiency) {
+                        $OutObj | Set-Style -Style Warning -Property 'Aggregate','Volumes without Deduplication'
+                    }
 
-                        $TableParams = @{
-                            Name = "HealthCheck - Volume without deduplication - $($ClusterInfo.ClusterName)"
-                            List = $false
-                            ColumnWidths = 45, 55
-                        }
-                        if ($Report.ShowTableCaptions) {
-                            $TableParams['Caption'] = "- $($TableParams.Name)"
-                        }
+                    $TableParams = @{
+                        Name = "HealthCheck - Volume without deduplication - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 45, 55
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                }
+                if ($OutObj) {
+                    Section -Style Heading4 'HealthCheck - Volume with Disabled Deduplication' {
+                        Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
+                        BlankLine
                         $OutObj | Table @TableParams
                     }
                 }

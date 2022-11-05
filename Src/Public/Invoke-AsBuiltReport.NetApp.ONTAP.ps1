@@ -388,7 +388,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 CIFS Section                                                #
                                         #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array) {
+                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array -ErrorAction SilentlyContinue) {
                                             Section -Style Heading5 "CIFS Services Information" {
                                                 Paragraph "The following section provides the CIFS Service Information on $($SVM)."
                                                 BlankLine
@@ -472,11 +472,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Section -Style Heading6 'Igroup Mapping' {
                                                         Get-AbrOntapVserverLunIgroup -Vserver $SVM
                                                     }
-                                                    if ($Healthcheck.Vserver.Status) {
+                                                    $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                    if ($Healthcheck.Vserver.Status -and $NonMappedLun) {
                                                         Section -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
                                                             Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
                                                             BlankLine
-                                                            Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                            $NonMappedLun
                                                         }
                                                     }
                                                 }
