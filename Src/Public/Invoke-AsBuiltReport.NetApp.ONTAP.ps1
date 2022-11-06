@@ -619,6 +619,17 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
+                    $MAPData = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/approval-groups?fields=**&return_records=true&return_timeout=15"
+                    if ($MAPData) {
+                        Section -Style Heading3 'Multi-Admin Approval Configuration' {
+                            Paragraph "The following section provides information about Multi-Admin Approval from $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecurityMAP
+                            Section -Style Heading4 'Multi-Admin Approval Rules' {
+                                Get-AbrOntapSecurityMAPRule
+                            }
+                        }
+                    }
                     if (Get-NcSecuritySsl -Controller $Array) {
                         Section -Style Heading3 'Vserver SSL Certificate' {
                             Paragraph "The following section provides the Vserver SSL Certificates information on $($ClusterInfo.ClusterName)."
