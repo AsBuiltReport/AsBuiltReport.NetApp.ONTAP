@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCGSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.5
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux

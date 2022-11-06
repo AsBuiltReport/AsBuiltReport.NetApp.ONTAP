@@ -710,7 +710,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapSysConfigDNS
                             }
                         }
-                        if (Get-NcSnmp -Controller $Array | Where-Object { $NULL -ne $_.Traphost -and $NULL -ne $_.Communities}) {
+                        if (Get-NcSnmp -Controller $Array | Where-Object { $Null -ne $_.Communities -and ($_.IsTrapEnabled -or $_.IsSnmpEnabled)}) {
                             Section -Style Heading3 'SNMP Configuration' {
                                 Get-AbrOntapSysConfigSNMP
                             }
