@@ -67,7 +67,7 @@ function Get-AbrOntapVserverCGLun {
                 }
 
                 $TableParams = @{
-                    Name = "Consistency Group Luns - $($Item.Name.Split('/')[3])"
+                    Name = "Consistency Group Luns - $($CGObj.Name)"
                     List = $false
                     ColumnWidths = 30, 10, 9, 10, 11, 10, 10, 10
                 }
