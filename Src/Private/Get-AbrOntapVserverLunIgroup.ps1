@@ -65,7 +65,7 @@ function Get-AbrOntapVserverLunIgroup {
                         }
 
                         $TableParams = @{
-                            Name = "Vserver Igroup - $($Item.Name)"
+                            Name = "Igroup - $($Item.Name)"
                             List = $true
                             ColumnWidths = 25, 75
                         }

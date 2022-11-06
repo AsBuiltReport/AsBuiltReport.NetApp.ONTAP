@@ -55,7 +55,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Volume SnapShot Configuration - $($Vserver)"
+                    Name = "Volume SnapShot Configuration - $($Vserver)"
                     List = $false
                     ColumnWidths = 25, 15, 15, 15, 15, 15
                 }

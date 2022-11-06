@@ -65,7 +65,7 @@ function Get-AbrOntapVserverNFSSummary {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver NFS Service - $($ClusterInfo.ClusterName)"
+                    Name = "NFS Service - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 25, 25, 25, 25
                 }

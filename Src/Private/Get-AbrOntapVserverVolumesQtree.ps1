@@ -51,7 +51,7 @@ function Get-AbrOntapVserverVolumesQtree {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Volume Qtree - $($Vserver)"
+                    Name = "Volume Qtree - $($Vserver)"
                     List = $false
                     ColumnWidths = 27, 28, 15, 15, 15
                 }

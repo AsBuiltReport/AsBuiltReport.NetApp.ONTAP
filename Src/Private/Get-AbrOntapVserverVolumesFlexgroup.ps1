@@ -49,7 +49,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Flexgroup Volume - $($Vserver)"
+                    Name = "Flexgroup Volume - $($Vserver)"
                     List = $false
                     ColumnWidths = 50, 25, 25
                 }

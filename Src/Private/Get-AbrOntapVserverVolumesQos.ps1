@@ -53,7 +53,7 @@ function Get-AbrOntapVserverVolumesQosSetting {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Volume QoS - $($Vserver)"
+                    Name = "Volume QoS - $($Vserver)"
                     List = $false
                     ColumnWidths = 50, 25, 25
                 }

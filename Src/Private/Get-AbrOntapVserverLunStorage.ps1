@@ -79,7 +79,7 @@ function Get-AbrOntapVserverLunStorage {
                         }
 
                         $TableParams = @{
-                            Name = "Vserver Lun - $($lun)"
+                            Name = "Lun - $($lun)"
                             List = $true
                             ColumnWidths = 25, 75
                         }

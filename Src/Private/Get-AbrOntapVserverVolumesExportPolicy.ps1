@@ -49,7 +49,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Volume Export Policy - $($Vserver)"
+                    Name = "Volume Export Policy - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 15, 20, 15, 15, 15
                 }
