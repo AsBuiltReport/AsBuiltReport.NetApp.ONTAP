@@ -463,8 +463,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 }
                                             }
                                         }
+                                        #---------------------------------------------------------------------------------------------#
+                                        #                                Lun Storage Section                                          #
+                                        #---------------------------------------------------------------------------------------------#
                                         if (Get-NcLun -Controller $Array | Where-Object {$_.Vserver -eq $SVM}) {
-                                            Section -Style Heading5 'FCP/ISCSI Lun Storage' {
+                                            Section -Style Heading5 'Lun Storage' {
                                                 Paragraph "The following section provides the Lun Storage Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverLunStorage -Vserver $SVM
@@ -473,12 +476,28 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                         Get-AbrOntapVserverLunIgroup -Vserver $SVM
                                                     }
                                                     $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
-                                                    if ($Healthcheck.Vserver.Status -and $NonMappedLun) {
+                                                    if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
                                                         Section -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
                                                             Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
                                                             BlankLine
                                                             $NonMappedLun
                                                         }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        #---------------------------------------------------------------------------------------------#
+                                        #                              Consistency Groups Section                                     #
+                                        #---------------------------------------------------------------------------------------------#
+                                        $CGs = Get-NetAppOntapAPI -uri "/api/application/consistency-groups?svm=$SVM&fields=**&return_records=true&return_timeout=15"
+                                        if ($CGs) {
+                                            Section -Style Heading5 'Consistency Groups' {
+                                                Paragraph "The following section provides Consistency Group Information on $($SVM)."
+                                                BlankLine
+                                                Get-AbrOntapVserverCGSummary -Vserver $SVM
+                                                foreach ($CG in $CGs) {
+                                                    Section -Style Heading6 "$($CG.name) Luns" {
+                                                        Get-AbrOntapVserverCGLun -CGObj $CG
                                                     }
                                                 }
                                             }
