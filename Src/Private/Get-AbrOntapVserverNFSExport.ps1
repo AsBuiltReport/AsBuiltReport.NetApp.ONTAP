@@ -53,7 +53,7 @@ function Get-AbrOntapVserverNFSExport {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver NFS Service Volume Export - $($Vserver)"
+                    Name = "NFS Service Volume Export - $($Vserver)"
                     List = $false
                     ColumnWidths = 35, 65
                 }

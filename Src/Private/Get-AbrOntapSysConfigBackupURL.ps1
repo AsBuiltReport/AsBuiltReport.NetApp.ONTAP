@@ -30,7 +30,6 @@ function Get-AbrOntapSysConfigBackupURL {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
-                            'Cluster IP' = $Item.NcController
                             'Url' = Switch ($Item.Url) {
                                 $Null { 'Not Configured' }
                                 default { $Item.Url }
@@ -55,7 +54,7 @@ function Get-AbrOntapSysConfigBackupURL {
                 $TableParams = @{
                     Name = "System Configuration Backup Setting - $($ClusterInfo.ClusterName)"
                     List = $false
-                    ColumnWidths = 20, 60, 20
+                    ColumnWidths = 60, 40
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

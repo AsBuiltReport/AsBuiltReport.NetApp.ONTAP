@@ -76,6 +76,56 @@ function Get-AbrOntapStorageAGGR {
                 $AggrSpaceSummary | Table @TableParams
             }
             try {
+                $AggrSpare = Get-NcAggrSpare -Controller $Array
+                if ($AggrSpare) {
+                    Section -Style Heading4 'Aggregate Spares' {
+                        $AggrSpareSummary = foreach ($Spare in $AggrSpare) {
+                            try {
+                                [PSCustomObject] @{
+                                    'Name' = $Spare.Disk
+                                    'Capacity' = Switch ([string]::IsNullOrEmpty($Spare.TotalSize)) {
+                                        $true {'-'}
+                                        $false {$Spare.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
+                                        default {'-'}
+                                    }
+                                    'Root Usable' = Switch ([string]::IsNullOrEmpty($Spare.LocalUsableRootSize)) {
+                                        $true {'-'}
+                                        $false {$Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
+                                        default {'-'}
+                                    }
+                                    'Data Usable' = Switch ([string]::IsNullOrEmpty($Spare.LocalUsableDataSize)) {
+                                        $true {'-'}
+                                        $false {$Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
+                                        default {'-'}
+                                    }
+                                    'Shared Disk' = ConvertTo-TextYN $Spare.IsDiskShared
+                                    'Disk Zeroed' = ConvertTo-TextYN $Spare.IsDiskZeroed
+                                    'Owner' = $Spare.OriginalOwner
+                                }
+                            }
+                            catch {
+                                Write-PscriboMessage -IsWarning $_.Exception.Message
+                            }
+                        }
+                        if ($Healthcheck.Storage.Aggr) {
+                            $AggrSpareSummary | Where-Object { $_.'Disk Zeroed' -eq 'No' } | Set-Style -Style Warning -Property 'Disk Zeroed'
+                        }
+                        $TableParams = @{
+                            Name = "Aggregates Spares - $($ClusterInfo.ClusterName)"
+                            List = $false
+                            ColumnWidths = 20, 12, 12, 12, 12, 12, 20
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $AggrSpareSummary | Table @TableParams
+                    }
+                }
+            }
+            catch {
+                Write-PscriboMessage -IsWarning $_.Exception.Message
+            }
+            try {
                 if ($InfoLevel.Storage -ge 2) {
                     Section -Style Heading4 'Aggregate Options' {
                         $Aggregates = Get-NcAggr -Controller $Array | Where-Object {!$_.AggrRaidAttributes.HasLocalRoot}

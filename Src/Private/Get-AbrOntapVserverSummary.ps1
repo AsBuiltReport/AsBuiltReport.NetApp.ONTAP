@@ -51,7 +51,7 @@ function Get-AbrOntapVserverSummary {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Information - $($Vserver)"
+                    Name = "Information - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 20, 20, 20, 20
                 }
@@ -88,7 +88,7 @@ function Get-AbrOntapVserverSummary {
                         }
 
                         $TableParams = @{
-                            Name = "Vserver Root Volume - $($Vserver)"
+                            Name = "Root Volume - $($Vserver)"
                             List = $false
                             ColumnWidths = 20, 10, 10, 10, 10, 10, 30
                         }
@@ -124,7 +124,7 @@ function Get-AbrOntapVserverSummary {
                             }
 
                             $TableParams = @{
-                                Name = "Vserver Aggregate Resource Allocation - $($Vserver)"
+                                Name = "Aggregate Resource Allocation - $($Vserver)"
                                 List = $false
                                 ColumnWidths = 40, 15, 25, 20
                             }

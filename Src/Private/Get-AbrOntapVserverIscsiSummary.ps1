@@ -57,7 +57,7 @@ function Get-AbrOntapVserverIscsiSummary {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver ISCSI Service - $($Vserver)"
+                    Name = "ISCSI Service - $($Vserver)"
                     List = $true
                     ColumnWidths = 30, 70
                 }

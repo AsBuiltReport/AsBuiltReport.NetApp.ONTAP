@@ -52,7 +52,7 @@ function Get-AbrOntapVserverFcpSummary {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver FCP Service - $($Vserver)"
+                    Name = "FCP Service - $($Vserver)"
                     List = $false
                     ColumnWidths = 70, 30
                 }

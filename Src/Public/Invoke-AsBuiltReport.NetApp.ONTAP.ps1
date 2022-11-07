@@ -388,7 +388,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 CIFS Section                                                #
                                         #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array) {
+                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array -ErrorAction SilentlyContinue) {
                                             Section -Style Heading5 "CIFS Services Information" {
                                                 Paragraph "The following section provides the CIFS Service Information on $($SVM)."
                                                 BlankLine
@@ -463,8 +463,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 }
                                             }
                                         }
+                                        #---------------------------------------------------------------------------------------------#
+                                        #                                Lun Storage Section                                          #
+                                        #---------------------------------------------------------------------------------------------#
                                         if (Get-NcLun -Controller $Array | Where-Object {$_.Vserver -eq $SVM}) {
-                                            Section -Style Heading5 'FCP/ISCSI Lun Storage' {
+                                            Section -Style Heading5 'Lun Storage' {
                                                 Paragraph "The following section provides the Lun Storage Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverLunStorage -Vserver $SVM
@@ -472,12 +475,29 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Section -Style Heading6 'Igroup Mapping' {
                                                         Get-AbrOntapVserverLunIgroup -Vserver $SVM
                                                     }
-                                                    if ($Healthcheck.Vserver.Status) {
+                                                    $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                    if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
                                                         Section -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
                                                             Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
                                                             BlankLine
-                                                            Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                            $NonMappedLun
                                                         }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        #---------------------------------------------------------------------------------------------#
+                                        #                              Consistency Groups Section                                     #
+                                        #---------------------------------------------------------------------------------------------#
+                                        $CGs = Get-NetAppOntapAPI -uri "/api/application/consistency-groups?svm=$SVM&fields=**&return_records=true&return_timeout=15"
+                                        if ($CGs) {
+                                            Section -Style Heading5 'Consistency Groups' {
+                                                Paragraph "The following section provides Consistency Group Information on $($SVM)."
+                                                BlankLine
+                                                Get-AbrOntapVserverCGSummary -Vserver $SVM
+                                                foreach ($CG in $CGs) {
+                                                    Section -Style Heading6 "$($CG.name) Luns" {
+                                                        Get-AbrOntapVserverCGLun -CGObj $CG
                                                     }
                                                 }
                                             }
@@ -599,6 +619,17 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
+                    $MAPData = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/approval-groups?fields=**&return_records=true&return_timeout=15"
+                    if ($MAPData) {
+                        Section -Style Heading3 'Multi-Admin Approval Configuration' {
+                            Paragraph "The following section provides information about Multi-Admin Approval from $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecurityMAP
+                            Section -Style Heading4 'Multi-Admin Approval Rules' {
+                                Get-AbrOntapSecurityMAPRule
+                            }
+                        }
+                    }
                     if (Get-NcSecuritySsl -Controller $Array) {
                         Section -Style Heading3 'Vserver SSL Certificate' {
                             Paragraph "The following section provides the Vserver SSL Certificates information on $($ClusterInfo.ClusterName)."
@@ -679,7 +710,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapSysConfigDNS
                             }
                         }
-                        if (Get-NcSnmp -Controller $Array | Where-Object { $NULL -ne $_.Traphost -and $NULL -ne $_.Communities}) {
+                        if (Get-NcSnmp -Controller $Array | Where-Object { $Null -ne $_.Communities -and ($_.IsTrapEnabled -or $_.IsSnmpEnabled)}) {
                             Section -Style Heading3 'SNMP Configuration' {
                                 Get-AbrOntapSysConfigSNMP
                             }
