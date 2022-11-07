@@ -51,6 +51,7 @@ Below are the instructions on how to install, configure and generate a NetApp ON
 The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 - ONTAP 9.x
+  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1
 
 ### **PowerShell**
 
