@@ -30,7 +30,6 @@ function Get-AbrOntapSysConfigSNMP {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
-                            'Cluster IP' = $Item.NcController
                             'Contact' = $Item.Contact
                             'Location' = $Item.Location
                             'Communities' = $Item.Communities
@@ -50,8 +49,8 @@ function Get-AbrOntapSysConfigSNMP {
 
                 $TableParams = @{
                     Name = "System SNMP Configuration - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 18, 20, 15, 20, 15, 12
+                    List = $true
+                    ColumnWidths = 40, 60
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

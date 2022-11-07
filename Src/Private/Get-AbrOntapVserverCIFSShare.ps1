@@ -46,7 +46,7 @@ function Get-AbrOntapVserverCIFSShare {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver CIFS Share - $($Vserver)"
+                    Name = "CIFS Share - $($Vserver)"
                     List = $false
                     ColumnWidths = 25, 25, 50
                 }

@@ -51,7 +51,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Flexcache Volume Connected Cache - $($Vserver)"
+                    Name = "Flexcache Volume Connected Cache - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 15, 15, 20, 15, 15
                 }
@@ -83,7 +83,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Flexcache Volume - $($Vserver)"
+                        Name = "Flexcache Volume - $($Vserver)"
                         List = $false
                         ColumnWidths = 20, 15, 15, 20, 15, 15
                     }

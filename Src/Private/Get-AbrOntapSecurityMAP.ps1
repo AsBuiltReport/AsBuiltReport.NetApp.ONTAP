@@ -1,11 +1,11 @@
-function Get-AbrOntapSecuritySSLDetailed {
+function Get-AbrOntapSecurityMAP {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Security Vserver SSL Detailed information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Security Multi-Admin Approval information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.5
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,27 +19,28 @@ function Get-AbrOntapSecuritySSLDetailed {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Vserver SSL Detailed information."
+        Write-PscriboMessage "Collecting ONTAP Security Vserver Multi-Admin Approval information."
     }
 
     process {
         try {
-            $Data =  Get-NcSecurityCertificate -Controller $Array | Where-Object {$_.Type -eq "server" -and $_.Vserver -notin $Options.Exclude.Vserver}
+            $Data =  Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/approval-groups?fields=**&return_records=true&return_timeout=15"
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
-                            'Common Name' = $Item.CommonName
-                            'Protocol' = $Item.Protocol
-                            'Hash Function' = $Item.HashFunction
-                            'Serial Number' = $Item.SerialNumber
-                            'Expiration' = Switch ([string]::IsNullOrEmpty($Item.ExpirationDateDT)) {
+                            'Name' = $Item.Name
+                            'Approvers' = Switch ([string]::IsNullOrEmpty($Item.Approvers)) {
                                 $true {'-'}
-                                $false {($Item.ExpirationDateDT).ToString().Split(" ")[0]}
-                                default {'Unknown'}
+                                $false {$Item.Approvers -join ', '}
+                                default {'-'}
                             }
-                            'Vserver' = $Item.Vserver
+                            'Email' = Switch ([string]::IsNullOrEmpty($Item.Email)) {
+                                $true {'-'}
+                                $false {$Item.Email -join ', '}
+                                default {'-'}
+                            }
                         }
                         $OutObj += [pscustomobject]$inobj
                     }
@@ -49,9 +50,9 @@ function Get-AbrOntapSecuritySSLDetailed {
                 }
 
                 $TableParams = @{
-                    Name = "SSL Detailed - $($ClusterInfo.ClusterName)"
+                    Name = "Multi-Admin Approval - $($ClusterInfo.ClusterName)"
                     List = $false
-                    ColumnWidths = 18, 10, 10, 25, 19, 18
+                    ColumnWidths = 34,33, 33
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

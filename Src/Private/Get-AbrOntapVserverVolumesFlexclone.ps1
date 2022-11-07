@@ -51,7 +51,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
                         }
 
                         $TableParams = @{
-                            Name = "Vserver Cloned Volumes - $($Item.Name)"
+                            Name = "Cloned Volumes - $($Item.Name)"
                             List = $true
                             ColumnWidths = 25, 75
                         }

@@ -53,7 +53,7 @@ function Get-AbrOntapVserverCIFSSummary {
                             }
 
                             $TableParams = @{
-                                Name = "Vserver CIFS Service - $($SVM.NodeName)"
+                                Name = "CIFS Service - $($SVM.NodeName)"
                                 List = $true
                                 ColumnWidths = 25, 75
                             }

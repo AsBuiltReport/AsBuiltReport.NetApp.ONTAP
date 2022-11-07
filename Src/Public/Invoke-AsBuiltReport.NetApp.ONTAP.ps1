@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.5
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -22,8 +22,25 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     )
 
     Write-PScriboMessage -IsWarning "Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project."
+    Write-PScriboMessage -IsWarning "Do not forget to update your report configuration file after each new version release."
     Write-PScriboMessage -IsWarning "Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
     Write-PScriboMessage -IsWarning "Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
+
+    # Check the current AsBuiltReport.NetApp.ONTAP module
+    Try {
+        $InstalledVersion = Get-Module -ListAvailable -Name AsBuiltReport.NetApp.ONTAP -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+
+        if ($InstalledVersion) {
+            Write-PScriboMessage -IsWarning "AsBuiltReport.NetApp.ONTAP $($InstalledVersion.ToString()) is currently installed."
+            $LatestVersion = Find-Module -Name AsBuiltReport.NetApp.ONTAP -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+            if ($LatestVersion -gt $InstalledVersion) {
+                Write-PScriboMessage -IsWarning "AsBuiltReport.NetApp.ONTAP $($LatestVersion.ToString()) is available."
+                Write-PScriboMessage -IsWarning "Run 'Update-Module -Name AsBuiltReport.NetApp.ONTAP -Force' to install the latest version."
+            }
+        }
+    } Catch {
+            Write-PscriboMessage -IsWarning $_.Exception.Message
+        }
 
     # Import Report Configuration
     $Report = $ReportConfig.Report
@@ -36,8 +53,16 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     #Connect to Ontap Storage Array using supplied credentials
     foreach ($OntapArray in $Target) {
         Try {
+            $OntapModuleInstalledVersion = Get-Module -ListAvailable -Name NetApp.ONTAP -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
             Write-PScriboMessage "Connecting to NetApp Storage '$OntapArray'."
-            $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS
+            if ($OntapModuleInstalledVersion.Minor -gt 10) {
+                # Workaround for NetApp.ONTAP v9.11+ RESAPI Issues
+                Write-PScriboMessage "Detected NetApp.ONTAP module version $($OntapModuleInstalledVersion.toString()). Enabling ONTAPI option."
+                $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS -ONTAPI
+            } else {
+                Write-PScriboMessage "Detected NetApp.ONTAP module version $($OntapModuleInstalledVersion.toString()). Disabling ONTAPI option."
+                $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop -HTTPS
+            }
         } Catch {
             Write-Verbose "Unable to connect to the $OntapArray Array"
             throw
@@ -67,9 +92,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Node Section                                                #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Node Section                                                #
+            #---------------------------------------------------------------------------------------------#
 
             Write-PScriboMessage "Node InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Node -gt 0) {
@@ -97,9 +122,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Storage Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Storage Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Storage InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Storage -gt 0) {
                 Section -Style Heading2 'Storage Information' {
@@ -108,8 +133,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading3 'Aggregate Inventory' {
                         Paragraph "The following section provides the Aggregates on $($ClusterInfo.ClusterName)."
                         BlankLine
-                        Get-AbrOntapStorageAGGR
-                        if (Get-NcAggrObjectStore -Controller $Array) {
+                        if (Get-NcAggr -Controller $Array) {
+                            Get-AbrOntapStorageAGGR
+                        }
+                        if (Get-NcAggrObjectStore -Controller $Array -Aggregate (Get-NcAggr -Controller $Array).Name) {
                             Section -Style Heading4 'FabricPool' {
                                 Get-AbrOntapStorageFabricPool
                                 if ($InfoLevel.Storage -ge 2) {
@@ -158,9 +185,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 License Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 License Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "License InfoLevel set at $($InfoLevel.License)."
             if ($InfoLevel.License -gt 0) {
                 Section -Style Heading2 'Licenses Information' {
@@ -175,9 +202,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Network Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Network Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
             if ($InfoLevel.Network -gt 0) {
                 Section -Style Heading2 'Network Information' {
@@ -258,9 +285,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Vserver Section                                             #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Vserver Section                                             #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Vserver InfoLevel set at $($InfoLevel.Vserver)."
             if ($InfoLevel.Vserver -gt 0) {
                 if (Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data"}) {
@@ -361,7 +388,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         #---------------------------------------------------------------------------------------------#
                                         #                                 CIFS Section                                                #
                                         #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array) {
+                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array -ErrorAction SilentlyContinue) {
                                             Section -Style Heading5 "CIFS Services Information" {
                                                 Paragraph "The following section provides the CIFS Service Information on $($SVM)."
                                                 BlankLine
@@ -411,9 +438,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Section -Style Heading6 "ISCSI Interfaces" {
                                                     Get-AbrOntapVserverIscsiInterface -Vserver $SVM
                                                 }
-                                                if (Get-NcIscsiInitiator -VS $SVM -Controller $Array) {
+
+                                                $ISCSIClientInitiators = Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
+                                                if ($ISCSIClientInitiators) {
                                                     Section -Style Heading6 "ISCSI Client Initiators" {
-                                                        Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
+                                                        $ISCSIClientInitiators
                                                     }
                                                 }
                                             }
@@ -434,8 +463,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 }
                                             }
                                         }
+                                        #---------------------------------------------------------------------------------------------#
+                                        #                                Lun Storage Section                                          #
+                                        #---------------------------------------------------------------------------------------------#
                                         if (Get-NcLun -Controller $Array | Where-Object {$_.Vserver -eq $SVM}) {
-                                            Section -Style Heading5 'FCP/ISCSI Lun Storage' {
+                                            Section -Style Heading5 'Lun Storage' {
                                                 Paragraph "The following section provides the Lun Storage Information on $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverLunStorage -Vserver $SVM
@@ -443,12 +475,29 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Section -Style Heading6 'Igroup Mapping' {
                                                         Get-AbrOntapVserverLunIgroup -Vserver $SVM
                                                     }
-                                                    if ($Healthcheck.Vserver.Status) {
+                                                    $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                    if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
                                                         Section -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
                                                             Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
                                                             BlankLine
-                                                            Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                            $NonMappedLun
                                                         }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        #---------------------------------------------------------------------------------------------#
+                                        #                              Consistency Groups Section                                     #
+                                        #---------------------------------------------------------------------------------------------#
+                                        $CGs = Get-NetAppOntapAPI -uri "/api/application/consistency-groups?svm=$SVM&fields=**&return_records=true&return_timeout=15"
+                                        if ($CGs) {
+                                            Section -Style Heading5 'Consistency Groups' {
+                                                Paragraph "The following section provides Consistency Group Information on $($SVM)."
+                                                BlankLine
+                                                Get-AbrOntapVserverCGSummary -Vserver $SVM
+                                                foreach ($CG in $CGs) {
+                                                    Section -Style Heading6 "$($CG.name) Luns" {
+                                                        Get-AbrOntapVserverCGLun -CGObj $CG
                                                     }
                                                 }
                                             }
@@ -475,9 +524,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-        #---------------------------------------------------------------------------------------------#
-        #                                 Replication Section                                         #
-        #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------#
+            #                                 Replication Section                                         #
+            #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Replication InfoLevel set at $($InfoLevel.Replication)."
             if ($InfoLevel.Replication -gt 0) {
                 if (Get-NcClusterPeer -Controller $Array) {
@@ -518,9 +567,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 }
             }
 
-            #---------------------------------------------------------------------------------------------#
-            #                                 Efficiency Section                                          #
-            #---------------------------------------------------------------------------------------------#
+            #---------------------------------------------------------------------------------------------y
             Write-PScriboMessage "Efficiency InfoLevel set at $($InfoLevel.Efficiency)."
             if ($InfoLevel.Efficiency -gt 0) {
                 $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -and $_.Vserver -notin $Options.Exclude.Vserver} | Select-Object -ExpandProperty Vserver
@@ -555,7 +602,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             }
 
             #---------------------------------------------------------------------------------------------#
-            #                                 Security Section                                          #
+            #                                 Security Section                                            #
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Security InfoLevel set at $($InfoLevel.Security)."
             if ($InfoLevel.Security -gt 0) {
@@ -569,6 +616,17 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Local User information on $($SVM)."
                                 BlankLine
                                 Get-AbrOntapSecurityUser -Vserver $SVM
+                            }
+                        }
+                    }
+                    $MAPData = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/approval-groups?fields=**&return_records=true&return_timeout=15"
+                    if ($MAPData) {
+                        Section -Style Heading3 'Multi-Admin Approval Configuration' {
+                            Paragraph "The following section provides information about Multi-Admin Approval from $($ClusterInfo.ClusterName)."
+                            BlankLine
+                            Get-AbrOntapSecurityMAP
+                            Section -Style Heading4 'Multi-Admin Approval Rules' {
+                                Get-AbrOntapSecurityMAPRule
                             }
                         }
                     }
@@ -652,7 +710,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapSysConfigDNS
                             }
                         }
-                        if (Get-NcSnmp -Controller $Array | Where-Object { $NULL -ne $_.Traphost -and $NULL -ne $_.Communities}) {
+                        if (Get-NcSnmp -Controller $Array | Where-Object { $Null -ne $_.Communities -and ($_.IsTrapEnabled -or $_.IsSnmpEnabled)}) {
                             Section -Style Heading3 'SNMP Configuration' {
                                 Get-AbrOntapSysConfigSNMP
                             }
@@ -680,7 +738,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 if ($InfoLevel.System -ge 2) {
                                     $Nodes = Get-NcNode -Controller $Array
                                     foreach ($Node in $Nodes) {
-                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Count 30 -Severity "emergency","alert" -Controller $Array)) {
+                                        if ($HealthCheck.System.EMS -and (Get-NcEmsMessage -Node $Node -Severity "emergency","alert" -Controller $Array | Select-Object -First 30)) {
                                             Section -Style Heading4 "$Node Emergency and Alert Messages" {
                                                 Get-AbrOntapSysConfigEMS -Node $Node
                                             }

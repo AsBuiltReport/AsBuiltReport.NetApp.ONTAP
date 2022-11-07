@@ -47,7 +47,7 @@ function Get-AbrOntapRepVserverPeer {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Peer - $($ClusterInfo.ClusterName)"
+                    Name = "Peer - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 20, 20, 20 ,20, 20
                 }

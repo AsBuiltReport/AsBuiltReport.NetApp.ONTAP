@@ -55,7 +55,7 @@ function Get-AbrOntapVserverVolumesQuota {
                     }
 
                     $TableParams = @{
-                        Name = "Vserver Volume Quota Status - $($Vserver)"
+                        Name = "Volume Quota Status - $($Vserver)"
                         List = $false
                         ColumnWidths = 50, 25, 25
                     }
@@ -116,7 +116,7 @@ function Get-AbrOntapVserverVolumesQuota {
                             }
 
                             $TableParams = @{
-                                Name = "Vserver Volume Quota - $($Vserver)"
+                                Name = "Volume Quota - $($Vserver)"
                                 List = $false
                                 ColumnWidths = 15, 13, 20, 13, 13, 13, 13
                             }
@@ -167,7 +167,7 @@ function Get-AbrOntapVserverVolumesQuota {
                             }
 
                             $TableParams = @{
-                                Name = "Vserver Volume Quota Report (Disk) - $($Vserver)"
+                                Name = "Volume Quota Report (Disk) - $($Vserver)"
                                 List = $false
                                 ColumnWidths = 20, 20, 15, 15, 15, 15
                             }
@@ -212,7 +212,7 @@ function Get-AbrOntapVserverVolumesQuota {
                             }
 
                             $TableParams = @{
-                                Name = "Vserver Volume Quota Report (File) - $($Vserver)"
+                                Name = "Volume Quota Report (File) - $($Vserver)"
                                 List = $false
                                 ColumnWidths = 20, 20, 15, 15, 15, 15
                             }

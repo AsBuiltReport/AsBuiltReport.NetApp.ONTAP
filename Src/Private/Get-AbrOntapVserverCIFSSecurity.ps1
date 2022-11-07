@@ -56,7 +56,7 @@ function Get-AbrOntapVserverCIFSSecurity {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver CIFS Service Security - $($Vserver)"
+                    Name = "CIFS Service Security - $($Vserver)"
                     List = $true
                     ColumnWidths = 35, 65
                 }

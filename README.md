@@ -22,6 +22,9 @@
     <a href="https://twitter.com/AsBuiltReport" alt="Twitter">
             <img src="https://img.shields.io/twitter/follow/AsBuiltReport.svg?style=social"/></a>
 </p>
+<p align="center">
+    <a href='https://ko-fi.com/F1F8DEV80' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi1.png?v=3'            border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+</p>
 
 # NetApp ONTAP Arrays AsBuiltReport
 
@@ -48,14 +51,15 @@ Below are the instructions on how to install, configure and generate a NetApp ON
 The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 - ONTAP 9.x
+  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1
 
 ### **PowerShell**
 
 This report is compatible with the following PowerShell versions;
 
-| Windows PowerShell 5.1 | PowerShell Core | PowerShell 7 |
-|:----------------------:|:---------------:|:------------:|
-|   :white_check_mark:   |   :white_check_mark:    |  :white_check_mark:  |
+| PowerShell 5.1 | PowerShell 7 | 
+|:----------------------:|:---------------:|
+|   :white_check_mark:   |   :white_check_mark:|
 
 ## :wrench: System Requirements
 
@@ -68,14 +72,6 @@ These modules may also be manually installed.
 | PScribo            |          0.9.1           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
 | AsBuiltReport.Core |          1.2.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
 | Netapp.ONTAP |          9.10.1.2111           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
-
-### Linux & macOS
-
-- .NET Core is required for cover page image support on Linux and macOS operating systems.
-  - [Installing .NET Core for macOS](https://docs.microsoft.com/en-us/dotnet/core/install/macos)
-  - [Installing .NET Core for Linux](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
-
-❗ If you are unable to install .NET Core, you must set `ShowCoverPageImage` to `False` in the report JSON configuration file.
 
 ## :package: Module Installation
 
@@ -195,3 +191,6 @@ PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Credential 
 PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'admin' -Password 'P@ssw0rd' -Format Html,Word -OutputFolderPath 'C:\Users\Jon\Documents' -SendEmail
 
 ```
+## :x: Known Issues
+
+- There are known issues with the NetApp.ONTAP module v9.11.1.2208. Therefore, v9.10.1.2111 is the recommended module version.

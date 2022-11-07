@@ -55,6 +55,7 @@
             "Status": true,
             "Iscsi": true,
             "FCP": true,
+            "CG": true,
             "NFS": true,
             "Quota": true,
             "CIFS": true,

@@ -47,7 +47,7 @@ function Get-AbrOntapVserverS3Bucket {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver S3 Bucket - $($Vserver)"
+                    Name = "S3 Bucket - $($Vserver)"
                     List = $false
                     ColumnWidths = 30, 30, 20, 20
                 }

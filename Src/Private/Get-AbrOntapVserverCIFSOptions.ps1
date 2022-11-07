@@ -79,7 +79,7 @@ function Get-AbrOntapVserverCIFSOption {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver CIFS Service Options - $($Vserver)"
+                    Name = "CIFS Service Options - $($Vserver)"
                     List = $true
                     ColumnWidths = 50, 50
                 }

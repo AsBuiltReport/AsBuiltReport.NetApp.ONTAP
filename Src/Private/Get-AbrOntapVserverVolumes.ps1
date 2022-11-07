@@ -53,7 +53,7 @@ function Get-AbrOntapVserverVolume {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver Volume - $($Vserver)"
+                    Name = "Volume - $($Vserver)"
                     List = $false
                     ColumnWidths = 34, 12, 12, 12, 10, 20
                 }

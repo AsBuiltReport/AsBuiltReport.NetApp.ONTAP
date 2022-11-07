@@ -52,7 +52,7 @@ function Get-AbrOntapVserverS3Summary {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver S3 Service - $($Vserver)"
+                    Name = "S3 Service - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 20, 20, 20, 20
                 }

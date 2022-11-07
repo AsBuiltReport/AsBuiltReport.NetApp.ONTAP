@@ -48,7 +48,7 @@ function Get-AbrOntapVserverCIFSSession {
                 }
 
                 $TableParams = @{
-                    Name = "Vserver CIFS Sessions - $($Vserver)"
+                    Name = "CIFS Sessions - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 15, 15, 20, 30
                 }

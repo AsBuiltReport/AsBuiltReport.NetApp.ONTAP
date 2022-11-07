@@ -25,15 +25,20 @@ function ConvertTo-TextYN {
             $TEXT
         )
 
-    switch ($TEXT)
-        {
-            "" {"-"}
-            $Null {"-"}
-            "True" {"Yes"; break}
-            "False" {"No"; break}
-            default {$TEXT}
+    switch ([string]::IsNullOrEmpty($TEXT))
+    {
+        $true {'-'}
+        $false {
+            switch ($TEXT)
+            {
+                "True" {"Yes"; break}
+                "False" {"No"; break}
+                default {$TEXT}
+            }
         }
-    } # end
+        default {'-'}
+    }
+} # end
 function Get-UnixDate ($UnixDate) {
         <#
     .SYNOPSIS
@@ -78,11 +83,9 @@ function ConvertTo-EmptyToFiller {
             $TEXT
         )
 
-    switch ($TEXT) {
-            "" {"-"; break}
-            $Null {"-"; break}
-            "True" {"Yes"; break}
-            "False" {"No"; break}
-            default {$TEXT}
+    switch ([string]::IsNullOrEmpty($TEXT)) {
+            $true {"-"; break}
+            $false {$TEXT; break}
+            default {'-'}
         }
     } # end
