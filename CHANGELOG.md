@@ -1,14 +1,14 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
-## [0.6.5] - 2022-11-0x
+## [0.6.5] - 2022-11-06
 
 ### Added
 
 - Added aggregate spare reporting [#26](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/26)
 - Added Ontap Multi Admin Approval [#29](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/29)
 - Added Consistency Group Support [#28](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/28)
-- Add Audit Logs Support [#31](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/31)
-- Add Audit log destination [#30](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/30)
+- Added Audit Logs Support [#31](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/31)
+- Added Audit log destination [#30](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/30)
 
 ### Fixed
 
