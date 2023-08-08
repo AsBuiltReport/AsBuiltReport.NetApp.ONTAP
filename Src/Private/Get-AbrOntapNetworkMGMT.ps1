@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkMgmt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -26,7 +26,7 @@ function Get-AbrOntapNetworkMgmt {
         try {
             if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}) {
                 try {
-                    Section -Style Heading6 'Cluster Network Interfaces' {
+                    Section -ExcludeFromTOC -Style Heading6 'Cluster Network Interfaces' {
                         $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster'}
                         $ClusterObj = @()
                         if ($ClusterData) {
@@ -70,7 +70,7 @@ function Get-AbrOntapNetworkMgmt {
                 }
             }
             try {
-                Section -Style Heading6 'Management Network Interfaces' {
+                Section -ExcludeFromTOC -Style Heading6 'Management Network Interfaces' {
                     $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt'}
                     $ClusterObj = @()
                     if ($ClusterData) {
@@ -114,7 +114,7 @@ function Get-AbrOntapNetworkMgmt {
             }
             try {
                 if (Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}) {
-                    Section -Style Heading6 'Intercluster Network Interfaces' {
+                    Section -ExcludeFromTOC -Style Heading6 'Intercluster Network Interfaces' {
                         $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'intercluster'}
                         $ClusterObj = @()
                         if ($ClusterData) {
@@ -158,7 +158,7 @@ function Get-AbrOntapNetworkMgmt {
                 Write-PscriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                Section -Style Heading6 'Data Network Interfaces' {
+                Section -ExcludeFromTOC -Style Heading6 'Data Network Interfaces' {
                     $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object {$_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp' -and $_.Vserver -notin $options.Exclude.Vserver}
                     $ClusterObj = @()
                     if ($ClusterData) {
@@ -202,7 +202,7 @@ function Get-AbrOntapNetworkMgmt {
             }
             try {
                 if ((Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}) -and $Healthcheck.Network.Interface) {
-                    Section -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
+                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
                         Paragraph "The following section provides the LIF Home Status Information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False"}

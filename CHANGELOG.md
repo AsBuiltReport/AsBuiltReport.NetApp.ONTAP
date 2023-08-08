@@ -1,5 +1,18 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+## [0.6.6] - 2023-08-07
+
+### Changed
+
+- Improved bug and feature request templates
+- Changed default logo from NetApp to the AsBuiltReport logo due to licensing requirements
+- Changed default report style font to 'Segoe Ui'
+- Changed Required Modules to AsBuiltReport.Core v1.3.0
+
+### Fixed
+
+- Fix [#35](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/35)
+
 ## [0.6.5] - 2022-11-06
 
 ### Added
