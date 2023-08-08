@@ -12,7 +12,7 @@
 RootModule = 'AsBuiltReport.NetApp.ONTAP.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.6.5'
+ModuleVersion = '0.6.6'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@ Author = 'Jonathan Colon Feliciano'
 #CompanyName = 'Unknown'
 
 # Copyright statement for this module
-Copyright = '(c) 2022 Jonathan Colon Feliciano. All rights reserved.'
+Copyright = '(c) 2023 Jonathan Colon Feliciano. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'A PowerShell module to generate an as built report on the configuration of NetApp ONTAP.'
@@ -54,7 +54,7 @@ Description = 'A PowerShell module to generate an as built report on the configu
 RequiredModules = @(
     @{
         ModuleName = 'AsBuiltReport.Core';
-        ModuleVersion = '1.2.0'
+        ModuleVersion = '1.3.0'
     },
     @{
         ModuleName = 'NetApp.ONTAP';
