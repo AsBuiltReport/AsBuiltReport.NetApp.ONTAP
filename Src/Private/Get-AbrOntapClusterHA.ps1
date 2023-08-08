@@ -5,7 +5,7 @@ function Get-AbrOntapClusterHA {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,9 +31,9 @@ function Get-AbrOntapClusterHA {
                         $ClusterHa = Get-NcClusterHa -Node $Nodes.Node -Controller $Array
                         [PSCustomObject] @{
                             'Name' = $Nodes.Node
-                            'Partner' = $ClusterHa.Partner
+                            'Partner' = ConvertTo-EmptyToFiller $ClusterHa.Partner
                             'TakeOver Possible' = ConvertTo-TextYN $ClusterHa.TakeoverPossible
-                            'TakeOver State' = $ClusterHa.TakeoverState
+                            'TakeOver State' = ConvertTo-EmptyToFiller $ClusterHa.TakeoverState
                             'HA Mode' = $ClusterHa.CurrentMode.ToUpper()
                             'HA State' = $ClusterHa.State.ToUpper()
                         }

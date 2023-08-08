@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQuota {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -28,7 +28,7 @@ function Get-AbrOntapVserverVolumesQuota {
 
     process {
         try {
-            Section -Style Heading6 "$Vserver Vserver Volume Quota Status" {
+            Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Status" {
                 Paragraph "The following section provides the $Vserver Volumes Quota Status Information on $($ClusterInfo.ClusterName)."
                 BlankLine
                 $VserverQuotaStatus = Get-NcQuotaStatus -VserverContext $Vserver -Controller $Array
@@ -72,7 +72,7 @@ function Get-AbrOntapVserverVolumesQuota {
         try {
             if ($InfoLevel.Vserver -ge 2) {
                 try {
-                    Section -Style Heading6 "$Vserver Vserver Volume Quota Information" {
+                    Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Information" {
                         Paragraph "The following section provides the $Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         $VserverQuota = Get-NcQuota -VserverContext $Vserver -Controller $Array
@@ -131,7 +131,7 @@ function Get-AbrOntapVserverVolumesQuota {
                     Write-PscriboMessage -IsWarning $_.Exception.Message
                 }
                 try {
-                    Section -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk)" {
+                    Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk)" {
                         Paragraph "The following section provides the $Vserver Volumes Quota Report (Disk) Information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
@@ -182,7 +182,7 @@ function Get-AbrOntapVserverVolumesQuota {
                     Write-PscriboMessage -IsWarning $_.Exception.Message
                 }
                 try {
-                    Section -Style Heading6 "$Vserver Vserver Volume Quota Report (File)" {
+                    Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Report (File)" {
                         Paragraph "The following section provides the $Vserver Volumes Quota Report (File) Information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
