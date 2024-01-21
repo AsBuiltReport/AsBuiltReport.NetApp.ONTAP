@@ -43,12 +43,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         }
 
     # Import Report Configuration
-    $Report = $ReportConfig.Report
-    $InfoLevel = $ReportConfig.InfoLevel
-    $Options = $ReportConfig.Options
+    $script:Report = $ReportConfig.Report
+    $script:InfoLevel = $ReportConfig.InfoLevel
+    $script:Options = $ReportConfig.Options
 
     # General information
-    $TextInfo = (Get-Culture).TextInfo
+    $script:TextInfo = (Get-Culture).TextInfo
 
     #Connect to Ontap Storage Array using supplied credentials
     foreach ($OntapArray in $Target) {
