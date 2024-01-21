@@ -29,7 +29,6 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
             if ($QoSFilter) {
                 foreach ($Item in $QoSFilter) {
                     try {
-                        $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Policy Name' = $Item.PolicyGroup
                             'Peak Iops' = $Item.PeakIops
