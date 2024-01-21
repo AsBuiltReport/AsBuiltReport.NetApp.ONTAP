@@ -29,7 +29,6 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
             if ($QoSFilter) {
                 foreach ($Item in $QoSFilter) {
                     try {
-                        $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Policy Name' = $Item.PolicyGroup
                             'Max Throughput' = $Item.MaxThroughput
