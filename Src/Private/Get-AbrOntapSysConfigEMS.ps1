@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigEMS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapSysConfigEMS {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Node
+        [string]
+        $Node
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System EMS Messages information."
+        Write-PScriboMessage "Collecting ONTAP System EMS Messages information."
     }
 
     process {
         try {
-            $Data =  Get-NcEmsMessage -Node $Node -Severity "emergency","alert" -Controller $Array | Select-Object -First 30
+            $Data = Get-NcEmsMessage -Node $Node -Severity "emergency", "alert" -Controller $Array | Select-Object -First 30
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -39,9 +39,8 @@ function Get-AbrOntapSysConfigEMS {
                             'Event' = $Item.Event
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -55,9 +54,8 @@ function Get-AbrOntapSysConfigEMS {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

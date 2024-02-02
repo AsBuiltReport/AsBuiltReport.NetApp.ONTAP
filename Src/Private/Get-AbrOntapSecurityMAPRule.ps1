@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityMAPRule {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.5
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSecurityMAPRule {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Vserver Multi-Admin Approval rules information."
+        Write-PScriboMessage "Collecting ONTAP Security Vserver Multi-Admin Approval rules information."
     }
 
     process {
         try {
-            $Data =  Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/rules?fields=**&return_records=true&return_timeout=15"
+            $Data = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/rules?fields=**&return_records=true&return_timeout=15"
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -33,18 +33,17 @@ function Get-AbrOntapSecurityMAPRule {
                             'operation' = $Item.operation
                             'query' = ConvertTo-EmptyToFiller $Item.query
                             'Approval Groups' = Switch ([string]::IsNullOrEmpty($Item.approval_groups.name)) {
-                                $true {'-'}
-                                $false {$Item.approval_groups.name}
-                                default {'-'}
+                                $true { '-' }
+                                $false { $Item.approval_groups.name }
+                                default { '-' }
                             }
                             'Required Approvers' = ConvertTo-EmptyToFiller $Item.required_approvers
                             'System Defined' = ConvertTo-TextYN $Item.system_defined
 
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -58,9 +57,8 @@ function Get-AbrOntapSecurityMAPRule {
                 }
                 $OutObj | Sort-Object -Property 'System Defined' | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverVolumesFlexcache {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver flexcache volumes information."
+        Write-PScriboMessage "Collecting ONTAP Vserver flexcache volumes information."
     }
 
     process {
@@ -44,9 +44,8 @@ function Get-AbrOntapVserverVolumesFlexcache {
                             'Capacity' = $VolumeUsage.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -76,9 +75,8 @@ function Get-AbrOntapVserverVolumesFlexcache {
                                 'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             }
                             $OutObj += [pscustomobject]$inobj
-                        }
-                        catch {
-                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
 
@@ -92,13 +90,11 @@ function Get-AbrOntapVserverVolumesFlexcache {
                     }
                     $OutObj | Table @TableParams
                 }
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
             }
-            catch {
-                Write-PscriboMessage -IsWarning $_.Exception.Message
-            }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

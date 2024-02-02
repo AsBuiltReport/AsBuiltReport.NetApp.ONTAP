@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverCIFSSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver CIFS information."
+        Write-PScriboMessage "Collecting ONTAP Vserver CIFS information."
     }
 
     process {
@@ -34,7 +34,7 @@ function Get-AbrOntapVserverCIFSSummary {
                 foreach ($Item in $VserverData) {
                     $CIFSSVM = Get-NcCifsServerStatus -VserverName $Item.Vserver -Controller $Array
                     foreach ($SVM in $CIFSSVM) {
-                        try{
+                        try {
                             $inObj = [ordered] @{
                                 'Node Name' = $SVM.NodeName
                                 'Cifs Domain Name' = $SVM.CifsDomainName
@@ -61,16 +61,14 @@ function Get-AbrOntapVserverCIFSSummary {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
                             $VserverObj | Table @TableParams
-                        }
-                        catch {
-                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

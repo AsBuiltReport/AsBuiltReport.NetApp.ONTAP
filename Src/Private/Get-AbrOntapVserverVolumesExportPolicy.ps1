@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverVolumesExportPolicy {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes export policy information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes export policy information."
     }
 
     process {
@@ -42,9 +42,8 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                             'Rw Rule' = $Item.RwRule
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -58,9 +57,8 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

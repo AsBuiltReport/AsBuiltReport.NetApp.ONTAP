@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,26 +19,25 @@ function Get-AbrOntapSecuritySnapLockVol {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Volume Snaplock Type information."
+        Write-PScriboMessage "Collecting ONTAP Security Volume Snaplock Type information."
     }
 
     process {
         try {
-            $Data =  Get-NcVol -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+            $Data = Get-NcVol -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $SnapLockType = Get-Ncvol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes
+                        $SnapLockType = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Aggregate' = $Item.Aggregate
                             'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -52,9 +51,8 @@ function Get-AbrOntapSecuritySnapLockVol {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

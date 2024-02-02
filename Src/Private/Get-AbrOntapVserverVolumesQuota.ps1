@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQuota {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.6
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverVolumesQuota {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes quota information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes quota information."
     }
 
     process {
@@ -45,9 +45,8 @@ function Get-AbrOntapVserverVolumesQuota {
                             if ($null -ne $Item.QuotaErrorMsgs) {
                                 $VserverObj.Add('Quota Error', $Item.QuotaErrorMsgs)
                             }
-                        }
-                        catch {
-                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
                     if ($Healthcheck.Vserver.Quota) {
@@ -65,9 +64,8 @@ function Get-AbrOntapVserverVolumesQuota {
                     $VserverObj | Table @TableParams
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
         try {
             if ($InfoLevel.Vserver -ge 2) {
@@ -105,9 +103,8 @@ function Get-AbrOntapVserverVolumesQuota {
                                     if ($null -ne $Item.QuotaError) {
                                         $VserverObj.Add('Quota Error', $Item.QuotaError)
                                     }
-                                }
-                                catch {
-                                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                                } catch {
+                                    Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
                             }
 
@@ -126,9 +123,8 @@ function Get-AbrOntapVserverVolumesQuota {
                             $VserverObj | Table @TableParams
                         }
                     }
-                }
-                catch {
-                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
                 try {
                     Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk)" {
@@ -154,9 +150,8 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Disk Used' = $Item.DiskUsed | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                                     }
                                     $VserverObj += [pscustomobject]$inobj
-                                }
-                                catch {
-                                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                                } catch {
+                                    Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
                             }
                             if ($null -ne $Item.QuotaError) {
@@ -177,9 +172,8 @@ function Get-AbrOntapVserverVolumesQuota {
                             $VserverObj | Table @TableParams
                         }
                     }
-                }
-                catch {
-                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
                 try {
                     Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Report (File)" {
@@ -205,9 +199,8 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Files Used' = $Item.FilesUsed | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
                                     }
                                     $VserverObj += [pscustomobject]$inobj
-                                }
-                                catch {
-                                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                                } catch {
+                                    Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
                             }
 
@@ -222,14 +215,12 @@ function Get-AbrOntapVserverVolumesQuota {
                             $VserverObj | Table @TableParams
                         }
                     }
-                }
-                catch {
-                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

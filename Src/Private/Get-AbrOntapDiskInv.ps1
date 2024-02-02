@@ -5,7 +5,7 @@ function Get-AbrOntapDiskInv {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,24 +19,23 @@ function Get-AbrOntapDiskInv {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP disk inventory per node."
+        Write-PScriboMessage "Collecting ONTAP disk inventory per node."
     }
 
     process {
         try {
             $DiskInv = Get-NcDisk -Controller $Array
-            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
+            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq "broken" }
             if ($DiskInv) {
                 $DiskInventory = foreach ($Disks in $DiskInv) {
                     try {
-                        $DiskType = Get-NcDisk -Controller $Array -Name $Disks.Name | ForEach-Object{ $_.DiskInventoryInfo }
+                        $DiskType = Get-NcDisk -Controller $Array -Name $Disks.Name | ForEach-Object { $_.DiskInventoryInfo }
                         $DiskFailed = $NodeDiskBroken | Where-Object { $_.'Name' -eq $Disks.Name }
                         if ($DiskFailed.Name -eq $Disks.Name ) {
                             $Disk = " $($DiskFailed.Name)(*)"
-                            }
-                            else {
-                                $Disk =  $Disks.Name
-                            }
+                        } else {
+                            $Disk = $Disks.Name
+                        }
                         [PSCustomObject] @{
                             'Disk Name' = $Disk
                             'Shelf' = $Disks.Shelf
@@ -46,9 +45,8 @@ function Get-AbrOntapDiskInv {
                             'Serial Number' = $DiskType.SerialNumber
                             'Type' = $DiskType.DiskType
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.DiskStatus) {
@@ -64,9 +62,8 @@ function Get-AbrOntapDiskInv {
                 }
                 $DiskInventory | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -5,7 +5,7 @@ function Get-AbrOntapRepRelationship {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepRelationship {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP SnapMirror relationship information."
+        Write-PScriboMessage "Collecting ONTAP SnapMirror relationship information."
     }
 
     process {
@@ -31,7 +31,7 @@ function Get-AbrOntapRepRelationship {
                     try {
                         $lag = [timespan]::fromseconds($Item.LagTime).tostring()
                         $time = $lag.Split(".").Split(":")
-                        $lagtime =  $time[0] + " days, " + $time[1] + " hrs, " + $time[2] + " mins, " + $time[0] + " secs"
+                        $lagtime = $time[0] + " days, " + $time[1] + " hrs, " + $time[2] + " mins, " + $time[0] + " secs"
                         $inObj = [ordered] @{
                             'Source Vserver' = $Item.SourceVserver
                             'Source Location' = $Item.SourceLocation
@@ -45,7 +45,7 @@ function Get-AbrOntapRepRelationship {
                                 'transition_data_protection' { 'TDP' }
                                 'restore' { 'RST' }
                                 'load_sharing' { 'LS' }
-                                default {$Item.RelationshipType}
+                                default { $Item.RelationshipType }
                             }
                             'Policy' = $Item.Policy
                             'Policy Type' = $Item.PolicyType
@@ -71,15 +71,13 @@ function Get-AbrOntapRepRelationship {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ReplicaObj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

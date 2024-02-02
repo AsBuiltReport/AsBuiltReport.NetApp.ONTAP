@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,20 +18,20 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes snapshot healthcheck information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes snapshot healthcheck information."
     }
 
     process {
         try {
             $SnapshotDays = 7
             $Now = Get-Date
-            $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
-            $SnapShotData = get-ncsnapshot -Volume $VserverFilter -Controller $Array | Where-Object {$_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays)}
+            $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
+            $SnapShotData = Get-NcSnapshot -Volume $VserverFilter -Controller $Array | Where-Object { $_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays) }
             if ($SnapShotData) {
                 Section -Style Heading4 "HealthCheck - Volumes Snapshot" {
                     Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck on $($SVM)."
@@ -46,9 +46,8 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                                 'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             }
                             $VserverObj += [pscustomobject]$inobj
-                        }
-                        catch {
-                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
 
@@ -64,8 +63,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                     $VserverObj | Table @TableParams
                 }
             }
-        }
-        catch {
+        } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }

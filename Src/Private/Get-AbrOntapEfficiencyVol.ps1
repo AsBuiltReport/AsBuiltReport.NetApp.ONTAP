@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapEfficiencyVol {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Volume Efficiency Savings information."
+        Write-PScriboMessage "Collecting ONTAP Volume Efficiency Savings information."
     }
 
     process {
         try {
-            $Data =  Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.Name -ne 'vol0' -and $_.State -eq "online"}
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.Name -ne 'vol0' -and $_.State -eq "online" }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -44,25 +44,23 @@ function Get-AbrOntapEfficiencyVol {
                             'Efficiency Percent' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 $TableParams = @{
                     Name = "Volume Efficiency Savings - $($Vserver)"
                     List = $false
-                    ColumnWidths = 30, 15, 10, 11, 10, 12 ,12
+                    ColumnWidths = 30, 15, 10, 11, 10, 12 , 12
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

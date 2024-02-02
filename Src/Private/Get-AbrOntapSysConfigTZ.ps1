@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigTZ {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.5
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSysConfigTZ {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System TimeZone information."
+        Write-PScriboMessage "Collecting ONTAP System TimeZone information."
     }
 
     process {
         try {
-            $Data =  Get-NcTimezone -Controller $Array
+            $Data = Get-NcTimezone -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -38,9 +38,8 @@ function Get-AbrOntapSysConfigTZ {
                             'Current Time' = $CurrentTime
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -54,9 +53,8 @@ function Get-AbrOntapSysConfigTZ {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverIscsiSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver ISCSI information."
+        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI information."
     }
 
     process {
@@ -43,13 +43,12 @@ function Get-AbrOntapVserverIscsiSummary {
                             'Status' = Switch ($Item.IsAvailable) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
-                                default {$Item.IsAvailable}
+                                default { $Item.IsAvailable }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Iscsi) {
@@ -66,9 +65,8 @@ function Get-AbrOntapVserverIscsiSummary {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

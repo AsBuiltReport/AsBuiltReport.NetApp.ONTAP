@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapEfficiencyVolSisStatus {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Volume Deduplication information."
+        Write-PScriboMessage "Collecting ONTAP Volume Deduplication information."
     }
 
     process {
         try {
-            $Data = Get-NcSis -VserverContext $Vserver -Controller $Array | Where-Object {$_.Path -notlike '*vol0*'}
+            $Data = Get-NcSis -VserverContext $Vserver -Controller $Array | Where-Object { $_.Path -notlike '*vol0*' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -39,16 +39,15 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                             'State' = Switch ($Item.State) {
                                 'enabled' { 'Enabled' }
                                 'disabled' { 'Disabled' }
-                                default {$Item.State}
+                                default { $Item.State }
                             }
                             'Status' = $Item.Status
                             'Schedule Or Policy' = ConvertTo-EmptyToFiller $Item.ScheduleOrPolicy
                             'Progress' = ConvertTo-EmptyToFiller $Item.Progress
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.Efficiency) {
@@ -65,9 +64,8 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

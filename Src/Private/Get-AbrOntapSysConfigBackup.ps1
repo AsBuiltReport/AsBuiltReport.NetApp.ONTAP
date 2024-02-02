@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapSysConfigBackup {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Node
+        [string]
+        $Node
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System Configuration Backups information."
+        Write-PScriboMessage "Collecting ONTAP System Configuration Backups information."
     }
 
     process {
         try {
-            $Data =  Get-NcConfigBackup -Node $Node -Controller $Array
+            $Data = Get-NcConfigBackup -Node $Node -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -41,9 +41,8 @@ function Get-AbrOntapSysConfigBackup {
                             'Is Auto' = ConvertTo-TextYN $Item.IsAuto
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -57,9 +56,8 @@ function Get-AbrOntapSysConfigBackup {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

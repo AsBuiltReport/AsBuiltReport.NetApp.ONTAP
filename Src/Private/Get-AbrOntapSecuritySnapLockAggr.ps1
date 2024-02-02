@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSecuritySnapLockAggr {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Aggregate Snaplock Type information."
+        Write-PScriboMessage "Collecting ONTAP Security Aggregate Snaplock Type information."
     }
 
     process {
         try {
-            $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+            $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -35,9 +35,8 @@ function Get-AbrOntapSecuritySnapLockAggr {
                             'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -51,9 +50,8 @@ function Get-AbrOntapSecuritySnapLockAggr {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

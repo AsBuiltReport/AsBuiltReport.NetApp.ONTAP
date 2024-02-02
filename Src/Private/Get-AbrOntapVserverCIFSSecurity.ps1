@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSecurity {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverCIFSSecurity {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver CIFS Security information."
+        Write-PScriboMessage "Collecting ONTAP Vserver CIFS Security information."
     }
 
     process {
@@ -46,12 +46,10 @@ function Get-AbrOntapVserverCIFSSecurity {
                                     'Lm Compatibility Level' = $SVM.LmCompatibilityLevel
                                 }
                                 $VserverObj += [pscustomobject]$inobj
-                            }
-                            else {continue}
+                            } else { continue }
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -65,9 +63,8 @@ function Get-AbrOntapVserverCIFSSecurity {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

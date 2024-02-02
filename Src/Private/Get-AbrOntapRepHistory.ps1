@@ -5,7 +5,7 @@ function Get-AbrOntapRepHistory {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepHistory {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP SnapMirror replication history information."
+        Write-PScriboMessage "Collecting ONTAP SnapMirror replication history information."
     }
 
     process {
@@ -37,13 +37,12 @@ function Get-AbrOntapRepHistory {
                             'Start' = $Item.Start
                         }
                         $ReplicaObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Replication.History) {
-                    $ReplicaObj | Where-Object { $_.'Result' -ne 'success'} | Set-Style -Style Warning -Property 'Result'
+                    $ReplicaObj | Where-Object { $_.'Result' -ne 'success' } | Set-Style -Style Warning -Property 'Result'
                 }
 
                 $TableParams = @{
@@ -56,9 +55,8 @@ function Get-AbrOntapRepHistory {
                 }
                 $ReplicaObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

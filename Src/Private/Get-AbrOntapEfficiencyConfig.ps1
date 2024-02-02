@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyConfig {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapEfficiencyConfig {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Storage Efficiency Savings information."
+        Write-PScriboMessage "Collecting ONTAP Storage Efficiency Savings information."
     }
 
     process {
         try {
-            $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+            $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -41,9 +41,8 @@ function Get-AbrOntapEfficiencyConfig {
 
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -57,9 +56,8 @@ function Get-AbrOntapEfficiencyConfig {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

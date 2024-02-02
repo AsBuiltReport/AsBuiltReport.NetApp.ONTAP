@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackupURL {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSysConfigBackupURL {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System Configuration Backup Setting information."
+        Write-PScriboMessage "Collecting ONTAP System Configuration Backup Setting information."
     }
 
     process {
         try {
-            $Data =  Get-NcConfigBackupUrl -Controller $Array
+            $Data = Get-NcConfigBackupUrl -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -40,15 +40,14 @@ function Get-AbrOntapSysConfigBackupURL {
                             }
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 if ($Healthcheck.System.Backup) {
-                    $OutObj | Where-Object { $_.'Url' -eq 'Not Configured'} | Set-Style -Style Warning -Property 'Url'
-                    $OutObj | Where-Object { $_.'Username' -eq 'Not Configured'} | Set-Style -Style Warning -Property 'Username'
+                    $OutObj | Where-Object { $_.'Url' -eq 'Not Configured' } | Set-Style -Style Warning -Property 'Url'
+                    $OutObj | Where-Object { $_.'Username' -eq 'Not Configured' } | Set-Style -Style Warning -Property 'Username'
                 }
 
                 $TableParams = @{
@@ -61,9 +60,8 @@ function Get-AbrOntapSysConfigBackupURL {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

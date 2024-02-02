@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityUser {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapSecurityUser {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Local Users information."
+        Write-PScriboMessage "Collecting ONTAP Security Local Users information."
     }
 
     process {
         try {
-            $Data =  Get-NcUser -Vserver $Vserver -Controller $Array
+            $Data = Get-NcUser -Vserver $Vserver -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -41,13 +41,12 @@ function Get-AbrOntapSecurityUser {
                             'Locked' = ConvertTo-TextYN $Item.IsLocked
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Security.Users) {
-                    $OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne "vsadmin"} | Set-Style -Style Warning -Property 'Locked'
+                    $OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne "vsadmin" } | Set-Style -Style Warning -Property 'Locked'
                 }
 
                 $TableParams = @{
@@ -60,9 +59,8 @@ function Get-AbrOntapSecurityUser {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

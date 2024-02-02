@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigEMSSetting {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSysConfigEMSSetting {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System EMS Settings information."
+        Write-PScriboMessage "Collecting ONTAP System EMS Settings information."
     }
 
     process {
         try {
-            $Data =  Get-NcEmsDestination -Controller $Array
+            $Data = Get-NcEmsDestination -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -53,9 +53,8 @@ function Get-AbrOntapSysConfigEMSSetting {
                             }
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -69,12 +68,11 @@ function Get-AbrOntapSysConfigEMSSetting {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
         try {
-            $Data =  Get-NcAudit -Controller $Array
+            $Data = Get-NcAudit -Controller $Array
             if ($Data) {
                 Section -Style Heading4 "Audit Settings" {
                     Paragraph "The following section provides information about Audit Setting from $($ClusterInfo.ClusterName)."
@@ -88,9 +86,8 @@ function Get-AbrOntapSysConfigEMSSetting {
                                 'Enable CLI Get request' = ConvertTo-TextYN $Item.CliGet
                             }
                             $OutObj += [pscustomobject]$inobj
-                        }
-                        catch {
-                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
 
@@ -104,7 +101,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                     }
                     $OutObj | Table @TableParams
                     try {
-                        $Data =  Get-NcClusterLogForward -Controller $Array
+                        $Data = Get-NcClusterLogForward -Controller $Array
                         if ($Data) {
                             Section -Style Heading4 "Audit Log Destinations" {
                                 $OutObj = @()
@@ -118,9 +115,8 @@ function Get-AbrOntapSysConfigEMSSetting {
                                             'Server Verification' = ConvertTo-TextYN $Item.VerifyServerSpecified
                                         }
                                         $OutObj += [pscustomobject]$inobj
-                                    }
-                                    catch {
-                                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                                    } catch {
+                                        Write-PScriboMessage -IsWarning $_.Exception.Message
                                     }
                                 }
 
@@ -135,15 +131,13 @@ function Get-AbrOntapSysConfigEMSSetting {
                                 $OutObj | Table @TableParams
                             }
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

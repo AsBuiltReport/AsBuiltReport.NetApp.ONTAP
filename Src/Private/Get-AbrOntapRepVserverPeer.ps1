@@ -5,7 +5,7 @@ function Get-AbrOntapRepVserverPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepVserverPeer {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver Peer information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Peer information."
     }
 
     process {
@@ -37,9 +37,8 @@ function Get-AbrOntapRepVserverPeer {
                             'Peer State' = $Item.PeerState
                         }
                         $ReplicaObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Replication.VserverPeer) {
@@ -49,16 +48,15 @@ function Get-AbrOntapRepVserverPeer {
                 $TableParams = @{
                     Name = "Peer - $($ClusterInfo.ClusterName)"
                     List = $false
-                    ColumnWidths = 20, 20, 20 ,20, 20
+                    ColumnWidths = 20, 20, 20 , 20, 20
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

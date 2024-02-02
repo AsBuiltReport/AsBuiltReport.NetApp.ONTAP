@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLVserver {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSecuritySSLVserver {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Vserver SSL information."
+        Write-PScriboMessage "Collecting ONTAP Security Vserver SSL information."
     }
 
     process {
         try {
-            $Data =  Get-NcSecuritySsl -Controller $Array | Where-Object {$_.Vserver -notin $Options.Exclude.Vserver}
+            $Data = Get-NcSecuritySsl -Controller $Array | Where-Object { $_.Vserver -notin $Options.Exclude.Vserver }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -38,9 +38,8 @@ function Get-AbrOntapSecuritySSLVserver {
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -54,9 +53,8 @@ function Get-AbrOntapSecuritySSLVserver {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

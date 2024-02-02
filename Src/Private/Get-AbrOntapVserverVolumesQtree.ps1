@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQtree {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapVserverVolumesQtree {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes qtree information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes qtree information."
     }
 
     process {
         try {
-            $VserverQtree = Get-NcQtree -VserverContext $Vserver -Controller $Array | Where-Object {$NULL -ne $_.Qtree}
+            $VserverQtree = Get-NcQtree -VserverContext $Vserver -Controller $Array | Where-Object { $NULL -ne $_.Qtree }
             $VserverObj = @()
             if ($VserverQtree) {
                 foreach ($Item in $VserverQtree) {
@@ -41,9 +41,8 @@ function Get-AbrOntapVserverVolumesQtree {
                             'Export Policy' = $Item.ExportPolicy
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Status) {
@@ -60,9 +59,8 @@ function Get-AbrOntapVserverVolumesQtree {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

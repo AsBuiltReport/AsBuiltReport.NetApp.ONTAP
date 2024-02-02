@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSOption {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverNFSOption {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver NFS Option information."
+        Write-PScriboMessage "Collecting ONTAP Vserver NFS Option information."
     }
 
     process {
@@ -49,9 +49,8 @@ function Get-AbrOntapVserverNFSOption {
                             'Nfsv40 Enabled' = ConvertTo-TextYN $Item.IsNfsv40Enabled
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -65,9 +64,8 @@ function Get-AbrOntapVserverNFSOption {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

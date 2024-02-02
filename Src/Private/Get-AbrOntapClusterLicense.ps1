@@ -5,7 +5,7 @@ function Get-AbrOntapClusterLicense {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapClusterLicense {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP cluster license information."
+        Write-PScriboMessage "Collecting ONTAP cluster license information."
     }
 
     process {
@@ -31,7 +31,7 @@ function Get-AbrOntapClusterLicense {
                         $License = Get-NcLicense -Owner $Node -Controller $Array
                         if ($License) {
                             $LicenseSummary = foreach ($Licenses in $License) {
-                                $EntitlementRisk = Try {Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue} catch {Write-PscriboMessage -IsWarning $_.Exception.Message}
+                                $EntitlementRisk = Try { Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                                 [PSCustomObject] @{
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)
@@ -54,14 +54,12 @@ function Get-AbrOntapClusterLicense {
                             $LicenseSummary | Table @TableParams
                         }
                     }
-                }
-                catch {
-                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 
