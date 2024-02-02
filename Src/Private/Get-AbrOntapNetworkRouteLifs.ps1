@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkRouteLif {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapNetworkRouteLif {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP network route per lif information."
+        Write-PScriboMessage "Collecting ONTAP network route per lif information."
     }
 
     process {
@@ -40,9 +40,8 @@ function Get-AbrOntapNetworkRouteLif {
                             'Address Family' = $Item.AddressFamily.ToString().ToUpper()
                         }
                         $RoutesObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -56,9 +55,8 @@ function Get-AbrOntapNetworkRouteLif {
                 }
                 $RoutesObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

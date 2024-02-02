@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolume {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapVserverVolume {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes information."
     }
 
     process {
         try {
-            $VserverRootVol = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+            $VserverRootVol = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
             $VserverObj = @()
             if ($VserverRootVol) {
                 foreach ($Item in $VserverRootVol) {
@@ -42,9 +42,8 @@ function Get-AbrOntapVserverVolume {
                             'Aggregate' = $Item.Aggregate
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Status) {
@@ -62,9 +61,8 @@ function Get-AbrOntapVserverVolume {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

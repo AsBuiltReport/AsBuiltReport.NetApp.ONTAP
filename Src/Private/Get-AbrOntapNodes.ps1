@@ -5,7 +5,7 @@ function Get-AbrOntapNode {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNode {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP node information."
+        Write-PScriboMessage "Collecting ONTAP node information."
     }
 
     process {
@@ -29,15 +29,14 @@ function Get-AbrOntapNode {
                 $NodeSummary = foreach ($Nodes in $NodeSum) {
                     try {
                         [PSCustomObject] @{
-                        'Name' = $Nodes.Node
-                        'Model' = $Nodes.NodeModel
-                        'Id' = $Nodes.NodeSystemId
-                        'Serial' = $Nodes.NodeSerialNumber
-                        'Uptime' = $Nodes.NodeUptimeTS
+                            'Name' = $Nodes.Node
+                            'Model' = $Nodes.NodeModel
+                            'Id' = $Nodes.NodeSystemId
+                            'Serial' = $Nodes.NodeSerialNumber
+                            'Uptime' = $Nodes.NodeUptimeTS
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 $TableParams = @{
@@ -50,9 +49,8 @@ function Get-AbrOntapNode {
                 }
                 $NodeSummary | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

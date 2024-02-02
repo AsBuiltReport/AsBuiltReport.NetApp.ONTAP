@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapVserverVolumeSnapshot {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes snapshot information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes snapshot information."
     }
 
     process {
         try {
-            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0'}
+            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
             $VserverObj = @()
             if ($VolumeFilter) {
                 foreach ($Item in $VolumeFilter) {
@@ -45,13 +45,12 @@ function Get-AbrOntapVserverVolumeSnapshot {
                         }
 
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Snapshot) {
-                    $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'True' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size','Reserve Available','Used'
+                    $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'True' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
                 }
 
                 $TableParams = @{
@@ -66,9 +65,8 @@ function Get-AbrOntapVserverVolumeSnapshot {
                     $VserverObj | Table @TableParams
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

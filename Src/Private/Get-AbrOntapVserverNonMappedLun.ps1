@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNonMappedLun {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapVserverNonMappedLun {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP ISCSI/FCP Non Mapped Lun information."
+        Write-PScriboMessage "Collecting ONTAP ISCSI/FCP Non Mapped Lun information."
     }
 
     process {
         try {
-            $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object {$_.Mapped -ne "True"}
+            $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object { $_.Mapped -ne "True" }
             $OutObj = @()
             if ($LunFilter) {
                 foreach ($Item in $LunFilter) {
@@ -42,9 +42,8 @@ function Get-AbrOntapVserverNonMappedLun {
                             'Lun Format' = $Item.Protocol
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Status) {
@@ -61,9 +60,8 @@ function Get-AbrOntapVserverNonMappedLun {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

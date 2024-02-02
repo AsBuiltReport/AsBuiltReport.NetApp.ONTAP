@@ -5,7 +5,7 @@ function Get-AbrOntapRepClusterPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepClusterPeer {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Replication information."
+        Write-PScriboMessage "Collecting ONTAP Replication information."
     }
 
     process {
@@ -38,9 +38,8 @@ function Get-AbrOntapRepClusterPeer {
                             'Status' = ($Item.Availability).toUpper()
                         }
                         $ReplicaObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Replication.ClusterPeer) {
@@ -57,9 +56,8 @@ function Get-AbrOntapRepClusterPeer {
                 }
                 $ReplicaObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

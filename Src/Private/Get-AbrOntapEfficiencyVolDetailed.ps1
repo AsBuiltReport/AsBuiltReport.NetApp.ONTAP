@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapEfficiencyVolDetailed {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Volume Efficiency Savings information."
+        Write-PScriboMessage "Collecting ONTAP Volume Efficiency Savings information."
     }
 
     process {
         try {
-            $Data =  Get-NcVol -VserverContext $Vserver -Controller $Array| Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online"}
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online" }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -42,12 +42,11 @@ function Get-AbrOntapEfficiencyVolDetailed {
                             'Snapshot Savings' = $Saving.Returns.Snapshot | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Cloning Savings' = $Saving.Returns.Cloning | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Efficiency %' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
-                            'Efficiency % w/o Snapshots' = [Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used  + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Efficiency % w/o Snapshots' = [Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -61,9 +60,8 @@ function Get-AbrOntapEfficiencyVolDetailed {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

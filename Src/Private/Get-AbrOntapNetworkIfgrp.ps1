@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIfgrp {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapNetworkIfgrp {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Node
+        [string]
+        $Node
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP physical aggregata interface information."
+        Write-PScriboMessage "Collecting ONTAP physical aggregata interface information."
     }
 
     process {
@@ -35,7 +35,7 @@ function Get-AbrOntapNetworkIfgrp {
                     try {
                         if ($Nics.DownPorts) {
                             $UPPort = "$($Nics.UpPorts) $($Nics.DownPorts)(Down)"
-                        }else {$UPPort = [String]$Nics.UpPorts}
+                        } else { $UPPort = [String]$Nics.UpPorts }
                         $inObj = [ordered] @{
                             'Port Name' = $Nics.IfgrpName
                             'Distribution Function' = $Nics.DistributionFunction
@@ -45,9 +45,8 @@ function Get-AbrOntapNetworkIfgrp {
                             'Port Participation' = $Nics.PortParticipation
                         }
                         $AggregatePorts += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Network.Port) {
@@ -59,16 +58,15 @@ function Get-AbrOntapNetworkIfgrp {
                 $TableParams = @{
                     Name = "Link Aggregation Group - $($Node)"
                     List = $false
-                    ColumnWidths = 15, 15, 15 ,20 ,20, 15
+                    ColumnWidths = 15, 15, 15 , 20 , 20, 15
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $AggregatePorts | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

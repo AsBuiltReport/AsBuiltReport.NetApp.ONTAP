@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapVserverLunStorage {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver lun information."
+        Write-PScriboMessage "Collecting ONTAP Vserver lun information."
     }
 
     process {
         try {
-            $VserverLun = get-nclun -VserverContext $Vserver -Controller $Array
+            $VserverLun = Get-NcLun -VserverContext $Vserver -Controller $Array
             $VserverObj = @()
             if ($VserverLun) {
                 foreach ($Item in $VserverLun) {
@@ -44,8 +44,8 @@ function Get-AbrOntapVserverLunStorage {
                             'Path' = $Item.Path
                             'Serial Number' = $Item.SerialNumber
                             'Initiator Group' = Switch (($lunmap).count) {
-                                0 {"None"}
-                                default {$lunmap}
+                                0 { "None" }
+                                default { $lunmap }
                             }
                             'Home Node ' = $Item.Node
                             'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
@@ -56,18 +56,18 @@ function Get-AbrOntapVserverLunStorage {
                             'Space Allocation' = Switch ($Item.IsSpaceAllocEnabled) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
-                                default {$Item.IsSpaceAllocEnabled}
+                                default { $Item.IsSpaceAllocEnabled }
                             }
                             'Space Reservation' = Switch ($Item.IsSpaceReservationEnabled) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
-                                default {$Item.IsSpaceReservationEnabled}
+                                default { $Item.IsSpaceReservationEnabled }
                             }
                             'Is Mapped' = ConvertTo-TextYN $Item.Mapped
                             'Status' = Switch ($Item.Online) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
-                                default {$Item.Online}
+                                default { $Item.Online }
                             }
                         }
                         $VserverObj = [pscustomobject]$inobj
@@ -87,15 +87,13 @@ function Get-AbrOntapVserverLunStorage {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $VserverObj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

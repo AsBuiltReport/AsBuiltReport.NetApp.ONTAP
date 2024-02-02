@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNAE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,17 +19,17 @@ function Get-AbrOntapSecurityNAE {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Aggregate NAE information."
+        Write-PScriboMessage "Collecting ONTAP Security Aggregate NAE information."
     }
 
     process {
         try {
-            $Data =  Get-NcAggr -Controller $Array
+            $Data = Get-NcAggr -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $NAE = (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object {$_.Name -eq "encrypt_with_aggr_key"}).Value
+                        $NAE = (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq "encrypt_with_aggr_key" }).Value
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
                             'Aggregate Encryption' = Switch ($NAE) {
@@ -42,13 +42,12 @@ function Get-AbrOntapSecurityNAE {
                             'State' = $TextInfo.ToTitleCase($Item.State)
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.Aggr) {
-                    $OutObj | Where-Object { $_.'State' -ne 'Online'} | Set-Style -Style Warning -Property 'State'
+                    $OutObj | Where-Object { $_.'State' -ne 'Online' } | Set-Style -Style Warning -Property 'State'
                 }
 
                 $TableParams = @{
@@ -61,9 +60,8 @@ function Get-AbrOntapSecurityNAE {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

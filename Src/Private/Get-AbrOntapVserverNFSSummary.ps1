@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverNFSSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver NFS information."
+        Write-PScriboMessage "Collecting ONTAP Vserver NFS information."
     }
 
     process {
@@ -37,25 +37,24 @@ function Get-AbrOntapVserverNFSSummary {
                             'Nfs v3' = Switch ($Item.IsNfsv3) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
-                                default {$Item.IsNfsv3}
+                                default { $Item.IsNfsv3 }
                             }
                             'Nfs v4' = Switch ($Item.IsNfsv4) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
-                                default {$Item.IsNfsv4}
+                                default { $Item.IsNfsv4 }
                             }
                             'Nfs v41' = Switch ($Item.IsNfsv41) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
-                                default {$Item.IsNfsv41}
+                                default { $Item.IsNfsv41 }
                             }
                             'General Access' = ConvertTo-TextYN $Item.GeneralAccess
 
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.NFS) {
@@ -74,9 +73,8 @@ function Get-AbrOntapVserverNFSSummary {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

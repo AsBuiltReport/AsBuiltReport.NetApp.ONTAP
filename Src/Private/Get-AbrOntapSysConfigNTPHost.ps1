@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTPHost {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSysConfigNTPHost {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System NTP Host Status information."
+        Write-PScriboMessage "Collecting ONTAP System NTP Host Status information."
     }
 
     process {
         try {
-            $Data =  Get-NcNtpServerStatus -Controller $Array
+            $Data = Get-NcNtpServerStatus -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -37,13 +37,12 @@ function Get-AbrOntapSysConfigNTPHost {
                             'Peer Status' = Switch ($Item.IsPeerReachable) {
                                 'True' { 'Reachable' }
                                 'False' { 'Unreachable' }
-                                default {$Item.IsPeerReachable}
+                                default { $Item.IsPeerReachable }
                             }
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.System.NTP) {
@@ -60,9 +59,8 @@ function Get-AbrOntapSysConfigNTPHost {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

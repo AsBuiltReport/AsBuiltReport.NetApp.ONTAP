@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapVserverSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver information."
+        Write-PScriboMessage "Collecting ONTAP Vserver information."
     }
 
     process {
         try {
-            $VserverData = Get-NcVserver -VserverContext $Vserver| Where-Object { $_.VserverType -eq "data" }
+            $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq "data" }
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
@@ -41,9 +41,8 @@ function Get-AbrOntapVserverSummary {
                             'Status' = $Item.State
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Status) {
@@ -62,7 +61,7 @@ function Get-AbrOntapVserverSummary {
             }
             try {
                 Section -Style Heading4 'Root Volume' {
-                    $VserverRootVol = Get-NcVol -VserverContext $Vserver| Where-Object {$_.JunctionPath -eq '/'}
+                    $VserverRootVol = Get-NcVol -VserverContext $Vserver | Where-Object { $_.JunctionPath -eq '/' }
                     $VserverObj = @()
                     if ($VserverRootVol) {
                         foreach ($Item in $VserverRootVol) {
@@ -77,9 +76,8 @@ function Get-AbrOntapVserverSummary {
                                     'Aggregate' = $Item.Aggregate
                                 }
                                 $VserverObj += [pscustomobject]$inobj
-                            }
-                            catch {
-                                Write-PscriboMessage -IsWarning $_.Exception.Message
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
                         if ($Healthcheck.Vserver.Status) {
@@ -98,9 +96,8 @@ function Get-AbrOntapVserverSummary {
                         $VserverObj | Table @TableParams
                     }
                 }
-            }
-            catch {
-                Write-PscriboMessage -IsWarning $_.Exception.Message
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
                 if (Get-NcVserverAggr) {
@@ -117,9 +114,8 @@ function Get-AbrOntapVserverSummary {
                                         'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                                     }
                                     $VserverObj += [pscustomobject]$inobj
-                                }
-                                catch {
-                                    Write-PscriboMessage -IsWarning $_.Exception.Message
+                                } catch {
+                                    Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
                             }
 
@@ -135,13 +131,11 @@ function Get-AbrOntapVserverSummary {
                         }
                     }
                 }
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
             }
-            catch {
-                Write-PscriboMessage -IsWarning $_.Exception.Message
-            }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

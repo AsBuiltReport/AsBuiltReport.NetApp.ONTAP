@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigDNS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSysConfigDNS {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System DNS Configuration information."
+        Write-PScriboMessage "Collecting ONTAP System DNS Configuration information."
     }
 
     process {
         try {
-            $Data =  Get-NcNetDns -Controller $Array | Where-Object {$_.Vserver -notin $Options.Exclude.Vserver}
+            $Data = Get-NcNetDns -Controller $Array | Where-Object { $_.Vserver -notin $Options.Exclude.Vserver }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -37,9 +37,8 @@ function Get-AbrOntapSysConfigDNS {
                             'Timeout/s' = $Item.Timeout
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.System.DNS) {
@@ -57,9 +56,8 @@ function Get-AbrOntapSysConfigDNS {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

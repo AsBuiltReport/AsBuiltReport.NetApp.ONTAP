@@ -16,31 +16,29 @@ function ConvertTo-TextYN {
     [CmdletBinding()]
     [OutputType([String])]
     Param
-        (
+    (
         [Parameter (
             Position = 0,
             Mandatory)]
-            [AllowEmptyString()]
-            [string]
-            $TEXT
-        )
+        [AllowEmptyString()]
+        [string]
+        $TEXT
+    )
 
-    switch ([string]::IsNullOrEmpty($TEXT))
-    {
-        $true {'-'}
+    switch ([string]::IsNullOrEmpty($TEXT)) {
+        $true { '-' }
         $false {
-            switch ($TEXT)
-            {
-                "True" {"Yes"; break}
-                "False" {"No"; break}
-                default {$TEXT}
+            switch ($TEXT) {
+                "True" { "Yes"; break }
+                "False" { "No"; break }
+                default { $TEXT }
             }
         }
-        default {'-'}
+        default { '-' }
     }
 } # end
 function Get-UnixDate ($UnixDate) {
-        <#
+    <#
     .SYNOPSIS
     Used by As Built Report to convert Date to a more nice format.
     .DESCRIPTION
@@ -74,18 +72,18 @@ function ConvertTo-EmptyToFiller {
     [CmdletBinding()]
     [OutputType([String])]
     Param
-        (
+    (
         [Parameter (
             Position = 0,
             Mandatory)]
-            [AllowEmptyString()]
-            [string]
-            $TEXT
-        )
+        [AllowEmptyString()]
+        [string]
+        $TEXT
+    )
 
     switch ([string]::IsNullOrEmpty($TEXT)) {
-            $true {"-"; break}
-            $false {$TEXT; break}
-            default {'-'}
-        }
-    } # end
+        $true { "-"; break }
+        $false { $TEXT; break }
+        default { '-' }
+    }
+} # end

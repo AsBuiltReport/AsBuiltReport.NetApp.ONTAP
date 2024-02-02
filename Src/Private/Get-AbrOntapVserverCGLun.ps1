@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCGLun {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.5
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,11 +18,11 @@ function Get-AbrOntapVserverCGLun {
         [Parameter (
             Position = 0,
             Mandatory)]
-            $CGObj
+        $CGObj
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver Consistency Groups lun information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups lun information."
     }
 
     process {
@@ -35,14 +35,14 @@ function Get-AbrOntapVserverCGLun {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name.Split('/')[3]
                             'Capacity' = Switch ([string]::IsNullOrEmpty($Item.space.size)) {
-                                $true {'-'}
-                                $false {$Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'-'}
+                                $true { '-' }
+                                $false { $Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { '-' }
                             }
                             'Used' = Switch ([string]::IsNullOrEmpty($Item.space.used)) {
-                                $true {'-'}
-                                $false {$Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'-'}
+                                $true { '-' }
+                                $false { $Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { '-' }
                             }
                             'OS Type' = ConvertTo-EmptyToFiller $Item.os_type
                             'Volume State' = $Item.status.container_state
@@ -53,17 +53,16 @@ function Get-AbrOntapVserverCGLun {
 
                         }
                         $CGLunObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 if ($Healthcheck.Vserver.CG) {
-                    $CGLunObj | Where-Object { $_.'Volume State' -ne 'online'} | Set-Style -Style Warning -Property 'Volume State'
-                    $CGLunObj | Where-Object { $_.'Mapped' -eq 'No'} | Set-Style -Style Warning -Property 'Mapped'
-                    $CGLunObj | Where-Object { $_.'Read Only' -eq 'Yes'} | Set-Style -Style Warning -Property 'Read Only'
-                    $CGLunObj | Where-Object { $_.'State' -eq 'offline'} | Set-Style -Style Warning -Property 'State'
+                    $CGLunObj | Where-Object { $_.'Volume State' -ne 'online' } | Set-Style -Style Warning -Property 'Volume State'
+                    $CGLunObj | Where-Object { $_.'Mapped' -eq 'No' } | Set-Style -Style Warning -Property 'Mapped'
+                    $CGLunObj | Where-Object { $_.'Read Only' -eq 'Yes' } | Set-Style -Style Warning -Property 'Read Only'
+                    $CGLunObj | Where-Object { $_.'State' -eq 'offline' } | Set-Style -Style Warning -Property 'State'
                 }
 
                 $TableParams = @{
@@ -76,9 +75,8 @@ function Get-AbrOntapVserverCGLun {
                 }
                 $CGLunObj | Sort-Object -Property Name | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

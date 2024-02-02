@@ -5,7 +5,7 @@ function Get-AbrOntapClusterHA {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.6
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapClusterHA {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP cluster high availability information."
+        Write-PScriboMessage "Collecting ONTAP cluster high availability information."
     }
 
     process {
@@ -32,22 +32,21 @@ function Get-AbrOntapClusterHA {
                         [PSCustomObject] @{
                             'Name' = $Nodes.Node
                             'Partner' = Switch ([string]::IsNullOrEmpty($ClusterHa.Partner)) {
-                                'True' {'-'}
-                                'False' {$ClusterHa.Partner}
-                                default {'Unknwon'}
+                                'True' { '-' }
+                                'False' { $ClusterHa.Partner }
+                                default { 'Unknwon' }
                             }
                             'TakeOver Possible' = ConvertTo-TextYN $ClusterHa.TakeoverPossible
                             'TakeOver State' = Switch ([string]::IsNullOrEmpty($ClusterHa.TakeoverState)) {
-                                'True' {'-'}
-                                'False' {$ClusterHa.TakeoverState}
-                                default {'Unknwon'}
+                                'True' { '-' }
+                                'False' { $ClusterHa.TakeoverState }
+                                default { 'Unknwon' }
                             }
                             'HA Mode' = $ClusterHa.CurrentMode.ToUpper()
                             'HA State' = $ClusterHa.State.ToUpper()
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Cluster.HA) {
@@ -65,9 +64,8 @@ function Get-AbrOntapClusterHA {
                 }
                 $NodeSummary | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

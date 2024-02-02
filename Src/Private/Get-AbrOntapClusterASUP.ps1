@@ -5,7 +5,7 @@ function Get-AbrOntapClusterASUP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapClusterASUP {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP AutoSupport information."
+        Write-PScriboMessage "Collecting ONTAP AutoSupport information."
     }
 
     process {
@@ -51,15 +51,13 @@ function Get-AbrOntapClusterASUP {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $Outobj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

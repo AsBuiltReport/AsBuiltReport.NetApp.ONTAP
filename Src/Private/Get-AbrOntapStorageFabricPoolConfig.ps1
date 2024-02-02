@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapEfficiencyAggrConfig {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Aggregate FabriPool Object Store information."
+        Write-PScriboMessage "Collecting ONTAP Aggregate FabriPool Object Store information."
     }
 
     process {
         try {
-            $Data =  Get-NcAggrObjectStoreConfig -Controller $Array
+            $Data = Get-NcAggrObjectStoreConfig -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -49,15 +49,13 @@ function Get-AbrOntapEfficiencyAggrConfig {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $OutObj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

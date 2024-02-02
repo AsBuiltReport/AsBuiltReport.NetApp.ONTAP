@@ -5,7 +5,7 @@ function Get-AbrOntapClusterLicenseUsage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapClusterLicenseUsage {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP cluster license usage information."
+        Write-PScriboMessage "Collecting ONTAP cluster license usage information."
     }
 
     process {
         try {
-        $LicenseFeature = Get-NcFeatureStatus -Controller $Array
+            $LicenseFeature = Get-NcFeatureStatus -Controller $Array
             if ($LicenseFeature) {
                 $LicenseFeature = foreach ($NodeLFs in $LicenseFeature) {
                     [PSCustomObject] @{
@@ -46,9 +46,8 @@ function Get-AbrOntapClusterLicenseUsage {
                 }
                 $LicenseFeature | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

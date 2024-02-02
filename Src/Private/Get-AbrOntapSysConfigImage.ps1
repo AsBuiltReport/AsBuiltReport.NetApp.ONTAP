@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigImage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSysConfigImage {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP System Image information."
+        Write-PScriboMessage "Collecting ONTAP System Image information."
     }
 
     process {
         try {
-            $Data =  Get-NcSystemImage -Controller $Array
+            $Data = Get-NcSystemImage -Controller $Array
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -38,9 +38,8 @@ function Get-AbrOntapSysConfigImage {
                             'Version' = $Item.Version
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -54,9 +53,8 @@ function Get-AbrOntapSysConfigImage {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

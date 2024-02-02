@@ -5,7 +5,7 @@ function Get-AbrOntapDiskShelf {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapDiskShelf {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP disk shelf information."
+        Write-PScriboMessage "Collecting ONTAP disk shelf information."
     }
 
     process {
@@ -37,13 +37,12 @@ function Get-AbrOntapDiskShelf {
                                 'Shelf ID' = $Nodeshelf.ShelfId
                                 'State' = $Nodeshelf.ShelfState
                                 'Type' = $Nodeshelf.ShelfType
-                                'Firmware' = $Nodeshelf.FirmwareRevA+$Nodeshelf.FirmwareRevB
+                                'Firmware' = $Nodeshelf.FirmwareRevA + $Nodeshelf.FirmwareRevB
                                 'Bay Count' = $Nodeshelf.ShelfBayCount
                             }
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.ShelfStatus) {
@@ -60,9 +59,8 @@ function Get-AbrOntapDiskShelf {
                 }
                 $ShelfInventory | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Key Management Service External Status information."
+        Write-PScriboMessage "Collecting ONTAP Security Key Management Service External Status information."
     }
 
     process {
@@ -36,14 +36,13 @@ function Get-AbrOntapSecurityKMSExtStatus {
                             'Status' = $TextInfo.ToTitleCase($Item.KeyManagerServerStatus)
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 if ($Healthcheck.Security.KMS) {
-                    $OutObj | Where-Object { $_.'Status' -ne 'Available'} | Set-Style -Style Critical -Property 'Status'
+                    $OutObj | Where-Object { $_.'Status' -ne 'Available' } | Set-Style -Style Critical -Property 'Status'
                 }
 
                 $TableParams = @{
@@ -56,9 +55,8 @@ function Get-AbrOntapSecurityKMSExtStatus {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

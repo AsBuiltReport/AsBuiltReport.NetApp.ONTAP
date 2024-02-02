@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkVlan {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapNetworkVlan {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Node
+        [string]
+        $Node
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP VLAN information."
+        Write-PScriboMessage "Collecting ONTAP VLAN information."
     }
 
     process {
@@ -39,9 +39,8 @@ function Get-AbrOntapNetworkVlan {
                             'Vlan ID' = $Item.VlanID
                         }
                         $VlanObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -55,9 +54,8 @@ function Get-AbrOntapNetworkVlan {
                 }
                 $VlanObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

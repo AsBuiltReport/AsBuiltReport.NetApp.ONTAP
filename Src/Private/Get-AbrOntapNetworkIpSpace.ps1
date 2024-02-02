@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIpSpace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkIpSpace {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP IPSpace information."
+        Write-PScriboMessage "Collecting ONTAP IPSpace information."
     }
 
     process {
@@ -51,15 +51,13 @@ function Get-AbrOntapNetworkIpSpace {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $IPSpaceObj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

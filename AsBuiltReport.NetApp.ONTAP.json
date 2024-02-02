@@ -78,6 +78,6 @@
         "Security": {
             "Users": true,
             "KMS": true
-    }
+        }
     }
 }

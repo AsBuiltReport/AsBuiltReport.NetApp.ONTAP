@@ -5,7 +5,7 @@ function Get-AbrOntapDiskBroken {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,25 +19,25 @@ function Get-AbrOntapDiskBroken {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP failed disk per node information."
+        Write-PScriboMessage "Collecting ONTAP failed disk per node information."
     }
 
     process {
         try {
-            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object{ $_.DiskRaidInfo.ContainerType -eq "broken" }
+            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq "broken" }
             if ($NodeDiskBroken) {
                 $DiskFailed = foreach ($DiskBroken in $NodeDiskBroken) {
-                        [PSCustomObject] @{
-                            'Disk Name' = $DiskBroken.Name
-                            'Shelf' = $DiskBroken.Shelf
-                            'Bay' = $DiskBroken.Bay
-                            'Pool' = $DiskBroken.Pool
-                            'Disk Paths' = $DiskBroken.DiskPaths
-                            }
-                        }
-                        if ($Healthcheck.Storage.DiskStatus) {
-                            $DiskFailed | Set-Style -Style Critical -Property 'Disk Name','Shelf','Bay','Pool','Disk Paths'
-                        }
+                    [PSCustomObject] @{
+                        'Disk Name' = $DiskBroken.Name
+                        'Shelf' = $DiskBroken.Shelf
+                        'Bay' = $DiskBroken.Bay
+                        'Pool' = $DiskBroken.Pool
+                        'Disk Paths' = $DiskBroken.DiskPaths
+                    }
+                }
+                if ($Healthcheck.Storage.DiskStatus) {
+                    $DiskFailed | Set-Style -Style Critical -Property 'Disk Name', 'Shelf', 'Bay', 'Pool', 'Disk Paths'
+                }
                 $TableParams = @{
                     Name = "Failed Disk - $($ClusterInfo.ClusterName)"
                     List = $false
@@ -48,9 +48,8 @@ function Get-AbrOntapDiskBroken {
                 }
                 $DiskFailed | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

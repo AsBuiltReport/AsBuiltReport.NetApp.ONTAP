@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCGSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.5
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverCGSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver Consistency Groups information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups information."
     }
 
     process {
@@ -36,31 +36,30 @@ function Get-AbrOntapVserverCGSummary {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
                             'Capacity' = Switch ([string]::IsNullOrEmpty($Item.space.size)) {
-                                $true {'-'}
-                                $false {$Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'-'}
+                                $true { '-' }
+                                $false { $Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { '-' }
                             }
                             'Available' = Switch ([string]::IsNullOrEmpty($Item.space.available)) {
-                                $true {'-'}
-                                $false {$Item.space.available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'-'}
+                                $true { '-' }
+                                $false { $Item.space.available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { '-' }
                             }
                             'Used' = Switch ([string]::IsNullOrEmpty($Item.space.used)) {
-                                $true {'-'}
-                                $false {$Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'-'}
+                                $true { '-' }
+                                $false { $Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { '-' }
                             }
                             'Replicated' = ConvertTo-TextYN $Item.replicated
                             'Lun Count' = Switch ([string]::IsNullOrEmpty($Item.luns.name)) {
-                                $true {'-'}
-                                $false {($Item.luns.name).count}
-                                default {'-'}
+                                $true { '-' }
+                                $false { ($Item.luns.name).count }
+                                default { '-' }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -74,9 +73,8 @@ function Get-AbrOntapVserverCGSummary {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

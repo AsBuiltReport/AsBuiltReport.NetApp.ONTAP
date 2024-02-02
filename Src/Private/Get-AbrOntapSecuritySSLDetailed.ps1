@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.4
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSecuritySSLDetailed {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Vserver SSL Detailed information."
+        Write-PScriboMessage "Collecting ONTAP Security Vserver SSL Detailed information."
     }
 
     process {
         try {
-            $Data =  Get-NcSecurityCertificate -Controller $Array | Where-Object {$_.Type -eq "server" -and $_.Vserver -notin $Options.Exclude.Vserver}
+            $Data = Get-NcSecurityCertificate -Controller $Array | Where-Object { $_.Type -eq "server" -and $_.Vserver -notin $Options.Exclude.Vserver }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -35,16 +35,15 @@ function Get-AbrOntapSecuritySSLDetailed {
                             'Hash Function' = $Item.HashFunction
                             'Serial Number' = $Item.SerialNumber
                             'Expiration' = Switch ([string]::IsNullOrEmpty($Item.ExpirationDateDT)) {
-                                $true {'-'}
-                                $false {($Item.ExpirationDateDT).ToString().Split(" ")[0]}
-                                default {'Unknown'}
+                                $true { '-' }
+                                $false { ($Item.ExpirationDateDT).ToString().Split(" ")[0] }
+                                default { 'Unknown' }
                             }
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -58,9 +57,8 @@ function Get-AbrOntapSecuritySSLDetailed {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

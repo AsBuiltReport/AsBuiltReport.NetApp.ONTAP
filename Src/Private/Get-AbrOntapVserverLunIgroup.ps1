@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunIgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,31 +18,30 @@ function Get-AbrOntapVserverLunIgroup {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver Igroup information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Igroup information."
     }
 
     process {
-        try{
+        try {
             $VserverIgroup = Get-NcIgroup -VserverContext $Vserver -Controller $Array
             $VserverObj = @()
             if ($VserverIgroup) {
                 foreach ($Item in $VserverIgroup) {
                     try {
-                        $lunmap = get-nclunmap -Controller $Array | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -ExpandProperty Path
-                        $reportingnodes = get-nclunmap -Controller $Array | Where-Object { $_.InitiatorGroup -eq $Item.Name} | Select-Object -Unique -ExpandProperty ReportingNodes
+                        $lunmap = Get-NcLunMap -Controller $Array | Where-Object { $_.InitiatorGroup -eq $Item.Name } | Select-Object -ExpandProperty Path
+                        $reportingnodes = Get-NcLunMap -Controller $Array | Where-Object { $_.InitiatorGroup -eq $Item.Name } | Select-Object -Unique -ExpandProperty ReportingNodes
                         $MappedLun = @()
                         foreach ($lun in $lunmap) {
                             try {
                                 $lunname = $lun.split('/')
                                 $MappedLun += $lunname[3]
-                            }
-                            catch {
-                                Write-PscriboMessage -IsWarning $_.Exception.Message
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
                         $inObj = [ordered] @{
@@ -51,12 +50,12 @@ function Get-AbrOntapVserverLunIgroup {
                             'Protocol' = $Item.Protocol
                             'Initiators' = $Item.Initiators.InitiatorName
                             'Mapped Lun' = Switch (($MappedLun).count) {
-                                0 {"None"}
-                                default {$MappedLun}
+                                0 { "None" }
+                                default { $MappedLun }
                             }
                             'Reporting Nodes' = Switch (($reportingnodes).count) {
-                                0 {"None"}
-                                default {$reportingnodes}
+                                0 { "None" }
+                                default { $reportingnodes }
                             }
                         }
                         $VserverObj = [pscustomobject]$inobj
@@ -73,15 +72,13 @@ function Get-AbrOntapVserverLunIgroup {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $VserverObj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 
