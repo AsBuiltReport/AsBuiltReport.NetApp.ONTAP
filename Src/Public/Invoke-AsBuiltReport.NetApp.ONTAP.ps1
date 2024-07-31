@@ -606,7 +606,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Security InfoLevel set at $($InfoLevel.Security)."
             if ($InfoLevel.Security -gt 0) {
-                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -and $_.Vserver -notin $Options.Exclude.Vserver } | Select-Object -ExpandProperty Vserver
+                $Vservers = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" -or $_.VserverType -eq "admin" -and $_.Vserver -notin $Options.Exclude.Vserver } | Select-Object -ExpandProperty Vserver
                 Section -Style Heading2 'Security Information' {
                     Paragraph "The following section provides the Security related information on $($ClusterInfo.ClusterName)."
                     BlankLine
