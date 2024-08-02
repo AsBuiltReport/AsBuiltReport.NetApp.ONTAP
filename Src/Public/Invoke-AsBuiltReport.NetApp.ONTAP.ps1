@@ -496,8 +496,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 BlankLine
                                                 Get-AbrOntapVserverCGSummary -Vserver $SVM
                                                 foreach ($CG in $CGs) {
-                                                    Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Luns" {
-                                                        Get-AbrOntapVserverCGLun -CGObj $CG
+                                                    if ($CG.luns) {
+                                                        Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Luns" {
+                                                            Get-AbrOntapVserverCGLun -CGObj $CG
+                                                        }
                                                     }
                                                 }
                                             }

@@ -90,7 +90,7 @@ function Get-AbrOntapEfficiencyAggr {
                     }
                 }
                 if ($OutObj) {
-                    Section -Style Heading4 'HealthCheck - Volume with Disabled Deduplication' {
+                    Section -Style Heading4 'HealthCheck - Volume with Deduplication Disabled' {
                         Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         $OutObj | Table @TableParams
