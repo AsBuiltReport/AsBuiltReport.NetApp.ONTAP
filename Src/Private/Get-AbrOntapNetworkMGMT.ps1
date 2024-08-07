@@ -153,11 +153,14 @@ function Get-AbrOntapNetworkMgmt {
             }
             try {
                 Section -ExcludeFromTOC -Style Heading6 'Data Network Interfaces' {
-                    $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'data' -and $_.DataProtocols -ne 'fcp' -and $_.Vserver -notin $options.Exclude.Vserver }
+                    $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'data' -and $_.Vserver -notin $options.Exclude.Vserver }
                     $ClusterObj = @()
                     if ($ClusterData) {
                         foreach ($Item in $ClusterData) {
                             try {
+                                if ($Item.Wwpn) {
+                                    $AddressData = $Item.Wwpn
+                                } else {$AddressData = $Item.Address}
                                 $inObj = [ordered] @{
                                     'Data Interface' = $Item.InterfaceName
                                     'Status' = Switch ($Item.OpStatus) {
@@ -166,7 +169,7 @@ function Get-AbrOntapNetworkMgmt {
                                         default { $Item.OpStatus.ToString().ToUpper() }
                                     }
                                     'Data Protocols' = [string]$Item.DataProtocols
-                                    'Address' = $Item.Address
+                                    'Address' = $AddressData
                                     'Vserver' = $Item.Vserver
                                 }
                                 $ClusterObj += [pscustomobject]$inobj
