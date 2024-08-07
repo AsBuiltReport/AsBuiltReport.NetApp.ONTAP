@@ -51,7 +51,7 @@ Below are the instructions on how to install, configure and generate a NetApp ON
 The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 - ONTAP 9.x
-  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1
+  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1, 9.12.1, 9.13.1, 9.14.1, 9.15.1
 
 ### **PowerShell**
 
@@ -69,9 +69,9 @@ These modules may also be manually installed.
 
 | Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
 |--------------------|:------------------------:|:---------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
-| PScribo            |          0.9.1           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
-| AsBuiltReport.Core |          1.2.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP |          9.10.1.2111           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
+| PScribo            |          0.10.0           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
+| AsBuiltReport.Core |          1.4.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
+| Netapp.ONTAP |          9.15.1.2407           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
 
 ## :package: Module Installation
 
