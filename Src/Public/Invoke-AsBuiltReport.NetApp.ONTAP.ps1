@@ -69,6 +69,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         }
         $ClusterInfo = Get-NcCluster -Controller $Array
 
+        #If metrocluster option remove all -mc vserver
+        if ($Options.Exclude.MetroCluster) {
+            $Options.Exclude.Vserver = $Options.Exclude.Vserver + (Get-NcVserver | Where-Object { $_ -like '*-mc' }).Vserver
+            $exclude_vserver = $Options.Exclude.Vserver
+            Write-PScriboMessage "exclude vserver = $exclude_vserver"
+        }
+
         #---------------------------------------------------------------------------------------------#
         #                                 Cluster Section                                             #
         #---------------------------------------------------------------------------------------------#
