@@ -54,11 +54,11 @@
     RequiredModules = @(
         @{
             ModuleName = 'AsBuiltReport.Core';
-            ModuleVersion = '1.3.0'
+            ModuleVersion = '1.4.0'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
-            ModuleVersion = '9.10.1.2111'
+            ModuleVersion = '9.15.1.2407'
         }
     )
 
@@ -129,5 +129,3 @@
     # DefaultCommandPrefix = ''
 
 }
-
-

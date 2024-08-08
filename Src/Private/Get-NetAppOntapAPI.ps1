@@ -75,7 +75,12 @@ function Get-NetAppOntapAPI {
 
     Process {
         Try {
-            $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers -SkipCertificateCheck
+            if ($PSVersionTable.PSEdition -eq 'Core') {
+                $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers -SkipCertificateCheck
+
+            } else {
+                $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers
+            }
             $response.records
         } Catch {
             Write-Verbose -Message $_

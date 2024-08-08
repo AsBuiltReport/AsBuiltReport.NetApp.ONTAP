@@ -369,158 +369,183 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                             Get-AbrOntapVserverVolumesQuota -Vserver $SVM
                                         }
                                     }
-                                    Section -Style Heading4 "Protocol Information" {
-                                        Paragraph "The following section provides a summary of the Vserver protocol information on $($SVM)."
-                                        BlankLine
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                                 NFS Section                                                 #
-                                        #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcNfsService -VserverContext $SVM -Controller $Array) {
-                                            Section -Style Heading5 "NFS Services" {
-                                                Paragraph "The following section provides the NFS Service Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverNFSSummary -Vserver $SVM
-                                                if ($InfoLevel.Vserver -ge 2) {
-                                                    Section -ExcludeFromTOC -Style Heading6 "NFS Options" {
-                                                        Get-AbrOntapVserverNFSOption -Vserver $SVM
-                                                    }
+                                }
+                                Section -Style Heading4 "Protocol Information" {
+                                    Paragraph "The following section provides a summary of the Vserver protocol information on $($SVM)."
+                                    BlankLine
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                 NFS Section                                                 #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if (Get-NcNfsService -VserverContext $SVM -Controller $Array) {
+                                        Section -Style Heading5 "NFS Services" {
+                                            Paragraph "The following section provides the NFS Service Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverNFSSummary -Vserver $SVM
+                                            if ($InfoLevel.Vserver -ge 2) {
+                                                Section -ExcludeFromTOC -Style Heading6 "NFS Options" {
+                                                    Get-AbrOntapVserverNFSOption -Vserver $SVM
                                                 }
-                                                if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport) {
-                                                    Section -ExcludeFromTOC -Style Heading6 "NFS Volume Export" {
-                                                        Get-AbrOntapVserverNFSExport -Vserver $SVM
+                                            }
+                                            if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' } | Get-NcNfsExport) {
+                                                Section -ExcludeFromTOC -Style Heading6 "NFS Volume Export" {
+                                                    Get-AbrOntapVserverNFSExport -Vserver $SVM
+                                                }
+                                            }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                 CIFS Section                                                #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array -ErrorAction SilentlyContinue) {
+                                        Section -Style Heading5 "CIFS Services Information" {
+                                            Paragraph "The following section provides the CIFS Service Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverCIFSSummary -Vserver $SVM
+                                            if ($InfoLevel.Vserver -ge 2) {
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Service Configuration' {
+                                                    Get-AbrOntapVserverCIFSSecurity -Vserver $SVM
+                                                }
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Domain Controller' {
+                                                    Get-AbrOntapVserverCIFSDC -Vserver $SVM
+                                                }
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group' {
+                                                Get-AbrOntapVserverCIFSLocalGroup -Vserver $SVM
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group Members' {
+                                                Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
+                                            }
+                                            if ($InfoLevel.Vserver -ge 2) {
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Options' {
+                                                    Get-AbrOntapVserverCIFSOption -Vserver $SVM
+                                                }
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Share' {
+                                                Get-AbrOntapVserverCIFSShare -Vserver $SVM
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Share Configuration' {
+                                                Get-AbrOntapVserverCIFSShareProp -Vserver $SVM
+                                            }
+                                            if ($InfoLevel.Vserver -ge 2) {
+                                                if (Get-NcCifsSession -VserverContext $SVM -Controller $Array) {
+                                                    Section -ExcludeFromTOC -Style Heading6 'CIFS Sessions' {
+                                                        Get-AbrOntapVserverCIFSSession -Vserver $SVM
                                                     }
                                                 }
                                             }
                                         }
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                                 CIFS Section                                                #
-                                        #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcVserver -VserverContext $SVM -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'cifs' -and $_.State -eq 'running' } | Get-NcCifsServerStatus -Controller $Array -ErrorAction SilentlyContinue) {
-                                            Section -Style Heading5 "CIFS Services Information" {
-                                                Paragraph "The following section provides the CIFS Service Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverCIFSSummary -Vserver $SVM
-                                                if ($InfoLevel.Vserver -ge 2) {
-                                                    Section -ExcludeFromTOC -Style Heading6 'CIFS Service Configuration' {
-                                                        Get-AbrOntapVserverCIFSSecurity -Vserver $SVM
-                                                    }
-                                                    Section -ExcludeFromTOC -Style Heading6 'CIFS Domain Controller' {
-                                                        Get-AbrOntapVserverCIFSDC -Vserver $SVM
-                                                    }
-                                                }
-                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group' {
-                                                    Get-AbrOntapVserverCIFSLocalGroup -Vserver $SVM
-                                                }
-                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group Members' {
-                                                    Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
-                                                }
-                                                if ($InfoLevel.Vserver -ge 2) {
-                                                    Section -ExcludeFromTOC -Style Heading6 'CIFS Options' {
-                                                        Get-AbrOntapVserverCIFSOption -Vserver $SVM
-                                                    }
-                                                }
-                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Share' {
-                                                    Get-AbrOntapVserverCIFSShare -Vserver $SVM
-                                                }
-                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Share Configuration' {
-                                                    Get-AbrOntapVserverCIFSShareProp -Vserver $SVM
-                                                }
-                                                if ($InfoLevel.Vserver -ge 2) {
-                                                    if (Get-NcCifsSession -VserverContext $SVM -Controller $Array) {
-                                                        Section -ExcludeFromTOC -Style Heading6 'CIFS Sessions' {
-                                                            Get-AbrOntapVserverCIFSSession -Vserver $SVM
-                                                        }
-                                                    }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                 NVME Section                                                 #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if ( Get-NcNvme -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
+                                        Section -Style Heading5 'Nvme Services Information' {
+                                            Paragraph "The following section provides the Nvme Service Information on $($SVM)."
+                                            BlankLine
+                                            # Get-AbrOntapVserverNvmeSummary -Vserver $SVM
+                                            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'fibre_channel' }) {
+                                                Section -ExcludeFromTOC -Style Heading6 'Nvme FC Physical Adapter' {
+                                                    Get-AbrOntapVserverNvmeFcAdapter -Vserver $SVM
                                                 }
                                             }
-                                        }
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                                 ISCSI Section                                               #
-                                        #---------------------------------------------------------------------------------------------#
-                                        if ( Get-NcIscsiService  -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
-                                            Section -Style Heading5 "ISCSI Services" {
-                                                Paragraph "The following section provides the ISCSI Service Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverIscsiSummary -Vserver $SVM
-                                                Section -ExcludeFromTOC -Style Heading6 "ISCSI Interfaces" {
-                                                    Get-AbrOntapVserverIscsiInterface -Vserver $SVM
+                                            HomePort            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' }) {
+                                                Section -ExcludeFromTOC -Style Heading6 'Nvme TCP Physical Adapter' {
+                                                    Get-AbrOntapVserverNvmeTcpAdapter -Vserver $SVM
                                                 }
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'NVME Interfaces' {
+                                                Get-AbrOntapVserverNvmeInterface -Vserver $SVM
+                                            }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                 ISCSI Section                                               #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if ( Get-NcIscsiService  -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
+                                        Section -Style Heading5 "ISCSI Services" {
+                                            Paragraph "The following section provides the ISCSI Service Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverIscsiSummary -Vserver $SVM
+                                            Section -ExcludeFromTOC -Style Heading6 "ISCSI Interfaces" {
+                                                Get-AbrOntapVserverIscsiInterface -Vserver $SVM
+                                            }
 
-                                                $ISCSIClientInitiators = Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
-                                                if ($ISCSIClientInitiators) {
-                                                    Section -ExcludeFromTOC -Style Heading6 "ISCSI Client Initiators" {
-                                                        $ISCSIClientInitiators
+                                            $ISCSIClientInitiators = Get-AbrOntapVserverIscsiInitiator -Vserver $SVM
+                                            if ($ISCSIClientInitiators) {
+                                                Section -ExcludeFromTOC -Style Heading6 "ISCSI Client Initiators" {
+                                                    $ISCSIClientInitiators
+                                                }
+                                            }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                 FCP Section                                                 #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if ( Get-NcFcpService -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
+                                        Section -Style Heading5 'FCP Services Information' {
+                                            Paragraph "The following section provides the FCP Service Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverFcpSummary -Vserver $SVM
+                                            Section -ExcludeFromTOC -Style Heading6 'FCP Physical Adapter' {
+                                                Get-AbrOntapVserverFcpAdapter
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'FCP Interfaces' {
+                                                Get-AbrOntapVserverFcpInterface -Vserver $SVM
+                                            }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                Lun Storage Section                                          #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if (Get-NcLun -Controller $Array | Where-Object { $_.Vserver -eq $SVM }) {
+                                        Section -Style Heading5 'Lun Storage' {
+                                            Paragraph "The following section provides the Lun Storage Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverLunStorage -Vserver $SVM
+                                            if (Get-NcIgroup -Vserver $SVM -Controller $Array) {
+                                                Section -ExcludeFromTOC -Style Heading6 'Igroup Mapping' {
+                                                    Get-AbrOntapVserverLunIgroup -Vserver $SVM
+                                                }
+                                                $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                                if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
+                                                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
+                                                        Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
+                                                        BlankLine
+                                                        $NonMappedLun
                                                     }
                                                 }
                                             }
                                         }
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                                 FCP Section                                                 #
-                                        #---------------------------------------------------------------------------------------------#
-                                        if ( Get-NcFcpService -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
-                                            Section -Style Heading5 'FCP Services Information' {
-                                                Paragraph "The following section provides the FCP Service Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverFcpSummary -Vserver $SVM
-                                                Section -ExcludeFromTOC -Style Heading6 'FCP Physical Adapter' {
-                                                    Get-AbrOntapVserverFcpAdapter
-                                                }
-                                                Section -ExcludeFromTOC -Style Heading6 'FCP Interfaces' {
-                                                    Get-AbrOntapVserverFcpInterface -Vserver $SVM
-                                                }
-                                            }
-                                        }
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                                Lun Storage Section                                          #
-                                        #---------------------------------------------------------------------------------------------#
-                                        if (Get-NcLun -Controller $Array | Where-Object { $_.Vserver -eq $SVM }) {
-                                            Section -Style Heading5 'Lun Storage' {
-                                                Paragraph "The following section provides the Lun Storage Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverLunStorage -Vserver $SVM
-                                                if (Get-NcIgroup -Vserver $SVM -Controller $Array) {
-                                                    Section -ExcludeFromTOC -Style Heading6 'Igroup Mapping' {
-                                                        Get-AbrOntapVserverLunIgroup -Vserver $SVM
-                                                    }
-                                                    $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
-                                                    if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
-                                                        Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
-                                                            Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
-                                                            BlankLine
-                                                            $NonMappedLun
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                              Consistency Groups Section                                     #
-                                        #---------------------------------------------------------------------------------------------#
-                                        $CGs = Get-NetAppOntapAPI -uri "/api/application/consistency-groups?svm=$SVM&fields=**&return_records=true&return_timeout=15"
-                                        if ($CGs) {
-                                            Section -Style Heading5 'Consistency Groups' {
-                                                Paragraph "The following section provides Consistency Group Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverCGSummary -Vserver $SVM
-                                                foreach ($CG in $CGs) {
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                              Consistency Groups Section                                     #
+                                    #---------------------------------------------------------------------------------------------#
+                                    $CGs = Get-NetAppOntapAPI -uri "/api/application/consistency-groups?svm=$SVM&fields=**&return_records=true&return_timeout=15"
+                                    if ($CGs) {
+                                        Section -Style Heading5 'Consistency Groups' {
+                                            Paragraph "The following section provides Consistency Group Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverCGSummary -Vserver $SVM
+                                            foreach ($CG in $CGs) {
+                                                if ($CG.luns) {
                                                     Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Luns" {
                                                         Get-AbrOntapVserverCGLun -CGObj $CG
                                                     }
                                                 }
                                             }
                                         }
-                                        #---------------------------------------------------------------------------------------------#
-                                        #                                 S3 Section                                                  #
-                                        #---------------------------------------------------------------------------------------------#
-                                        $S3Data = Get-NetAppOntapAPI -uri "/api/protocols/s3/services?svm=$SVM&fields=*&return_records=true&return_timeout=15"
-                                        if ($S3Data) {
-                                            Section -Style Heading5 'S3 Services Configuration Information' {
-                                                Paragraph "The following section provides the S3 Service Information on $($SVM)."
-                                                BlankLine
-                                                Get-AbrOntapVserverS3Summary -Vserver $SVM
-                                                Section -ExcludeFromTOC -Style Heading6 'S3 Buckets' {
-                                                    Get-AbrOntapVserverS3Bucket -Vserver $SVM
-                                                }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                                 S3 Section                                                  #
+                                    #---------------------------------------------------------------------------------------------#
+                                    $S3Data = Get-NetAppOntapAPI -uri "/api/protocols/s3/services?svm=$SVM&fields=*&return_records=true&return_timeout=15"
+                                    if ($S3Data) {
+                                        Section -Style Heading5 'S3 Services Configuration Information' {
+                                            Paragraph "The following section provides the S3 Service Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverS3Summary -Vserver $SVM
+                                            Section -ExcludeFromTOC -Style Heading6 'S3 Buckets' {
+                                                Get-AbrOntapVserverS3Bucket -Vserver $SVM
                                             }
                                         }
                                     }
