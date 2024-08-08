@@ -10,7 +10,8 @@
     },
     "Options": {
         "Exclude": {
-            "Vserver": []
+            "Vserver": [],
+            "MetroCluster" : false
         }
     },
     "InfoLevel": {
