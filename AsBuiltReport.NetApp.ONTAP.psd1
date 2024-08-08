@@ -58,7 +58,7 @@
         },
         @{
             ModuleName = 'NetApp.ONTAP';
-            ModuleVersion = '9.10.1.2111'
+            ModuleVersion = '9.15.1.2407'
         }
     )
 
