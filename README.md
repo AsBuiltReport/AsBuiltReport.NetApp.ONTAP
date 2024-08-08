@@ -57,9 +57,9 @@ The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 This report is compatible with the following PowerShell versions;
 
-| PowerShell 5.1 | PowerShell 7 | 
-|:----------------------:|:---------------:|
-|   :white_check_mark:   |   :white_check_mark:|
+|   PowerShell 5.1   |    PowerShell 7    |
+| :----------------: | :----------------: |
+| :white_check_mark: | :white_check_mark: |
 
 ## :wrench: System Requirements
 
@@ -68,10 +68,10 @@ Each of the following modules will be automatically installed by following the [
 These modules may also be manually installed.
 
 | Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
-|--------------------|:------------------------:|:---------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
-| PScribo            |          0.10.0           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
+| ------------------ | :----------------------: | :-------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+| PScribo            |          0.10.0          |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
 | AsBuiltReport.Core |          1.4.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP |          9.15.1.2407           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
+| Netapp.ONTAP       |       9.15.1.2407        |    [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)    |                                                                             |
 
 ## :package: Module Installation
 
@@ -124,22 +124,22 @@ The following provides information of how to configure each schema within the re
 
 The **Report** schema provides configuration of the NetApp ONTAP report information.
 
-| Sub-Schema          | Setting      | Default                        | Description                                                  |
-|---------------------|--------------|--------------------------------|--------------------------------------------------------------|
-| Name                | User defined | NetApp ONTAP As Built Report   | The name of the As Built Report                              |
-| Version             | User defined | 1.0                            | The report version                                           |
-| Status              | User defined | Released                       | The report release status                                    |
-| ShowCoverPageImage  | true / false | true                           | Toggle to enable/disable the display of the cover page image |
-| ShowTableOfContents | true / false | true                           | Toggle to enable/disable table of contents                   |
-| ShowHeaderFooter    | true / false | true                           | Toggle to enable/disable document headers & footers          |
-| ShowTableCaptions   | true / false | true                           | Toggle to enable/disable table captions/numbering            |
+| Sub-Schema          | Setting      | Default                      | Description                                                  |
+| ------------------- | ------------ | ---------------------------- | ------------------------------------------------------------ |
+| Name                | User defined | NetApp ONTAP As Built Report | The name of the As Built Report                              |
+| Version             | User defined | 1.0                          | The report version                                           |
+| Status              | User defined | Released                     | The report release status                                    |
+| ShowCoverPageImage  | true / false | true                         | Toggle to enable/disable the display of the cover page image |
+| ShowTableOfContents | true / false | true                         | Toggle to enable/disable table of contents                   |
+| ShowHeaderFooter    | true / false | true                         | Toggle to enable/disable document headers & footers          |
+| ShowTableCaptions   | true / false | true                         | Toggle to enable/disable table captions/numbering            |
 
 ### Options
 
 The **Options** schema allows certain options within the report to be toggled on or off.
-| Sub-Schema      | Setting      | Default | Description |
-|-----------------|--------------|---------|-----------------------------------------------------------------|
-| Exclude: Vserver | Array List  | Empty    | Allow to filter on Vserver Name
+| Sub-Schema       | Setting    | Default | Description                     |
+| ---------------- | ---------- | ------- | ------------------------------- |
+| Exclude: Vserver | Array List | Empty   | Allow to filter on Vserver Name |
 
 ### InfoLevel
 
@@ -147,26 +147,26 @@ The **InfoLevel** schema allows configuration of each section of the report at a
 
 There are 3 levels (0-2) of detail granularity for each section as follows;
 
-| Setting | InfoLevel         | Description                                                                                                                                |
-|:-------:|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-|    0    | Disabled          | Does not collect or display any information                                                                                                |
-|    1    | Enabled / Summary | Provides summarised information for a collection of objects                                                                                |
-|    2    | Adv Summary       | Provides condensed, detailed information for a collection of objects                                                                       |
+| Setting | InfoLevel         | Description                                                          |
+| :-----: | ----------------- | -------------------------------------------------------------------- |
+|    0    | Disabled          | Does not collect or display any information                          |
+|    1    | Enabled / Summary | Provides summarised information for a collection of objects          |
+|    2    | Adv Summary       | Provides condensed, detailed information for a collection of objects |
 
 The table below outlines the default and maximum **InfoLevel** settings for each section.
 
-| Sub-Schema   | Default Setting | Maximum Setting |
-|--------------|:---------------:|:---------------:|
-| Cluster       |        1        |        2        |
-| Node       |        1        |        2        |
-| Storage          |        1        |        2        |
-| Network         |        1        |        2        |
-| License           |        1        |        2        |
-| Vserver           |        1        |        2        |
-| Efficiency           |        1        |        2        |
-| Security           |        1        |        2        |
-| System           |        1        |        2        |
-| Replication           |        1        |        2        |
+| Sub-Schema  | Default Setting | Maximum Setting |
+| ----------- | :-------------: | :-------------: |
+| Cluster     |        1        |        2        |
+| Node        |        1        |        2        |
+| Storage     |        1        |        2        |
+| Network     |        1        |        2        |
+| License     |        1        |        2        |
+| Vserver     |        1        |        2        |
+| Efficiency  |        1        |        2        |
+| Security    |        1        |        2        |
+| System      |        1        |        2        |
+| Replication |        1        |        2        |
 
 ### Healthcheck
 
