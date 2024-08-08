@@ -55,6 +55,7 @@
         "Vserver": {
             "Status": true,
             "Iscsi": true,
+            "Nvme": true,
             "FCP": true,
             "CG": true,
             "NFS": true,

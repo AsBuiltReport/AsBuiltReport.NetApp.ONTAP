@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverFcpAdapter {
+function Get-AbrOntapVserverNvmeFcAdapter {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Vserver FCP adapter information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver Nvme FC adapter information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -14,30 +14,35 @@ function Get-AbrOntapVserverFcpAdapter {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP adapter information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Nvme FC adapter information."
     }
 
     process {
         try {
-            $VserverData = Get-NcFcpAdapter -Controller $Array | Where-Object { $_.PhysicalProtocol -ne 'ethernet' }
+            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object {$_.PhysicalProtocol -eq 'fibre_channel'} | Sort-Object -Property HomeNode
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'Node Name' = $Item.Node
-                            'Adapter' = $Item.Adapter
+                            'Node Name' = $Item.HomeNode
+                            'Adapter' = $Item.HomePort
                             'Protocol' = $Item.PhysicalProtocol
-                            'Speed' = $Item.Speed
-                            'Status' = Switch ($Item.State) {
-                                'online' { 'Up' }
-                                'offline' { 'Down' }
-                                default { $Item.State }
+                            'WWNN' = $Item.FcWwnn
+                            'WWPN' = $Item.FcWwpn
+                            'Status' = Switch ($Item.StatusAdmin) {
+                                'up' { 'Up' }
+                                'down' { 'Down' }
+                                default { $Item.StatusAdmin }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
@@ -50,9 +55,10 @@ function Get-AbrOntapVserverFcpAdapter {
                 }
 
                 $TableParams = @{
-                    Name = "FCP Physical Adapter - $($ClusterInfo.ClusterName)"
+                    Name = "Nvme FC Physical Adapter - $($Vserver)"
                     List = $false
-                    ColumnWidths = 32, 17, 17, 17, 17
+                    ColumnWidths = 25, 12, 15, 18, 18, 12
+
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

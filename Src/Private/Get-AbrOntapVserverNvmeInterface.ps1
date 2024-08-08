@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverFcpAdapter {
+function Get-AbrOntapVserverNvmeInterface {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Vserver FCP adapter information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver NVME interface information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -14,30 +14,33 @@ function Get-AbrOntapVserverFcpAdapter {
     .LINK
 
     #>
-    [CmdletBinding()]
     param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP adapter information."
+        Write-PScriboMessage "Collecting ONTAP Vserver NVME interface information."
     }
 
     process {
         try {
-            $VserverData = Get-NcFcpAdapter -Controller $Array | Where-Object { $_.PhysicalProtocol -ne 'ethernet' }
+            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Sort-Object -Property TransportProtocols
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'Node Name' = $Item.Node
-                            'Adapter' = $Item.Adapter
-                            'Protocol' = $Item.PhysicalProtocol
-                            'Speed' = $Item.Speed
-                            'Status' = Switch ($Item.State) {
-                                'online' { 'Up' }
-                                'offline' { 'Down' }
-                                default { $Item.State }
+                            'Interface Name' = $Item.Lif
+                            'Transport Address' = $Item.TransportAddress
+                            'Transport Protocols' = $Item.TransportProtocols
+                            'Status' = Switch ($Item.StatusAdmin) {
+                                'up' { 'Up' }
+                                'down' { 'Down' }
+                                default { $Item.StatusAdmin }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
@@ -45,14 +48,14 @@ function Get-AbrOntapVserverFcpAdapter {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                if ($Healthcheck.Vserver.FCP) {
+                if ($Healthcheck.Vserver.Nvme) {
                     $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
                 }
 
                 $TableParams = @{
-                    Name = "FCP Physical Adapter - $($ClusterInfo.ClusterName)"
+                    Name = "NVME Interface - $($Vserver)"
                     List = $false
-                    ColumnWidths = 32, 17, 17, 17, 17
+                    ColumnWidths = 40, 36, 12, 12
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

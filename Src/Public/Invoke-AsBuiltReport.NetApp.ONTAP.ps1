@@ -436,6 +436,29 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                         }
                                     }
                                     #---------------------------------------------------------------------------------------------#
+                                    #                                 NVME Section                                                 #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if ( Get-NcNvme -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
+                                        Section -Style Heading5 'Nvme Services Information' {
+                                            Paragraph "The following section provides the Nvme Service Information on $($SVM)."
+                                            BlankLine
+                                            # Get-AbrOntapVserverNvmeSummary -Vserver $SVM
+                                            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'fibre_channel' }) {
+                                                Section -ExcludeFromTOC -Style Heading6 'Nvme FC Physical Adapter' {
+                                                    Get-AbrOntapVserverNvmeFcAdapter -Vserver $SVM
+                                                }
+                                            }
+                                            HomePort            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' }) {
+                                                Section -ExcludeFromTOC -Style Heading6 'Nvme TCP Physical Adapter' {
+                                                    Get-AbrOntapVserverNvmeTcpAdapter -Vserver $SVM
+                                                }
+                                            }
+                                            Section -ExcludeFromTOC -Style Heading6 'NVME Interfaces' {
+                                                Get-AbrOntapVserverNvmeInterface -Vserver $SVM
+                                            }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
                                     #                                 ISCSI Section                                               #
                                     #---------------------------------------------------------------------------------------------#
                                     if ( Get-NcIscsiService  -Controller $Array | Where-Object { $_.Vserver -eq $SVM } ) {
