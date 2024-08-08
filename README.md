@@ -140,6 +140,7 @@ The **Options** schema allows certain options within the report to be toggled on
 | Sub-Schema      | Setting      | Default | Description |
 |-----------------|--------------|---------|-----------------------------------------------------------------|
 | Exclude: Vserver | Array List  | Empty    | Allow to filter on Vserver Name
+| Exclude: MetroCluster | true / false   | false    | Allow to filter automatically all Vserver with -mc
 
 ### InfoLevel
 
