@@ -11,7 +11,7 @@
     "Options": {
         "Exclude": {
             "Vserver": [],
-            "MetroCluster" : false
+            "MetroCluster": false
         }
     },
     "InfoLevel": {

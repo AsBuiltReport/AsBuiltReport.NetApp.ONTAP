@@ -71,7 +71,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
 
         #If metrocluster option remove all -mc vserver
         if ($Options.Exclude.MetroCluster) {
-            $Options.Exclude.Vserver = $Options.Exclude.Vserver + (get-ncvserver |where-object {$_ -like '*-mc'}).Vserver
+            $Options.Exclude.Vserver = $Options.Exclude.Vserver + (Get-NcVserver | Where-Object { $_ -like '*-mc' }).Vserver
             $exclude_vserver = $Options.Exclude.Vserver
             Write-PScriboMessage "exclude vserver = $exclude_vserver"
         }
