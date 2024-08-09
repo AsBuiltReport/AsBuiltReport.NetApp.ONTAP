@@ -448,7 +448,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Get-AbrOntapVserverNvmeFcAdapter -Vserver $SVM
                                                 }
                                             }
-                                            HomePort            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' }) {
+                                            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' }) {
                                                 Section -ExcludeFromTOC -Style Heading6 'Nvme TCP Physical Adapter' {
                                                     Get-AbrOntapVserverNvmeTcpAdapter -Vserver $SVM
                                                 }
@@ -515,6 +515,29 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     }
                                                 }
                                             }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                         NameSpace & Subsystem Storage Section                               #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if (Get-NcNvmeNamespace -Controller $Array | Where-Object { $_.Vserver -eq $SVM }) {
+                                        Section -Style Heading5 'Namespace Storage' {
+                                            Paragraph "The following section provides the Namespace Storage Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverNamespaceStorage -Vserver $SVM
+                                            # if (Get-NcIgroup -Vserver $SVM -Controller $Array) {
+                                            #     Section -ExcludeFromTOC -Style Heading6 'Igroup Mapping' {
+                                            #         Get-AbrOntapVserverLunIgroup -Vserver $SVM
+                                            #     }
+                                            #     $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                            #     if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
+                                            #         Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
+                                            #             Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
+                                            #             BlankLine
+                                            #             $NonMappedLun
+                                            #         }
+                                            #     }
+                                            # }
                                         }
                                     }
                                     #---------------------------------------------------------------------------------------------#
