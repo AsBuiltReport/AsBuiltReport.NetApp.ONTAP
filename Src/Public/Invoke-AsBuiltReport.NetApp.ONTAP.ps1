@@ -448,7 +448,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Get-AbrOntapVserverNvmeFcAdapter -Vserver $SVM
                                                 }
                                             }
-                                            HomePort            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' }) {
+                                            if (Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' }) {
                                                 Section -ExcludeFromTOC -Style Heading6 'Nvme TCP Physical Adapter' {
                                                     Get-AbrOntapVserverNvmeTcpAdapter -Vserver $SVM
                                                 }
@@ -507,11 +507,34 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Get-AbrOntapVserverLunIgroup -Vserver $SVM
                                                 }
                                                 $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
-                                                if ($Healthcheck.Vserver.Status -and $NonMappedLunFCP) {
+                                                if ($Healthcheck.Vserver.Status -and $NonMappedLun) {
                                                     Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
                                                         Paragraph "The following section provides information of Non Mapped Lun on $($SVM)."
                                                         BlankLine
                                                         $NonMappedLun
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    #---------------------------------------------------------------------------------------------#
+                                    #                         NameSpace & Subsystem Storage Section                               #
+                                    #---------------------------------------------------------------------------------------------#
+                                    if (Get-NcNvmeNamespace -Controller $Array | Where-Object { $_.Vserver -eq $SVM }) {
+                                        Section -Style Heading5 'Namespace Storage' {
+                                            Paragraph "The following section provides the Namespace Storage Information on $($SVM)."
+                                            BlankLine
+                                            Get-AbrOntapVserverNamespaceStorage -Vserver $SVM
+                                            if (Get-NcNvmeSubsystem -Vserver $SVM -Controller $Array) {
+                                                Section -ExcludeFromTOC -Style Heading6 'Subsystem Mapping' {
+                                                    Get-AbrOntapVserverSubsystem -Vserver $SVM
+                                                }
+                                                $NonMappedNamespace = Get-AbrOntapVserverNonMappedNamespace -Vserver $SVM
+                                                if ($Healthcheck.Vserver.Status -and $NonMappedNamespace) {
+                                                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Namespace Information' {
+                                                        Paragraph "The following table provides information about Non Mapped Namespace on $($SVM)."
+                                                        BlankLine
+                                                        $NonMappedNamespace
                                                     }
                                                 }
                                             }
@@ -530,6 +553,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 if ($CG.luns) {
                                                     Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Luns" {
                                                         Get-AbrOntapVserverCGLun -CGObj $CG
+                                                    }
+                                                }
+                                                if ($CG.namespaces) {
+                                                    Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Namespaces" {
+                                                        Get-AbrOntapVserverCGNamespace -CGObj $CG
                                                     }
                                                 }
                                             }
