@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial Vserver NVME support
+- Added option for MetroCluster volume exclusions (*.mc) @MicKBfr
 
 ### Changed
 
