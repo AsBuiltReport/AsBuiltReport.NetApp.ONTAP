@@ -79,6 +79,7 @@ if ($ReportConfig.Report.ShowCoverPageImage) {
         BlankLine -Count 1
     } Catch {
         Write-PScriboMessage -IsWarning "Unable to display cover page image. Please set 'ShowCoverPageImage' to 'false' in the report JSON configuration file to avoid this error."
+        Write-PScriboMessage -IsWarning $_.Exception.Message
     }
 }
 

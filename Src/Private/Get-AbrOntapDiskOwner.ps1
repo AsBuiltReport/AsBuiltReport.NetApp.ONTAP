@@ -5,7 +5,7 @@ function Get-AbrOntapDiskOwner {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapDiskOwner {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Node
+        [string]
+        $Node
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP disk owned per node information."
+        Write-PScriboMessage "Collecting ONTAP disk owned per node information."
     }
 
     process {
@@ -42,9 +42,8 @@ function Get-AbrOntapDiskOwner {
                                 'Type' = $Disk.Type
                             }
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 $TableParams = @{
@@ -57,9 +56,8 @@ function Get-AbrOntapDiskOwner {
                 }
                 $DiskSummary | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

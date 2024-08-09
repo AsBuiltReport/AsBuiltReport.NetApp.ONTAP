@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAGGR {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.5
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapStorageAGGR {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP storage aggregate information."
+        Write-PScriboMessage "Collecting ONTAP storage aggregate information."
     }
 
     process {
@@ -28,36 +28,35 @@ function Get-AbrOntapStorageAGGR {
             if ($AggrSpace) {
                 $AggrSpaceSummary = foreach ($Aggr in $AggrSpace) {
                     try {
-                        $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object{ $_.AggrRaidAttributes.HasLocalRoot }
+                        $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object { $_.AggrRaidAttributes.HasLocalRoot }
                         [PSCustomObject] @{
                             'Name' = $Aggr.Name
                             'Capacity' = Switch ([string]::IsNullOrEmpty($Aggr.Totalsize)) {
-                                $true {'Unknown'}
-                                $false {$Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'Unknown'}
+                                $true { 'Unknown' }
+                                $false { $Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { 'Unknown' }
                             }
                             'Available' = Switch ([string]::IsNullOrEmpty($Aggr.Available)) {
-                                $true {'Unknown'}
-                                $false {$Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                default {'Unknown'}
+                                $true { 'Unknown' }
+                                $false { $Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                default { 'Unknown' }
                             }
                             'Used' = Switch ([string]::IsNullOrEmpty($Aggr.Used)) {
-                                $true {'Unknown'}
-                                $false {$Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue}
-                                default {'Unknown'}
+                                $true { 'Unknown' }
+                                $false { $Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue }
+                                default { 'Unknown' }
                             }
                             'Disk Count' = $Aggr.Disks
                             'Root' = ConvertTo-TextYN $RootAggr
                             'Raid Type' = Switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
-                                $true {'Unknown'}
-                                $false {($Aggr.RaidType.Split(",")[0]).ToUpper()}
-                                default {'Unknown'}
+                                $true { 'Unknown' }
+                                $false { ($Aggr.RaidType.Split(",")[0]).ToUpper() }
+                                default { 'Unknown' }
                             }
                             'State' = $Aggr.State
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.Aggr) {
@@ -84,27 +83,26 @@ function Get-AbrOntapStorageAGGR {
                                 [PSCustomObject] @{
                                     'Name' = $Spare.Disk
                                     'Capacity' = Switch ([string]::IsNullOrEmpty($Spare.TotalSize)) {
-                                        $true {'-'}
-                                        $false {$Spare.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                        default {'-'}
+                                        $true { '-' }
+                                        $false { $Spare.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                        default { '-' }
                                     }
                                     'Root Usable' = Switch ([string]::IsNullOrEmpty($Spare.LocalUsableRootSize)) {
-                                        $true {'-'}
-                                        $false {$Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                        default {'-'}
+                                        $true { '-' }
+                                        $false { $Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                        default { '-' }
                                     }
                                     'Data Usable' = Switch ([string]::IsNullOrEmpty($Spare.LocalUsableDataSize)) {
-                                        $true {'-'}
-                                        $false {$Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue}
-                                        default {'-'}
+                                        $true { '-' }
+                                        $false { $Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
+                                        default { '-' }
                                     }
                                     'Shared Disk' = ConvertTo-TextYN $Spare.IsDiskShared
                                     'Disk Zeroed' = ConvertTo-TextYN $Spare.IsDiskZeroed
                                     'Owner' = $Spare.OriginalOwner
                                 }
-                            }
-                            catch {
-                                Write-PscriboMessage -IsWarning $_.Exception.Message
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
                         if ($Healthcheck.Storage.Aggr) {
@@ -121,21 +119,20 @@ function Get-AbrOntapStorageAGGR {
                         $AggrSpareSummary | Table @TableParams
                     }
                 }
-            }
-            catch {
-                Write-PscriboMessage -IsWarning $_.Exception.Message
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
                 if ($InfoLevel.Storage -ge 2) {
                     Section -Style Heading4 'Aggregate Options' {
-                        $Aggregates = Get-NcAggr -Controller $Array | Where-Object {!$_.AggrRaidAttributes.HasLocalRoot}
+                        $Aggregates = Get-NcAggr -Controller $Array | Where-Object { !$_.AggrRaidAttributes.HasLocalRoot }
                         foreach ($Aggregate in $Aggregates) {
                             try {
                                 Section -Style Heading5 "$($Aggregate.Name) Options" {
                                     $OutObj = @()
                                     $Options = Get-NcAggrOption -Controller $Array -Name $Aggregate.Name
                                     $Option = @{}
-                                    $Options | ForEach-Object {$Option.add($_.Name, $_.Value)}
+                                    $Options | ForEach-Object { $Option.add($_.Name, $_.Value) }
                                     $inObj = [ordered] @{
                                         'azcs_read_optimization' = $TextInfo.ToTitleCase($Option.azcs_read_optimization)
                                         'dir_holes' = ConvertTo-TextYN $Option.dir_holes
@@ -178,20 +175,17 @@ function Get-AbrOntapStorageAGGR {
                                     }
                                     $OutObj | Table @TableParams
                                 }
-                            }
-                            catch {
-                                Write-PscriboMessage -IsWarning $_.Exception.Message
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
                     }
                 }
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
             }
-            catch {
-                Write-PscriboMessage -IsWarning $_.Exception.Message
-            }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

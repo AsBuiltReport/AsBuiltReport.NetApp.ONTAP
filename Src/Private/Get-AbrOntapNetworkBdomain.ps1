@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkBdomain {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkBdomain {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Broadcast information."
+        Write-PScriboMessage "Collecting ONTAP Broadcast information."
     }
 
     process {
@@ -48,9 +48,8 @@ function Get-AbrOntapNetworkBdomain {
                 }
                 $BDomainObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

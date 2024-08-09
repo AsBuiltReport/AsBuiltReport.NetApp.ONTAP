@@ -5,7 +5,7 @@ function Get-AbrOntapNodesHW {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNodesHW {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Node Hardware information."
+        Write-PScriboMessage "Collecting ONTAP Node Hardware information."
     }
 
     process {
@@ -30,7 +30,7 @@ function Get-AbrOntapNodesHW {
                 foreach ($NodeHWs in $NodeHW) {
                     try {
                         $NodeInfo = Get-NcNode -Node $NodeHWs.SystemName -Controller $Array
-                        $Inobj =  [ordered] @{
+                        $Inobj = [ordered] @{
                             'Name' = $NodeHWs.SystemName
                             'System Type' = $NodeHWs.SystemMachineType
                             'CPU Count' = $NodeHWs.NumberOfProcessors
@@ -40,18 +40,18 @@ function Get-AbrOntapNodesHW {
                             'All Flash Optimized' = ConvertTo-TextYN $NodeInfo.IsAllFlashOptimized
                             'Epsilon' = ConvertTo-TextYN $NodeInfo.IsEpsilonNode
                             'System Healthy' = Switch ($NodeInfo.IsNodeHealthy) {
-                                "True" {"Healthy"}
-                                "False" {"UnHealthy"}
-                                default {$NodeInfo.IsNodeHealthy}
+                                "True" { "Healthy" }
+                                "False" { "UnHealthy" }
+                                default { $NodeInfo.IsNodeHealthy }
                             }
                             'Failed Fan Count' = $NodeInfo.EnvFailedFanCount
                             'Failed Fan Error' = $NodeInfo.EnvFailedFanMessage
                             'Failed PowerSupply Count' = $NodeInfo.EnvFailedPowerSupplyCount
                             'Failed PowerSupply Error' = $NodeInfo.EnvFailedPowerSupplyMessage
                             'Over Temperature' = Switch ($NodeInfo.EnvOverTemperature) {
-                                "True" {"High Temperature"}
-                                "False" {"Normal Temperature"}
-                                default {$NodeInfo.EnvOverTemperature}
+                                "True" { "High Temperature" }
+                                "False" { "Normal Temperature" }
+                                default { $NodeInfo.EnvOverTemperature }
                             }
                             'NVRAM Battery Healthy' = $NodeInfo.NvramBatteryStatus
                         }
@@ -74,15 +74,13 @@ function Get-AbrOntapNodesHW {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $Outobj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes qos group adaptive information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos group adaptive information."
     }
 
     process {
@@ -29,7 +29,6 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
             if ($QoSFilter) {
                 foreach ($Item in $QoSFilter) {
                     try {
-                        $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Policy Name' = $Item.PolicyGroup
                             'Peak Iops' = $Item.PeakIops
@@ -38,9 +37,8 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -54,9 +52,8 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

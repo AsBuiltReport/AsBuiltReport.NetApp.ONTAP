@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,17 +19,16 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver volumes qos group fixed information."
+        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos group fixed information."
     }
 
     process {
         try {
-            $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object {$_.PolicyGroupClass -eq "user_defined"}
+            $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object { $_.PolicyGroupClass -eq "user_defined" }
             $OutObj = @()
             if ($QoSFilter) {
                 foreach ($Item in $QoSFilter) {
                     try {
-                        $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Policy Name' = $Item.PolicyGroup
                             'Max Throughput' = $Item.MaxThroughput
@@ -38,9 +37,8 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -54,9 +52,8 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

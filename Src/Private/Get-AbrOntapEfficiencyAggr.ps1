@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapEfficiencyAggr {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Aggregate Efficiency Savings information."
+        Write-PScriboMessage "Collecting ONTAP Aggregate Efficiency Savings information."
     }
 
     process {
         try {
-            $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+            $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -39,9 +39,8 @@ function Get-AbrOntapEfficiencyAggr {
 
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -56,15 +55,15 @@ function Get-AbrOntapEfficiencyAggr {
                 $OutObj | Table @TableParams
             }
             try {
-                $Data =  Get-NcAggr -Controller $Array | Where-Object {$_.AggrRaidAttributes.HasLocalRoot -ne 'True'}
+                $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
                 $Savingfilter = (Get-NcAggrEfficiency -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
                 if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
                     $OutObj = @()
                     foreach ($Item in $Data) {
                         try {
                             $Saving = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes
-                            $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array | Where-Object {$_.VolumeStateAttributes.IsVserverRoot -ne 'True'}
-                            $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True"}
+                            $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array | Where-Object { $_.VolumeStateAttributes.IsVserverRoot -ne 'True' }
+                            $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True" }
                             if ($Saving -ne 0 -and $VolFilter) {
                                 $inObj = [ordered] @{
                                     'Aggregate' = $Item.Name
@@ -72,14 +71,13 @@ function Get-AbrOntapEfficiencyAggr {
                                 }
                                 $OutObj += [pscustomobject]$inobj
                             }
-                        }
-                        catch {
-                            Write-PscriboMessage -IsWarning $_.Exception.Message
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
 
                     if ($Healthcheck.Storage.Efficiency) {
-                        $OutObj | Set-Style -Style Warning -Property 'Aggregate','Volumes without Deduplication'
+                        $OutObj | Set-Style -Style Warning -Property 'Aggregate', 'Volumes without Deduplication'
                     }
 
                     $TableParams = @{
@@ -93,18 +91,16 @@ function Get-AbrOntapEfficiencyAggr {
                 }
                 if ($OutObj) {
                     Section -Style Heading4 'HealthCheck - Volume with Disabled Deduplication' {
-                        Paragraph "The following section provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following table provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
                         BlankLine
                         $OutObj | Table @TableParams
                     }
                 }
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
             }
-            catch {
-                Write-PscriboMessage -IsWarning $_.Exception.Message
-            }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

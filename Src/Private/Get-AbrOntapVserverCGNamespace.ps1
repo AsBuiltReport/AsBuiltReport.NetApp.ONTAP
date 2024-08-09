@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverCGLun {
+function Get-AbrOntapVserverCGNamespace {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Vserver Consistency Groups Luns information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver Consistency Groups Namespace information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -22,15 +22,15 @@ function Get-AbrOntapVserverCGLun {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups lun information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups namespace information."
     }
 
     process {
         try {
-            $LunData = $CGObj.luns
-            $CGLunObj = @()
-            if ($LunData) {
-                foreach ($Item in $LunData) {
+            $NamespaceData = $CGObj.namespaces
+            $CGNamespaceObj = @()
+            if ($NamespaceData) {
+                foreach ($Item in $NamespaceData) {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name.Split('/')[3]
@@ -52,28 +52,28 @@ function Get-AbrOntapVserverCGLun {
 
 
                         }
-                        $CGLunObj += [pscustomobject]$inobj
+                        $CGNamespaceObj += [pscustomobject]$inobj
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 if ($Healthcheck.Vserver.CG) {
-                    $CGLunObj | Where-Object { $_.'Volume State' -ne 'online' } | Set-Style -Style Warning -Property 'Volume State'
-                    $CGLunObj | Where-Object { $_.'Mapped' -eq 'No' } | Set-Style -Style Warning -Property 'Mapped'
-                    $CGLunObj | Where-Object { $_.'Read Only' -eq 'Yes' } | Set-Style -Style Warning -Property 'Read Only'
-                    $CGLunObj | Where-Object { $_.'State' -eq 'offline' } | Set-Style -Style Warning -Property 'State'
+                    $CGNamespaceObj | Where-Object { $_.'Volume State' -ne 'online' } | Set-Style -Style Warning -Property 'Volume State'
+                    $CGNamespaceObj | Where-Object { $_.'Mapped' -eq 'No' } | Set-Style -Style Warning -Property 'Mapped'
+                    $CGNamespaceObj | Where-Object { $_.'Read Only' -eq 'Yes' } | Set-Style -Style Warning -Property 'Read Only'
+                    $CGNamespaceObj | Where-Object { $_.'State' -eq 'offline' } | Set-Style -Style Warning -Property 'State'
                 }
 
                 $TableParams = @{
-                    Name = "Consistency Group Luns - $($CGObj.Name)"
+                    Name = "Consistency Group Namespace - $($CGObj.Name)"
                     List = $false
                     ColumnWidths = 30, 10, 9, 10, 11, 10, 10, 10
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $CGLunObj | Sort-Object -Property Name | Table @TableParams
+                $CGNamespaceObj | Sort-Object -Property Name | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

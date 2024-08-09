@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverIscsiSummary {
+function Get-AbrOntapVserverNvmeFcAdapter {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Vserver ISCSI information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver Nvme FC adapter information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,27 +23,26 @@ function Get-AbrOntapVserverIscsiSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI information."
+        Write-PScriboMessage "Collecting ONTAP Vserver Nvme FC adapter information."
     }
 
     process {
         try {
-            $VserverData = Get-NcIscsiService -VserverContext $Vserver -Controller $Array
+            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object {$_.PhysicalProtocol -eq 'fibre_channel'} | Sort-Object -Property HomeNode
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'IQN Name' = $Item.NodeName
-                            'Alias Name' = $Item.AliasName
-                            'Tcp Window Size' = $Item.TcpWindowSize
-                            'Max Cmds Per Session' = $Item.MaxCmdsPerSession
-                            'Max Conn Per Session' = $Item.MaxConnPerSession
-                            'Login Timeout' = $Item.LoginTimeout
-                            'Status' = Switch ($Item.IsAvailable) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsAvailable }
+                            'Node Name' = $Item.HomeNode
+                            'Adapter' = $Item.HomePort
+                            'Protocol' = $Item.PhysicalProtocol
+                            'WWNN' = $Item.FcWwnn
+                            'WWPN' = $Item.FcWwpn
+                            'Status' = Switch ($Item.StatusAdmin) {
+                                'up' { 'Up' }
+                                'down' { 'Down' }
+                                default { $Item.StatusAdmin }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
@@ -51,14 +50,15 @@ function Get-AbrOntapVserverIscsiSummary {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                if ($Healthcheck.Vserver.Iscsi) {
+                if ($Healthcheck.Vserver.FCP) {
                     $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
                 }
 
                 $TableParams = @{
-                    Name = "ISCSI Service - $($Vserver)"
-                    List = $true
-                    ColumnWidths = 30, 70
+                    Name = "Nvme FC Physical Adapter - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 25, 12, 15, 18, 18, 12
+
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -5,7 +5,7 @@ function Get-AbrOntapCluster {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapCluster {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP cluster information."
+        Write-PScriboMessage "Collecting ONTAP cluster information."
     }
 
     process {
@@ -57,9 +57,8 @@ function Get-AbrOntapCluster {
                 }
                 $ClusterSummary | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

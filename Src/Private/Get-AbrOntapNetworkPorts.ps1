@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkPort {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,17 +18,17 @@ function Get-AbrOntapNetworkPort {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Node
+        [string]
+        $Node
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP physical interface information."
+        Write-PScriboMessage "Collecting ONTAP physical interface information."
     }
 
     process {
         try {
-            $PhysicalPorts = Get-NcNetPort -Node $Node -Controller $Array | Where-Object {$_.PortType -like 'physical'}
+            $PhysicalPorts = Get-NcNetPort -Node $Node -Controller $Array | Where-Object { $_.PortType -like 'physical' }
             if ($PhysicalPorts) {
                 $PhysicalNic = foreach ($Nics in $PhysicalPorts) {
                     try {
@@ -44,9 +44,8 @@ function Get-AbrOntapNetworkPort {
                                 default { $Nics.IsAdministrativeUp }
                             }
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Network.Port) {
@@ -63,9 +62,8 @@ function Get-AbrOntapNetworkPort {
                 }
                 $PhysicalNic | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

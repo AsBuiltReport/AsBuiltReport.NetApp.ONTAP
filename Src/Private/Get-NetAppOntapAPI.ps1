@@ -5,7 +5,7 @@ function Get-NetAppOntapAPI {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.5.0
+        Version:        0.6.7
         Author:         Tim Carman
         Editor:         Jonathan Colon
         Twitter:        @jcolonfzenpr
@@ -26,9 +26,9 @@ function Get-NetAppOntapAPI {
     )
 
     begin {
-    #region Workaround for SelfSigned Cert an force TLS 1.2
-    if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
-        $certCallback = @"
+        #region Workaround for SelfSigned Cert an force TLS 1.2
+        if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
+            $certCallback = @"
         using System;
         using System.Net;
         using System.Net.Security;
@@ -54,11 +54,11 @@ function Get-NetAppOntapAPI {
             }
         }
 "@
-        Add-Type $certCallback
-    }
-    [ServerCertificateValidationCallback]::Ignore()
-    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
-    #endregion Workaround for SelfSigned Cert an force TLS 1.2
+            Add-Type $certCallback
+        }
+        [ServerCertificateValidationCallback]::Ignore()
+        [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+        #endregion Workaround for SelfSigned Cert an force TLS 1.2
 
         $username = $Credential.UserName
         $password = $Credential.GetNetworkCredential().Password
@@ -67,15 +67,20 @@ function Get-NetAppOntapAPI {
         #$fields = 'fields=*&return_records=true&return_timeout=15'
         $api = "https://" + $($ClusterIP)
         $headers = @{
-            'Accept'        = 'application/json'
+            'Accept' = 'application/json'
             'Authorization' = "Basic $auth"
-            'Content-Type'  = 'application/json'
+            'Content-Type' = 'application/json'
         }
     }
 
     Process {
         Try {
-            $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers -SkipCertificateCheck
+            if ($PSVersionTable.PSEdition -eq 'Core') {
+                $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers -SkipCertificateCheck
+
+            } else {
+                $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers
+            }
             $response.records
         } Catch {
             Write-Verbose -Message $_

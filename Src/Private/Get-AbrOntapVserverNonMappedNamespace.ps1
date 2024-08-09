@@ -1,7 +1,7 @@
-function Get-AbrOntapSecurityUser {
+function Get-AbrOntapVserverNonMappedNamespace {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Security Local Users information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP NVMW Non Mapped amespace information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,36 +23,37 @@ function Get-AbrOntapSecurityUser {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Local Users information."
+        Write-PScriboMessage "Collecting ONTAP NVME Non Mapped Namespace information."
     }
 
     process {
         try {
-            $Data = Get-NcUser -Vserver $Vserver -Controller $Array
+            $NamespaceFilter = Get-NcNvmeNamespace -VserverContext $Vserver -Controller $Array | Where-Object { -Not $_.Subsystem }
             $OutObj = @()
-            if ($Data) {
-                foreach ($Item in $Data) {
+            if ($NamespaceFilter) {
+                foreach ($Item in $NamespaceFilter) {
                     try {
+                        $namespacename = (($Item.Path).split('/'))[3]
                         $inObj = [ordered] @{
-                            'User Name' = $Item.UserName
-                            'Application' = $TextInfo.ToTitleCase($Item.Application)
-                            'Auth Method' = $Item.AuthMethod
-                            'Role Name' = $Item.RoleName
-                            'Locked' = ConvertTo-TextYN $Item.IsLocked
+                            'Volume Name' = $Item.Volume
+                            'Lun Name' = $namespacename
+                            'Type' = $Item.Ostype
+                            'Mapped' = "No"
+                            'State' = $Item.State
                         }
                         $OutObj += [pscustomobject]$inobj
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                if ($Healthcheck.Security.Users) {
-                    $OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne "vsadmin" } | Set-Style -Style Warning -Property 'Locked'
+                if ($Healthcheck.Vserver.Status) {
+                    $OutObj | Set-Style -Style Warning
                 }
 
                 $TableParams = @{
-                    Name = "Security Local Users - $($Vserver)"
+                    Name = "HealthCheck - Non-Mapped Namespace - $($Vserver)"
                     List = $false
-                    ColumnWidths = 25, 15, 15, 30, 15
+                    ColumnWidths = 30, 30, 10, 10, 20
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -18,12 +18,12 @@ function Get-AbrOntapVserverFcpSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver FCP information."
+        Write-PScriboMessage "Collecting ONTAP Vserver FCP information."
     }
 
     process {
@@ -38,13 +38,12 @@ function Get-AbrOntapVserverFcpSummary {
                             'Status' = Switch ($Item.IsAvailable) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
-                                default {$Item.IsAvailable}
+                                default { $Item.IsAvailable }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.FCP) {
@@ -61,9 +60,8 @@ function Get-AbrOntapVserverFcpSummary {
                 }
                 $VserverObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

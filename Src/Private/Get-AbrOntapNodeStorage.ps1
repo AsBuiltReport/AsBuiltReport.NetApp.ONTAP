@@ -5,7 +5,7 @@ function Get-AbrOntapNodeStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapNodeStorage {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Node Storage information."
+        Write-PScriboMessage "Collecting ONTAP Node Storage information."
     }
 
     process {
         try {
-            $Data = Get-NcVol -Controller $Array | Where-Object {$_.Name -eq 'vol0'}
+            $Data = Get-NcVol -Controller $Array | Where-Object { $_.Name -eq 'vol0' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -38,9 +38,8 @@ function Get-AbrOntapNodeStorage {
                             'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Node.HW) {
@@ -58,9 +57,8 @@ function Get-AbrOntapNodeStorage {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

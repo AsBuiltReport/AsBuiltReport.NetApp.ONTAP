@@ -5,7 +5,7 @@ function Get-AbrOntapRepMediator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepMediator {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP SnapMirror Mediator relationship information."
+        Write-PScriboMessage "Collecting ONTAP SnapMirror Mediator relationship information."
     }
 
     process {
@@ -36,17 +36,16 @@ function Get-AbrOntapRepMediator {
                             'Status' = Switch ($Item.reachable) {
                                 'True' { 'Reachable' }
                                 'False' { 'Unreachable' }
-                                default {$Item.reachable}
+                                default { $Item.reachable }
                             }
                         }
                         $ReplicaObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Replication.Mediator) {
-                    $ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable"} | Set-Style -Style Critical -Property 'Status'
+                    $ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable" } | Set-Style -Style Critical -Property 'Status'
                 }
 
                 $TableParams = @{
@@ -59,9 +58,8 @@ function Get-AbrOntapRepMediator {
                 }
                 $ReplicaObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

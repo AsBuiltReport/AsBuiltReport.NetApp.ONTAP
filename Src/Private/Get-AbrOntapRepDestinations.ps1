@@ -5,7 +5,7 @@ function Get-AbrOntapRepDestination {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepDestination {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP SnapMirror Destination relationship information."
+        Write-PScriboMessage "Collecting ONTAP SnapMirror Destination relationship information."
     }
 
     process {
@@ -43,7 +43,7 @@ function Get-AbrOntapRepDestination {
                                 'transition_data_protection' { 'TDP' }
                                 'restore' { 'RST' }
                                 'load_sharing' { 'LS' }
-                                default {$Item.RelationshipType}
+                                default { $Item.RelationshipType }
                             }
                             'Policy Type' = $Item.PolicyType
                             'Status' = Switch ($Item.RelationshipStatus) {
@@ -66,15 +66,13 @@ function Get-AbrOntapRepDestination {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ReplicaObj | Table @TableParams
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

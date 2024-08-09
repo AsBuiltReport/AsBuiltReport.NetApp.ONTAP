@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverLunStorage {
+function Get-AbrOntapVserverNamespaceStorage {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP vserver lun information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver namespace information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,50 +23,44 @@ function Get-AbrOntapVserverLunStorage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver lun information."
+        Write-PScriboMessage "Collecting ONTAP Vserver namespace information."
     }
 
     process {
         try {
-            $VserverLun = Get-NcLun -VserverContext $Vserver -Controller $Array
+            $VserverNamespace = Get-NcNvmeNamespace -VserverContext $Vserver -Controller $Arra
             $VserverObj = @()
-            if ($VserverLun) {
-                foreach ($Item in $VserverLun) {
+            if ($VserverNamespace) {
+                foreach ($Item in $VserverNamespace) {
                     try {
-                        $lunmap = Get-NcLunMap -Path $Item.Path -Controller $Array | Select-Object -ExpandProperty InitiatorGroup
-                        $lunpath = $Item.Path.split('/')
-                        $lun = $lunpath[3]
+                        $namespacemap = Get-NcNvmeSubsystemMap -Vserver $Vserver -Controller $Array | Where-Object { $_.Path -eq $Item.Path }
+                        $namespacepath = $Item.Path.split('/')
+                        $namespace = $namespacepath[3]
                         $available = $Item.Size - $Item.SizeUsed
                         $used = ($Item.SizeUsed / $Item.Size) * 100
                         $inObj = [ordered] @{
-                            'Lun Name' = $lun
+                            'Namespace Name' = $namespace
                             'Parent Volume' = $Item.Volume
                             'Path' = $Item.Path
-                            'Serial Number' = $Item.SerialNumber
-                            'Initiator Group' = Switch (($lunmap).count) {
+                            'Serial Number' = $Item.Uuid
+                            'Subsystem Map' = Switch (($namespacemap).count) {
                                 0 { "None" }
-                                default { $lunmap }
+                                default { $namespacemap.Subsystem }
                             }
                             'Home Node ' = $Item.Node
                             'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                            'OS Type' = $Item.Protocol
-                            'Is Thin' = ConvertTo-TextYN $Item.Thin
-                            'Space Allocation' = Switch ($Item.IsSpaceAllocEnabled) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsSpaceAllocEnabled }
+                            'OS Type' = $Item.Ostype
+                            'Is Mapped' = Switch ([string]::IsNullOrEmpty($Item.Subsystem)) {
+                                $true { "No" }
+                                $false { "Yes" }
+                                default { $Item.Subsystem }
                             }
-                            'Space Reservation' = Switch ($Item.IsSpaceReservationEnabled) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsSpaceReservationEnabled }
-                            }
-                            'Is Mapped' = ConvertTo-TextYN $Item.Mapped
-                            'Status' = Switch ($Item.Online) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
+                            'ReadOnly' = ConvertTo-TextYN $Item.IsReadOnly
+                            'Status' = Switch ($Item.State) {
+                                'online' { 'Up' }
+                                'offline' { 'Down' }
                                 default { $Item.Online }
                             }
                         }
@@ -79,14 +73,14 @@ function Get-AbrOntapVserverLunStorage {
                         }
 
                         $TableParams = @{
-                            Name = "Lun - $($lun)"
+                            Name = "Namespace - $($namespace)"
                             List = $true
                             ColumnWidths = 25, 75
                         }
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
-                        $VserverObj | Table @TableParams
+                        $VserverObj | Sort-Object -Property 'Namespace Name' | Table @TableParams
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

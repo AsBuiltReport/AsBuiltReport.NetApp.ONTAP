@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkSubnet {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkSubnet {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Subnets information."
+        Write-PScriboMessage "Collecting ONTAP Subnets information."
     }
 
     process {
@@ -38,9 +38,8 @@ function Get-AbrOntapNetworkSubnet {
                             'Ip Ranges' = $Item.IpRanges
                         }
                         $SubnetObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -54,9 +53,8 @@ function Get-AbrOntapNetworkSubnet {
                 }
                 $SubnetObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

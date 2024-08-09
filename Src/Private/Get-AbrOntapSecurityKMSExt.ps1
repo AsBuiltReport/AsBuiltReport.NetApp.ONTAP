@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityKMSExt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityKMSExt {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Security Key Management Service External information."
+        Write-PScriboMessage "Collecting ONTAP Security Key Management Service External information."
     }
 
     process {
@@ -37,9 +37,8 @@ function Get-AbrOntapSecurityKMSExt {
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
@@ -53,9 +52,8 @@ function Get-AbrOntapSecurityKMSExt {
                 }
                 $OutObj | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

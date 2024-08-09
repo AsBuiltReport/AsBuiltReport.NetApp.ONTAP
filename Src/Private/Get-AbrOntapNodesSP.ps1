@@ -5,7 +5,7 @@ function Get-AbrOntapNodesSP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNodesSP {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Node Service-Processor information."
+        Write-PScriboMessage "Collecting ONTAP Node Service-Processor information."
     }
 
     process {
@@ -37,9 +37,8 @@ function Get-AbrOntapNodesSP {
                             'Firmware' = $NodeSPs.FirmwareVersion
                             'Status' = $NodeSPs.Status
                         }
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Node.ServiceProcessor) {
@@ -58,9 +57,8 @@ function Get-AbrOntapNodesSP {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
             $NodeServiceProcessor | Table @TableParams
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

@@ -10,7 +10,8 @@
     },
     "Options": {
         "Exclude": {
-            "Vserver": []
+            "Vserver": [],
+            "MetroCluster": false
         }
     },
     "InfoLevel": {
@@ -54,6 +55,7 @@
         "Vserver": {
             "Status": true,
             "Iscsi": true,
+            "Nvme": true,
             "FCP": true,
             "CG": true,
             "NFS": true,
@@ -78,6 +80,6 @@
         "Security": {
             "Users": true,
             "KMS": true
-    }
+        }
     }
 }

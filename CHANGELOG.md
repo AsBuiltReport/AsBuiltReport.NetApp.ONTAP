@@ -1,5 +1,32 @@
 # :arrows_counterclockwise: NetApp ONTAP Storage As Built Report Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.6.7] - 2024-08-09
+
+### Added
+
+- Initial Vserver NVME support
+- Added option for MetroCluster volume exclusions (*.mc) @MicKBfr
+
+### Changed
+
+- Update the Eomm/why-don-t-you-tweet action to v2.0.0
+- General code cleanup/improvements
+- Increased Required Modules version:
+  - AsBuiltReport.Core v1.4.0
+  - NetApp.Ontap v9.15.1.2407
+
+### Fixed
+
+- Fix [#40](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/40)
+- Fix [#41](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/41)
+- Fix [#42](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/42)
+- Fix [#43](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/43)
+
 ## [0.6.6] - 2023-08-07
 
 ### Changed

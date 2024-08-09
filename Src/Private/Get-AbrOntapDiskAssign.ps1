@@ -5,7 +5,7 @@ function Get-AbrOntapDiskAssign {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.3
+        Version:        0.6.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,18 +19,18 @@ function Get-AbrOntapDiskAssign {
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP disk assignment per node information."
+        Write-PScriboMessage "Collecting ONTAP disk assignment per node information."
     }
 
     process {
         try {
-            $NodeDiskCount = get-ncdisk -Controller $Array | ForEach-Object{ $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
+            $NodeDiskCount = Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
             if ($NodeDiskCount) {
                 $DiskSummary = foreach ($Disks in $NodeDiskCount) {
                     [PSCustomObject] @{
                         'Node' = $Disks.Name
                         'Disk Count' = $Disks | Select-Object -ExpandProperty Count
-                        }
+                    }
                 }
                 $TableParams = @{
                     Name = "Assigned Disk - $($ClusterInfo.ClusterName)"
@@ -42,9 +42,8 @@ function Get-AbrOntapDiskAssign {
                 }
                 $DiskSummary | Table @TableParams
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

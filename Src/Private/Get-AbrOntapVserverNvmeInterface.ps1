@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverIscsiSummary {
+function Get-AbrOntapVserverNvmeInterface {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Vserver ISCSI information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver NVME interface information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,27 +23,24 @@ function Get-AbrOntapVserverIscsiSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI information."
+        Write-PScriboMessage "Collecting ONTAP Vserver NVME interface information."
     }
 
     process {
         try {
-            $VserverData = Get-NcIscsiService -VserverContext $Vserver -Controller $Array
+            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Sort-Object -Property TransportProtocols
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'IQN Name' = $Item.NodeName
-                            'Alias Name' = $Item.AliasName
-                            'Tcp Window Size' = $Item.TcpWindowSize
-                            'Max Cmds Per Session' = $Item.MaxCmdsPerSession
-                            'Max Conn Per Session' = $Item.MaxConnPerSession
-                            'Login Timeout' = $Item.LoginTimeout
-                            'Status' = Switch ($Item.IsAvailable) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsAvailable }
+                            'Interface Name' = $Item.Lif
+                            'Transport Address' = $Item.TransportAddress
+                            'Transport Protocols' = $Item.TransportProtocols
+                            'Status' = Switch ($Item.StatusAdmin) {
+                                'up' { 'Up' }
+                                'down' { 'Down' }
+                                default { $Item.StatusAdmin }
                             }
                         }
                         $VserverObj += [pscustomobject]$inobj
@@ -51,14 +48,14 @@ function Get-AbrOntapVserverIscsiSummary {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                if ($Healthcheck.Vserver.Iscsi) {
+                if ($Healthcheck.Vserver.Nvme) {
                     $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
                 }
 
                 $TableParams = @{
-                    Name = "ISCSI Service - $($Vserver)"
-                    List = $true
-                    ColumnWidths = 30, 70
+                    Name = "NVME Interface - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 40, 36, 12, 12
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
