@@ -193,5 +193,3 @@ PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'a
 
 ```
 ## :x: Known Issues
-
-- There are known issues with the NetApp.ONTAP module v9.11.1.2208. Therefore, v9.10.1.2111 is the recommended module version.
