@@ -33,8 +33,8 @@ function Get-AbrOntapVserverVolumeSnapshot {
             if ($VolumeFilter) {
                 foreach ($Item in $VolumeFilter) {
                     try {
-                        $SnapReserve = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSpaceAttributes
-                        $SnapPolicy = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnapshotAttributes
+                        $SnapReserve = Get-NcVol $Item.Name -VserverContext $Vserver -Controller $Array | Select-Object -ExpandProperty VolumeSpaceAttributes
+                        $SnapPolicy = Get-NcVol $Item.Name -VserverContext $Vserver -Controller $Array | Select-Object -ExpandProperty VolumeSnapshotAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Snapshot Enabled' = ConvertTo-TextYN $SnapPolicy.AutoSnapshotsEnabled
