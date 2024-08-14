@@ -33,7 +33,7 @@ function Get-AbrOntapEfficiencyVol {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $Saving = Get-NcEfficiency -Volume $Item.Name -Controller $Array
+                        $Saving = Get-NcEfficiency -Volume $Item.Name -Vserver $Vserver -Controller $Array
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Capacity' = $Saving.Capacity | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
