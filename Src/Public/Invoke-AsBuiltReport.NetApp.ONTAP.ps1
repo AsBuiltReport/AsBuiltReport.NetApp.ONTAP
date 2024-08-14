@@ -641,8 +641,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             BlankLine
                             Get-AbrOntapEfficiencyAggr
                             foreach ($SVM in $Vservers) {
-                                $VolFilter = Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object { $_.State -eq "online" }
-                                if (Get-NcEfficiency -Volume $VolFilter.Name -Controller $Array | Where-Object { $_.Name -ne "vol0" }) {
+                                $VolFilter = Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object { ($_.State -eq "online") -and ($_.Name -ne "vol0") }
+                                if (Get-NcEfficiency -Volume $VolFilter.Name[0] -Vserver $SVM -Controller $Array)  {
                                     Section -Style Heading4 "$SVM Vserver Volume Deduplication" {
                                         Get-AbrOntapEfficiencyVolSisStatus -Vserver $SVM
                                         Section -Style Heading5 "Volume Efficiency" {
