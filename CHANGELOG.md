@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.8] - Unreleased
 
-### Added
+### Fixed
+
+- Fix [#51](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/51)
 
 ## [0.6.7] - 2024-08-09
 
