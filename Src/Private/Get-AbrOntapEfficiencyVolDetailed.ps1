@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,7 +33,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $Saving = Get-NcEfficiency -Volume $Item.Name -Controller $Array
+                        $Saving = Get-NcEfficiency -Volume $Item.Name -Vserver $Vserver -Controller $Array
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Capacity' = $Saving.Capacity | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
