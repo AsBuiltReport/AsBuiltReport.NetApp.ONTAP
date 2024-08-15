@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.8
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -642,7 +642,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             Get-AbrOntapEfficiencyAggr
                             foreach ($SVM in $Vservers) {
                                 $VolFilter = Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object { ($_.State -eq "online") -and ($_.Name -ne "vol0") }
-                                if (Get-NcEfficiency -Volume $VolFilter.Name[0] -Vserver $SVM -Controller $Array)  {
+                                if (Get-NcEfficiency -Volume $VolFilter.Name[0] -Vserver $SVM -Controller $Array) {
                                     Section -Style Heading4 "$SVM Vserver Volume Deduplication" {
                                         Get-AbrOntapEfficiencyVolSisStatus -Vserver $SVM
                                         Section -Style Heading5 "Volume Efficiency" {
