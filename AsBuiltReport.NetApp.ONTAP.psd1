@@ -12,7 +12,7 @@
     RootModule = 'AsBuiltReport.NetApp.ONTAP.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.6.7'
+    ModuleVersion = '0.6.8'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -54,11 +54,15 @@
     RequiredModules = @(
         @{
             ModuleName = 'AsBuiltReport.Core';
-            ModuleVersion = '1.4.0'
+            ModuleVersion = '1.4.3'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
-            ModuleVersion = '9.15.1.2407'
+            ModuleVersion = '9.16.1.2501'
+        },
+        @{
+            ModuleName = 'Diagrammer.Core';
+            ModuleVersion = '0.2.29'
         }
     )
 

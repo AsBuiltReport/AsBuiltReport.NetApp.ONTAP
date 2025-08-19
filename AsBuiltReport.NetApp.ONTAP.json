@@ -12,7 +12,19 @@
         "Exclude": {
             "Vserver": [],
             "MetroCluster": false
-        }
+        },
+        "EnableDiagrams": true,
+        "EnableDiagramDebug": false,
+        "DiagramTheme": "White",
+        "DiagramWaterMark": "",
+        "ExportDiagrams": false,
+        "ExportDiagramsFormat": [
+            "png"
+        ],
+        "EnableDiagramSignature": false,
+        "DiagramColumnSize": 4,
+        "SignatureAuthorName": "",
+        "SignatureCompanyName": ""
     },
     "InfoLevel": {
         "_comment_": "0 = Disabled, 1 = Enabled, 2 = Adv Summary",

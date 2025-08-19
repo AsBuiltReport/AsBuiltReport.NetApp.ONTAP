@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkRoute {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -37,7 +37,7 @@ function Get-AbrOntapNetworkRoute {
                             'Destination' = $Item.Destination
                             'Gateway' = $Item.Gateway
                             'Metric' = $Item.Metric
-                            'Address Family' = $Item.AddressFamily.ToString().ToUpper()
+                            'Address Family' = $Item.AddressFamily.ToString()
                         }
                         $RoutesObj += [pscustomobject]$inobj
                     } catch {

@@ -51,7 +51,7 @@ Below are the instructions on how to install, configure and generate a NetApp ON
 The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 - ONTAP 9.x
-  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1, 9.12.1, 9.13.1, 9.14.1, 9.15.1
+  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1, 9.12.1, 9.13.1, 9.14.1, 9.15.1, 9.16.1
 
 ### **PowerShell**
 
@@ -141,6 +141,17 @@ The **Options** schema allows certain options within the report to be toggled on
 | --------------------- | ------------ | ------- | -------------------------------------------------- |
 | Exclude: Vserver      | Array List   | Empty   | Allow to filter on Vserver Name                    |
 | Exclude: MetroCluster | true / false | false   | Allow to filter automatically all Vserver with -mc |
+| DiagramColumnSize       | int                        | 3       | Set the diagram node table size                                               |
+| DiagramTheme            | string                     | White   | Set the diagram theme (Black/White/Neon)                                      |
+| DiagramWaterMark        | string                     | empty   | Set the diagram watermark                                                     |
+| DiagramType             | true / false               | true    | Toggle to enable/disable the export of individual diagram diagrams            |
+| EnableDiagrams          | true / false               | false   | Toggle to enable/disable infrastructure diagrams                              |
+| EnableDiagramsDebug     | true / false               | false   | Toggle to enable/disable diagram debug option                                 |
+| EnableDiagramSignature  | true / false               | false   | Toggle to enable/disable diagram signature (bottom right corner)              |
+| ExportDiagrams          | true / false               | true    | Toggle to enable/disable diagram export option                                |
+| ExportDiagramsFormat    | string array               | png     | Set the format used to export the infrastructure diagram (dot, png, pdf, svg) |
+| SignatureAuthorName     | string                     | empty   | Set the signature author name                                                 |
+| SignatureCompanyName    | string                     | empty   | Set the signature company name                                                |
 
 ### InfoLevel
 
@@ -193,5 +204,3 @@ PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'a
 
 ```
 ## :x: Known Issues
-
-- There are known issues with the NetApp.ONTAP module v9.11.1.2208. Therefore, v9.10.1.2111 is the recommended module version.

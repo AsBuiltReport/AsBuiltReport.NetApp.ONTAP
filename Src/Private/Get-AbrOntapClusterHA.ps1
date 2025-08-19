@@ -5,7 +5,7 @@ function Get-AbrOntapClusterHA {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.9
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -42,8 +42,8 @@ function Get-AbrOntapClusterHA {
                                 'False' { $ClusterHa.TakeoverState }
                                 default { 'Unknwon' }
                             }
-                            'HA Mode' = $ClusterHa.CurrentMode.ToUpper()
-                            'HA State' = $ClusterHa.State.ToUpper()
+                            'HA Mode' = $ClusterHa.CurrentMode
+                            'HA State' = $ClusterHa.State
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
