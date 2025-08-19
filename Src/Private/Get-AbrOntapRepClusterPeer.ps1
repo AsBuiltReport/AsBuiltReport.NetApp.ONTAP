@@ -5,7 +5,7 @@ function Get-AbrOntapRepClusterPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,7 +35,7 @@ function Get-AbrOntapRepClusterPeer {
                             'Peer Addresses' = $Item.PeerAddresses
                             'Cluster Health' = $Item.IsClusterHealthy
                             'IP Space' = $Item.IpspaceName
-                            'Status' = ($Item.Availability).toUpper()
+                            'Status' = ($Item.Availability)
                         }
                         $ReplicaObj += [pscustomobject]$inobj
                     } catch {
