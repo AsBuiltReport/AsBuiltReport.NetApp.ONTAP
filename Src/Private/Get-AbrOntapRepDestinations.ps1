@@ -5,7 +5,7 @@ function Get-AbrOntapRepDestination {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -30,7 +30,7 @@ function Get-AbrOntapRepDestination {
                 foreach ($Item in $ReplicaData) {
                     try {
                         if ($Item.RelationshipStatus) {
-                            $Item.RelationshipStatus = ($Item.RelationshipStatus).toUpper()
+                            $Item.RelationshipStatus = ($Item.RelationshipStatus)
                         }
                         $inObj = [ordered] @{
                             'Destination Vserver' = $Item.DestinationVserver

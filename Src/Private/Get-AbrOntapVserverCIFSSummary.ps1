@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapVserverCIFSSummary {
                                 'AD Server Site' = $SVM.CifsServerSite
                                 'Cifs Server Status' = $SVM.CifsServerStatus
                                 'Status Details' = $SVM.StatusDetails
-                                'Status' = $SVM.Status.ToString().ToUpper()
+                                'Status' = $SVM.Status.ToString()
                             }
                             $VserverObj = [pscustomobject]$inobj
 

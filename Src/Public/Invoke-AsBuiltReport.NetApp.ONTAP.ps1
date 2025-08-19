@@ -15,31 +15,53 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingUserNameAndPassWordParams", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Scope = "Function")]
+
+
     # Do not remove or add to these parameters
     param (
         [String[]] $Target,
         [PSCredential] $Credential
     )
 
-    Write-PScriboMessage -IsWarning "Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project."
-    Write-PScriboMessage -IsWarning "Do not forget to update your report configuration file after each new version release."
-    Write-PScriboMessage -IsWarning "Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
-    Write-PScriboMessage -IsWarning "Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
+    #Requires -Version 5.1
+    #Requires -PSEdition Desktop
+    #Requires -RunAsAdministrator
 
-    # Check the current AsBuiltReport.NetApp.ONTAP module
-    Try {
-        $InstalledVersion = Get-Module -ListAvailable -Name AsBuiltReport.NetApp.ONTAP -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+    if ($psISE) {
+        Write-Error -Message "You cannot run this script inside the PowerShell ISE. Please execute it from the PowerShell Command Window."
+        break
+    }
 
-        if ($InstalledVersion) {
-            Write-PScriboMessage -IsWarning "AsBuiltReport.NetApp.ONTAP $($InstalledVersion.ToString()) is currently installed."
-            $LatestVersion = Find-Module -Name AsBuiltReport.NetApp.ONTAP -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
-            if ($LatestVersion -gt $InstalledVersion) {
-                Write-PScriboMessage -IsWarning "AsBuiltReport.NetApp.ONTAP $($LatestVersion.ToString()) is available."
-                Write-PScriboMessage -IsWarning "Run 'Update-Module -Name AsBuiltReport.NetApp.ONTAP -Force' to install the latest version."
+    Write-Host "- Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project."
+    Write-Host "- Do not forget to update your report configuration file after each new version release."
+    Write-Host "- Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
+    Write-Host "- Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
+    Write-Host "- This project is community maintained and has no sponsorship from NetApp, its employees or any of its affiliates."
+
+
+    # Check the version of the dependency modules
+    $ModuleArray = @('AsBuiltReport.Netapp.ONTAP', 'Diagrammer.Core')
+
+    foreach ($Module in $ModuleArray) {
+        try {
+            $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+
+            if ($InstalledVersion) {
+                Write-Host "- $Module module v$($InstalledVersion.ToString()) is currently installed."
+                $LatestVersion = Find-Module -Name $Module -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+                if ($InstalledVersion -lt $LatestVersion) {
+                    Write-Host "  - $Module module v$($LatestVersion.ToString()) is available." -ForegroundColor Red
+                    Write-Host "  - Run 'Update-Module -Name $Module -Force' to install the latest version." -ForegroundColor Red
+                }
             }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
-    } Catch {
-        Write-PScriboMessage -IsWarning $_.Exception.Message
     }
 
     # Import Report Configuration
@@ -52,7 +74,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
 
     #Connect to Ontap Storage Array using supplied credentials
     foreach ($OntapArray in $Target) {
-        Try {
+        try {
             $OntapModuleInstalledVersion = Get-Module -ListAvailable -Name NetApp.ONTAP -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
             Write-PScriboMessage "Connecting to NetApp Storage '$OntapArray'."
             if ($OntapModuleInstalledVersion.Minor -gt 10) {
@@ -63,7 +85,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                 Write-PScriboMessage "Detected NetApp.ONTAP module version $($OntapModuleInstalledVersion.toString()). Disabling ONTAPI option."
                 $Array = Connect-NcController -Name $OntapArray -Credential $Credential -ErrorAction Stop
             }
-        } Catch {
+        } catch {
             Write-Verbose "Unable to connect to the $OntapArray Array"
             throw
         }
@@ -76,6 +98,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             Write-PScriboMessage "exclude vserver = $exclude_vserver"
         }
 
+        # Variable translating Icon to Image Path ($IconPath)
+        $script:Images = @{
+            "Ontap_LOGO" = "netapp-logo.png"
+            "AsBuiltReport_LOGO" = "AsBuiltReport_Logo.png"
+            "AsBuiltReport_Signature" = "AsBuiltReport_Signature.png"
+            "Ontap_Node" = "ontap_node_new.png"
+            "Abr_LOGO_Footer" = "AsBuiltReport.png"
+            "Ontap_Node_Icon" = "netapp_node_icon.png"
+            "Ontap_Aggregate" = "netapp_aggregate.png"
+            "Ontap_SVM" = "ontap_svm.png"
+            "Ontap_SVM_Icon" = "ontap_svm_icon.png"
+        }
+        $script:ColumnSize = $Options.DiagramColumnSize
+
         #---------------------------------------------------------------------------------------------#
         #                                 Cluster Section                                             #
         #---------------------------------------------------------------------------------------------#
@@ -83,6 +119,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             Paragraph "The following section provides a summary of the array configuration for $($ClusterInfo.ClusterName)."
             BlankLine
             #region Cluster Section
+            $ClusterDiagram = Get-AbrOntapClusterDiagram
+            if ($ClusterDiagram) {
+                Export-AbrOntapDiagram -DiagramObject $ClusterDiagram -MainDiagramLabel "$($ClusterInfo.ClusterName) Cluster Diagram" -FileName "AsBuiltReport.NetApp.Ontap.Cluster"
+            } else {
+                Write-PScriboMessage -IsWarning "Unable to generate the Cluster Diagram."
+            }
             Write-PScriboMessage "Cluster InfoLevel set at $($InfoLevel.Cluster)."
             if ($InfoLevel.Cluster -gt 0) {
                 Section -Style Heading2 'Cluster Information' {
@@ -141,6 +183,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the Aggregates on $($ClusterInfo.ClusterName)."
                         BlankLine
                         if (Get-NcAggr -Controller $Array) {
+                            $StorageAggrDiagram = Get-AbrOntapStorageAggrDiagram
+                            if ($StorageAggrDiagram) {
+                                Export-AbrOntapDiagram -DiagramObject $StorageAggrDiagram -MainDiagramLabel "Storage Aggregate Diagram" -FileName "AsBuiltReport.NetApp.Ontap.StorageAggr"
+                            } else {
+                                Write-PScriboMessage -IsWarning "Unable to generate the Storage Aggregate Diagram."
+                            }
                             Get-AbrOntapStorageAGGR
                         }
                         if (Get-NcAggrObjectStore -Controller $Array -Aggregate (Get-NcAggr -Controller $Array).Name) {
@@ -178,7 +226,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapDiskBroken
                             }
                         }
-                        If (Get-NcNode -Controller $Array | Select-Object Node | Get-NcShelf -Controller $Array -ErrorAction SilentlyContinue) {
+                        if (Get-NcNode -Controller $Array | Select-Object Node | Get-NcShelf -Controller $Array -ErrorAction SilentlyContinue) {
                             Section -Style Heading3 'Shelf Inventory' {
                                 Get-AbrOntapDiskShelf
                             }
@@ -593,6 +641,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading2 'Replication Information' {
                         Paragraph "The following section provides a summary of the replication information on $($ClusterInfo.ClusterName)."
                         BlankLine
+                        $ClusterReplicationDiagram = Get-AbrOntapClusterReplicationDiagram
+                        if ($ClusterReplicationDiagram) {
+                            Export-AbrOntapDiagram -DiagramObject $ClusterReplicationDiagram -MainDiagramLabel "Cluster Replication Diagram" -FileName "AsBuiltReport.NetApp.Ontap.Replication"
+                        } else {
+                            Write-PScriboMessage -IsWarning "Unable to generate the Cluster Replication Diagram."
+                        }
                         Section -Style Heading3 'Cluster Peer' {
                             Paragraph "The following section provides the Cluster Peer information on $($ClusterInfo.ClusterName)."
                             BlankLine
@@ -604,7 +658,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 if (Get-NcSnapmirror -Controller $Array) {
                                     Section -Style Heading5 'SnapMirror Relationship' {
                                         Get-AbrOntapRepRelationship
-                                        if ($InfoLevel.Replication -ge 2) {
+                                        if (($InfoLevel.Replication -ge 2) -and ($ReplicaData = Get-NcSnapmirrorHistory -Controller $Array)) {
                                             Section -ExcludeFromTOC -Style Heading6 'SnapMirror Replication History' {
                                                 Get-AbrOntapRepHistory
                                             }

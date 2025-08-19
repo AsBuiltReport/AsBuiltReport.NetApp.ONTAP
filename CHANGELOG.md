@@ -5,7 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.8] - Unreleased
+## [0.6.8] - 2025-08-18
+
+### Added
+
+- Add Infrastructure diagram support
+  - Cluster
+  - Storage Aggretates (Tiers)
+  - Replication
+- Added various icon files for report generation.
+
+### Changed
+
+- Improved Invoke-AsBuiltReport.NetApp.ONTAP.ps1 to provide better user feedback and check for module versions.
+- Refactor and enhance ONTAP report generation scripts
+- Updated Get-AbrOntapClusterHA.ps1 to remove unnecessary string conversion to uppercase for HA Mode and HA State.
+- Modified Get-AbrOntapNetworkRoute.ps1 and Get-AbrOntapNetworkRouteLifs.ps1 to remove uppercase conversion for Address Family.
+- Enhanced Get-AbrOntapRepRelations.ps1 to handle empty Schedule and Status fields more gracefully.
+- Updated Get-AbrOntapVserverCIFSSummary.ps1 to remove uppercase conversion for Status.
+- Improved Invoke-AsBuiltReport.NetApp.ONTAP.ps1 to provide better user feedback and check for module versions.
 
 ### Fixed
 
