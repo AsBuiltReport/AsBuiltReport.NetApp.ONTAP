@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Diagrammer.Core v0.2.30
   - NetApp.Ontap v9.17.1.2509
 
+### Fixed
+
+- Fix issue where cluster replication diagram generation fails if no replication relationships are found.
+
 ## [0.6.8] - 2025-08-18
 
 ### Added
