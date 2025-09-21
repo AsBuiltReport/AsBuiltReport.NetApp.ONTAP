@@ -68,10 +68,10 @@ Each of the following modules will be automatically installed by following the [
 These modules may also be manually installed.
 
 | Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
-|--------------------|:------------------------:|:---------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
-| PScribo            |          0.10.0           |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
+| ------------------ | :----------------------: | :-------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+| PScribo            |          0.10.0          |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
 | AsBuiltReport.Core |          1.4.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP |          9.15.1.2407           | [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP) |  |
+| Netapp.ONTAP       |       9.15.1.2407        |    [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)    |                                                                             |
 
 ## :package: Module Installation
 
@@ -137,21 +137,21 @@ The **Report** schema provides configuration of the NetApp ONTAP report informat
 ### Options
 
 The **Options** schema allows certain options within the report to be toggled on or off.
-| Sub-Schema            | Setting      | Default | Description                                        |
-| --------------------- | ------------ | ------- | -------------------------------------------------- |
-| Exclude: Vserver      | Array List   | Empty   | Allow to filter on Vserver Name                    |
-| Exclude: MetroCluster | true / false | false   | Allow to filter automatically all Vserver with -mc |
-| DiagramColumnSize       | int                        | 3       | Set the diagram node table size                                               |
-| DiagramTheme            | string                     | White   | Set the diagram theme (Black/White/Neon)                                      |
-| DiagramWaterMark        | string                     | empty   | Set the diagram watermark                                                     |
-| DiagramType             | true / false               | true    | Toggle to enable/disable the export of individual diagram diagrams            |
-| EnableDiagrams          | true / false               | false   | Toggle to enable/disable infrastructure diagrams                              |
-| EnableDiagramsDebug     | true / false               | false   | Toggle to enable/disable diagram debug option                                 |
-| EnableDiagramSignature  | true / false               | false   | Toggle to enable/disable diagram signature (bottom right corner)              |
-| ExportDiagrams          | true / false               | true    | Toggle to enable/disable diagram export option                                |
-| ExportDiagramsFormat    | string array               | png     | Set the format used to export the infrastructure diagram (dot, png, pdf, svg) |
-| SignatureAuthorName     | string                     | empty   | Set the signature author name                                                 |
-| SignatureCompanyName    | string                     | empty   | Set the signature company name                                                |
+| Sub-Schema             | Setting      | Default | Description                                                                   |
+| ---------------------- | ------------ | ------- | ----------------------------------------------------------------------------- |
+| Exclude: Vserver       | Array List   | Empty   | Allow to filter on Vserver Name                                               |
+| Exclude: MetroCluster  | true / false | false   | Allow to filter automatically all Vserver with -mc                            |
+| DiagramColumnSize      | int          | 3       | Set the diagram node table size                                               |
+| DiagramTheme           | string       | White   | Set the diagram theme (Black/White/Neon)                                      |
+| DiagramWaterMark       | string       | empty   | Set the diagram watermark                                                     |
+| DiagramType            | true / false | true    | Toggle to enable/disable the export of individual diagram diagrams            |
+| EnableDiagrams         | true / false | false   | Toggle to enable/disable infrastructure diagrams                              |
+| EnableDiagramsDebug    | true / false | false   | Toggle to enable/disable diagram debug option                                 |
+| EnableDiagramSignature | true / false | false   | Toggle to enable/disable diagram signature (bottom right corner)              |
+| ExportDiagrams         | true / false | true    | Toggle to enable/disable diagram export option                                |
+| ExportDiagramsFormat   | string array | png     | Set the format used to export the infrastructure diagram (dot, png, pdf, svg) |
+| SignatureAuthorName    | string       | empty   | Set the signature author name                                                 |
+| SignatureCompanyName   | string       | empty   | Set the signature company name                                                |
 
 ### InfoLevel
 
@@ -204,3 +204,5 @@ PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'a
 
 ```
 ## :x: Known Issues
+
+- Issues with ASA v1/v2 hardware model. [#56](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/56)
