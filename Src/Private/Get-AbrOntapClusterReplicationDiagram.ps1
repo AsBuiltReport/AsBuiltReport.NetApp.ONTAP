@@ -205,6 +205,8 @@ function Get-AbrOntapClusterReplicationDiagram {
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
+                } else {
+                    Write-PScriboMessage -IsWarning "Unable to create Cluster Replication Node. No Cluster Management Object found."
                 }
 
                 if ($ClusterReplicaNodeObj) {
