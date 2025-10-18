@@ -28,8 +28,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         [PSCredential] $Credential
     )
 
-    #Requires -Version 5.1
-    #Requires -PSEdition Desktop
     #Requires -RunAsAdministrator
 
     if ($psISE) {
