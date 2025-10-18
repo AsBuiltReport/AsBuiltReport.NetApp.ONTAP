@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Increased Required Modules version:
   - Diagrammer.Core v0.2.30
   - NetApp.Ontap v9.17.1.2509
+- Refactor Get-NetAppOntapAPI to handle Unix platform and improve error handling in Invoke-AsBuiltReport.NetApp.ONTAP
 
 ### Fixed
 
