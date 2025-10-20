@@ -21,6 +21,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Scope = "Function")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Scope = "Function")]
 
+    #Requires -RunAsAdministrator
 
     # Do not remove or add to these parameters
     param (
