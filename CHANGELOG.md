@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix issue where cluster replication diagram generation fails if no replication relationships are found.
+- Fix issue where certain sections of the report may not render correctly on Unix-based systems.
+- Close [#58](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/58)
 
 ## [0.6.8] - 2025-08-18
 
