@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.9] - 2025-10-21
+
+### Changed
+
+- General code cleanup/improvements
+- Add Bluesky post action to release workflow
+- Increased Required Modules version:
+  - Diagrammer.Core v0.2.32
+  - NetApp.Ontap v9.17.1.2509
+  - AsBuiltReport.Core v1.5.0
+- Refactor Get-NetAppOntapAPI to handle Unix platform and improve error handling in Invoke-AsBuiltReport.NetApp.ONTAP
+
+### Fixed
+
+- Fix issue where cluster replication diagram generation fails if no replication relationships are found.
+- Fix issue where certain sections of the report may not render correctly on Unix-based systems.
+- Close [#58](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/58)
+
 ## [0.6.8] - 2025-08-18
 
 ### Added

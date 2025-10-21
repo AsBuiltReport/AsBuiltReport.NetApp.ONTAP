@@ -26,9 +26,10 @@ function Get-NetAppOntapAPI {
     )
 
     begin {
-        #region Workaround for SelfSigned Cert an force TLS 1.2
-        if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
-            $certCallback = @"
+        if ($PSVersionTable.Platform -ne 'Unix') {
+            #region Workaround for SelfSigned Cert an force TLS 1.2
+            if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
+                $certCallback = @"
         using System;
         using System.Net;
         using System.Net.Security;
@@ -54,11 +55,12 @@ function Get-NetAppOntapAPI {
             }
         }
 "@
-            Add-Type $certCallback
+                Add-Type $certCallback
+            }
+            [ServerCertificateValidationCallback]::Ignore()
+            [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+            #endregion Workaround for SelfSigned Cert an force TLS 1.2
         }
-        [ServerCertificateValidationCallback]::Ignore()
-        [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
-        #endregion Workaround for SelfSigned Cert an force TLS 1.2
 
         $username = $Credential.UserName
         $password = $Credential.GetNetworkCredential().Password
@@ -73,8 +75,8 @@ function Get-NetAppOntapAPI {
         }
     }
 
-    Process {
-        Try {
+    process {
+        try {
             if ($PSVersionTable.PSEdition -eq 'Core') {
                 $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers -SkipCertificateCheck
 
@@ -82,10 +84,10 @@ function Get-NetAppOntapAPI {
                 $response = Invoke-RestMethod -Method Get -Uri ($api + $uri) -Headers $headers
             }
             $response.records
-        } Catch {
+        } catch {
             Write-Verbose -Message $_
         }
     }
 
-    End {}
+    end {}
 }

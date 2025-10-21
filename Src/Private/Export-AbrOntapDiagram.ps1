@@ -48,7 +48,7 @@ function Export-AbrOntapDiagram {
                 'LogoName' = 'AsBuiltReport_LOGO'
                 'SignatureLogoName' = 'Abr_LOGO_Footer'
                 'WaterMarkText' = $Options.DiagramWaterMark
-                'Direction' = &{
+                'Direction' = & {
                     if ($MainDiagramLabel -eq 'Cluster Replication Diagram') {
                         'left-to-right'
                     } else {
@@ -114,17 +114,22 @@ function Export-AbrOntapDiagram {
                 }
             }
             try {
-                $DiagramParams.Remove('Format')
-                $DiagramParams.Add('Format', "base64")
+                if ($PSVersionTable.Platform -ne 'Unix') {
+                    $DiagramParams.Remove('Format')
+                    $DiagramParams.Add('Format', "base64")
 
-                $Graph = $DiagramObject
-                $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
-                if ($Diagram) {
-                    if ((Get-DiaImagePercent -GraphObj $Diagram).Width -gt 600) { $ImagePrty = 40 } else { $ImagePrty = 30 }
-                    Section -Style Heading2 $MainDiagramLabel {
-                        Image -Base64 $Diagram -Text "NetApp Ontap Diagram" -Percent $ImagePrty -Align Center
-                        Paragraph "Image preview: Opens the image in a new tab to view it at full resolution." -Tabs 2
+                    $Graph = $DiagramObject
+                    $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
+                    if ($Diagram) {
+                        if ((Get-DiaImagePercent -GraphObj $Diagram).Width -gt 600) { $ImagePrty = 40 } else { $ImagePrty = 30 }
+                        Section -Style Heading2 $MainDiagramLabel {
+                            Image -Base64 $Diagram -Text "NetApp Ontap Diagram" -Percent $ImagePrty -Align Center
+                            Paragraph "Image preview: Opens the image in a new tab to view it at full resolution." -Tabs 2
+                        }
                     }
+                } else {
+                    Write-PScriboMessage -IsWarning -Message "PSCribo Images embedding is not supported on PowerShell Core running on Linux or MacOS."
+
                 }
             } catch {
                 Write-PScriboMessage -IsWarning -Message "Unable to generate the Ontap Diagram: $($_.Exception.Message)"

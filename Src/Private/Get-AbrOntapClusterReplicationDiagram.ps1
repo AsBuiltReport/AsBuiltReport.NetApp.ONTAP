@@ -5,7 +5,7 @@ function Get-AbrOntapClusterReplicationDiagram {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.9
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -199,12 +199,14 @@ function Get-AbrOntapClusterReplicationDiagram {
                     $Num++
                 }
 
-                if ($ClusterReplicaInfo) {
+                if ($ClusterReplicaInfo -and $NodeReplicaSum) {
                     try {
                         $ClusterReplicaNodeObj = Add-DiaHTMLNodeTable -ImagesObj $Images -inputObject $NodeReplicaSum -Align "Center" -iconType "Ontap_Node" -columnSize $NodeSumColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $NodeAdditionalInfo -Subgraph -SubgraphIconType "Ontap_Node_Icon" -SubgraphLabel $ClusterReplicaInfo.ClusterName -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder "1" -SubgraphLabelFontsize 22 -fontSize 18
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
+                } else {
+                    Write-PScriboMessage -IsWarning "Unable to create Cluster Replication Node. No Cluster Management Object found."
                 }
 
                 if ($ClusterReplicaNodeObj) {
@@ -238,9 +240,11 @@ function Get-AbrOntapClusterReplicationDiagram {
 
                     $PeerVserverPeerSubGraphObj = Add-DiaHTMLSubGraph -ImagesObj $Images -TableArray $PeerVserverPeerObj -Align 'Center' -IconDebug $IconDebug -Label "Peer Storage VMs" -LabelPos 'top' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder "1" -columnSize $PeerVserverPeerObjColumnSize -fontSize 18 -IconType "Ontap_SVM_Icon"
 
-                    if ($PeerVserverPeerSubGraphObj) {
+                    if ($PeerVserverPeerSubGraphObj -and $RemoteClusterName) {
                         Node "$($RemoteClusterName)PeerVservers" @{Label = $PeerVserverPeerSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
                         Edge -From $RemoteClusterName -To "$($RemoteClusterName)PeerVservers" @{minlen = 2; color = '#71797E'; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                    } else {
+                        Write-PScriboMessage -IsWarning "Unable to create Peer Vserver Node. No Peer Vserver Object found."
                     }
                 } catch {
                     Write-PScriboMessage -IsWarning $_.Exception.Message
