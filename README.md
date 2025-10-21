@@ -67,7 +67,7 @@ These modules may also be manually installed.
 | Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
 | ------------------ | :----------------------: | :-------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
 | PScribo            |          0.10.0          |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
-| AsBuiltReport.Core |          1.4.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
+| AsBuiltReport.Core |          1.5.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
 | Netapp.ONTAP       |       9.17.1.2509        |    [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)    |                                                                             |
 
 ## :package: Module Installation
