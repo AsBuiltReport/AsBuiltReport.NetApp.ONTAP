@@ -91,7 +91,7 @@ function Get-AbrOntapStorageAggrDiagram {
                                 "Mgmt" = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
                                     $true { "Unknown" }
                                     $false { $NodeMgmtAddress }
-                                    Default { "Unknown" }
+                                    default { "Unknown" }
                                 }
                             }
                         }
@@ -115,11 +115,11 @@ function Get-AbrOntapStorageAggrDiagram {
                                                     "raid0" { "RAID 0" }
                                                     "raid1" { "RAID 1" }
                                                     "raid10" { "RAID 10" }
-                                                    Default { "Unknown" }
+                                                    default { "Unknown" }
                                                 }
                                             }
                                         }
-                                        Default { "Unknown" }
+                                        default { "Unknown" }
                                     }
                                     "Raid Size" = $Aggr.RaidSize
                                     "State" = $Aggr.State
@@ -132,7 +132,7 @@ function Get-AbrOntapStorageAggrDiagram {
 
                     foreach ($Node in $NodeAdditionalInfo) {
                         $ClusterNodeObj = @()
-                        $ClusterNodeObj += Add-DiaHTMLNodeTable -ImagesObj $Images -inputObject $Node.NodeName -Align "Center" -iconType "Ontap_Node" -columnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 0 -SubgraphLabelFontsize 22 -fontSize 18
+                        $ClusterNodeObj += Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject $Node.NodeName -Align "Center" -iconType "Ontap_Node" -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
 
                         if ($ClusterNodeObj) {
                             if ($AggrInfo.Count -eq 1) {
@@ -142,11 +142,11 @@ function Get-AbrOntapStorageAggrDiagram {
                             } else {
                                 $AggrInfoColumnSize = $AggrInfo.Count
                             }
-                            $ClusterNodeObj += Add-DiaHTMLNodeTable -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align "Center" -iconType "Ontap_Aggregate" -columnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel "Aggregates" -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 1 -SubgraphLabelFontsize 22 -fontSize 18
+                            $ClusterNodeObj += Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align "Center" -iconType "Ontap_Aggregate" -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel "Aggregates" -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
                         }
 
                         if ($ClusterNodeObj) {
-                            $ClusterNodeSubgraphObj = Add-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label " " -LabelPos 'top' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 1 -columnSize 1 -fontSize 12
+                            $ClusterNodeSubgraphObj = Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label " " -LabelPos 'top' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
                         }
 
                         $ClusterNodesObj += $ClusterNodeSubgraphObj
@@ -160,10 +160,10 @@ function Get-AbrOntapStorageAggrDiagram {
                         } else {
                             $ClusterNodesObjColumnSize = $ClusterNodesObj.Count
                         }
-                        $ClusterMgmtObj = Add-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController)" -LabelPos 'down' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 0 -columnSize $ClusterNodesObjColumnSize -fontSize 18
+                        $ClusterMgmtObj = Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController.Name)" -LabelPos 'down' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize $ClusterNodesObjColumnSize -FontSize 18
 
                         if ($ClusterMgmtObj) {
-                            Node Cluster @{Label = $ClusterMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                            Node ClusterAggrs @{Label = $ClusterMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
                         } else {
                             Write-PScriboMessage -IsWarning "Unable to create ClusterNodesObj. No Cluster Management Object found."
