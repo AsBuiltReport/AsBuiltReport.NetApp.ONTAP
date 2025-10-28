@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.10] - Unreleased
 
+### Added
+
+- Add WaterMarkFontOpacity parameter to Export-AbrOntapDiagram function
+
 ### Changed
 
 - Refactor Export-AbrOntapDiagram to handle image format for Unix platforms and improve error messaging

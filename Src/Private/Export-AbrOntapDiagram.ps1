@@ -48,6 +48,7 @@ function Export-AbrOntapDiagram {
                 'LogoName' = 'AsBuiltReport_LOGO'
                 'SignatureLogoName' = 'Abr_LOGO_Footer'
                 'WaterMarkText' = $Options.DiagramWaterMark
+                'WaterMarkFontOpacity' = 20
                 'Direction' = & {
                     if ($MainDiagramLabel -eq 'Cluster Replication Diagram') {
                         'left-to-right'
