@@ -26,10 +26,7 @@ function Get-NetAppOntapAPI {
     )
 
     begin {
-        if ($PSVersionTable.Platform -ne 'Unix') {
-            #region Workaround for SelfSigned Cert an force TLS 1.2
-            if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
-                $certCallback = @"
+        $certCallback = @"
         using System;
         using System.Net;
         using System.Net.Security;
@@ -55,6 +52,9 @@ function Get-NetAppOntapAPI {
             }
         }
 "@
+        if ($PSVersionTable.PSEdition -ne 'Core') {
+            #region Workaround for SelfSigned Cert an force TLS 1.2
+            if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
                 Add-Type $certCallback
             }
             [ServerCertificateValidationCallback]::Ignore()
