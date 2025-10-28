@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump Diagrammer.Core module requirement to v0.2.33
 - Bump module version to v0.6.10
 - Refactor Get-NetAppOntapAPI to streamline certificate validation for Unix platforms
+- Update SignatureLogoName in Export-AbrOntapDiagram function for consistency
 
 ### Fixed
 

@@ -46,7 +46,7 @@ function Export-AbrOntapDiagram {
                 'IconPath' = $IconPath
                 'ImagesObj' = $Images
                 'LogoName' = 'AsBuiltReport_LOGO'
-                'SignatureLogoName' = 'Abr_LOGO_Footer'
+                'SignatureLogoName' = 'AsBuiltReport_Signature'
                 'WaterMarkText' = $Options.DiagramWaterMark
                 'WaterMarkFontOpacity' = 20
                 'Direction' = & {
