@@ -29,7 +29,7 @@ function Get-AbrOntapVserverVolumesQuota {
     process {
         try {
             Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Status" {
-                Paragraph "The following section provides the $Vserver Volumes Quota Status Information on $($ClusterInfo.ClusterName)."
+                Paragraph "The following section provides the $Vserver Volumes Quota Status Information in $($ClusterInfo.ClusterName)."
                 BlankLine
                 $VserverQuotaStatus = Get-NcQuotaStatus -VserverContext $Vserver -Controller $Array
                 $VserverObj = @()
@@ -71,7 +71,7 @@ function Get-AbrOntapVserverVolumesQuota {
             if ($InfoLevel.Vserver -ge 2) {
                 try {
                     Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Information" {
-                        Paragraph "The following section provides the $Vserver Volumes Quota Information on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following section provides the $Vserver Volumes Quota Information in $($ClusterInfo.ClusterName)."
                         BlankLine
                         $VserverQuota = Get-NcQuota -VserverContext $Vserver -Controller $Array
                         $VserverObj = @()
@@ -128,7 +128,7 @@ function Get-AbrOntapVserverVolumesQuota {
                 }
                 try {
                     Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Report (Disk)" {
-                        Paragraph "The following section provides the $Vserver Volumes Quota Report (Disk) Information on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following section provides the $Vserver Volumes Quota Report (Disk) Information in $($ClusterInfo.ClusterName)."
                         BlankLine
                         $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
                         $VserverObj = @()
@@ -177,7 +177,7 @@ function Get-AbrOntapVserverVolumesQuota {
                 }
                 try {
                     Section -ExcludeFromTOC -Style Heading6 "$Vserver Vserver Volume Quota Report (File)" {
-                        Paragraph "The following section provides the $Vserver Volumes Quota Report (File) Information on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following section provides the $Vserver Volumes Quota Report (File) Information in $($ClusterInfo.ClusterName)."
                         BlankLine
                         $VserverQuotaReport = Get-NcQuotaReport -VserverContext $Vserver -Controller $Array
                         $VserverObj = @()

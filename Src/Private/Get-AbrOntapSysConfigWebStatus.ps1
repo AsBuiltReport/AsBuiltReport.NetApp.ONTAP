@@ -49,7 +49,7 @@ function Get-AbrOntapSysConfigWebStatus {
                 }
 
                 $TableParams = @{
-                    Name = "System Web Service - $($ClusterInfo.ClusterName)"
+                    Name = "Web Service - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 25, 12, 12, 12, 12, 15, 12
                 }

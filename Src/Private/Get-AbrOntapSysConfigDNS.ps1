@@ -47,7 +47,7 @@ function Get-AbrOntapSysConfigDNS {
                 }
 
                 $TableParams = @{
-                    Name = "System DNS Configuration - $($ClusterInfo.ClusterName)"
+                    Name = "DNS Configuration - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 30, 15, 20, 20, 15
                 }

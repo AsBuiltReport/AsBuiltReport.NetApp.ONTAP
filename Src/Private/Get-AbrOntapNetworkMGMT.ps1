@@ -198,7 +198,7 @@ function Get-AbrOntapNetworkMgmt {
             try {
                 if ((Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False" }) -and $Healthcheck.Network.Interface) {
                     Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
-                        Paragraph "The following table provides the LIF Home Status Information on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following table provides the LIF Home Status Information in $($ClusterInfo.ClusterName)."
                         BlankLine
                         $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False" }
                         $ClusterObj = @()

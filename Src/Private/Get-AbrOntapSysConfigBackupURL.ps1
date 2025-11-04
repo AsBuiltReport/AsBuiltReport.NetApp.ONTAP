@@ -51,7 +51,7 @@ function Get-AbrOntapSysConfigBackupURL {
                 }
 
                 $TableParams = @{
-                    Name = "System Configuration Backup Setting - $($ClusterInfo.ClusterName)"
+                    Name = "Configuration Backup Setting - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 60, 40
                 }

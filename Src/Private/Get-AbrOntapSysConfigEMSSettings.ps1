@@ -59,7 +59,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                 }
 
                 $TableParams = @{
-                    Name = "System EMS Configuration Setting - $($ClusterInfo.ClusterName)"
+                    Name = "EMS Configuration Setting - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 17, 30, 15, 13, 15, 10
                 }

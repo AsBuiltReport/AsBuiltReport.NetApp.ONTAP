@@ -42,7 +42,7 @@ function Get-AbrOntapSysConfigNTP {
                 }
 
                 $TableParams = @{
-                    Name = "System Network Time Protocol - $($ClusterInfo.ClusterName)"
+                    Name = "Network Time Protocol - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 40, 20, 20, 20
                 }

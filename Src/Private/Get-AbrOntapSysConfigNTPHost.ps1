@@ -34,7 +34,7 @@ function Get-AbrOntapSysConfigNTPHost {
                             'Time Offset' = $Item.Offset
                             'Selection State' = $Item.SelectionState
                             'Server' = $Item.Server
-                            'Peer Status' = Switch ($Item.IsPeerReachable) {
+                            'Peer Status' = switch ($Item.IsPeerReachable) {
                                 'True' { 'Reachable' }
                                 'False' { 'Unreachable' }
                                 default { $Item.IsPeerReachable }
@@ -50,7 +50,7 @@ function Get-AbrOntapSysConfigNTPHost {
                 }
 
                 $TableParams = @{
-                    Name = "System NTP Host Status - $($ClusterInfo.ClusterName)"
+                    Name = "NTP Host Status - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 30, 10, 20, 20, 20
                 }
