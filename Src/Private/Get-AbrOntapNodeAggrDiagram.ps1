@@ -103,7 +103,7 @@ function Get-AbrOntapStorageAggrDiagram {
                                 "AggregateName" = $Aggr.Name
                                 "AdditionalInfo" = [PSCustomObject][ordered]@{
                                     "Total Size" = $Aggr.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    "Used Space" = $Aggr.Used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                    "Used Space" = ($Aggr.TotalSize - $Aggr.Available) | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                                     "Assigned Disk" = $Aggr.Disks
                                     "Raid Type" = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
                                         $true { "Unknown" }
@@ -122,7 +122,11 @@ function Get-AbrOntapStorageAggrDiagram {
                                         default { "Unknown" }
                                     }
                                     "Raid Size" = $Aggr.RaidSize
-                                    "State" = $Aggr.State
+                                    "State" = switch ([string]::IsNullOrEmpty($Aggr.State)) {
+                                        $true { "Unknown" }
+                                        $false { $Aggr.State.ToUpper() }
+                                        default { "Unknown" }
+                                    }
                                 }
                             }
                         }
