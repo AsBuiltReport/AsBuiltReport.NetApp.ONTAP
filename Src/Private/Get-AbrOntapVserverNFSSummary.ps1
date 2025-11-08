@@ -34,17 +34,17 @@ function Get-AbrOntapVserverNFSSummary {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'Nfs v3' = Switch ($Item.IsNfsv3) {
+                            'Nfs v3' = switch ($Item.IsNfsv3) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
                                 default { $Item.IsNfsv3 }
                             }
-                            'Nfs v4' = Switch ($Item.IsNfsv4) {
+                            'Nfs v4' = switch ($Item.IsNfsv4) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
                                 default { $Item.IsNfsv4 }
                             }
-                            'Nfs v41' = Switch ($Item.IsNfsv41) {
+                            'Nfs v41' = switch ($Item.IsNfsv41) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
                                 default { $Item.IsNfsv41 }
@@ -58,9 +58,7 @@ function Get-AbrOntapVserverNFSSummary {
                     }
                 }
                 if ($Healthcheck.Vserver.NFS) {
-                    $VserverObj | Where-Object { $_.'Nfs v3' -like 'Disabled' } | Set-Style -Style Warning -Property 'Nfs v3'
-                    $VserverObj | Where-Object { $_.'Nfs v4' -like 'Disabled' } | Set-Style -Style Warning -Property 'Nfs v4'
-                    $VserverObj | Where-Object { $_.'Nfs v41' -like 'Disabled' } | Set-Style -Style Warning -Property 'Nfs v41'
+                    $VserverObj | Where-Object { $_.'Nfs v3' -like 'Disabled' -and $_.'Nfs v4' -like 'Disabled' -and $_.'Nfs v41' -like 'Disabled' } | Set-Style -Style Warning
                 }
 
                 $TableParams = @{
@@ -72,6 +70,15 @@ function Get-AbrOntapVserverNFSSummary {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.NFS -and ($VserverObj | Where-Object { $_.'Nfs v3' -like 'Disabled' -and $_.'Nfs v4' -like 'Disabled' -and $_.'Nfs v41' -like 'Disabled' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Evaluate enabling NFS services to support client connectivity and file sharing."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

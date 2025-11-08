@@ -29,13 +29,13 @@ function Get-AbrOntapSecurityNAE {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $NAE = (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq "encrypt_with_aggr_key" }).Value
+                        $NAE = try { (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq "encrypt_with_aggr_key" }).Value } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
-                            'Aggregate Encryption' = Switch ($NAE) {
+                            'Aggregate Encryption' = switch ($NAE) {
                                 'true' { 'Yes' }
                                 'false' { 'No' }
-                                $Null { 'Unsupported' }
+                                $Null { 'Unknown' }
                                 default { $NAE }
                             }
                             'Volume Count' = $Item.Volumes
@@ -59,6 +59,15 @@ function Get-AbrOntapSecurityNAE {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Storage.Aggr -and ($OutObj | Where-Object { $_.'State' -ne 'Online' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all Aggregates are in 'Online' state to maintain optimal storage performance and client access availability."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -37,7 +37,7 @@ function Get-AbrOntapRepDestination {
                             'Destination Location' = $Item.DestinationLocation
                             'Source Vserver' = $Item.SourceVserver
                             'Source Location' = $Item.SourceLocation
-                            'Relationship Type' = Switch ($Item.RelationshipType) {
+                            'Relationship Type' = switch ($Item.RelationshipType) {
                                 'extended_data_protection' { 'XDP' }
                                 'data_protection' { 'DP' }
                                 'transition_data_protection' { 'TDP' }
@@ -46,7 +46,7 @@ function Get-AbrOntapRepDestination {
                                 default { $Item.RelationshipType }
                             }
                             'Policy Type' = $Item.PolicyType
-                            'Status' = Switch ($Item.RelationshipStatus) {
+                            'Status' = switch ($Item.RelationshipStatus) {
                                 $Null { 'Unknown' }
                                 default { $Item.RelationshipStatus }
                             }
@@ -66,6 +66,15 @@ function Get-AbrOntapRepDestination {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ReplicaObj | Table @TableParams
+                        if ($Healthcheck.Replication.Relationship -and ($ReplicaObj | Where-Object { $_.'Status' -eq "Unknown" })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all SnapMirror relationships have a known status to maintain replication integrity."
+                            }
+                            BlankLine
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -24,7 +24,7 @@ function Get-AbrOntapNodesHW {
 
     process {
         try {
-            $NodeHW = Get-NcNodeInfo -Controller $Array
+            $NodeHW = Get-NcNodeInfo -Controller $Array -ErrorAction Continue
             if ($NodeHW) {
                 $Outobj = @()
                 foreach ($NodeHWs in $NodeHW) {
@@ -39,7 +39,7 @@ function Get-AbrOntapNodesHW {
                             'AFF/FAS' = $NodeHWs.ProdType
                             'All Flash Optimized' = ConvertTo-TextYN $NodeInfo.IsAllFlashOptimized
                             'Epsilon' = ConvertTo-TextYN $NodeInfo.IsEpsilonNode
-                            'System Healthy' = Switch ($NodeInfo.IsNodeHealthy) {
+                            'System Healthy' = switch ($NodeInfo.IsNodeHealthy) {
                                 "True" { "Healthy" }
                                 "False" { "UnHealthy" }
                                 default { $NodeInfo.IsNodeHealthy }
@@ -48,7 +48,7 @@ function Get-AbrOntapNodesHW {
                             'Failed Fan Error' = $NodeInfo.EnvFailedFanMessage
                             'Failed PowerSupply Count' = $NodeInfo.EnvFailedPowerSupplyCount
                             'Failed PowerSupply Error' = $NodeInfo.EnvFailedPowerSupplyMessage
-                            'Over Temperature' = Switch ($NodeInfo.EnvOverTemperature) {
+                            'Over Temperature' = switch ($NodeInfo.EnvOverTemperature) {
                                 "True" { "High Temperature" }
                                 "False" { "Normal Temperature" }
                                 default { $NodeInfo.EnvOverTemperature }

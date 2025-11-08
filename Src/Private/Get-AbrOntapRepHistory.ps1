@@ -54,6 +54,15 @@ function Get-AbrOntapRepHistory {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
+                if ($Healthcheck.Replication.History -and ($ReplicaObj | Where-Object { $_.'Result' -ne 'success' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all SnapMirror replication operations complete successfully to maintain data integrity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

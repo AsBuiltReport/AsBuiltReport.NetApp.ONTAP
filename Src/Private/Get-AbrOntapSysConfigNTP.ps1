@@ -50,6 +50,37 @@ function Get-AbrOntapSysConfigNTP {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+            } else {
+                $inObj = [ordered] @{
+                    'Server Name' = 'No NTP Servers Configured'
+                    'NTP Version' = 'N/A'
+                    'Preferred' = 'N/A'
+                    'Authentication Enabled' = 'N/A'
+                }
+                $OutObj = [pscustomobject]$inObj
+
+                if ($Healthcheck.System.NTP) {
+                    $OutObj | Set-Style -Style Warning
+                }
+
+                $TableParams = @{
+                    Name = "Network Time Protocol - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 40, 20, 20, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
+
+                Paragraph "Health Check:" -Bold -Underline
+                BlankLine
+                Paragraph {
+                    Text "Best Practice:" -Bold
+                    Text "Configure at least one NTP server to ensure accurate time synchronization across the cluster."
+                }
+                BlankLine
+
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

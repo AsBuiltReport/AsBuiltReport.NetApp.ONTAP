@@ -34,7 +34,7 @@ function Get-AbrOntapNetworkMgmt {
                                 try {
                                     $inObj = [ordered] @{
                                         'Cluster Interface' = $Item.InterfaceName
-                                        'Status' = Switch ($Item.OpStatus) {
+                                        'Status' = switch ($Item.OpStatus) {
                                             "" { "Unknown" }
                                             $Null { "Unknown" }
                                             default { $Item.OpStatus.ToString().ToUpper() }
@@ -61,6 +61,15 @@ function Get-AbrOntapNetworkMgmt {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
                             $ClusterObj | Table @TableParams
+                            if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
+                                Paragraph "Health Check:" -Bold -Underline
+                                BlankLine
+                                Paragraph {
+                                    Text "Best Practice:" -Bold
+                                    Text "Ensure that all cluster network interfaces are operational (UP) to maintain cluster connectivity and performance."
+                                }
+                                BlankLine
+                            }
                         }
                     }
                 } catch {
@@ -76,7 +85,7 @@ function Get-AbrOntapNetworkMgmt {
                             try {
                                 $inObj = [ordered] @{
                                     'MGMT Interface' = $Item.InterfaceName
-                                    'Status' = Switch ($Item.OpStatus) {
+                                    'Status' = switch ($Item.OpStatus) {
                                         "" { "Unknown" }
                                         $Null { "Unknown" }
                                         default { $Item.OpStatus.ToString().ToUpper() }
@@ -103,6 +112,15 @@ function Get-AbrOntapNetworkMgmt {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ClusterObj | Table @TableParams
+                        if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all management network interfaces are operational (UP) to maintain proper management access to the cluster."
+                            }
+                            BlankLine
+                        }
                     }
                 }
             } catch {
@@ -118,7 +136,7 @@ function Get-AbrOntapNetworkMgmt {
                                 try {
                                     $inObj = [ordered] @{
                                         'Intercluster Interface' = $Item.InterfaceName
-                                        'Status' = Switch ($Item.OpStatus) {
+                                        'Status' = switch ($Item.OpStatus) {
                                             "" { "Unknown" }
                                             $Null { "Unknown" }
                                             default { $Item.OpStatus.ToString().ToUpper() }
@@ -145,6 +163,15 @@ function Get-AbrOntapNetworkMgmt {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
                             $ClusterObj | Table @TableParams
+                            if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
+                                Paragraph "Health Check:" -Bold -Underline
+                                BlankLine
+                                Paragraph {
+                                    Text "Best Practice:" -Bold
+                                    Text "Ensure that all intercluster network interfaces are operational (UP) to maintain cluster-to-cluster communication."
+                                }
+                                BlankLine
+                            }
                         }
                     }
                 }
@@ -160,10 +187,10 @@ function Get-AbrOntapNetworkMgmt {
                             try {
                                 if ($Item.Wwpn) {
                                     $AddressData = $Item.Wwpn
-                                } else {$AddressData = $Item.Address}
+                                } else { $AddressData = $Item.Address }
                                 $inObj = [ordered] @{
                                     'Data Interface' = $Item.InterfaceName
-                                    'Status' = Switch ($Item.OpStatus) {
+                                    'Status' = switch ($Item.OpStatus) {
                                         "" { "Unknown" }
                                         $Null { "Unknown" }
                                         default { $Item.OpStatus.ToString().ToUpper() }
@@ -190,6 +217,15 @@ function Get-AbrOntapNetworkMgmt {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ClusterObj | Table @TableParams
+                        if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all data network interfaces are operational (UP) to maintain optimal data access and performance."
+                            }
+                            BlankLine
+                        }
                     }
                 }
             } catch {
@@ -209,7 +245,7 @@ function Get-AbrOntapNetworkMgmt {
                                         'Network Interface' = $Item.InterfaceName
                                         'Home Port' = $Item.HomeNode + ":" + $Item.HomePort
                                         'Current Port' = $Item.CurrentNode + ":" + $Item.CurrentPort
-                                        'IsHome' = Switch ($Item.IsHome) {
+                                        'IsHome' = switch ($Item.IsHome) {
                                             "True" { 'Yes' }
                                             "False" { "No" }
                                             default { $Item.IsHome }
@@ -234,6 +270,15 @@ function Get-AbrOntapNetworkMgmt {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
                             $ClusterObj | Table @TableParams
+                            if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' })) {
+                                Paragraph "Health Check:" -Bold -Underline
+                                BlankLine
+                                Paragraph {
+                                    Text "Best Practice:" -Bold
+                                    Text "Ensure that all network interfaces are on their designated home ports to maintain optimal network performance and reliability."
+                                }
+                                BlankLine
+                            }
                         }
                     }
                 }

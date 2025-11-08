@@ -50,7 +50,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                     }
                 }
                 if ($Healthcheck.Vserver.Snapshot) {
-                    $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'True' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
+                    $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
                 }
 
                 $TableParams = @{
@@ -63,6 +63,15 @@ function Get-AbrOntapVserverVolumeSnapshot {
                 }
                 if ($VserverObj) {
                     $VserverObj | Table @TableParams
+                    if ($Healthcheck.Vserver.Snapshot -and ($VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and $_.'Reserve Available' -eq 0 })) {
+                        Paragraph "Health Check:" -Bold -Underline
+                        BlankLine
+                        Paragraph {
+                            Text "Best Practice:" -Bold
+                            Text "Snapshots are enabled on volumes but there is no available snapshot reserve space. It is recommended to increase the snapshot reserve size to avoid snapshot failures."
+                        }
+                        BlankLine
+                    }
                 }
             }
         } catch {

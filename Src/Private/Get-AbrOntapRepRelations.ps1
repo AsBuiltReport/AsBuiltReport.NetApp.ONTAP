@@ -79,6 +79,15 @@ function Get-AbrOntapRepRelationship {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ReplicaObj | Table @TableParams
+                        if ($Healthcheck.Replication.Relationship -and ($ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne "None" })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all SnapMirror relationships are healthy to maintain data replication integrity."
+                            }
+                            BlankLine
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

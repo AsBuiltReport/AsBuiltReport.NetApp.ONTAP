@@ -41,6 +41,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     Write-Host "- Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
     Write-Host "- Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
     Write-Host "- This project is community maintained and has no sponsorship from NetApp, its employees or any of its affiliates."
+    Write-Host "- To sponsor this project, please visit: https://ko-fi.com/F1F8DEV80"
+    Write-Host "- Getting dependency information:"
 
 
     # Check the version of the dependency modules
@@ -51,11 +53,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
 
             if ($InstalledVersion) {
-                Write-Host "- $Module module v$($InstalledVersion.ToString()) is currently installed."
+                Write-Host "  - $Module module v$($InstalledVersion.ToString()) is currently installed."
                 $LatestVersion = Find-Module -Name $Module -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
                 if ($InstalledVersion -lt $LatestVersion) {
-                    Write-Host "  - $Module module v$($LatestVersion.ToString()) is available." -ForegroundColor Red
-                    Write-Host "  - Run 'Update-Module -Name $Module -Force' to install the latest version." -ForegroundColor Red
+                    Write-Host "    - $Module module v$($LatestVersion.ToString()) is available." -ForegroundColor Red
+                    Write-Host "    - Run 'Update-Module -Name $Module -Force' to install the latest version." -ForegroundColor Red
                 }
             }
         } catch {
@@ -132,10 +134,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Section -Style Heading3 'Cluster HA Status' {
                         Get-AbrOntapClusterHA
                     }
-                    if ($InfoLevel.Cluster -ge 2) {
-                        Section -Style Heading3 'Cluster AutoSupport Status' {
-                            Get-AbrOntapClusterASUP
-                        }
+                    Section -Style Heading3 'Cluster AutoSupport Status' {
+                        Get-AbrOntapClusterASUP
                     }
                 }
             }
@@ -244,7 +244,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #                                 License Section                                             #
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "License InfoLevel set at $($InfoLevel.License)."
-            if ($InfoLevel.License -gt 0) {
+            if ($InfoLevel.License -gt 0 -and (Get-NcLicense -Controller $Array)) {
                 Section -Style Heading2 'Licenses Information' {
                     Paragraph "The following section provides a summary of the license usage in $($ClusterInfo.ClusterName)."
                     BlankLine
@@ -255,6 +255,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         }
                     }
                 }
+            } else {
+                Write-PScriboMessage -IsWarning "No license information found on $($ClusterInfo.ClusterName) or License InfoLevel is set to 0."
             }
 
             #---------------------------------------------------------------------------------------------#
@@ -298,7 +300,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides Network VLAN information in $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 $Nodes = Get-NcNode -Controller $Array
-                                foreach ($Node in $Nodes) {
+                                $VLANDataObj = foreach ($Node in $Nodes) {
                                     if (Get-NcNetPortVlan -Node $Node -Controller $Array) {
                                         Section -Style Heading4 "$Node Vlans" {
                                             Get-AbrOntapNetworkVlan -Node $Node
@@ -556,13 +558,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Section -ExcludeFromTOC -Style Heading6 'Igroup Mapping' {
                                                     Get-AbrOntapVserverLunIgroup -Vserver $SVM
                                                 }
-                                                $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
-                                                if ($Healthcheck.Vserver.Status -and $NonMappedLun) {
-                                                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
-                                                        Paragraph "The following section provides information of Non Mapped Lun in $($SVM)."
-                                                        BlankLine
-                                                        $NonMappedLun
-                                                    }
+                                            }
+                                            $NonMappedLun = Get-AbrOntapVserverNonMappedLun -Vserver $SVM
+                                            if ($Healthcheck.Vserver.Status -and $NonMappedLun) {
+                                                Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Lun Information' {
+                                                    Paragraph "The following section provides information of Non Mapped Lun in $($SVM)."
+                                                    BlankLine
+                                                    $NonMappedLun
                                                 }
                                             }
                                         }
@@ -579,13 +581,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Section -ExcludeFromTOC -Style Heading6 'Subsystem Mapping' {
                                                     Get-AbrOntapVserverSubsystem -Vserver $SVM
                                                 }
-                                                $NonMappedNamespace = Get-AbrOntapVserverNonMappedNamespace -Vserver $SVM
-                                                if ($Healthcheck.Vserver.Status -and $NonMappedNamespace) {
-                                                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Namespace Information' {
-                                                        Paragraph "The following table provides information about Non Mapped Namespace in $($SVM)."
-                                                        BlankLine
-                                                        $NonMappedNamespace
-                                                    }
+                                            }
+                                            $NonMappedNamespace = Get-AbrOntapVserverNonMappedNamespace -Vserver $SVM
+                                            if ($Healthcheck.Vserver.Status -and $NonMappedNamespace) {
+                                                Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Non-Mapped Namespace Information' {
+                                                    Paragraph "The following table provides information about Non Mapped Namespace in $($SVM)."
+                                                    BlankLine
+                                                    $NonMappedNamespace
                                                 }
                                             }
                                         }
@@ -870,13 +872,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the Timezone Configuration in $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 Get-AbrOntapSysConfigTZ
-                                if (Get-NcNtpServer -Controller $Array) {
-                                    Section -Style Heading4 'NTP Configuration' {
-                                        Get-AbrOntapSysConfigNTP
-                                        if ($InfoLevel.System -ge 2) {
-                                            Section -Style Heading5 'NTP Node Status Information' {
-                                                Get-AbrOntapSysConfigNTPHost
-                                            }
+                                Section -Style Heading4 'NTP Configuration' {
+                                    Get-AbrOntapSysConfigNTP
+                                    if ($InfoLevel.System -ge 2 -and (Get-NcNtpServerStatus -Controller $Array)) {
+                                        Section -Style Heading5 'NTP Node Status Information' {
+                                            Get-AbrOntapSysConfigNTPHost
                                         }
                                     }
                                 }

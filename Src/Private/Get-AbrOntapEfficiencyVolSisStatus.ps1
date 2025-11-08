@@ -36,7 +36,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                         $Volume = $Item.Path.split('/')
                         $inObj = [ordered] @{
                             'Volume' = $Volume[2]
-                            'State' = Switch ($Item.State) {
+                            'State' = switch ($Item.State) {
                                 'enabled' { 'Enabled' }
                                 'disabled' { 'Disabled' }
                                 default { $Item.State }
@@ -63,6 +63,15 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Storage.Efficiency -and ($OutObj | Where-Object { $_.'State' -like 'Disabled' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that volume deduplication is enabled on volumes where data reduction is beneficial to optimize storage efficiency."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

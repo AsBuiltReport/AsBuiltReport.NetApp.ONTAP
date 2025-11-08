@@ -57,6 +57,15 @@ function Get-AbrOntapNodesSP {
                 $TableParams['Caption'] = "- $($TableParams.Name)"
             }
             $NodeServiceProcessor | Table @TableParams
+            if ($Healthcheck.Node.ServiceProcessor -and ($NodeServiceProcessor | Where-Object { $_.'Status' -like 'offline' -or $_.'Status' -like 'degraded' })) {
+                Paragraph "Health Check:" -Bold -Underline
+                BlankLine
+                Paragraph {
+                    Text "Best Practice:" -Bold
+                    Text "Ensure that all service-processors are online and functioning properly to maintain system management capabilities."
+                }
+                BlankLine
+            }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message
         }

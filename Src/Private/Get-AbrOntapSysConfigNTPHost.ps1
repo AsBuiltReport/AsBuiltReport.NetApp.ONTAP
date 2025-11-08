@@ -52,12 +52,21 @@ function Get-AbrOntapSysConfigNTPHost {
                 $TableParams = @{
                     Name = "NTP Host Status - $($ClusterInfo.ClusterName)"
                     List = $false
-                    ColumnWidths = 30, 10, 20, 20, 20
+                    ColumnWidths = 30, 10, 25, 20, 15
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.NTP -and ($OutObj | Where-Object { $_.'Peer Status' -notlike 'Reachable' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all configured NTP servers are reachable to maintain accurate time synchronization across the cluster."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

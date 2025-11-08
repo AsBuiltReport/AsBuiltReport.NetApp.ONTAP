@@ -60,6 +60,15 @@ function Get-AbrOntapVserverVolume {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'offline' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all volumes are in 'online' status and monitor volume usage to prevent capacity issues."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

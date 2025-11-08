@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.11] - Unreleased
 
+### Added
+
+- Add Health Check best practices for general Ontap configurations
+- Add sponsorship information
+
 ### Changed
 
 - Update health check messages to use "in" instead of "on" for consistency in reporting

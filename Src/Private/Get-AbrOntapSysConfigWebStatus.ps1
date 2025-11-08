@@ -43,9 +43,10 @@ function Get-AbrOntapSysConfigWebStatus {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
-                if ($Healthcheck.System.DNS) {
+                if ($Healthcheck.System.Web) {
                     $OutObj | Where-Object { $_.'Status' -notlike 'Online' } | Set-Style -Style Warning -Property 'Status'
                     $OutObj | Where-Object { $_.'Status Code' -ne 200 } | Set-Style -Style Warning -Property 'Status Code'
+                    $OutObj | Where-Object { $_.'Http Enabled' -eq 'Yes' } | Set-Style -Style Warning -Property 'Http Enabled'
                 }
 
                 $TableParams = @{
@@ -57,6 +58,15 @@ function Get-AbrOntapSysConfigWebStatus {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.Web -and (($OutObj | Where-Object { $_.'Http Enabled' -eq 'Yes' }))) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "It is recommended to enable HTTPS and disable HTTP on all nodes to ensure secure communication with the cluster management interface."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

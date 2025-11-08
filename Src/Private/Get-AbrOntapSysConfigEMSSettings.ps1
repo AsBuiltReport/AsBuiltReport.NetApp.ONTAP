@@ -31,23 +31,23 @@ function Get-AbrOntapSysConfigEMSSetting {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Email Destinations' = Switch ($Item.Mail) {
+                            'Email Destinations' = switch ($Item.Mail) {
                                 $Null { '-' }
                                 default { $Item.Mail }
                             }
-                            'Snmp Traphost' = Switch ($Item.Snmp) {
+                            'Snmp Traphost' = switch ($Item.Snmp) {
                                 $Null { '-' }
                                 default { $Item.Snmp }
                             }
-                            'Snmp Community' = Switch ($Item.SnmpCommunity) {
+                            'Snmp Community' = switch ($Item.SnmpCommunity) {
                                 $Null { '-' }
                                 default { $Item.SnmpCommunity }
                             }
-                            'Syslog' = Switch ($Item.Syslog) {
+                            'Syslog' = switch ($Item.Syslog) {
                                 $Null { '-' }
                                 default { $Item.Syslog }
                             }
-                            'Syslog Facility' = Switch ($Item.SyslogFacility) {
+                            'Syslog Facility' = switch ($Item.SyslogFacility) {
                                 $Null { '-' }
                                 default { $Item.SyslogFacility }
                             }
@@ -67,6 +67,15 @@ function Get-AbrOntapSysConfigEMSSetting {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.EMS -and ($OutObj | Where-Object { $_.'Email Destinations' -eq '-' -and $_.'Snmp Traphost' -eq '-' -and $_.'Syslog' -eq '-' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "It is recommended to configure at least one EMS destination (Email, SNMP, or Syslog) to ensure proper monitoring and alerting of system events."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

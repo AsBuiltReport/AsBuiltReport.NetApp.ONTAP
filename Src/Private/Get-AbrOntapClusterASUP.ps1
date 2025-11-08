@@ -24,7 +24,7 @@ function Get-AbrOntapClusterASUP {
 
     process {
         try {
-            $AutoSupport = Get-NcAutoSupportConfig -Controller $Array
+            $AutoSupport = Get-NcAutoSupportConfig -Controller $Array -ErrorAction Continue
             if ($AutoSupport) {
                 $Outobj = @()
                 foreach ($NodesAUTO in $AutoSupport) {
@@ -51,6 +51,15 @@ function Get-AbrOntapClusterASUP {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $Outobj | Table @TableParams
+                        if ($Healthcheck.Cluster.AutoSupport -and ($Outobj | Where-Object { $_.'Enabled' -like 'No' })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "AutoSupport is disabled on one or more nodes. It is recommended to enable AutoSupport to ensure proactive monitoring and issue resolution."
+                            }
+                            BlankLine
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

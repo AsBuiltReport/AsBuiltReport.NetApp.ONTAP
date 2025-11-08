@@ -37,7 +37,7 @@ function Get-AbrOntapVserverIscsiInterface {
                             'Interface Name' = $Item.InterfaceName
                             'IP Address' = $Item.IpAddress
                             'Port' = $Item.IpPort
-                            'Status' = Switch ($Item.IsInterfaceEnabled) {
+                            'Status' = switch ($Item.IsInterfaceEnabled) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
                                 default { $Item.IsInterfaceEnabled }
@@ -61,6 +61,15 @@ function Get-AbrOntapVserverIscsiInterface {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.Iscsi -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all ISCSI interfaces are operational to maintain optimal storage connectivity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -48,7 +48,7 @@ function Get-AbrOntapVserverSubsystem {
                             'Type' = $Item.Ostype
                             'Target NQN' = $Item.TargetNqn
                             'Host NQN' = $Item.Hosts.Nqn
-                            'Mapped Namespace' = Switch (($MappedNamespace).count) {
+                            'Mapped Namespace' = switch (($MappedNamespace).count) {
                                 0 { "None" }
                                 default { $MappedNamespace }
                             }
@@ -67,6 +67,15 @@ function Get-AbrOntapVserverSubsystem {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $VserverObj | Table @TableParams
+                        if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { ($_.'Mapped Namespace').count -eq 0 })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure all subsystems have mapped namespaces to guarantee proper functionality and performance."
+                            }
+                            BlankLine
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

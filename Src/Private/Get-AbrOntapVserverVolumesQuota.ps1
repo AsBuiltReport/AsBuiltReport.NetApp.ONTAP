@@ -62,6 +62,15 @@ function Get-AbrOntapVserverVolumesQuota {
                         $TableParams['Caption'] = "- $($TableParams.Name)"
                     }
                     $VserverObj | Table @TableParams
+                    if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $null -ne $_.'Quota Error' })) {
+                        Paragraph "Health Check:" -Bold -Underline
+                        BlankLine
+                        Paragraph {
+                            Text "Best Practice:" -Bold
+                            Text "Review and resolve any quota errors to ensure proper quota enforcement and avoid potential data management issues."
+                        }
+                        BlankLine
+                    }
                 }
             }
         } catch {
@@ -82,19 +91,19 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Type' = $Item.QuotaType
                                         'Target' = $Item.QuotaTarget
-                                        'Disk Limit' = Switch ($Item.DiskLimit) {
+                                        'Disk Limit' = switch ($Item.DiskLimit) {
                                             "-" { $Item.DiskLimit }
                                             default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
-                                        'File Limit' = Switch ($Item.FileLimit) {
+                                        'File Limit' = switch ($Item.FileLimit) {
                                             "-" { $Item.FileLimit }
                                             default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
-                                        'Soft Disk Limit' = Switch ($Item.SoftDiskLimit) {
+                                        'Soft Disk Limit' = switch ($Item.SoftDiskLimit) {
                                             "-" { $Item.SoftDiskLimit }
                                             default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
-                                        'Soft File Limit' = Switch ($Item.SoftFileLimit) {
+                                        'Soft File Limit' = switch ($Item.SoftFileLimit) {
                                             "-" { $Item.SoftFileLimit }
                                             default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
@@ -139,11 +148,11 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
-                                        'Disk Limit' = Switch ($Item.DiskLimit) {
+                                        'Disk Limit' = switch ($Item.DiskLimit) {
                                             "-" { $Item.DiskLimit }
                                             default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
-                                        'Soft Disk Limit' = Switch ($Item.SoftDiskLimit) {
+                                        'Soft Disk Limit' = switch ($Item.SoftDiskLimit) {
                                             "-" { $Item.SoftDiskLimit }
                                             default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
@@ -188,11 +197,11 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
-                                        'File Limit' = Switch ($Item.FileLimit) {
+                                        'File Limit' = switch ($Item.FileLimit) {
                                             "-" { $Item.FileLimit }
                                             default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
-                                        'Soft File Limit' = Switch ($Item.SoftFileLimit) {
+                                        'Soft File Limit' = switch ($Item.SoftFileLimit) {
                                             "-" { $Item.SoftFileLimit }
                                             default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }

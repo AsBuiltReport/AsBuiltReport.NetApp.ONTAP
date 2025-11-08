@@ -56,6 +56,7 @@ function Export-AbrOntapDiagram {
                         'top-to-bottom'
                     }
                 }
+                'DisableMainDiagramLogo' = $Options.DisableDiagramMainLogo
             }
 
             if ($Options.DiagramTheme -eq 'Black') {
