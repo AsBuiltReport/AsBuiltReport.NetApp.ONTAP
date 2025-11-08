@@ -61,6 +61,15 @@ function Get-AbrOntapVserverCIFSSummary {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
                             $VserverObj | Table @TableParams
+                            if ($Healthcheck.Vserver.CIFS -and ($VserverObj | Where-Object { $_.'Status' -like 'down' })) {
+                                Paragraph "Health Check:" -Bold -Underline
+                                BlankLine
+                                Paragraph {
+                                    Text "Best Practice:" -Bold
+                                    Text "Ensure that the CIFS service is running on all nodes to maintain file sharing capabilities."
+                                }
+                                BlankLine
+                            }
                         } catch {
                             Write-PScriboMessage -IsWarning $_.Exception.Message
                         }

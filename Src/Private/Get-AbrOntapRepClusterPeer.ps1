@@ -55,6 +55,15 @@ function Get-AbrOntapRepClusterPeer {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
+                if ($Healthcheck.Replication.ClusterPeer -and ($ReplicaObj | Where-Object { $_.'Status' -notlike 'Available' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all cluster peers are available to maintain replication integrity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

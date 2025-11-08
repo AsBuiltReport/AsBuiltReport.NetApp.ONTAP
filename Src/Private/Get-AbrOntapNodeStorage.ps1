@@ -56,6 +56,15 @@ function Get-AbrOntapNodeStorage {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Node.HW -and (($OutObj | Where-Object { $_.'Status' -like 'offline' }) -or ($OutObj | Where-Object { $_.'Used' -ge 90 }))) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all nodes are online and that storage usage is within acceptable limits."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

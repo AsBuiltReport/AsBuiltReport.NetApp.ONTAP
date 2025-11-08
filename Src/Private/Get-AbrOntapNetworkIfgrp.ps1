@@ -64,6 +64,15 @@ function Get-AbrOntapNetworkIfgrp {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $AggregatePorts | Table @TableParams
+                if ($Healthcheck.Network.Port -and ($AggregatePorts | Where-Object { $_.'Port Participation' -ne "full" })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all ports in the interface group are active and participating fully to maintain optimal network performance and redundancy."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

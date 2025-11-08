@@ -40,7 +40,7 @@ function Get-AbrOntapVserverIscsiSummary {
                             'Max Cmds Per Session' = $Item.MaxCmdsPerSession
                             'Max Conn Per Session' = $Item.MaxConnPerSession
                             'Login Timeout' = $Item.LoginTimeout
-                            'Status' = Switch ($Item.IsAvailable) {
+                            'Status' = switch ($Item.IsAvailable) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
                                 default { $Item.IsAvailable }
@@ -64,6 +64,15 @@ function Get-AbrOntapVserverIscsiSummary {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.Iscsi -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all ISCSI services are operational to maintain optimal storage connectivity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -74,6 +74,15 @@ function Get-AbrOntapDiskType {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Storage.DiskStatus -and ($OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that aggregate spare capacity is above the recommended threshold to maintain optimal performance and reliability."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

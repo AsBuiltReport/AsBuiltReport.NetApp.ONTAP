@@ -47,6 +47,15 @@ function Get-AbrOntapDiskBroken {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $DiskFailed | Table @TableParams
+                if ($Healthcheck.Storage.DiskStatus -and ($DiskFailed)) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Review the failed disk information above. It is recommended to replace any broken disks promptly to maintain data integrity and system performance."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

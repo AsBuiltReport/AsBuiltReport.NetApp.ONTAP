@@ -58,6 +58,15 @@ function Get-AbrOntapDiskShelf {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ShelfInventory | Table @TableParams
+                if ($Healthcheck.Storage.ShelfStatus -and ($ShelfInventory | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all disk shelves are online and operational. Investigate any shelves marked as offline or missing."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -43,7 +43,7 @@ function Get-AbrOntapVserverLunStorage {
                             'Parent Volume' = $Item.Volume
                             'Path' = $Item.Path
                             'Serial Number' = $Item.SerialNumber
-                            'Initiator Group' = Switch (($lunmap).count) {
+                            'Initiator Group' = switch (($lunmap).count) {
                                 0 { "None" }
                                 default { $lunmap }
                             }
@@ -53,18 +53,18 @@ function Get-AbrOntapVserverLunStorage {
                             'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                             'OS Type' = $Item.Protocol
                             'Is Thin' = ConvertTo-TextYN $Item.Thin
-                            'Space Allocation' = Switch ($Item.IsSpaceAllocEnabled) {
+                            'Space Allocation' = switch ($Item.IsSpaceAllocEnabled) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
                                 default { $Item.IsSpaceAllocEnabled }
                             }
-                            'Space Reservation' = Switch ($Item.IsSpaceReservationEnabled) {
+                            'Space Reservation' = switch ($Item.IsSpaceReservationEnabled) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
                                 default { $Item.IsSpaceReservationEnabled }
                             }
                             'Is Mapped' = ConvertTo-TextYN $Item.Mapped
-                            'Status' = Switch ($Item.Online) {
+                            'Status' = switch ($Item.Online) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
                                 default { $Item.Online }
@@ -87,6 +87,15 @@ function Get-AbrOntapVserverLunStorage {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $VserverObj | Table @TableParams
+                        if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all LUNs are operational to maintain optimal storage connectivity."
+                            }
+                            BlankLine
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

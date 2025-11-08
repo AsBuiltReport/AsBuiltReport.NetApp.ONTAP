@@ -35,7 +35,7 @@ function Get-AbrOntapVserverFcpSummary {
                     try {
                         $inObj = [ordered] @{
                             'FCP WWNN' = $Item.NodeName
-                            'Status' = Switch ($Item.IsAvailable) {
+                            'Status' = switch ($Item.IsAvailable) {
                                 'True' { 'Up' }
                                 'False' { 'Down' }
                                 default { $Item.IsAvailable }
@@ -59,6 +59,15 @@ function Get-AbrOntapVserverFcpSummary {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' } )) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all FCP services are operational to maintain optimal storage connectivity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

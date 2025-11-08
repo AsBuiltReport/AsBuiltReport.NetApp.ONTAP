@@ -18,17 +18,17 @@ function Get-AbrOntapVserverVolumesFlexgroup {
         [Parameter (
             Position = 0,
             Mandatory)]
-            [string]
-            $Vserver
+        [string]
+        $Vserver
     )
 
     begin {
-        Write-PscriboMessage "Collecting ONTAP Vserver flexgroup volumes information."
+        Write-PScriboMessage "Collecting ONTAP Vserver flexgroup volumes information."
     }
 
     process {
         try {
-            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object {$_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True"}
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True" }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -39,9 +39,8 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                             'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
-                    }
-                    catch {
-                        Write-PscriboMessage -IsWarning $_.Exception.Message
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Status) {
@@ -57,10 +56,18 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Vserver.Status -and ($OutObj | Where-Object { $_.'Status' -like 'offline' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all flexgroup volumes are in 'online' status to maintain data availability."
+                    }
+                    BlankLine
+                }
             }
-        }
-        catch {
-            Write-PscriboMessage -IsWarning $_.Exception.Message
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
         }
     }
 

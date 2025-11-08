@@ -37,7 +37,7 @@ function Get-AbrOntapVserverNvmeInterface {
                             'Interface Name' = $Item.Lif
                             'Transport Address' = $Item.TransportAddress
                             'Transport Protocols' = $Item.TransportProtocols
-                            'Status' = Switch ($Item.StatusAdmin) {
+                            'Status' = switch ($Item.StatusAdmin) {
                                 'up' { 'Up' }
                                 'down' { 'Down' }
                                 default { $Item.StatusAdmin }
@@ -61,6 +61,15 @@ function Get-AbrOntapVserverNvmeInterface {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.Nvme -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all NVME interfaces are in 'Up' status to maintain optimal connectivity and performance."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

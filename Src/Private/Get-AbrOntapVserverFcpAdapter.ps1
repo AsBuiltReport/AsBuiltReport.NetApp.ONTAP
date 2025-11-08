@@ -34,7 +34,7 @@ function Get-AbrOntapVserverFcpAdapter {
                             'Adapter' = $Item.Adapter
                             'Protocol' = $Item.PhysicalProtocol
                             'Speed' = $Item.Speed
-                            'Status' = Switch ($Item.State) {
+                            'Status' = switch ($Item.State) {
                                 'online' { 'Up' }
                                 'offline' { 'Down' }
                                 default { $Item.State }
@@ -58,6 +58,15 @@ function Get-AbrOntapVserverFcpAdapter {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all FCP adapters are operational to maintain optimal storage connectivity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

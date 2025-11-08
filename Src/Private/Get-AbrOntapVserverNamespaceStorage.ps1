@@ -43,7 +43,7 @@ function Get-AbrOntapVserverNamespaceStorage {
                             'Parent Volume' = $Item.Volume
                             'Path' = $Item.Path
                             'Serial Number' = $Item.Uuid
-                            'Subsystem Map' = Switch (($namespacemap).count) {
+                            'Subsystem Map' = switch (($namespacemap).count) {
                                 0 { "None" }
                                 default { $namespacemap.Subsystem }
                             }
@@ -52,13 +52,13 @@ function Get-AbrOntapVserverNamespaceStorage {
                             'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                             'OS Type' = $Item.Ostype
-                            'Is Mapped' = Switch ([string]::IsNullOrEmpty($Item.Subsystem)) {
+                            'Is Mapped' = switch ([string]::IsNullOrEmpty($Item.Subsystem)) {
                                 $true { "No" }
                                 $false { "Yes" }
                                 default { $Item.Subsystem }
                             }
                             'ReadOnly' = ConvertTo-TextYN $Item.IsReadOnly
-                            'Status' = Switch ($Item.State) {
+                            'Status' = switch ($Item.State) {
                                 'online' { 'Up' }
                                 'offline' { 'Down' }
                                 default { $Item.Online }
@@ -81,6 +81,15 @@ function Get-AbrOntapVserverNamespaceStorage {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $VserverObj | Sort-Object -Property 'Namespace Name' | Table @TableParams
+                        if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all namespaces are operational to maintain optimal storage connectivity."
+                            }
+                            BlankLine
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -47,7 +47,7 @@ function Get-AbrOntapSysConfigBackup {
                 }
 
                 $TableParams = @{
-                    Name = "System Configuration Backups - $($Node)"
+                    Name = "Configuration Backups - $($Node)"
                     List = $false
                     ColumnWidths = 40, 15, 15, 15, 15
                 }

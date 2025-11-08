@@ -45,7 +45,7 @@ function Get-AbrOntapSysConfigEMS {
                 }
 
                 $TableParams = @{
-                    Name = "HealtCheck - System EMS Messages - $($Node)"
+                    Name = "HealtCheck - EMS Messages - $($Node)"
                     List = $false
                     ColumnWidths = 25, 20, 55
                 }

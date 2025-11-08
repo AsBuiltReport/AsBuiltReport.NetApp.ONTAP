@@ -54,6 +54,15 @@ function Get-AbrOntapRepVserverPeer {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
+                if ($Healthcheck.Replication.VserverPeer -and ($ReplicaObj | Where-Object { $_.'Peer State' -notlike 'peered' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all Vserver Peer relationships are in 'peered' state to maintain proper data replication."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

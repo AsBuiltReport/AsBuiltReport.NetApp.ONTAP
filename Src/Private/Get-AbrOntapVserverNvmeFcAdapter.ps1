@@ -28,7 +28,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
 
     process {
         try {
-            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object {$_.PhysicalProtocol -eq 'fibre_channel'} | Sort-Object -Property HomeNode
+            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'fibre_channel' } | Sort-Object -Property HomeNode
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
@@ -39,7 +39,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                             'Protocol' = $Item.PhysicalProtocol
                             'WWNN' = $Item.FcWwnn
                             'WWPN' = $Item.FcWwpn
-                            'Status' = Switch ($Item.StatusAdmin) {
+                            'Status' = switch ($Item.StatusAdmin) {
                                 'up' { 'Up' }
                                 'down' { 'Down' }
                                 default { $Item.StatusAdmin }
@@ -64,6 +64,15 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all Nvme FC adapters are in 'Up' status to maintain optimal connectivity and performance."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

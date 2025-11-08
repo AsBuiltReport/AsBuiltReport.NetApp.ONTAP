@@ -58,6 +58,15 @@ function Get-AbrOntapVserverVolumesQtree {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -notlike 'normal' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all qtrees are in 'normal' status to maintain data integrity and accessibility."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message
