@@ -300,7 +300,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides Network VLAN information in $($ClusterInfo.ClusterName)."
                                 BlankLine
                                 $Nodes = Get-NcNode -Controller $Array
-                                $VLANDataObj = foreach ($Node in $Nodes) {
+                                foreach ($Node in $Nodes) {
                                     if (Get-NcNetPortVlan -Node $Node -Controller $Array) {
                                         Section -Style Heading4 "$Node Vlans" {
                                             Get-AbrOntapNetworkVlan -Node $Node
