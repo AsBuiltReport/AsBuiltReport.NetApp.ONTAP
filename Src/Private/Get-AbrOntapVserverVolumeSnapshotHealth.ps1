@@ -34,7 +34,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
             $SnapShotData = Get-NcSnapshot -Volume $VserverFilter -Vserver $Vserver -Controller $Array | Where-Object { $_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays) }
             if ($SnapShotData) {
                 Section -Style Heading4 "HealthCheck - Volumes Snapshot" {
-                    Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck on $($SVM)."
+                    Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck in $($SVM)."
                     BlankLine
                     $VserverObj = @()
                     foreach ($Item in $SnapShotData) {

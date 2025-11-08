@@ -31,7 +31,7 @@ function Get-AbrOntapClusterLicense {
                         $License = Get-NcLicense -Owner $Node -Controller $Array
                         if ($License) {
                             $LicenseSummary = foreach ($Licenses in $License) {
-                                $EntitlementRisk = Try { Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
+                                $EntitlementRisk = try { Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                                 [PSCustomObject] @{
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)
@@ -52,6 +52,15 @@ function Get-AbrOntapClusterLicense {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
                             $LicenseSummary | Table @TableParams
+                            if ($Healthcheck.License.RiskSummary -and ($LicenseSummary | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' -or $_.'Risk' -like 'unlicensed' }) -or ($LicenseSummary | Where-Object { $_.'Risk' -like 'High' })) {
+                                Paragraph "Health Check:" -Bold -Underline
+                                BlankLine
+                                Paragraph {
+                                    Text "Best Practice:" -Bold
+                                    Text "Review the license risk summary above. It is recommended to address any licenses with medium, high, unknown, or unlicensed risk to ensure compliance and avoid potential disruptions."
+                                }
+                                BlankLine
+                            }
                         }
                     }
                 } catch {

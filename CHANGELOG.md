@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.10] - Unreleased
+## [0.6.11] - 2025-11-07
+
+### Added
+
+- Add Health Check best practices for general Ontap configurations
+- Add sponsorship information
+- Add Dependabot configuration for module dependencies
+
+### Changed
+
+- Update health check messages to use "in" instead of "on" for consistency in reporting
+- Refactor Get-AbrOntapNodeAggrDiagram to handle aggregate state correctly
+- Refactor Get-AbrOntapNodeAggrDiagram to handle used space calculation correctly
+
+## [0.6.10] - 2025-10-27
 
 ### Added
 

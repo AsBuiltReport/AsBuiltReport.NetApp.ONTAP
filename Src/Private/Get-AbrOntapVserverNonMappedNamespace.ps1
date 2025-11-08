@@ -28,7 +28,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
 
     process {
         try {
-            $NamespaceFilter = Get-NcNvmeNamespace -VserverContext $Vserver -Controller $Array | Where-Object { -Not $_.Subsystem }
+            $NamespaceFilter = Get-NcNvmeNamespace -VserverContext $Vserver -Controller $Array | Where-Object { -not $_.Subsystem }
             $OutObj = @()
             if ($NamespaceFilter) {
                 foreach ($Item in $NamespaceFilter) {
@@ -59,6 +59,15 @@ function Get-AbrOntapVserverNonMappedNamespace {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Vserver.Status -and ($OutObj)) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Review non-mapped Namespaces to determine if they are still required or can be removed to optimize storage resources."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -119,7 +119,7 @@ function Get-AbrOntapClusterDiagram {
 
                         foreach ($Node in $NodeSum) {
                             # $ClusterHa = $ClusterHaObj | Where-Object { $_.Name -eq $Node.Node }
-                            $ClusterHa = Get-NcClusterHa -Node $Node.Node -Controller $Array
+                            $ClusterHa = try { Get-NcClusterHa -Node $Node.Node -Controller $Array } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
 
                             $NodeMgmtAddress = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'node_mgmt' -and $_.HomeNode -eq $Node.Node } | Select-Object -ExpandProperty Address
                             $NodeInterClusterAddress = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'intercluster' -and $_.HomeNode -eq $Node.Node } | Select-Object -ExpandProperty Address
@@ -141,7 +141,7 @@ function Get-AbrOntapClusterDiagram {
                                     "Mgmt" = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
                                         $true { "Unknown" }
                                         $false { $NodeMgmtAddress }
-                                        Default { "Unknown" }
+                                        default { "Unknown" }
                                     }
                                 }
                             }

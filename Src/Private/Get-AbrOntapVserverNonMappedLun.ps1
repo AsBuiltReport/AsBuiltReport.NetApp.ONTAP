@@ -59,6 +59,15 @@ function Get-AbrOntapVserverNonMappedLun {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Vserver.Status -and ($OutObj)) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Review non-mapped LUNs to determine if they are still required or can be removed to optimize storage resources."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

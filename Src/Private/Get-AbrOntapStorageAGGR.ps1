@@ -31,24 +31,24 @@ function Get-AbrOntapStorageAGGR {
                         $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object { $_.AggrRaidAttributes.HasLocalRoot }
                         [PSCustomObject] @{
                             'Name' = $Aggr.Name
-                            'Capacity' = Switch ([string]::IsNullOrEmpty($Aggr.Totalsize)) {
+                            'Capacity' = switch ([string]::IsNullOrEmpty($Aggr.Totalsize)) {
                                 $true { 'Unknown' }
                                 $false { $Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { 'Unknown' }
                             }
-                            'Available' = Switch ([string]::IsNullOrEmpty($Aggr.Available)) {
+                            'Available' = switch ([string]::IsNullOrEmpty($Aggr.Available)) {
                                 $true { 'Unknown' }
                                 $false { $Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { 'Unknown' }
                             }
-                            'Used' = Switch ([string]::IsNullOrEmpty($Aggr.Used)) {
+                            'Used' = switch ([string]::IsNullOrEmpty($Aggr.Used)) {
                                 $true { 'Unknown' }
                                 $false { $Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue }
                                 default { 'Unknown' }
                             }
                             'Disk Count' = $Aggr.Disks
                             'Root' = ConvertTo-TextYN $RootAggr
-                            'Raid Type' = Switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
+                            'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
                                 $true { 'Unknown' }
                                 $false { ($Aggr.RaidType.Split(",")[0]).ToUpper() }
                                 default { 'Unknown' }
@@ -73,6 +73,15 @@ function Get-AbrOntapStorageAGGR {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $AggrSpaceSummary | Table @TableParams
+                if ($Healthcheck.Storage.Aggr -and (($AggrSpaceSummary | Where-Object { $_.'State' -eq 'failed' } ) -or ($AggrSpaceSummary | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' }) -or ($AggrSpaceSummary | Where-Object { $_.'Used' -ge 90  -and $_.'Root' -ne 'Yes' }))) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all Aggregates are in healthy state to maintain optimal storage performance and client access availability."
+                    }
+                    BlankLine
+                }
             }
             try {
                 $AggrSpare = Get-NcAggrSpare -Controller $Array
@@ -82,17 +91,17 @@ function Get-AbrOntapStorageAGGR {
                             try {
                                 [PSCustomObject] @{
                                     'Name' = $Spare.Disk
-                                    'Capacity' = Switch ([string]::IsNullOrEmpty($Spare.TotalSize)) {
+                                    'Capacity' = switch ([string]::IsNullOrEmpty($Spare.TotalSize)) {
                                         $true { '-' }
                                         $false { $Spare.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                         default { '-' }
                                     }
-                                    'Root Usable' = Switch ([string]::IsNullOrEmpty($Spare.LocalUsableRootSize)) {
+                                    'Root Usable' = switch ([string]::IsNullOrEmpty($Spare.LocalUsableRootSize)) {
                                         $true { '-' }
                                         $false { $Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                         default { '-' }
                                     }
-                                    'Data Usable' = Switch ([string]::IsNullOrEmpty($Spare.LocalUsableDataSize)) {
+                                    'Data Usable' = switch ([string]::IsNullOrEmpty($Spare.LocalUsableDataSize)) {
                                         $true { '-' }
                                         $false { $Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                         default { '-' }

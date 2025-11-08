@@ -44,7 +44,7 @@ function Get-AbrOntapSysConfigTZ {
                 }
 
                 $TableParams = @{
-                    Name = "System TimeZone - $($ClusterInfo.ClusterName)"
+                    Name = "TimeZone - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 30, 20, 20, 30
                 }

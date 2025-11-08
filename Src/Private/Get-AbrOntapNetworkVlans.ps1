@@ -52,7 +52,7 @@ function Get-AbrOntapNetworkVlan {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $VlanObj | Table @TableParams
+                $VlanObj | Sort-Object -Property 'Vlan ID' | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

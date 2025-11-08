@@ -34,7 +34,7 @@ function Get-AbrOntapSysConfigNTPHost {
                             'Time Offset' = $Item.Offset
                             'Selection State' = $Item.SelectionState
                             'Server' = $Item.Server
-                            'Peer Status' = Switch ($Item.IsPeerReachable) {
+                            'Peer Status' = switch ($Item.IsPeerReachable) {
                                 'True' { 'Reachable' }
                                 'False' { 'Unreachable' }
                                 default { $Item.IsPeerReachable }
@@ -50,14 +50,23 @@ function Get-AbrOntapSysConfigNTPHost {
                 }
 
                 $TableParams = @{
-                    Name = "System NTP Host Status - $($ClusterInfo.ClusterName)"
+                    Name = "NTP Host Status - $($ClusterInfo.ClusterName)"
                     List = $false
-                    ColumnWidths = 30, 10, 20, 20, 20
+                    ColumnWidths = 30, 10, 25, 20, 15
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.NTP -and ($OutObj | Where-Object { $_.'Peer Status' -notlike 'Reachable' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all configured NTP servers are reachable to maintain accurate time synchronization across the cluster."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

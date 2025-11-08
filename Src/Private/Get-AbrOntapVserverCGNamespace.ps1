@@ -34,12 +34,12 @@ function Get-AbrOntapVserverCGNamespace {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name.Split('/')[3]
-                            'Capacity' = Switch ([string]::IsNullOrEmpty($Item.space.size)) {
+                            'Capacity' = switch ([string]::IsNullOrEmpty($Item.space.size)) {
                                 $true { '-' }
                                 $false { $Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { '-' }
                             }
-                            'Used' = Switch ([string]::IsNullOrEmpty($Item.space.used)) {
+                            'Used' = switch ([string]::IsNullOrEmpty($Item.space.used)) {
                                 $true { '-' }
                                 $false { $Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { '-' }
@@ -74,6 +74,15 @@ function Get-AbrOntapVserverCGNamespace {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $CGNamespaceObj | Sort-Object -Property Name | Table @TableParams
+                if ($Healthcheck.Vserver.CG -and ($CGNamespaceObj | Where-Object { $_.'State' -eq 'offline' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all namespaces within the Consistency Group are online to maintain data availability and integrity."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

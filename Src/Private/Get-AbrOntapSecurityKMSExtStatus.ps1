@@ -54,6 +54,15 @@ function Get-AbrOntapSecurityKMSExtStatus {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.Security.KMS -and ($OutObj | Where-Object { $_.'Status' -ne 'Available' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all External Key Management Services are in 'Available' status to maintain encryption functionality."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

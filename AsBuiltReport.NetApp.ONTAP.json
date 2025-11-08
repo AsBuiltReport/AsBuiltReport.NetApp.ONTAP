@@ -15,6 +15,7 @@
         },
         "EnableDiagrams": true,
         "EnableDiagramDebug": false,
+        "DisableDiagramMainLogo": false,
         "DiagramTheme": "White",
         "DiagramWaterMark": "",
         "ExportDiagrams": false,
@@ -87,7 +88,8 @@
             "NTP": true,
             "DNS": true,
             "EMS": true,
-            "Backup": true
+            "Backup": true,
+            "Web": true
         },
         "Security": {
             "Users": true,

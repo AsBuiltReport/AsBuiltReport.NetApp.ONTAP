@@ -30,11 +30,11 @@ function Get-AbrOntapSysConfigBackupURL {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
-                            'Url' = Switch ($Item.Url) {
+                            'Url' = switch ($Item.Url) {
                                 $Null { 'Not Configured' }
                                 default { $Item.Url }
                             }
-                            'Username' = Switch ($Item.Username) {
+                            'Username' = switch ($Item.Username) {
                                 $Null { 'Not Configured' }
                                 default { $Item.Username }
                             }
@@ -51,7 +51,7 @@ function Get-AbrOntapSysConfigBackupURL {
                 }
 
                 $TableParams = @{
-                    Name = "System Configuration Backup Setting - $($ClusterInfo.ClusterName)"
+                    Name = "Configuration Backup Setting - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 60, 40
                 }
@@ -59,6 +59,15 @@ function Get-AbrOntapSysConfigBackupURL {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.Backup -and ($OutObj | Where-Object { $_.'Url' -eq 'Not Configured' -or $_.'Username' -eq 'Not Configured' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "It is recommended to backup the system configuration to a remote location to ensure recovery in case of failures."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

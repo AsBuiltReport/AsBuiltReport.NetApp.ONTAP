@@ -58,6 +58,15 @@ function Get-AbrOntapVserverSummary {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'stopped' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure all Vservers are in 'running' status to provide uninterrupted services."
+                    }
+                    BlankLine
+                }
             }
             try {
                 Section -Style Heading4 'Root Volume' {

@@ -91,9 +91,18 @@ function Get-AbrOntapEfficiencyAggr {
                 }
                 if ($OutObj) {
                     Section -Style Heading4 'HealthCheck - Volume with Disabled Deduplication' {
-                        Paragraph "The following table provides the Volume efficiency healthcheck Information on $($ClusterInfo.ClusterName)."
+                        Paragraph "The following table provides the Volume efficiency healthcheck Information in $($ClusterInfo.ClusterName)."
                         BlankLine
                         $OutObj | Table @TableParams
+                        if ($Healthcheck.Storage.Efficiency) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that deduplication is enabled on all volumes to maximize storage efficiency."
+                            }
+                            BlankLine
+                        }
                     }
                 }
             } catch {

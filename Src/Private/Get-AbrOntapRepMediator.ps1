@@ -33,7 +33,7 @@ function Get-AbrOntapRepMediator {
                             'Peer cluster' = $Item.peer_cluster.name
                             'IP Address' = $Item.ip_address
                             'port' = $Item.port
-                            'Status' = Switch ($Item.reachable) {
+                            'Status' = switch ($Item.reachable) {
                                 'True' { 'Reachable' }
                                 'False' { 'Unreachable' }
                                 default { $Item.reachable }
@@ -57,6 +57,15 @@ function Get-AbrOntapRepMediator {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
+                if ($Healthcheck.Replication.Mediator -and ($ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable" })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "Ensure that all SnapMirror Mediator relationships are reachable to facilitate proper replication management."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

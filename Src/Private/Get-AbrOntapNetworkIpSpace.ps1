@@ -37,11 +37,6 @@ function Get-AbrOntapNetworkIpSpace {
                         }
                         $IPSpaceObj = [pscustomobject]$inobj
 
-                        if ($Healthcheck.Network.Port) {
-                            $IPSpaceObj | Where-Object { $_.'Port' -match "Down" } | Set-Style -Style Warning -Property 'Port'
-                            $IPSpaceObj | Where-Object { $_.'Port Participation' -ne "full" } | Set-Style -Style Warning -Property 'Port Participation'
-                        }
-
                         $TableParams = @{
                             Name = "Network IPSpace - $($Item.Ipspace)"
                             List = $true

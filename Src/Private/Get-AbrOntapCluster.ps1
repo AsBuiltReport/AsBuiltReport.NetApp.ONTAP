@@ -43,7 +43,7 @@ function Get-AbrOntapCluster {
                     'Overall System Health' = switch ([string]::IsNullOrEmpty($ClusterDiag.Status)) {
                         $true { '--' }
                         $false { $ClusterDiag.Status.ToUpper() }
-                        Default { 'Unknown' }
+                        default { 'Unknown' }
                     }
                 }
                 if ($Healthcheck.Cluster.Summary) {
@@ -60,6 +60,15 @@ function Get-AbrOntapCluster {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ClusterSummary | Table @TableParams
+                if ($Healthcheck.Cluster.Summary -and ($ClusterSummary | Where-Object { $_.'Overall System Health' -notlike 'OK' })) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "The overall system health is not OK. It is recommended to investigate the issue further to ensure the cluster is functioning properly."
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

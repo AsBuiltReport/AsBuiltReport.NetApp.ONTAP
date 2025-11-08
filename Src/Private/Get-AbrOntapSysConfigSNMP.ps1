@@ -47,7 +47,7 @@ function Get-AbrOntapSysConfigSNMP {
                 }
 
                 $TableParams = @{
-                    Name = "System SNMP Configuration - $($ClusterInfo.ClusterName)"
+                    Name = "SNMP Configuration - $($ClusterInfo.ClusterName)"
                     List = $true
                     ColumnWidths = 40, 60
                 }

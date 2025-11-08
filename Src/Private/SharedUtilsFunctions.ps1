@@ -15,7 +15,7 @@ function ConvertTo-TextYN {
     #>
     [CmdletBinding()]
     [OutputType([String])]
-    Param
+    param
     (
         [Parameter (
             Position = 0,
@@ -71,7 +71,7 @@ function ConvertTo-EmptyToFiller {
     #>
     [CmdletBinding()]
     [OutputType([String])]
-    Param
+    param
     (
         [Parameter (
             Position = 0,
