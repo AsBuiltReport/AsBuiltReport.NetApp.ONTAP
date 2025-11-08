@@ -12,7 +12,7 @@
     RootModule = 'AsBuiltReport.NetApp.ONTAP.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.6.10'
+    ModuleVersion = '0.6.11'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
