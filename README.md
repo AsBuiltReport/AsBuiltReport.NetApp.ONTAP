@@ -142,6 +142,7 @@ The **Options** schema allows certain options within the report to be toggled on
 | DiagramTheme           | string       | White   | Set the diagram theme (Black/White/Neon)                                      |
 | DiagramWaterMark       | string       | empty   | Set the diagram watermark                                                     |
 | DiagramType            | true / false | true    | Toggle to enable/disable the export of individual diagram diagrams            |
+| DisableDiagramMainLogo | true / false | false   | Toggle to enable/disable the main logo in diagrams                            |
 | EnableDiagrams         | true / false | false   | Toggle to enable/disable infrastructure diagrams                              |
 | EnableDiagramsDebug    | true / false | false   | Toggle to enable/disable diagram debug option                                 |
 | EnableDiagramSignature | true / false | false   | Toggle to enable/disable diagram signature (bottom right corner)              |
