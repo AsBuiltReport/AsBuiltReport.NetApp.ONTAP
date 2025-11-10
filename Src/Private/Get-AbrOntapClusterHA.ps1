@@ -5,7 +5,7 @@ function Get-AbrOntapClusterHA {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.9
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -51,8 +51,8 @@ function Get-AbrOntapClusterHA {
                 }
                 if ($Healthcheck.Cluster.HA) {
                     $NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' } | Set-Style -Style Warning -Property 'TakeOver State'
-                    $NodeSummary | Where-Object { $_.'HA Mode' -eq 'non_ha' -and $_.'HA State' -notlike 'connected' } | Set-Style -Style Warning -Property 'HA State'
-                    $NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' } | Set-Style -Style Warning -Property 'TakeOver Possible'
+                    $NodeSummary | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' } | Set-Style -Style Warning -Property 'HA State'
+                    $NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' -and $_.'HA Mode' -ne 'non_ha' } | Set-Style -Style Warning -Property 'TakeOver Possible'
                 }
 
                 $TableParams = @{
@@ -64,7 +64,7 @@ function Get-AbrOntapClusterHA {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $NodeSummary | Table @TableParams
-                if ($Healthcheck.Cluster.HA -and (($NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' } ) -or ($NodeSummary | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' }) -or ($NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' }))) {
+                if ($Healthcheck.Cluster.HA -and (($NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' } ) -or ($NodeSummary | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' }) -or ($NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' -and $_.'HA Mode' -ne 'non_ha' }))) {
                     Paragraph "Health Check:" -Bold -Underline
                     BlankLine
                     if ($NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' }) {

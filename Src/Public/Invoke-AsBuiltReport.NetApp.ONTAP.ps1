@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     Write-Host "- Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP"
     Write-Host "- Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues"
     Write-Host "- This project is community maintained and has no sponsorship from NetApp, its employees or any of its affiliates."
-    Write-Host "- To sponsor this project, please visit: https://ko-fi.com/F1F8DEV80"
+    Write-Host "- To sponsor this project, please visit: " -NoNewline
+    Write-Host "https://ko-fi.com/F1F8DEV80" -ForegroundColor Cyan
     Write-Host "- Getting dependency information:"
 
 
@@ -264,6 +265,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             #---------------------------------------------------------------------------------------------#
             Write-PScriboMessage "Network InfoLevel set at $($InfoLevel.Network)."
             if ($InfoLevel.Network -gt 0) {
+                $NetworkDiagram = Get-AbrOntapNodeNetworkDiagram
+                if ($NetworkDiagram) {
+                    Export-AbrOntapDiagram -DiagramObject $NetworkDiagram -MainDiagramLabel "Networking Diagram" -FileName "AsBuiltReport.NetApp.Ontap.Networking"
+                    BlankLine
+                } else {
+                    Write-PScriboMessage -IsWarning "Unable to generate the Networking Diagram."
+                }
                 Section -Style Heading2 'Network Information' {
                     Paragraph "The following section provides a summary of the networking features in $($ClusterInfo.ClusterName)."
                     BlankLine

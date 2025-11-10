@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,6 +41,10 @@ function Get-AbrOntapSysConfigNTP {
                     }
                 }
 
+                if ($Healthcheck.System.NTP) {
+                    $OutObj.Count -eq 1 | Set-Style -Style Warning
+                }
+
                 $TableParams = @{
                     Name = "Network Time Protocol - $($ClusterInfo.ClusterName)"
                     List = $false
@@ -50,6 +54,15 @@ function Get-AbrOntapSysConfigNTP {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.NTP -and ($OutObj.Count -eq 1)) {
+                    Paragraph "Health Check:" -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text "Best Practice:" -Bold
+                        Text "It is recommended to configure multiple NTP servers for redundancy and reliability."
+                    }
+                    BlankLine
+                }
             } else {
                 $inObj = [ordered] @{
                     'Server Name' = 'No NTP Servers Configured'

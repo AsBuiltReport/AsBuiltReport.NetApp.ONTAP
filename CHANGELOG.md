@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.12] - Unreleased
+
+### Added
+
+- Add Health Check best practices for Network Broadcast Domains
+- Add Health Check best practices for NTP configuration
+  - Recommend multiple NTP servers for redundancy
+
+### Fixed
+
+- Fix snapshot reserve space health check to use correct calculation method
+
 ## [0.6.11] - 2025-11-07
 
 ### Added

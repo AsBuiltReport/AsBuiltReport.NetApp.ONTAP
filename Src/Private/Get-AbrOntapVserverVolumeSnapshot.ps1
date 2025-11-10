@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -50,7 +50,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                     }
                 }
                 if ($Healthcheck.Vserver.Snapshot) {
-                    $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
+                    $VserverObj | Where-Object { $_.'Used'.split()[0] -gt $_.'Reserve Size'.split()[0] } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
                 }
 
                 $TableParams = @{
