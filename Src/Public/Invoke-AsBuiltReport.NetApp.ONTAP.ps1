@@ -166,7 +166,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Get-AbrOntapNodesHW
                             }
                         }
-                        if ($true) {
+                        if (Get-NcServiceProcessor -Controller $Array) {
                             Section -Style Heading4 'Node Service-Processor' {
                                 Get-AbrOntapNodesSP
                             }
