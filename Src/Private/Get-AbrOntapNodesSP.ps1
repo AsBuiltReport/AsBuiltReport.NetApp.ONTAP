@@ -5,7 +5,7 @@ function Get-AbrOntapNodesSP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -25,27 +25,6 @@ function Get-AbrOntapNodesSP {
     process {
         try {
             $ServiceProcessor = Get-NcServiceProcessor -Controller $Array
-
-            $ServiceProcessor = @(
-                @{
-                    Node = "cluster-01"
-                    Type = "sp"
-                    IpAddress = "192.168.5.43"
-                    MacAddress = "00:0c:29:3e:5b:7c"
-                    IsIpConfigured = "true"
-                    FirmwareVersion = "2.5"
-                    Status = "online"
-                },
-                @{
-                    Node = "cluster-02"
-                    Type = "sp"
-                    IpAddress = ""
-                    MacAddress = "00:0c:29:3e:5b:7f"
-                    IsIpConfigured = "false"
-                    FirmwareVersion = "2.5"
-                    Status = "offline"
-                }
-            )
             if ($ServiceProcessor) {
                 foreach ($NodeSPs in $ServiceProcessor) {
                     Section -ExcludeFromTOC -Style NOTOCHeading5 $NodeSPs.Node {
