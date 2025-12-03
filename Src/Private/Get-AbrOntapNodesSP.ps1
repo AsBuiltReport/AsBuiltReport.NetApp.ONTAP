@@ -25,46 +25,74 @@ function Get-AbrOntapNodesSP {
     process {
         try {
             $ServiceProcessor = Get-NcServiceProcessor -Controller $Array
+
+            $ServiceProcessor = @(
+                @{
+                    Node = "cluster-01"
+                    Type = "sp"
+                    IpAddress = "192.168.5.43"
+                    MacAddress = "00:0c:29:3e:5b:7c"
+                    IsIpConfigured = "true"
+                    FirmwareVersion = "2.5"
+                    Status = "online"
+                },
+                @{
+                    Node = "cluster-02"
+                    Type = "sp"
+                    IpAddress = ""
+                    MacAddress = "00:0c:29:3e:5b:7f"
+                    IsIpConfigured = "false"
+                    FirmwareVersion = "2.5"
+                    Status = "offline"
+                }
+            )
             if ($ServiceProcessor) {
-                $NodeServiceProcessor = foreach ($NodeSPs in $ServiceProcessor) {
-                    try {
-                        [PSCustomObject] @{
-                            'Name' = $NodeSPs.Node
-                            'Type' = $NodeSPs.Type
-                            'IP Address' = $NodeSPs.IpAddress
-                            'MAC Address' = $NodeSPs.MacAddress
-                            'Network Configured' = $NodeSPs.IsIpConfigured
-                            'Firmware' = $NodeSPs.FirmwareVersion
-                            'Status' = $NodeSPs.Status
+                foreach ($NodeSPs in $ServiceProcessor) {
+                    Section -ExcludeFromTOC -Style NOTOCHeading5 $NodeSPs.Node {
+
+                        $SPObj = @()
+                        try {
+                            $inObj = [ordered] @{
+                                'Name' = $NodeSPs.Node
+                                'Type' = $NodeSPs.Type
+                                'IP Address' = $NodeSPs.IpAddress
+                                'MAC Address' = $NodeSPs.MacAddress
+                                'Network Configured' = ConvertTo-TextYN $NodeSPs.IsIpConfigured
+                                'Firmware' = $NodeSPs.FirmwareVersion
+                                'Status' = $NodeSPs.Status
+                            }
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
-                    } catch {
-                        Write-PScriboMessage -IsWarning $_.Exception.Message
+
+                        $SPObj += [pscustomobject]$inobj
+
+                        if ($Healthcheck.Node.ServiceProcessor) {
+                            $SPObj | Where-Object { $_.'Status' -like 'offline' -or $_.'Status' -like 'degraded' } | Set-Style -Style Critical -Property 'Status'
+                            $SPObj | Where-Object { $_.'Status' -like 'unknown' -or $_.'Status' -like 'sp-daemon-offline' } | Set-Style -Style Warning -Property 'Status'
+                            $SPObj | Where-Object { $_.'Network Configured' -eq "No" } | Set-Style -Style Critical -Property 'Network Configured'
+                        }
+
+                        $TableParams = @{
+                            Name = "Node Service-Processor - $($NodeSPs.Node)"
+                            List = $true
+                            ColumnWidths = 30, 70
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $SPObj | Table @TableParams
+                        if ($Healthcheck.Node.ServiceProcessor -and ($SPObj | Where-Object { $_.'Status' -like 'offline' -or $_.'Status' -like 'degraded' })) {
+                            Paragraph "Health Check:" -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text "Best Practice:" -Bold
+                                Text "Ensure that all service-processors are online and functioning properly to maintain system management capabilities."
+                            }
+                            BlankLine
+                        }
                     }
                 }
-                if ($Healthcheck.Node.ServiceProcessor) {
-                    $NodeServiceProcessor | Where-Object { $_.'Status' -like 'offline' -or $_.'Status' -like 'degraded' } | Set-Style -Style Critical -Property 'Status'
-                    $NodeServiceProcessor | Where-Object { $_.'Status' -like 'unknown' -or $_.'Status' -like 'sp-daemon-offline' } | Set-Style -Style Warning -Property 'Status'
-                    $NodeServiceProcessor | Where-Object { $_.'Network Configured' -like "false" } | Set-Style -Style Critical -Property 'Network Configured'
-                }
-            }
-
-            $TableParams = @{
-                Name = "Node Service-Processor - $($ClusterInfo.ClusterName)"
-                List = $true
-                ColumnWidths = 35, 65
-            }
-            if ($Report.ShowTableCaptions) {
-                $TableParams['Caption'] = "- $($TableParams.Name)"
-            }
-            $NodeServiceProcessor | Table @TableParams
-            if ($Healthcheck.Node.ServiceProcessor -and ($NodeServiceProcessor | Where-Object { $_.'Status' -like 'offline' -or $_.'Status' -like 'degraded' })) {
-                Paragraph "Health Check:" -Bold -Underline
-                BlankLine
-                Paragraph {
-                    Text "Best Practice:" -Bold
-                    Text "Ensure that all service-processors are online and functioning properly to maintain system management capabilities."
-                }
-                BlankLine
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

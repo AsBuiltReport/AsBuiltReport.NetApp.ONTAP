@@ -16,9 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix snapshot reserve space health check to use correct calculation method
-- Bump Diagrammer.Core module requirement to v0.2.35
+- Bump Diagrammer.Core module requirement to v0.2.36
 - Bump module version to v0.6.12
-
+- Enhance Get-AbrOntapNodesSP function with detailed service-processor information
 
 ## [0.6.11] - 2025-11-07
 

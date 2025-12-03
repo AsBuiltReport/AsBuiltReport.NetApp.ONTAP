@@ -111,6 +111,10 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             "Ontap_Aggregate" = "netapp_aggregate.png"
             "Ontap_SVM" = "ontap_svm.png"
             "Ontap_SVM_Icon" = "ontap_svm_icon.png"
+            "Ontap_Network_Port" = "network_port.png"
+            "Ontap_Management_Network" = "network-switch.png"
+            "Ontap_Cluster_Network" = "ontap_stack_switch.png"
+            "Ontap_Single_Network" = "ontap_single_switch.png"
         }
         $script:ColumnSize = $Options.DiagramColumnSize
 
@@ -154,16 +158,16 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the node inventory in $($ClusterInfo.ClusterName)."
                         BlankLine
                         Get-AbrOntapNode
-                        Section -Style Heading4 'Node Vol0 Inventory' {
+                        Section -Style Heading4 'Node Vol0' {
                             Get-AbrOntapNodeStorage
                         }
                         if ($InfoLevel.Node -ge 2) {
-                            Section -Style Heading4 'Node Hardware Inventory' {
+                            Section -Style Heading4 'Node Hardware' {
                                 Get-AbrOntapNodesHW
                             }
                         }
-                        if (Get-NcServiceProcessor  -Controller $Array | Where-Object { $NULL -ne $_.IpAddress -and $NULL -ne $_.MacAddress }) {
-                            Section -Style Heading4 'Node Service-Processor Inventory' {
+                        if ($true) {
+                            Section -Style Heading4 'Node Service-Processor' {
                                 Get-AbrOntapNodesSP
                             }
                         }
@@ -183,14 +187,14 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                         Paragraph "The following section provides the Aggregates in $($ClusterInfo.ClusterName)."
                         BlankLine
                         if (Get-NcAggr -Controller $Array) {
+                            Get-AbrOntapStorageAGGR
                             $StorageAggrDiagram = Get-AbrOntapStorageAggrDiagram
                             if ($StorageAggrDiagram) {
-                                Export-AbrOntapDiagram -DiagramObject $StorageAggrDiagram -MainDiagramLabel "Storage Aggregate Diagram" -FileName "AsBuiltReport.NetApp.Ontap.StorageAggr"
+                                Export-AbrOntapDiagram -DiagramObject $StorageAggrDiagram -MainDiagramLabel "Aggregate Diagram" -FileName "AsBuiltReport.NetApp.Ontap.Aggregate"
                                 BlankLine
                             } else {
-                                Write-PScriboMessage -IsWarning "Unable to generate the Storage Aggregate Diagram."
+                                Write-PScriboMessage -IsWarning "Unable to generate the Aggregate Diagram."
                             }
-                            Get-AbrOntapStorageAGGR
                         }
                         if (Get-NcAggrObjectStore -Controller $Array -Aggregate (Get-NcAggr -Controller $Array).Name) {
                             Section -Style Heading4 'FabricPool' {
@@ -469,22 +473,28 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                     Get-AbrOntapVserverCIFSDC -Vserver $SVM
                                                 }
                                             }
-                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group' {
-                                                Get-AbrOntapVserverCIFSLocalGroup -Vserver $SVM
+                                            if (Get-NcCifsLocalGroup -VserverContext $SVM -Controller $Array) {
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group' {
+                                                    Get-AbrOntapVserverCIFSLocalGroup -Vserver $SVM
+                                                }
                                             }
-                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group Members' {
-                                                Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
+                                            if (Get-NcCifsLocalGroupMember -VserverContext $SVM -Controller $Array) {
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Local Group Members' {
+                                                    Get-AbrOntapVserverCIFSLGMember -Vserver $SVM
+                                                }
                                             }
                                             if ($InfoLevel.Vserver -ge 2) {
                                                 Section -ExcludeFromTOC -Style Heading6 'CIFS Options' {
                                                     Get-AbrOntapVserverCIFSOption -Vserver $SVM
                                                 }
                                             }
-                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Share' {
-                                                Get-AbrOntapVserverCIFSShare -Vserver $SVM
-                                            }
-                                            Section -ExcludeFromTOC -Style Heading6 'CIFS Share Configuration' {
-                                                Get-AbrOntapVserverCIFSShareProp -Vserver $SVM
+                                            if (Get-NcCifsShare -VserverContext $SVM -Controller $Array) {
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Share' {
+                                                    Get-AbrOntapVserverCIFSShare -Vserver $SVM
+                                                }
+                                                Section -ExcludeFromTOC -Style Heading6 'CIFS Share Configuration' {
+                                                    Get-AbrOntapVserverCIFSShareProp -Vserver $SVM
+                                                }
                                             }
                                             if ($InfoLevel.Vserver -ge 2) {
                                                 if (Get-NcCifsSession -VserverContext $SVM -Controller $Array) {

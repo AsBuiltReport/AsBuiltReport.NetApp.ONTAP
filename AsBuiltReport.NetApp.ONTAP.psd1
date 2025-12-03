@@ -62,7 +62,7 @@
         },
         @{
             ModuleName = 'Diagrammer.Core';
-            ModuleVersion = '0.2.35'
+            ModuleVersion = '0.2.36'
         }
     )
 
