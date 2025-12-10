@@ -1,0 +1,16 @@
+- [] Network Port Diagram
+  - [] Cluster Network Ports:
+    - [] Document all ports and lifs used by the cluster nodes for cluster communication.
+  - [] Network Ports:
+    - [] Ifgrps:
+      - [] Document all ifgrps used in the cluster and their associated ports.
+    - [] Vlan Interface Ports:
+    - [] Document all ports used by management access to the cluster nodes.
+    - [] Document all ports used for replication traffic.
+  - [] Data Network Ports:
+    - [] Document all ports used for data access to the vservers running on the cluster
+- [] Vserver Diagram
+  - [] Document all vservers running on the cluster.
+  - [] Document the purpose of each vserver.
+  - [] Document the data access methods used by each vserver (NFS, SMB, iSCSI, etc.).
+  - [] Document the storage resources allocated to each vserver.
