@@ -87,7 +87,7 @@ function Get-AbrOntapStorageAggrDiagram {
                             'AdditionalInfo' = [PSCustomObject][ordered]@{
                                 "System Id" = $Node.NodeSystemId
                                 "Serial" = $Node.NodeSerialNumber
-                                "Model" = $Node.NodeSerialNumber
+                                "Model" = $Node.NodeModel
                                 "Mgmt" = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
                                     $true { "Unknown" }
                                     $false { $NodeMgmtAddress }
