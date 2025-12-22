@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkRoute {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP network route information."
+        Write-PScriboMessage 'Collecting ONTAP network route information.'
     }
 
     process {

@@ -19,7 +19,7 @@ function Get-AbrOntapClusterASUP {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP AutoSupport information."
+        Write-PScriboMessage 'Collecting ONTAP AutoSupport information.'
     }
 
     process {
@@ -52,11 +52,11 @@ function Get-AbrOntapClusterASUP {
                         }
                         $Outobj | Table @TableParams
                         if ($Healthcheck.Cluster.AutoSupport -and ($Outobj | Where-Object { $_.'Enabled' -like 'No' })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "AutoSupport is disabled on one or more nodes. It is recommended to enable AutoSupport to ensure proactive monitoring and issue resolution."
+                                Text 'Best Practice:' -Bold
+                                Text 'AutoSupport is disabled on one or more nodes. It is recommended to enable AutoSupport to ensure proactive monitoring and issue resolution.'
                             }
                             BlankLine
                         }

@@ -19,7 +19,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Aggregate FabriPool Object Store information."
+        Write-PScriboMessage 'Collecting ONTAP Aggregate FabriPool Object Store information.'
     }
 
     process {
@@ -36,7 +36,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
                             'Port' = $Item.Port
                             'SSL Enabled' = ConvertTo-TextYN $Item.SslEnabled
                             'Provider Type' = $Item.ProviderType
-                            'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                         }
                         $OutObj = [pscustomobject]$inobj
 

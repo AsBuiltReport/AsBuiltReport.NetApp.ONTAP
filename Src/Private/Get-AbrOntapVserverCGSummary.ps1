@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCGSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Consistency Groups information.'
     }
 
     process {
@@ -35,23 +35,23 @@ function Get-AbrOntapVserverCGSummary {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Capacity' = Switch ([string]::IsNullOrEmpty($Item.space.size)) {
+                            'Capacity' = switch ([string]::IsNullOrEmpty($Item.space.size)) {
                                 $true { '-' }
                                 $false { $Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { '-' }
                             }
-                            'Available' = Switch ([string]::IsNullOrEmpty($Item.space.available)) {
+                            'Available' = switch ([string]::IsNullOrEmpty($Item.space.available)) {
                                 $true { '-' }
                                 $false { $Item.space.available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { '-' }
                             }
-                            'Used' = Switch ([string]::IsNullOrEmpty($Item.space.used)) {
+                            'Used' = switch ([string]::IsNullOrEmpty($Item.space.used)) {
                                 $true { '-' }
                                 $false { $Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
                                 default { '-' }
                             }
                             'Replicated' = ConvertTo-TextYN $Item.replicated
-                            'Lun Count' = Switch ([string]::IsNullOrEmpty($Item.luns.name)) {
+                            'Lun Count' = switch ([string]::IsNullOrEmpty($Item.luns.name)) {
                                 $true { '-' }
                                 $false { ($Item.luns.name).count }
                                 default { '-' }

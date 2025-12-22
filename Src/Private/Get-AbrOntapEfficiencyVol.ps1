@@ -23,12 +23,12 @@ function Get-AbrOntapEfficiencyVol {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Volume Efficiency Savings information."
+        Write-PScriboMessage 'Collecting ONTAP Volume Efficiency Savings information.'
     }
 
     process {
         try {
-            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online" }
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq 'online' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -41,7 +41,7 @@ function Get-AbrOntapEfficiencyVol {
                             'Snapshot Used' = $Saving.SnapshotUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Total Savings' = $Saving.Returns.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Effective Used' = $Saving.EffectiveUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Efficiency Percent' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Efficiency Percent' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
                     } catch {

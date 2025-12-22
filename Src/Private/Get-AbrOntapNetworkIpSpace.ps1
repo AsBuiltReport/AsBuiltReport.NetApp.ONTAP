@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkIpSpace {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP IPSpace information."
+        Write-PScriboMessage 'Collecting ONTAP IPSpace information.'
     }
 
     process {

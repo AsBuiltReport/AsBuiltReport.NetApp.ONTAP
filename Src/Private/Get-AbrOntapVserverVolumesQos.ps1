@@ -23,12 +23,12 @@ function Get-AbrOntapVserverVolumesQosSetting {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qos information.'
     }
 
     process {
         try {
-            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True" }
+            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne 'True' }
             $OutObj = @()
             if ($VolumeFilter) {
                 foreach ($Item in $VolumeFilter) {
@@ -36,11 +36,11 @@ function Get-AbrOntapVserverVolumesQosSetting {
                         $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Fixed Policy Name' = Switch ($VolQoS.PolicyGroupName) {
+                            'Fixed Policy Name' = switch ($VolQoS.PolicyGroupName) {
                                 $Null { 'None' }
                                 default { $VolQoS.PolicyGroupName }
                             }
-                            'Adaptive Policy Name' = Switch ($VolQoS.AdaptivePolicyGroupName) {
+                            'Adaptive Policy Name' = switch ($VolQoS.AdaptivePolicyGroupName) {
                                 $Null { 'None' }
                                 default { $VolQoS.AdaptivePolicyGroupName }
                             }

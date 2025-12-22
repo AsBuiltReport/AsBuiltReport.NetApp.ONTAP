@@ -19,7 +19,7 @@ function Get-AbrOntapEfficiencyConfig {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Storage Efficiency Savings information."
+        Write-PScriboMessage 'Collecting ONTAP Storage Efficiency Savings information.'
     }
 
     process {
@@ -30,11 +30,11 @@ function Get-AbrOntapEfficiencyConfig {
                 foreach ($Item in $Data) {
                     try {
                         $Saving = Get-NcAggr -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSpaceAttributes
-                        $TotalStorageEfficiencyRatio = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array |  Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo
+                        $TotalStorageEfficiencyRatio = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
                             'Used %' = $Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                            'Capacity Tier Used' = $Saving.CapacityTierUsed | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Capacity Tier Used' = $Saving.CapacityTierUsed | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                             'Compaction Saved %' = $Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                             'Deduplication Saved %' = $Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                             'Total Data Reduction' = $TotalStorageEfficiencyRatio.TotalStorageEfficiencyRatio

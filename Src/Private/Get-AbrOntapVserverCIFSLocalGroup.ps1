@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSLocalGroup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Local Group information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Local Group information.'
     }
 
     process {

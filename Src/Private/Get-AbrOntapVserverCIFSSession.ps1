@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSSession {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Session information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Session information.'
     }
 
     process {

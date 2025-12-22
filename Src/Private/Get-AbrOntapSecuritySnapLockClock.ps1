@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockClock {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Snaplock compliance clock information."
+        Write-PScriboMessage 'Collecting ONTAP Security Snaplock compliance clock information.'
     }
 
     process {
@@ -32,7 +32,7 @@ function Get-AbrOntapSecuritySnapLockClock {
                         $SnapLockClock = Get-NcSnaplockComplianceClock $Item.Node -Controller $Array
                         $inObj = [ordered] @{
                             'Node Name' = $Item.Node
-                            'Compliance Clock' = Switch ($SnapLockClock.FormattedSnaplockComplianceClock) {
+                            'Compliance Clock' = switch ($SnapLockClock.FormattedSnaplockComplianceClock) {
                                 $Null { 'Uninitialized' }
                                 default { $SnapLockClock.FormattedSnaplockComplianceClock }
                             }

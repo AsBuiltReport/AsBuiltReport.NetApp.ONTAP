@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySSLVserver {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Vserver SSL information."
+        Write-PScriboMessage 'Collecting ONTAP Security Vserver SSL information.'
     }
 
     process {

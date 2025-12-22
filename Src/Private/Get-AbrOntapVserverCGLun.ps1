@@ -22,7 +22,7 @@ function Get-AbrOntapVserverCGLun {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups lun information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Consistency Groups lun information.'
     }
 
     process {
@@ -75,11 +75,11 @@ function Get-AbrOntapVserverCGLun {
                 }
                 $CGLunObj | Sort-Object -Property Name | Table @TableParams
                 if ($Healthcheck.Vserver.CG -and ($CGLunObj | Where-Object { $_.'State' -eq 'offline' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all LUNs within the Consistency Group are online to maintain data availability and integrity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all LUNs within the Consistency Group are online to maintain data availability and integrity.'
                     }
                     BlankLine
                 }

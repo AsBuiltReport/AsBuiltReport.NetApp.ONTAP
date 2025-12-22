@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI information.'
     }
 
     process {
@@ -65,11 +65,11 @@ function Get-AbrOntapVserverIscsiSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Iscsi -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all ISCSI services are operational to maintain optimal storage connectivity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all ISCSI services are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

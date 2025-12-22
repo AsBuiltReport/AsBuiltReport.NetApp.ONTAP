@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigEMSSetting {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System EMS Settings information."
+        Write-PScriboMessage 'Collecting ONTAP System EMS Settings information.'
     }
 
     process {
@@ -68,11 +68,11 @@ function Get-AbrOntapSysConfigEMSSetting {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.EMS -and ($OutObj | Where-Object { $_.'Email Destinations' -eq '-' -and $_.'Snmp Traphost' -eq '-' -and $_.'Syslog' -eq '-' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "It is recommended to configure at least one EMS destination (Email, SNMP, or Syslog) to ensure proper monitoring and alerting of system events."
+                        Text 'Best Practice:' -Bold
+                        Text 'It is recommended to configure at least one EMS destination (Email, SNMP, or Syslog) to ensure proper monitoring and alerting of system events.'
                     }
                     BlankLine
                 }
@@ -83,7 +83,7 @@ function Get-AbrOntapSysConfigEMSSetting {
         try {
             $Data = Get-NcAudit -Controller $Array
             if ($Data) {
-                Section -Style Heading4 "Audit Settings" {
+                Section -Style Heading4 'Audit Settings' {
                     Paragraph "The following section provides information about Audit Setting from $($ClusterInfo.ClusterName)."
                     BlankLine
                     $OutObj = @()
@@ -112,7 +112,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                     try {
                         $Data = Get-NcClusterLogForward -Controller $Array
                         if ($Data) {
-                            Section -Style Heading4 "Audit Log Destinations" {
+                            Section -Style Heading4 'Audit Log Destinations' {
                                 $OutObj = @()
                                 foreach ($Item in $Data) {
                                     try {

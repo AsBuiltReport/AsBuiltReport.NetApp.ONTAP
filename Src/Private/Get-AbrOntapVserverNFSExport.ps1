@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNFSExport {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver NFS Export information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver NFS Export information.'
     }
 
     process {

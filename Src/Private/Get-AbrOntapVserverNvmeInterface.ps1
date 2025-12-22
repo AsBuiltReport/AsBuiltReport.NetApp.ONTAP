@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNvmeInterface {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver NVME interface information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver NVME interface information.'
     }
 
     process {
@@ -62,10 +62,10 @@ function Get-AbrOntapVserverNvmeInterface {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Nvme -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all NVME interfaces are in 'Up' status to maintain optimal connectivity and performance."
                     }
                     BlankLine

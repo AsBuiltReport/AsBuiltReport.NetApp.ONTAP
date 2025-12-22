@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Failover Group information."
+        Write-PScriboMessage 'Collecting ONTAP Failover Group information.'
     }
 
     process {

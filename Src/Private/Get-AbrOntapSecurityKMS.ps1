@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityKMS {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Key Management Service information."
+        Write-PScriboMessage 'Collecting ONTAP Security Key Management Service information.'
     }
 
     process {

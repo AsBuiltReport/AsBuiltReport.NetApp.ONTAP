@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkIfgrp {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP physical aggregata interface information."
+        Write-PScriboMessage 'Collecting ONTAP physical aggregata interface information.'
     }
 
     process {
@@ -50,8 +50,8 @@ function Get-AbrOntapNetworkIfgrp {
                     }
                 }
                 if ($Healthcheck.Network.Port) {
-                    $AggregatePorts | Where-Object { $_.'Port' -match "Down" } | Set-Style -Style Warning -Property 'Port'
-                    $AggregatePorts | Where-Object { $_.'Port Participation' -ne "full" } | Set-Style -Style Warning -Property 'Port Participation'
+                    $AggregatePorts | Where-Object { $_.'Port' -match 'Down' } | Set-Style -Style Warning -Property 'Port'
+                    $AggregatePorts | Where-Object { $_.'Port Participation' -ne 'full' } | Set-Style -Style Warning -Property 'Port Participation'
                 }
 
 
@@ -64,12 +64,12 @@ function Get-AbrOntapNetworkIfgrp {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $AggregatePorts | Table @TableParams
-                if ($Healthcheck.Network.Port -and ($AggregatePorts | Where-Object { $_.'Port Participation' -ne "full" })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                if ($Healthcheck.Network.Port -and ($AggregatePorts | Where-Object { $_.'Port Participation' -ne 'full' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all ports in the interface group are active and participating fully to maintain optimal network performance and redundancy."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all ports in the interface group are active and participating fully to maintain optimal network performance and redundancy.'
                     }
                     BlankLine
                 }

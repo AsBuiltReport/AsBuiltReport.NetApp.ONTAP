@@ -19,7 +19,7 @@ function Get-AbrOntapDiskType {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk type per node information."
+        Write-PScriboMessage 'Collecting ONTAP disk type per node information.'
     }
 
     process {
@@ -49,14 +49,14 @@ function Get-AbrOntapDiskType {
                 }
                 $DiskType | Table @TableParams
             }
-            $Node = Get-NcNode | Where-Object { $_.IsNodeHealthy -eq "True" }
-            if ($Node -and (Confirm-NcAggrSpareLow | Where-Object { $_.Value -eq "True" })) {
+            $Node = Get-NcNode | Where-Object { $_.IsNodeHealthy -eq 'True' }
+            if ($Node -and (Confirm-NcAggrSpareLow | Where-Object { $_.Value -eq 'True' })) {
                 $OutObj = foreach ($Item in $Node) {
                     try {
                         $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node
                         [PSCustomObject] @{
                             'Node' = $Item.Node
-                            'Aggregate Spare Low' = $DiskSpareLow.Value.ToString().Replace("True", "Yes").Replace("False", "No")
+                            'Aggregate Spare Low' = $DiskSpareLow.Value.ToString().Replace('True', 'Yes').Replace('False', 'No')
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
@@ -75,11 +75,11 @@ function Get-AbrOntapDiskType {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Storage.DiskStatus -and ($OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that aggregate spare capacity is above the recommended threshold to maintain optimal performance and reliability."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that aggregate spare capacity is above the recommended threshold to maintain optimal performance and reliability.'
                     }
                     BlankLine
                 }

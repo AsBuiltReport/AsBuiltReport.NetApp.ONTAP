@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP NVME Non Mapped Namespace information."
+        Write-PScriboMessage 'Collecting ONTAP NVME Non Mapped Namespace information.'
     }
 
     process {
@@ -38,7 +38,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
                             'Volume Name' = $Item.Volume
                             'Lun Name' = $namespacename
                             'Type' = $Item.Ostype
-                            'Mapped' = "No"
+                            'Mapped' = 'No'
                             'State' = $Item.State
                         }
                         $OutObj += [pscustomobject]$inobj
@@ -60,11 +60,11 @@ function Get-AbrOntapVserverNonMappedNamespace {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($OutObj)) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Review non-mapped Namespaces to determine if they are still required or can be removed to optimize storage resources."
+                        Text 'Best Practice:' -Bold
+                        Text 'Review non-mapped Namespaces to determine if they are still required or can be removed to optimize storage resources.'
                     }
                     BlankLine
                 }

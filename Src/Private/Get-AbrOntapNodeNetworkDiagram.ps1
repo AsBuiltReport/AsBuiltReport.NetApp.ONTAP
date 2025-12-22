@@ -19,7 +19,11 @@ function Get-AbrOntapNodeNetworkDiagram {
     )
 
     begin {
-        Write-PScriboMessage "Generating Node Network Diagram for NetApp ONTAP."
+        Write-PScriboMessage 'Generating Node Network Diagram for NetApp ONTAP.'
+        # Set the root path for icons
+        $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+        [System.IO.FileInfo]$IconPath = Join-Path $RootPath 'icons'
+
         # Used for DiagramDebug
         if ($Options.EnableDiagramDebug) {
             $EdgeDebug = @{style = 'filled'; color = 'red' }
@@ -54,123 +58,178 @@ function Get-AbrOntapNodeNetworkDiagram {
 
             try {
 
-                if ($NodeSum.Count -eq 1) {
-                    $NodeSumColumnSize = 1
-                } elseif ($ColumnSize) {
-                    $NodeSumColumnSize = $ColumnSize
-                } else {
-                    $NodeSumColumnSize = $NodeSum.Count
-                }
-
                 $HAObject = @()
 
                 $NodeAdditionalInfo = @()
-                $AggrInfo = @()
+                $NetPortInfo = @()
+                $NetLifsInfo = @()
 
                 foreach ($Node in $NodeSum) {
                     $ClusterHa = Get-NcClusterHa -Node $Node.Node -Controller $Array
 
                     $NodeMgmtAddress = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'node_mgmt' -and $_.HomeNode -eq $Node.Node } | Select-Object -ExpandProperty Address
-                    $NodeInterClusterAddress = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'intercluster' -and $_.HomeNode -eq $Node.Node } | Select-Object -ExpandProperty Address
 
                     if ($ClusterHa.Name -notin $HAObject.Partner) {
                         $HAObject += [PSCustomObject][ordered]@{
-                            "Name" = $ClusterHa.Name
-                            "Partner" = $ClusterHa.Partner
-                            "HAState" = $ClusterHa.State
+                            'Name' = $ClusterHa.Name
+                            'Partner' = $ClusterHa.Partner
+                            'HAState' = $ClusterHa.State
                         }
                     }
 
                     $NodeAdditionalInfo += [PSCustomObject][ordered]@{
                         'NodeName' = $Node.Node
                         'AdditionalInfo' = [PSCustomObject][ordered]@{
-                            "System Id" = $Node.NodeSystemId
-                            "Serial" = $Node.NodeSerialNumber
-                            "Model" = $Node.NodeSerialNumber
-                            "Mgmt" = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
-                                $true { "Unknown" }
+                            'System Id' = $Node.NodeSystemId
+                            'Serial' = $Node.NodeSerialNumber
+                            'Model' = $Node.NodeModel
+                            'Mgmt' = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
+                                $true { 'Unknown' }
                                 $false { $NodeMgmtAddress }
-                                default { "Unknown" }
+                                default { 'Unknown' }
                             }
                         }
                     }
 
-                    $NodeAggr = Get-NcAggr | Where-Object { $_.Nodes -eq $Node.Node }
-                    foreach ($Aggr in $NodeAggr) {
-                        $AggrInfo += [PSCustomObject][ordered]@{
-                            "NodeName" = $Node.Node
-                            "AggregateName" = $Aggr.Name
-                            "AdditionalInfo" = [PSCustomObject][ordered]@{
-                                "Total Size" = $Aggr.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                "Used Space" = ($Aggr.TotalSize - $Aggr.Available) | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                "Assigned Disk" = $Aggr.Disks
-                                "Raid Type" = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
-                                    $true { "Unknown" }
-                                    $false {
-                                        & {
-                                            switch ($Aggr.RaidType.Split(", ")[0]) {
-                                                "raid4" { "RAID 4" }
-                                                "raid_dp" { "RAID DP" }
-                                                "raid0" { "RAID 0" }
-                                                "raid1" { "RAID 1" }
-                                                "raid10" { "RAID 10" }
-                                                default { "Unknown" }
-                                            }
-                                        }
-                                    }
-                                    default { "Unknown" }
+                    $NodePorts = Get-NcNetPort -Controller $Array | Where-Object { $_.Node -eq $Node.Node }
+                    foreach ($NodePort in $NodePorts) {
+                        $NetPortInfo += [PSCustomObject][ordered]@{
+                            'NodeName' = $NodePort.Node
+                            'PortName' = $NodePort.Name
+                            'PortType' = $NodePort.PortType
+                            'IsParentVlan' = & { if (Get-NcNetPortVlan -Controller $Array -ParentInterface $NodePort.Name -Node $Node.Node) { $true } else { $false } }
+                            'AdditionalInfo' = [PSCustomObject][ordered]@{
+                                'Health' = $NodePort.HealthStatus
+                                'Broadcast Domain' = switch ([string]::IsNullOrEmpty($NodePort.BroadcastDomain)) {
+                                    $true { 'Unknown' }
+                                    $false { $NodePort.BroadcastDomain }
+                                    default { 'Unknown' }
                                 }
-                                "Raid Size" = $Aggr.RaidSize
-                                "State" = switch ([string]::IsNullOrEmpty($Aggr.State)) {
-                                    $true { "Unknown" }
-                                    $false { $Aggr.State.ToUpper() }
-                                    default { "Unknown" }
+                                'Ifgrp Port' = switch ([string]::IsNullOrEmpty($NodePort.IfgrpPort)) {
+                                    $true { 'None' }
+                                    $false { $NodePort.IfgrpPort }
+                                    default { 'Unknown' }
+                                }
+                                'Ipspace' = $NodePort.IpSpace
+                                'Link Status' = switch ($NodePort.LinkStatus) {
+                                    'up' { 'Up' }
+                                    'down' { 'Down' }
+                                    default { 'Unknown' }
+                                }
+                                'Mac' = $NodePort.MacAddress
+                                'Mtu' = $NodePort.Mtu
+                            }
+                        }
+                    }
+
+                    $NodeLifs = Get-NcNetInterface -Controller $Array | Where-Object { $_.HomeNode -eq $Node.Node -and $_.DataProtocols -ne 'fcp' }
+                    foreach ($NodeLif in $NodeLifs) {
+                        $NetLifsInfo += [PSCustomObject][ordered]@{
+                            'NodeName' = $NodeLif.HomeNode
+                            'InterfaceName' = $NodeLif.InterfaceName
+                            'HomeNode' = $NodeLif.HomeNode
+                            'HomePort' = $NodeLif.HomePort
+                            'CurrentNode' = $NodeLif.CurrentNode
+                            'CurrentPort' = $NodeLif.CurrentPort
+                            'AdditionalInfo' = [PSCustomObject][ordered]@{
+                                'IP' = $NodeLif.Address
+                                'Netmask' = $NodeLif.Netmask
+                                'Is Home?' = switch ($NodeLif.IsHome) {
+                                    $true { 'Yes' }
+                                    $false { 'No' }
+                                    default { 'Unknown' }
+                                }
+                                'Status' = switch ($NodeLif.AdministrativeStatus) {
+                                    'up' { 'Up' }
+                                    'down' { 'Down' }
+                                    default { 'Unknown' }
+                                }
+                                'Role' = switch ([string]::IsNullOrEmpty($NodeLif.Role)) {
+                                    $true { 'Unknown' }
+                                    $false { $TextInfo.ToTitleCase($NodeLif.Role) }
+                                    default { 'Unknown' }
                                 }
                             }
                         }
                     }
                 }
 
-                $ClusterNodesObj = @()
+                # Cluster Network Diagram
+                $ClusterNetwork = Add-DiaNodeImage -Name 'ClusterSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug
+
+                Add-DiaHtmlSubGraph -Name 'ClusterNetwork' -TableArray $ClusterNetwork -Label 'Cluster Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 20 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#a1e3fd'
 
                 foreach ($Node in $NodeAdditionalInfo) {
-                    $ClusterNodeObj = @()
-                    $ClusterNodeObj += Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject $Node.NodeName -Align "Center" -iconType "Ontap_Node" -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
 
-                    if ($ClusterNodeObj) {
-                        if ($AggrInfo.Count -eq 1) {
-                            $AggrInfoColumnSize = 1
-                        } elseif ($ColumnSize) {
-                            $AggrInfoColumnSize = $ColumnSize
-                        } else {
-                            $AggrInfoColumnSize = $AggrInfo.Count
+                    # Ontap System Node
+                    Add-DiaNodeIcon -Name $Node.NodeName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Node' -IconDebug $IconDebug -AditionalInfo $Node.AdditionalInfo -TableBorder 1 -FontSize 18 -NodeObject -TableBorderColor '#71797E' -TableStyle 'rounded,dashed'
+
+
+                    if ($NetPortInfo) {
+                        # Cluster Network Ports
+                        $ClusterPortObj = @()
+                        foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Broadcast Domain' -eq 'Cluster' })) {
+
+                            $PerPortLifs = @()
+                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.CurrentPort -eq $Port.PortName })) {
+                                $PerPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
+                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
+                                } else {
+                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                                }
+                            }
+
+                            if (-not $PerPortLifs) {
+                                $PerPortLifs = Add-DiaNodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                            }
+
+                            if ($PerPortLifs.Count -eq 1) { $PerPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $PerPortLifsColumnSize = $Options.DiagramColumnSize } else { $PerPortLifsColumnSize = $PerPortLifs.Count }
+
+                            $ClusterPortObj += Add-DiaHtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $PerPortLifsColumnSize
                         }
-                        $ClusterNodeObj += Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align "Center" -iconType "Ontap_Aggregate" -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel "Aggregates" -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
-                    }
 
-                    if ($ClusterNodeObj) {
-                        $ClusterNodeSubgraphObj = Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label " " -LabelPos 'top' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
-                    }
+                        if ($ClusterPortObj.Count -eq 1) { $ClusterPortObjColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $ClusterPortObjColumnSize = $Options.DiagramColumnSize } else { $ClusterPortObjColumnSize = $ClusterPortObj.Count }
 
-                    $ClusterNodesObj += $ClusterNodeSubgraphObj
+                        Add-DiaHtmlSubGraph -Name "$($Port.NodeName)ClusterPorts" -TableArray $ClusterPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label 'Cluster Network Ports' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $ClusterPortObjColumnSize -NodeObject
+
+                        Edge -From 'ClusterNetwork' -To "$($Port.NodeName)ClusterPorts" @{color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+
+                        Edge -From "$($Port.NodeName)ClusterPorts" -To $Node.NodeName @{minlen = 1; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+
+                        # Non-IFGRP Ports without Vlan Interfces
+                        foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') -and $_.PortName -notmatch 'a0' -and $_.PortType -ne 'vlan' -and $_.IsParentVlan -eq $false })) {
+                            $PerPortLifs = @()
+                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $Port.PortName })) {
+                                $PerPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
+                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
+                                } else {
+                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                                }
+                            }
+
+                            if (-not $PerPortLifs) {
+                                $PerPortLifs = Add-DiaNodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                            }
+
+                            if ($PerPortLifs.Count -eq 1) { $PerPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $PerPortLifsColumnSize = $Options.DiagramColumnSize } else { $PerPortLifsColumnSize = $PerPortLifs.Count }
+
+                            Add-DiaHtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $PerPortLifsColumnSize
+
+                            Edge -From $Node.NodeName -To "$($Port.NodeName)$($Port.PortName)_Lifs" @{minlen = 1; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+                        }
+
+                        # foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Ifgrp Port' -notin @('None', 'Unknown') })) {
+                        #     Add-DiaNodeIcon -Name "$($Port.NodeName)_$($Port.PortName)" -LabelName "$($Port.PortName)" -ImagesObj $Images -Align "Center" -IconType "Ontap_Network_Port" -IconDebug $IconDebug -AditionalInfo $Port.AdditionalInfo -NodeObject
+
+                        #     Edge -From $Node.NodeName -To "$($Port.NodeName)_$($Port.PortName)" @{minlen = 1; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+                        # }
+                    }
                 }
 
-                if ($ClusterNodesObj) {
-                    $Index = 0
-                    foreach ($Node in $ClusterNodesObj) {
-
-                        $ClusterMgmtObj = Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $Node -Align 'Right' -IconDebug $IconDebug -Label " " -LabelPos 'down' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize 1 -FontSize 18
-
-                        if ($ClusterMgmtObj) {
-                            Node Node$Index @{Label = $ClusterMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            $Index++
-                        } else {
-                            Write-PScriboMessage -IsWarning "Unable to create ClusterNodesObj. No Cluster Management Object found."
-                        }
-                    }
-                    foreach ($HA in $HAObject) {
-                        Edge -From Node0 -To Node1 @{tailport = $HA.Name; headport = $HA.Partner; minlen = 2; label = "HA: $($HA.HAState)"; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 16; style = 'solid'; penwidth = 2; arrowhead = 'box'; arrowtail = 'box' }
-                        Rank Node0, Node1
+                foreach ($HA in $HAObject) {
+                    if ($HA.Partner) {
+                        Edge -From $HA.Name -To $HA.Partner @{tailport = $HA.Name; headport = $HA.Partner; minlen = 3; label = "HA: $($HA.HAState)"; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 16; style = 'solid'; penwidth = 2; arrowhead = 'box'; arrowtail = 'box' }
+                        Rank $HA.Name, $HA.Partner
                     }
                 }
             } catch {

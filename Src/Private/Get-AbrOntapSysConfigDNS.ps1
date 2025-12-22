@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigDNS {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System DNS Configuration information."
+        Write-PScriboMessage 'Collecting ONTAP System DNS Configuration information.'
     }
 
     process {
@@ -57,19 +57,19 @@ function Get-AbrOntapSysConfigDNS {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.DNS -and (($OutObj | Where-Object { $_.'Dns State' -notlike 'Enabled' }) -or ($OutObj | Where-Object { $_.'Name Servers' -lt 2 }))) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     if ($OutObj | Where-Object { $_.'Dns State' -notlike 'Enabled' }) {
                         Paragraph {
-                            Text "Best Practice:" -Bold
-                            Text "It is recommended to enable DNS on the cluster to ensure proper name resolution for network services."
+                            Text 'Best Practice:' -Bold
+                            Text 'It is recommended to enable DNS on the cluster to ensure proper name resolution for network services.'
                         }
                         BlankLine
                     }
                     if ($OutObj | Where-Object { $_.'Name Servers' -lt 2 } ) {
                         Paragraph {
-                            Text "Best Practice:" -Bold
-                            Text "It is recommended to configure at least two DNS name servers for redundancy and reliability."
+                            Text 'Best Practice:' -Bold
+                            Text 'It is recommended to configure at least two DNS name servers for redundancy and reliability.'
                         }
                         BlankLine
                     }

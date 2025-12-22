@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigTZ {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System TimeZone information."
+        Write-PScriboMessage 'Collecting ONTAP System TimeZone information.'
     }
 
     process {

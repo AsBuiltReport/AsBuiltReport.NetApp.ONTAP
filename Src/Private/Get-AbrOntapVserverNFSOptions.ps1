@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNFSOption {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver NFS Option information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver NFS Option information.'
     }
 
     process {

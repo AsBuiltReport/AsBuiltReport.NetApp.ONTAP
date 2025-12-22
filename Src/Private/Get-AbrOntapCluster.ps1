@@ -19,7 +19,7 @@ function Get-AbrOntapCluster {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP cluster information."
+        Write-PScriboMessage 'Collecting ONTAP cluster information.'
     }
 
     process {
@@ -61,11 +61,11 @@ function Get-AbrOntapCluster {
                 }
                 $ClusterSummary | Table @TableParams
                 if ($Healthcheck.Cluster.Summary -and ($ClusterSummary | Where-Object { $_.'Overall System Health' -notlike 'OK' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "The overall system health is not OK. It is recommended to investigate the issue further to ensure the cluster is functioning properly."
+                        Text 'Best Practice:' -Bold
+                        Text 'The overall system health is not OK. It is recommended to investigate the issue further to ensure the cluster is functioning properly.'
                     }
                     BlankLine
                 }

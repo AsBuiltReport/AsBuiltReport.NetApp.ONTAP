@@ -23,7 +23,7 @@ function Get-AbrOntapVserverSubsystem {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Subsystem information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Subsystem information.'
     }
 
     process {
@@ -49,7 +49,7 @@ function Get-AbrOntapVserverSubsystem {
                             'Target NQN' = $Item.TargetNqn
                             'Host NQN' = $Item.Hosts.Nqn
                             'Mapped Namespace' = switch (($MappedNamespace).count) {
-                                0 { "None" }
+                                0 { 'None' }
                                 default { $MappedNamespace }
                             }
                         }
@@ -68,11 +68,11 @@ function Get-AbrOntapVserverSubsystem {
                         }
                         $VserverObj | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { ($_.'Mapped Namespace').count -eq 0 })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure all subsystems have mapped namespaces to guarantee proper functionality and performance."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure all subsystems have mapped namespaces to guarantee proper functionality and performance.'
                             }
                             BlankLine
                         }

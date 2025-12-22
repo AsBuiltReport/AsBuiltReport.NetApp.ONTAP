@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Key Management Service External Status information."
+        Write-PScriboMessage 'Collecting ONTAP Security Key Management Service External Status information.'
     }
 
     process {
@@ -55,10 +55,10 @@ function Get-AbrOntapSecurityKMSExtStatus {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Security.KMS -and ($OutObj | Where-Object { $_.'Status' -ne 'Available' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all External Key Management Services are in 'Available' status to maintain encryption functionality."
                     }
                     BlankLine

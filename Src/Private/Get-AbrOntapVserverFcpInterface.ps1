@@ -23,7 +23,7 @@ function Get-AbrOntapVserverFcpInterface {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP interface information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver FCP interface information.'
     }
 
     process {
@@ -36,6 +36,7 @@ function Get-AbrOntapVserverFcpInterface {
                         $inObj = [ordered] @{
                             'Interface Name' = $Item.InterfaceName
                             'FCP WWPN' = $Item.PortName
+                            'Node Name' = $Item.CurrentNode
                             'Home Port' = $Item.CurrentPort
                         }
                         $VserverObj += [pscustomobject]$inobj
@@ -47,7 +48,7 @@ function Get-AbrOntapVserverFcpInterface {
                 $TableParams = @{
                     Name = "FCP Interface - $($Vserver)"
                     List = $false
-                    ColumnWidths = 35, 35, 30
+                    ColumnWidths = 30, 30, 20, 20
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

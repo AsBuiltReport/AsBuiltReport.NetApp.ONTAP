@@ -1,7 +1,7 @@
 function Get-AbrOntapVserverVolumesExportPolicy {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP vserver volumes export policy information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver per volumes export policy information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes export policy information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver per volumes export policy information.'
     }
 
     process {
@@ -37,7 +37,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                             'Policy Name' = $Item.PolicyName
                             'Rule Index' = $Item.RuleIndex
                             'Client Match' = $Item.ClientMatch
-                            'Protocol' = $Item.Protocol -join ", "
+                            'Protocol' = $Item.Protocol -join ', '
                             'Ro Rule' = $Item.RoRule
                             'Rw Rule' = $Item.RwRule
                         }
@@ -47,8 +47,13 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                     }
                 }
 
+                if ($Healthcheck.Vserver.Status) {
+                    $VserverObj | Where-Object { $_.'Client Match' -like '0.0.0.0/' } | Set-Style -Style Warning -Property 'Client Match'
+                }
+
+
                 $TableParams = @{
-                    Name = "Volume Export Policy - $($Vserver)"
+                    Name = "Per Volume Export Policy - $($Vserver)"
                     List = $false
                     ColumnWidths = 20, 15, 20, 15, 15, 15
                 }

@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigBackupURL {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System Configuration Backup Setting information."
+        Write-PScriboMessage 'Collecting ONTAP System Configuration Backup Setting information.'
     }
 
     process {
@@ -60,11 +60,11 @@ function Get-AbrOntapSysConfigBackupURL {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.Backup -and ($OutObj | Where-Object { $_.'Url' -eq 'Not Configured' -or $_.'Username' -eq 'Not Configured' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "It is recommended to backup the system configuration to a remote location to ensure recovery in case of failures."
+                        Text 'Best Practice:' -Bold
+                        Text 'It is recommended to backup the system configuration to a remote location to ensure recovery in case of failures.'
                     }
                     BlankLine
                 }

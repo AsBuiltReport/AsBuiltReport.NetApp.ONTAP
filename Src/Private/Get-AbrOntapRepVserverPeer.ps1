@@ -19,7 +19,7 @@ function Get-AbrOntapRepVserverPeer {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Peer information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Peer information.'
     }
 
     process {
@@ -55,10 +55,10 @@ function Get-AbrOntapRepVserverPeer {
                 }
                 $ReplicaObj | Table @TableParams
                 if ($Healthcheck.Replication.VserverPeer -and ($ReplicaObj | Where-Object { $_.'Peer State' -notlike 'peered' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all Vserver Peer relationships are in 'peered' state to maintain proper data replication."
                     }
                     BlankLine

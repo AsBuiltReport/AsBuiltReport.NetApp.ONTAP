@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigNTPHost {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System NTP Host Status information."
+        Write-PScriboMessage 'Collecting ONTAP System NTP Host Status information.'
     }
 
     process {
@@ -59,11 +59,11 @@ function Get-AbrOntapSysConfigNTPHost {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.NTP -and ($OutObj | Where-Object { $_.'Peer Status' -notlike 'Reachable' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all configured NTP servers are reachable to maintain accurate time synchronization across the cluster."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all configured NTP servers are reachable to maintain accurate time synchronization across the cluster.'
                     }
                     BlankLine
                 }

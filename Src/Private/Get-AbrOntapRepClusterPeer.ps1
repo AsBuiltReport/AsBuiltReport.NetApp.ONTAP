@@ -19,7 +19,7 @@ function Get-AbrOntapRepClusterPeer {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Replication information."
+        Write-PScriboMessage 'Collecting ONTAP Replication information.'
     }
 
     process {
@@ -56,11 +56,11 @@ function Get-AbrOntapRepClusterPeer {
                 }
                 $ReplicaObj | Table @TableParams
                 if ($Healthcheck.Replication.ClusterPeer -and ($ReplicaObj | Where-Object { $_.'Status' -notlike 'Available' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all cluster peers are available to maintain replication integrity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all cluster peers are available to maintain replication integrity.'
                     }
                     BlankLine
                 }

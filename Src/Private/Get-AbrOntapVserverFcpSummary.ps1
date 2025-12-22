@@ -23,7 +23,7 @@ function Get-AbrOntapVserverFcpSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver FCP information.'
     }
 
     process {
@@ -60,11 +60,11 @@ function Get-AbrOntapVserverFcpSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' } )) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all FCP services are operational to maintain optimal storage connectivity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all FCP services are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

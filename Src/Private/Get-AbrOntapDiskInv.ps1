@@ -19,13 +19,13 @@ function Get-AbrOntapDiskInv {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk inventory per node."
+        Write-PScriboMessage 'Collecting ONTAP disk inventory per node.'
     }
 
     process {
         try {
             $DiskInv = Get-NcDisk -Controller $Array
-            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq "broken" }
+            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }
             if ($DiskInv) {
                 $DiskInventory = foreach ($Disks in $DiskInv) {
                     try {

@@ -19,7 +19,7 @@ function Get-AbrOntapDiskAssign {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk assignment per node information."
+        Write-PScriboMessage 'Collecting ONTAP disk assignment per node information.'
     }
 
     process {

@@ -19,7 +19,7 @@ function Get-AbrOntapClusterLicenseUsage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP cluster license usage information."
+        Write-PScriboMessage 'Collecting ONTAP cluster license usage information.'
     }
 
     process {
@@ -30,8 +30,8 @@ function Get-AbrOntapClusterLicenseUsage {
                     [PSCustomObject] @{
                         'Name' = $NodeLFs.FeatureName
                         'Status' = $NodeLFs.Status
-                        'Notes' = Switch ($NodeLFs.Notes) {
-                            "-" { 'None' }
+                        'Notes' = switch ($NodeLFs.Notes) {
+                            '-' { 'None' }
                             default { $NodeLFs.Notes }
                         }
                     }

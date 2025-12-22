@@ -24,7 +24,7 @@ function Get-AbrOntapDiskOwner {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk owned per node information."
+        Write-PScriboMessage 'Collecting ONTAP disk owned per node information.'
     }
 
     process {

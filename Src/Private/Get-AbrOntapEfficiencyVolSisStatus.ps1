@@ -23,7 +23,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Volume Deduplication information."
+        Write-PScriboMessage 'Collecting ONTAP Volume Deduplication information.'
     }
 
     process {
@@ -64,11 +64,11 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Storage.Efficiency -and ($OutObj | Where-Object { $_.'State' -like 'Disabled' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that volume deduplication is enabled on volumes where data reduction is beneficial to optimize storage efficiency."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that volume deduplication is enabled on volumes where data reduction is beneficial to optimize storage efficiency.'
                     }
                     BlankLine
                 }

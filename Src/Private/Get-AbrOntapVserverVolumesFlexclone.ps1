@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes flexclone information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes flexclone information.'
     }
 
     process {
@@ -60,11 +60,11 @@ function Get-AbrOntapVserverVolumesFlexclone {
                         }
                         $VserverObj | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj)) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Regularly monitor flexclone volumes to manage storage utilization effectively."
+                                Text 'Best Practice:' -Bold
+                                Text 'Regularly monitor flexclone volumes to manage storage utilization effectively.'
                             }
                             BlankLine
                         }

@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNamespaceStorage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver namespace information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver namespace information.'
     }
 
     process {
@@ -44,7 +44,7 @@ function Get-AbrOntapVserverNamespaceStorage {
                             'Path' = $Item.Path
                             'Serial Number' = $Item.Uuid
                             'Subsystem Map' = switch (($namespacemap).count) {
-                                0 { "None" }
+                                0 { 'None' }
                                 default { $namespacemap.Subsystem }
                             }
                             'Home Node ' = $Item.Node
@@ -53,8 +53,8 @@ function Get-AbrOntapVserverNamespaceStorage {
                             'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
                             'OS Type' = $Item.Ostype
                             'Is Mapped' = switch ([string]::IsNullOrEmpty($Item.Subsystem)) {
-                                $true { "No" }
-                                $false { "Yes" }
+                                $true { 'No' }
+                                $false { 'Yes' }
                                 default { $Item.Subsystem }
                             }
                             'ReadOnly' = ConvertTo-TextYN $Item.IsReadOnly
@@ -82,11 +82,11 @@ function Get-AbrOntapVserverNamespaceStorage {
                         }
                         $VserverObj | Sort-Object -Property 'Namespace Name' | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that all namespaces are operational to maintain optimal storage connectivity."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all namespaces are operational to maintain optimal storage connectivity.'
                             }
                             BlankLine
                         }

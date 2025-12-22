@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver CIFS information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver CIFS information.'
     }
 
     process {
@@ -62,11 +62,11 @@ function Get-AbrOntapVserverCIFSSummary {
                             }
                             $VserverObj | Table @TableParams
                             if ($Healthcheck.Vserver.CIFS -and ($VserverObj | Where-Object { $_.'Status' -like 'down' })) {
-                                Paragraph "Health Check:" -Bold -Underline
+                                Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {
-                                    Text "Best Practice:" -Bold
-                                    Text "Ensure that the CIFS service is running on all nodes to maintain file sharing capabilities."
+                                    Text 'Best Practice:' -Bold
+                                    Text 'Ensure that the CIFS service is running on all nodes to maintain file sharing capabilities.'
                                 }
                                 BlankLine
                             }

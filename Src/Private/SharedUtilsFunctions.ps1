@@ -29,8 +29,8 @@ function ConvertTo-TextYN {
         $true { '-' }
         $false {
             switch ($TEXT) {
-                "True" { "Yes"; break }
-                "False" { "No"; break }
+                'True' { 'Yes'; break }
+                'False' { 'No'; break }
                 default { $TEXT }
             }
         }
@@ -82,7 +82,7 @@ function ConvertTo-EmptyToFiller {
     )
 
     switch ([string]::IsNullOrEmpty($TEXT)) {
-        $true { "-"; break }
+        $true { '-'; break }
         $false { $TEXT; break }
         default { '-' }
     }

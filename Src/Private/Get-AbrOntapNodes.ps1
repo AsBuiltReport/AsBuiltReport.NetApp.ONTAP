@@ -19,7 +19,7 @@ function Get-AbrOntapNode {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP node information."
+        Write-PScriboMessage 'Collecting ONTAP node information.'
     }
 
     process {

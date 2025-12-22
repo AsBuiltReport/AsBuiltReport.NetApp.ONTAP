@@ -19,7 +19,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos group adaptive information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qos group adaptive information.'
     }
 
     process {

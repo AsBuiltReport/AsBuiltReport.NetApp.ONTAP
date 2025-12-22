@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkSubnet {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Subnets information."
+        Write-PScriboMessage 'Collecting ONTAP Subnets information.'
     }
 
     process {

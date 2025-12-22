@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSDC {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Domain Controller Properties information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Domain Controller Properties information.'
     }
 
     process {

@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Nvme FC adapter information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Nvme FC adapter information.'
     }
 
     process {
@@ -65,10 +65,10 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all Nvme FC adapters are in 'Up' status to maintain optimal connectivity and performance."
                     }
                     BlankLine

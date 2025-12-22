@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSShareProp {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Share Properties information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Share Properties information.'
     }
 
     process {

@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigNTP {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System NTP information."
+        Write-PScriboMessage 'Collecting ONTAP System NTP information.'
     }
 
     process {
@@ -55,11 +55,11 @@ function Get-AbrOntapSysConfigNTP {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.NTP -and ($OutObj.Count -eq 1)) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "It is recommended to configure multiple NTP servers for redundancy and reliability."
+                        Text 'Best Practice:' -Bold
+                        Text 'It is recommended to configure multiple NTP servers for redundancy and reliability.'
                     }
                     BlankLine
                 }
@@ -86,11 +86,11 @@ function Get-AbrOntapSysConfigNTP {
                 }
                 $OutObj | Table @TableParams
 
-                Paragraph "Health Check:" -Bold -Underline
+                Paragraph 'Health Check:' -Bold -Underline
                 BlankLine
                 Paragraph {
-                    Text "Best Practice:" -Bold
-                    Text "Configure at least one NTP server to ensure accurate time synchronization across the cluster."
+                    Text 'Best Practice:' -Bold
+                    Text 'Configure at least one NTP server to ensure accurate time synchronization across the cluster.'
                 }
                 BlankLine
 

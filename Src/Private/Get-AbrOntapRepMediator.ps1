@@ -19,12 +19,12 @@ function Get-AbrOntapRepMediator {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP SnapMirror Mediator relationship information."
+        Write-PScriboMessage 'Collecting ONTAP SnapMirror Mediator relationship information.'
     }
 
     process {
         try {
-            $ReplicaData = Get-NetAppOntapAPI -uri "/api/cluster/mediators?fields=*&return_records=true&return_timeout=15"
+            $ReplicaData = Get-NetAppOntapAPI -uri '/api/cluster/mediators?fields=*&return_records=true&return_timeout=15'
             $ReplicaObj = @()
             if ($ReplicaData) {
                 foreach ($Item in $ReplicaData) {
@@ -45,7 +45,7 @@ function Get-AbrOntapRepMediator {
                     }
                 }
                 if ($Healthcheck.Replication.Mediator) {
-                    $ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable" } | Set-Style -Style Critical -Property 'Status'
+                    $ReplicaObj | Where-Object { $_.'Status' -eq 'Unreachable' } | Set-Style -Style Critical -Property 'Status'
                 }
 
                 $TableParams = @{
@@ -57,12 +57,12 @@ function Get-AbrOntapRepMediator {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
-                if ($Healthcheck.Replication.Mediator -and ($ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable" })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                if ($Healthcheck.Replication.Mediator -and ($ReplicaObj | Where-Object { $_.'Status' -eq 'Unreachable' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all SnapMirror Mediator relationships are reachable to facilitate proper replication management."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all SnapMirror Mediator relationships are reachable to facilitate proper replication management.'
                     }
                     BlankLine
                 }

@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolume {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes information.'
     }
 
     process {
@@ -61,10 +61,10 @@ function Get-AbrOntapVserverVolume {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'offline' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all volumes are in 'online' status and monitor volume usage to prevent capacity issues."
                     }
                     BlankLine

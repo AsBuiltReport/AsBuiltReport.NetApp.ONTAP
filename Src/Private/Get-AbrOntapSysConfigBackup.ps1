@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigBackup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System Configuration Backups information."
+        Write-PScriboMessage 'Collecting ONTAP System Configuration Backups information.'
     }
 
     process {

@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Volume Snaplock Type information."
+        Write-PScriboMessage 'Collecting ONTAP Security Volume Snaplock Type information.'
     }
 
     process {

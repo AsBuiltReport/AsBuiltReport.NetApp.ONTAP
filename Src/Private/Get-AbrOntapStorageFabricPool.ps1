@@ -19,7 +19,7 @@ function Get-AbrOntapStorageFabricPool {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Aggregate FabriPool information."
+        Write-PScriboMessage 'Collecting ONTAP Aggregate FabriPool information.'
     }
 
     process {
@@ -34,7 +34,7 @@ function Get-AbrOntapStorageFabricPool {
                             'Aggregate' = $Item.Aggregate
                             'Fabric Pool Name' = $Item.ObjectStoreName
                             'Type' = $Item.ProviderType
-                            'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                             'Status' = $Item.ObjectStoreAvailability
                         }
                         $OutObj += [pscustomobject]$inobj

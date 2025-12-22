@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSSecurity {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver CIFS Security information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver CIFS Security information.'
     }
 
     process {

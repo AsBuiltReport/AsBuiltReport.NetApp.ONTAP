@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiInitiator {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI Client Initiators information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI Client Initiators information.'
     }
 
     process {

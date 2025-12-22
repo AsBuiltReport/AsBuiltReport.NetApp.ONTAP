@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNFSSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver NFS information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver NFS information.'
     }
 
     process {
@@ -71,11 +71,11 @@ function Get-AbrOntapVserverNFSSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.NFS -and ($VserverObj | Where-Object { $_.'Nfs v3' -like 'Disabled' -and $_.'Nfs v4' -like 'Disabled' -and $_.'Nfs v41' -like 'Disabled' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Evaluate enabling NFS services to support client connectivity and file sharing."
+                        Text 'Best Practice:' -Bold
+                        Text 'Evaluate enabling NFS services to support client connectivity and file sharing.'
                     }
                     BlankLine
                 }

@@ -19,7 +19,7 @@ function Get-AbrOntapNodeStorage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Node Storage information."
+        Write-PScriboMessage 'Collecting ONTAP Node Storage information.'
     }
 
     process {
@@ -57,11 +57,11 @@ function Get-AbrOntapNodeStorage {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Node.HW -and (($OutObj | Where-Object { $_.'Status' -like 'offline' }) -or ($OutObj | Where-Object { $_.'Used' -ge 90 }))) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all nodes are online and that storage usage is within acceptable limits."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all nodes are online and that storage usage is within acceptable limits.'
                     }
                     BlankLine
                 }

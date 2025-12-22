@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigSNMP {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System SNMP Configuration information."
+        Write-PScriboMessage 'Collecting ONTAP System SNMP Configuration information.'
     }
 
     process {
@@ -34,7 +34,7 @@ function Get-AbrOntapSysConfigSNMP {
                             'Location' = $Item.Location
                             'Communities' = $Item.Communities
                             'Traphosts' = $Item.Traphosts
-                            'Status' = Switch ($Item.IsTrapEnabled) {
+                            'Status' = switch ($Item.IsTrapEnabled) {
                                 'True' { 'Enabled' }
                                 'False' { 'Disabled' }
                                 default { $Item.IsTrapEnabled }

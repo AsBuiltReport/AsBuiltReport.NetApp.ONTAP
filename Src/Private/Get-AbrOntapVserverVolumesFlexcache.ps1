@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver flexcache volumes information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver flexcache volumes information.'
     }
 
     process {

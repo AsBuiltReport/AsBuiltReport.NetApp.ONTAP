@@ -19,7 +19,7 @@ function Get-AbrOntapNodesHW {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Node Hardware information."
+        Write-PScriboMessage 'Collecting ONTAP Node Hardware information.'
     }
 
     process {
@@ -40,8 +40,8 @@ function Get-AbrOntapNodesHW {
                             'All Flash Optimized' = ConvertTo-TextYN $NodeInfo.IsAllFlashOptimized
                             'Epsilon' = ConvertTo-TextYN $NodeInfo.IsEpsilonNode
                             'System Healthy' = switch ($NodeInfo.IsNodeHealthy) {
-                                "True" { "Healthy" }
-                                "False" { "UnHealthy" }
+                                'True' { 'Healthy' }
+                                'False' { 'UnHealthy' }
                                 default { $NodeInfo.IsNodeHealthy }
                             }
                             'Failed Fan Count' = $NodeInfo.EnvFailedFanCount
@@ -49,8 +49,8 @@ function Get-AbrOntapNodesHW {
                             'Failed PowerSupply Count' = $NodeInfo.EnvFailedPowerSupplyCount
                             'Failed PowerSupply Error' = $NodeInfo.EnvFailedPowerSupplyMessage
                             'Over Temperature' = switch ($NodeInfo.EnvOverTemperature) {
-                                "True" { "High Temperature" }
-                                "False" { "Normal Temperature" }
+                                'True' { 'High Temperature' }
+                                'False' { 'Normal Temperature' }
                                 default { $NodeInfo.EnvOverTemperature }
                             }
                             'NVRAM Battery Healthy' = $NodeInfo.NvramBatteryStatus

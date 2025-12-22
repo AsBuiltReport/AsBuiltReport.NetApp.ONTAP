@@ -19,7 +19,7 @@ function Get-AbrOntapRepDestination {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP SnapMirror Destination relationship information."
+        Write-PScriboMessage 'Collecting ONTAP SnapMirror Destination relationship information.'
     }
 
     process {
@@ -54,7 +54,7 @@ function Get-AbrOntapRepDestination {
                         $ReplicaObj = [pscustomobject]$inobj
 
                         if ($Healthcheck.Replication.Relationship) {
-                            $ReplicaObj | Where-Object { $_.'Status' -eq "Unknown" } | Set-Style -Style Warning -Property 'Status'
+                            $ReplicaObj | Where-Object { $_.'Status' -eq 'Unknown' } | Set-Style -Style Warning -Property 'Status'
                         }
 
                         $TableParams = @{
@@ -66,12 +66,12 @@ function Get-AbrOntapRepDestination {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ReplicaObj | Table @TableParams
-                        if ($Healthcheck.Replication.Relationship -and ($ReplicaObj | Where-Object { $_.'Status' -eq "Unknown" })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                        if ($Healthcheck.Replication.Relationship -and ($ReplicaObj | Where-Object { $_.'Status' -eq 'Unknown' })) {
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that all SnapMirror relationships have a known status to maintain replication integrity."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all SnapMirror relationships have a known status to maintain replication integrity.'
                             }
                             BlankLine
                         }

@@ -23,12 +23,12 @@ function Get-AbrOntapVserverSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver information.'
     }
 
     process {
         try {
-            $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq "data" }
+            $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' }
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
@@ -59,10 +59,10 @@ function Get-AbrOntapVserverSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'stopped' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all Vservers are in 'running' status to provide uninterrupted services."
                     }
                     BlankLine
@@ -109,7 +109,7 @@ function Get-AbrOntapVserverSummary {
                 Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                if (Get-NcVserverAggr) {
+                if (Get-NcVserverAggr -VserverContext $Vserver) {
                     Section -Style Heading4 'Aggregate Resource Allocation' {
                         $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
                         $VserverObj = @()

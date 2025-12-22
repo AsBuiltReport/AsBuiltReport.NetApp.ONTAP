@@ -19,7 +19,7 @@ function Get-AbrOntapStorageAGGR {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP storage aggregate information."
+        Write-PScriboMessage 'Collecting ONTAP storage aggregate information.'
     }
 
     process {
@@ -50,7 +50,7 @@ function Get-AbrOntapStorageAGGR {
                             'Root' = ConvertTo-TextYN $RootAggr
                             'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
                                 $true { 'Unknown' }
-                                $false { ($Aggr.RaidType.Split(",")[0]).ToUpper() }
+                                $false { ($Aggr.RaidType.Split(',')[0]).ToUpper() }
                                 default { 'Unknown' }
                             }
                             'State' = $Aggr.State
@@ -73,12 +73,12 @@ function Get-AbrOntapStorageAGGR {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $AggrSpaceSummary | Table @TableParams
-                if ($Healthcheck.Storage.Aggr -and (($AggrSpaceSummary | Where-Object { $_.'State' -eq 'failed' } ) -or ($AggrSpaceSummary | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' }) -or ($AggrSpaceSummary | Where-Object { $_.'Used' -ge 90  -and $_.'Root' -ne 'Yes' }))) {
-                    Paragraph "Health Check:" -Bold -Underline
+                if ($Healthcheck.Storage.Aggr -and (($AggrSpaceSummary | Where-Object { $_.'State' -eq 'failed' } ) -or ($AggrSpaceSummary | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' }) -or ($AggrSpaceSummary | Where-Object { $_.'Used' -ge 90 -and $_.'Root' -ne 'Yes' }))) {
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all Aggregates are in healthy state to maintain optimal storage performance and client access availability."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all Aggregates are in healthy state to maintain optimal storage performance and client access availability.'
                     }
                     BlankLine
                 }

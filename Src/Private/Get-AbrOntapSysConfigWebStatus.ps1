@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigWebStatus {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System Web Service information."
+        Write-PScriboMessage 'Collecting ONTAP System Web Service information.'
     }
 
     process {
@@ -59,11 +59,11 @@ function Get-AbrOntapSysConfigWebStatus {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.Web -and (($OutObj | Where-Object { $_.'Http Enabled' -eq 'Yes' }))) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "It is recommended to enable HTTPS and disable HTTP on all nodes to ensure secure communication with the cluster management interface."
+                        Text 'Best Practice:' -Bold
+                        Text 'It is recommended to enable HTTPS and disable HTTP on all nodes to ensure secure communication with the cluster management interface.'
                     }
                     BlankLine
                 }

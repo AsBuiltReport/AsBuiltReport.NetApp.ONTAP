@@ -19,7 +19,7 @@ function Get-AbrOntapVserverFcpAdapter {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP adapter information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver FCP adapter information.'
     }
 
     process {
@@ -59,11 +59,11 @@ function Get-AbrOntapVserverFcpAdapter {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all FCP adapters are operational to maintain optimal storage connectivity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all FCP adapters are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

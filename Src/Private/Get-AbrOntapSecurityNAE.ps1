@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityNAE {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Aggregate NAE information."
+        Write-PScriboMessage 'Collecting ONTAP Security Aggregate NAE information.'
     }
 
     process {
@@ -29,7 +29,7 @@ function Get-AbrOntapSecurityNAE {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $NAE = try { (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq "encrypt_with_aggr_key" }).Value } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
+                        $NAE = try { (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq 'encrypt_with_aggr_key' }).Value } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
                             'Aggregate Encryption' = switch ($NAE) {
@@ -60,10 +60,10 @@ function Get-AbrOntapSecurityNAE {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Storage.Aggr -and ($OutObj | Where-Object { $_.'State' -ne 'Online' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all Aggregates are in 'Online' state to maintain optimal storage performance and client access availability."
                     }
                     BlankLine

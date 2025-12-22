@@ -19,12 +19,12 @@ function Get-AbrOntapSecurityMAPRule {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Vserver Multi-Admin Approval rules information."
+        Write-PScriboMessage 'Collecting ONTAP Security Vserver Multi-Admin Approval rules information.'
     }
 
     process {
         try {
-            $Data = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/rules?fields=**&return_records=true&return_timeout=15"
+            $Data = Get-NetAppOntapAPI -uri '/api/security/multi-admin-verify/rules?fields=**&return_records=true&return_timeout=15'
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -32,7 +32,7 @@ function Get-AbrOntapSecurityMAPRule {
                         $inObj = [ordered] @{
                             'operation' = $Item.operation
                             'query' = ConvertTo-EmptyToFiller $Item.query
-                            'Approval Groups' = Switch ([string]::IsNullOrEmpty($Item.approval_groups.name)) {
+                            'Approval Groups' = switch ([string]::IsNullOrEmpty($Item.approval_groups.name)) {
                                 $true { '-' }
                                 $false { $Item.approval_groups.name }
                                 default { '-' }

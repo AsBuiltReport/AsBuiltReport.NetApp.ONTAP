@@ -23,7 +23,7 @@ function Get-AbrOntapVserverS3Bucket {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver S3 bucket information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver S3 bucket information.'
     }
 
     process {

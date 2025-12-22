@@ -23,7 +23,7 @@ function Get-AbrOntapVserverS3Summary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver S3 information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver S3 information.'
     }
 
     process {
@@ -38,7 +38,7 @@ function Get-AbrOntapVserverS3Summary {
                             'HTTP Port' = $Item.port
                             'HTTPS' = ConvertTo-TextYN $Item.is_https_enabled
                             'HTTPS Port' = $Item.secure_port
-                            'Status' = Switch ($Item.enabled) {
+                            'Status' = switch ($Item.enabled) {
                                 'True' { 'UP' }
                                 'False' { 'Down' }
                                 default { $Item.enabled }

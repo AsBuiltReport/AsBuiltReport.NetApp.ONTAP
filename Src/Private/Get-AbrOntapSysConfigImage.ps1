@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigImage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System Image information."
+        Write-PScriboMessage 'Collecting ONTAP System Image information.'
     }
 
     process {

@@ -19,18 +19,18 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Snaplock volume attributes information."
+        Write-PScriboMessage 'Collecting ONTAP Security Snaplock volume attributes information.'
     }
 
     process {
         try {
-            $Data = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq "data" }
-            $VolumeFilter = Get-NcVol -Controller $Array | Where-Object { $_.VolumeSnaplockAttributes.SnaplockType -in "enterprise", "compliance" }
+            $Data = Get-NcVserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' }
+            $VolumeFilter = Get-NcVol -Controller $Array | Where-Object { $_.VolumeSnaplockAttributes.SnaplockType -in 'enterprise', 'compliance' }
             $OutObj = @()
             if ($Data -and $VolumeFilter) {
                 foreach ($Item in $Data) {
                     try {
-                        $VolumeFilter = Get-NcVol -VserverContext $Item.Vserver -Controller $Array | Where-Object { $_.VolumeSnaplockAttributes.SnaplockType -in "enterprise", "compliance" }
+                        $VolumeFilter = Get-NcVol -VserverContext $Item.Vserver -Controller $Array | Where-Object { $_.VolumeSnaplockAttributes.SnaplockType -in 'enterprise', 'compliance' }
                         foreach ($vol in $VolumeFilter) {
                             $SnapLockVolAttr = Get-NcSnaplockVolAttr -Volume $vol.Name -VserverContext $Item.VserverName -Controller $Array
                             $inObj = [ordered] @{
@@ -39,7 +39,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                                 'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockVolAttr.Type)
                                 'Maximum Retention Period' = $SnapLockVolAttr.MaximumRetentionPeriod
                                 'Minimum Retention Period' = $SnapLockVolAttr.MinimumRetentionPeriod
-                                'Privileged Delete State' = Switch ($SnapLockVolAttr.PrivilegedDeleteState) {
+                                'Privileged Delete State' = switch ($SnapLockVolAttr.PrivilegedDeleteState) {
                                     $Null { '-' }
                                     default { $SnapLockVolAttr.PrivilegedDeleteState }
                                 }

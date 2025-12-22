@@ -19,12 +19,12 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos group fixed information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qos group fixed information.'
     }
 
     process {
         try {
-            $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object { $_.PolicyGroupClass -eq "user_defined" }
+            $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object { $_.PolicyGroupClass -eq 'user_defined' }
             $OutObj = @()
             if ($QoSFilter) {
                 foreach ($Item in $QoSFilter) {

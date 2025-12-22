@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Aggregate Snaplock Type information."
+        Write-PScriboMessage 'Collecting ONTAP Security Aggregate Snaplock Type information.'
     }
 
     process {

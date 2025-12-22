@@ -19,7 +19,7 @@ function Get-AbrOntapRepHistory {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP SnapMirror replication history information."
+        Write-PScriboMessage 'Collecting ONTAP SnapMirror replication history information.'
     }
 
     process {
@@ -55,11 +55,11 @@ function Get-AbrOntapRepHistory {
                 }
                 $ReplicaObj | Table @TableParams
                 if ($Healthcheck.Replication.History -and ($ReplicaObj | Where-Object { $_.'Result' -ne 'success' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all SnapMirror replication operations complete successfully to maintain data integrity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all SnapMirror replication operations complete successfully to maintain data integrity.'
                     }
                     BlankLine
                 }

@@ -23,12 +23,12 @@ function Get-AbrOntapSysConfigEMS {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System EMS Messages information."
+        Write-PScriboMessage 'Collecting ONTAP System EMS Messages information.'
     }
 
     process {
         try {
-            $Data = Get-NcEmsMessage -Node $Node -Severity "emergency", "alert" -Controller $Array | Select-Object -First 30
+            $Data = Get-NcEmsMessage -Node $Node -Severity 'emergency', 'alert' -Controller $Array | Select-Object -First 30
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {

@@ -23,7 +23,7 @@ function Get-AbrOntapVserverLunIgroup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Igroup information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Igroup information.'
     }
 
     process {
@@ -50,11 +50,11 @@ function Get-AbrOntapVserverLunIgroup {
                             'Protocol' = $Item.Protocol
                             'Initiators' = $Item.Initiators.InitiatorName
                             'Mapped Lun' = switch (($MappedLun).count) {
-                                0 { "None" }
+                                0 { 'None' }
                                 default { $MappedLun }
                             }
                             'Reporting Nodes' = switch (($reportingnodes).count) {
-                                0 { "None" }
+                                0 { 'None' }
                                 default { $reportingnodes }
                             }
                         }
@@ -73,11 +73,11 @@ function Get-AbrOntapVserverLunIgroup {
                         }
                         $VserverObj | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that igroups have an optimal number of reporting nodes to maintain performance and reliability."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that igroups have an optimal number of reporting nodes to maintain performance and reliability.'
                             }
                             BlankLine
                         }

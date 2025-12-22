@@ -23,7 +23,7 @@ function Get-AbrOntapVserverLunStorage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver lun information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver lun information.'
     }
 
     process {
@@ -44,7 +44,7 @@ function Get-AbrOntapVserverLunStorage {
                             'Path' = $Item.Path
                             'Serial Number' = $Item.SerialNumber
                             'Initiator Group' = switch (($lunmap).count) {
-                                0 { "None" }
+                                0 { 'None' }
                                 default { $lunmap }
                             }
                             'Home Node ' = $Item.Node
@@ -88,11 +88,11 @@ function Get-AbrOntapVserverLunStorage {
                         }
                         $VserverObj | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that all LUNs are operational to maintain optimal storage connectivity."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all LUNs are operational to maintain optimal storage connectivity.'
                             }
                             BlankLine
                         }

@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumesQtree {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qtree information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qtree information.'
     }
 
     process {
@@ -59,10 +59,10 @@ function Get-AbrOntapVserverVolumesQtree {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -notlike 'normal' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all qtrees are in 'normal' status to maintain data integrity and accessibility."
                     }
                     BlankLine

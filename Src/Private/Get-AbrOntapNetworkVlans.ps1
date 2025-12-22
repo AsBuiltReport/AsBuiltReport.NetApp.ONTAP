@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkVlan {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP VLAN information."
+        Write-PScriboMessage 'Collecting ONTAP VLAN information.'
     }
 
     process {

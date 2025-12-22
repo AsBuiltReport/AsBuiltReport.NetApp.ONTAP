@@ -23,12 +23,12 @@ function Get-AbrOntapVserverNonMappedLun {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP ISCSI/FCP Non Mapped Lun information."
+        Write-PScriboMessage 'Collecting ONTAP ISCSI/FCP Non Mapped Lun information.'
     }
 
     process {
         try {
-            $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object { $_.Mapped -ne "True" }
+            $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object { $_.Mapped -ne 'True' }
             $OutObj = @()
             if ($LunFilter) {
                 foreach ($Item in $LunFilter) {
@@ -60,11 +60,11 @@ function Get-AbrOntapVserverNonMappedLun {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($OutObj)) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Review non-mapped LUNs to determine if they are still required or can be removed to optimize storage resources."
+                        Text 'Best Practice:' -Bold
+                        Text 'Review non-mapped LUNs to determine if they are still required or can be removed to optimize storage resources.'
                     }
                     BlankLine
                 }

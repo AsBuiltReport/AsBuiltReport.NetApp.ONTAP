@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkPort {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP physical interface information."
+        Write-PScriboMessage 'Collecting ONTAP physical interface information.'
     }
 
     process {
@@ -39,8 +39,8 @@ function Get-AbrOntapNetworkPort {
                             'MTU' = $Nics.MTU
                             'Link Status' = $TextInfo.ToTitleCase($Nics.LinkStatus)
                             'Admin Status' = switch ($Nics.IsAdministrativeUp) {
-                                "True" { 'Up' }
-                                "False" { 'Down' }
+                                'True' { 'Up' }
+                                'False' { 'Down' }
                                 default { $Nics.IsAdministrativeUp }
                             }
                         }
@@ -62,10 +62,10 @@ function Get-AbrOntapNetworkPort {
                 }
                 $PhysicalNic | Table @TableParams
                 if ($Healthcheck.Network.Port -and ($PhysicalNic | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all physical network ports with an administrative status of 'Up' also have a link status of 'Up' to maintain optimal network connectivity."
                     }
                     BlankLine

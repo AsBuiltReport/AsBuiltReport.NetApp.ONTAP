@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes snapshot information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes snapshot information.'
     }
 
     process {
@@ -63,12 +63,12 @@ function Get-AbrOntapVserverVolumeSnapshot {
                 }
                 if ($VserverObj) {
                     $VserverObj | Table @TableParams
-                    if ($Healthcheck.Vserver.Snapshot -and ($VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and $_.'Reserve Available' -eq 0 })) {
-                        Paragraph "Health Check:" -Bold -Underline
+                    if ($Healthcheck.Vserver.Snapshot -and ($VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and ($_.'Used'.split()[0] -gt $_.'Reserve Size'.split()[0]) })) {
+                        Paragraph 'Health Check:' -Bold -Underline
                         BlankLine
                         Paragraph {
-                            Text "Best Practice:" -Bold
-                            Text "Snapshots are enabled on volumes but there is no available snapshot reserve space. It is recommended to increase the snapshot reserve size to avoid snapshot failures."
+                            Text 'Best Practice:' -Bold
+                            Text 'Snapshots are enabled on volumes but there is no available snapshot reserve space. It is recommended to increase the snapshot reserve size to avoid snapshot failures.'
                         }
                         BlankLine
                     }

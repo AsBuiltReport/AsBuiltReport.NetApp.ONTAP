@@ -23,12 +23,12 @@ function Get-AbrOntapEfficiencyVolDetailed {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Volume Efficiency Savings information."
+        Write-PScriboMessage 'Collecting ONTAP Volume Efficiency Savings information.'
     }
 
     process {
         try {
-            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online" }
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq 'online' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -41,8 +41,8 @@ function Get-AbrOntapEfficiencyVolDetailed {
                             'Compression Savings' = $Saving.Returns.Compression | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Snapshot Savings' = $Saving.Returns.Snapshot | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             'Cloning Savings' = $Saving.Returns.Cloning | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Efficiency %' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
-                            'Efficiency % w/o Snapshots' = [Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Efficiency %' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
+                            'Efficiency % w/o Snapshots' = [Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                         }
                         $OutObj += [pscustomobject]$inobj
                     } catch {

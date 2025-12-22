@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumesQuota {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes quota information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes quota information.'
     }
 
     process {
@@ -63,11 +63,11 @@ function Get-AbrOntapVserverVolumesQuota {
                     }
                     $VserverObj | Table @TableParams
                     if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $null -ne $_.'Quota Error' })) {
-                        Paragraph "Health Check:" -Bold -Underline
+                        Paragraph 'Health Check:' -Bold -Underline
                         BlankLine
                         Paragraph {
-                            Text "Best Practice:" -Bold
-                            Text "Review and resolve any quota errors to ensure proper quota enforcement and avoid potential data management issues."
+                            Text 'Best Practice:' -Bold
+                            Text 'Review and resolve any quota errors to ensure proper quota enforcement and avoid potential data management issues.'
                         }
                         BlankLine
                     }
@@ -92,19 +92,19 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Type' = $Item.QuotaType
                                         'Target' = $Item.QuotaTarget
                                         'Disk Limit' = switch ($Item.DiskLimit) {
-                                            "-" { $Item.DiskLimit }
+                                            '-' { $Item.DiskLimit }
                                             default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
                                         'File Limit' = switch ($Item.FileLimit) {
-                                            "-" { $Item.FileLimit }
+                                            '-' { $Item.FileLimit }
                                             default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
                                         'Soft Disk Limit' = switch ($Item.SoftDiskLimit) {
-                                            "-" { $Item.SoftDiskLimit }
+                                            '-' { $Item.SoftDiskLimit }
                                             default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
                                         'Soft File Limit' = switch ($Item.SoftFileLimit) {
-                                            "-" { $Item.SoftFileLimit }
+                                            '-' { $Item.SoftFileLimit }
                                             default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
                                     }
@@ -149,11 +149,11 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
                                         'Disk Limit' = switch ($Item.DiskLimit) {
-                                            "-" { $Item.DiskLimit }
+                                            '-' { $Item.DiskLimit }
                                             default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
                                         'Soft Disk Limit' = switch ($Item.SoftDiskLimit) {
-                                            "-" { $Item.SoftDiskLimit }
+                                            '-' { $Item.SoftDiskLimit }
                                             default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
                                         }
                                         'Disk Used' = $Item.DiskUsed | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
@@ -198,11 +198,11 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
                                         'File Limit' = switch ($Item.FileLimit) {
-                                            "-" { $Item.FileLimit }
+                                            '-' { $Item.FileLimit }
                                             default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
                                         'Soft File Limit' = switch ($Item.SoftFileLimit) {
-                                            "-" { $Item.SoftFileLimit }
+                                            '-' { $Item.SoftFileLimit }
                                             default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
                                         'Files Used' = $Item.FilesUsed | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue

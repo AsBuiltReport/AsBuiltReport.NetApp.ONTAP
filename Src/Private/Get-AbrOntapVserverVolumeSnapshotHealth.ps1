@@ -23,17 +23,17 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes snapshot healthcheck information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes snapshot healthcheck information.'
     }
 
     process {
         try {
-            $SnapshotDays = 7
+            $SnapshotDays = 30
             $Now = Get-Date
             $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
-            $SnapShotData = Get-NcSnapshot -Volume $VserverFilter -Vserver $Vserver -Controller $Array | Where-Object { $_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays) }
+            $SnapShotData = Get-NcSnapshot -Volume $VserverFilter -Vserver $Vserver -Controller $Array | Where-Object { $_.Name -notmatch 'snapmirror.*' -and $_.Created -le $Now.AddDays(-$SnapshotDays) }
             if ($SnapShotData) {
-                Section -Style Heading4 "HealthCheck - Volumes Snapshot" {
+                Section -Style Heading4 'HealthCheck - Volumes Snapshot' {
                     Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck in $($SVM)."
                     BlankLine
                     $VserverObj = @()
@@ -52,7 +52,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                     }
 
                     $TableParams = @{
-                        Name = "HealthCheck - Volume Snapshot over 7 days - $($Vserver)"
+                        Name = "HealthCheck - Volume Snapshot over $($SnapshotDays) days - $($Vserver)"
                         List = $false
                         ColumnWidths = 25, 35, 25, 15
                     }

@@ -19,7 +19,7 @@ function Get-AbrOntapEfficiencyAggr {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Aggregate Efficiency Savings information."
+        Write-PScriboMessage 'Collecting ONTAP Aggregate Efficiency Savings information.'
     }
 
     process {
@@ -63,11 +63,11 @@ function Get-AbrOntapEfficiencyAggr {
                         try {
                             $Saving = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes
                             $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array | Where-Object { $_.VolumeStateAttributes.IsVserverRoot -ne 'True' }
-                            $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne "True" }
+                            $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne 'True' }
                             if ($Saving -ne 0 -and $VolFilter) {
                                 $inObj = [ordered] @{
                                     'Aggregate' = $Item.Name
-                                    'Volumes without Deduplication' = $VolFilter.Name -join ", "
+                                    'Volumes without Deduplication' = $VolFilter.Name -join ', '
                                 }
                                 $OutObj += [pscustomobject]$inobj
                             }
@@ -95,11 +95,11 @@ function Get-AbrOntapEfficiencyAggr {
                         BlankLine
                         $OutObj | Table @TableParams
                         if ($Healthcheck.Storage.Efficiency) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that deduplication is enabled on all volumes to maximize storage efficiency."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that deduplication is enabled on all volumes to maximize storage efficiency.'
                             }
                             BlankLine
                         }
