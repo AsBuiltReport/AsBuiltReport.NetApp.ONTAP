@@ -64,7 +64,7 @@ function Get-AbrOntapRepRelationship {
                                 default { 'Unknown' }
                             }
                         }
-                        $ReplicaObj = [pscustomobject]$inobj
+                        $ReplicaObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Replication.Relationship) {
                             $ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne 'None' } | Set-Style -Style Warning -Property 'Unhealthy Reason'

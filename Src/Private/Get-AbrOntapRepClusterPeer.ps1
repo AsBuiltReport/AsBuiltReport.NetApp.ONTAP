@@ -37,7 +37,7 @@ function Get-AbrOntapRepClusterPeer {
                             'IP Space' = $Item.IpspaceName
                             'Status' = ($Item.Availability)
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

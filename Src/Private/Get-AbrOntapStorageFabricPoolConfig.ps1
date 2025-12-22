@@ -38,7 +38,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
                             'Provider Type' = $Item.ProviderType
                             'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                         }
-                        $OutObj = [pscustomobject]$inobj
+                        $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         $TableParams = @{
                             Name = "Aggregate FabriPool Object Store Configuration - $($Item.ObjectStoreName)"

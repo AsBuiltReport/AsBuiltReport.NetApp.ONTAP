@@ -36,7 +36,7 @@ function Get-AbrOntapSysConfigDNS {
                             'Name Servers' = $Item.NameServers
                             'Timeout/s' = $Item.Timeout
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

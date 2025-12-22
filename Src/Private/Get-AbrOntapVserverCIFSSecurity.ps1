@@ -45,7 +45,7 @@ function Get-AbrOntapVserverCIFSSecurity {
                                     'Smb Encryption Required' = ConvertTo-TextYN $SVM.IsSmbEncryptionRequired
                                     'Lm Compatibility Level' = $SVM.LmCompatibilityLevel
                                 }
-                                $VserverObj += [pscustomobject]$inobj
+                                $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } else { continue }
                         }
                     } catch {

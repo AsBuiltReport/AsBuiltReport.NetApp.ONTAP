@@ -37,7 +37,7 @@ function Get-AbrOntapSysConfigTZ {
                             'Timezone Version' = $Item.TimezoneVersion
                             'Current Time' = $CurrentTime
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

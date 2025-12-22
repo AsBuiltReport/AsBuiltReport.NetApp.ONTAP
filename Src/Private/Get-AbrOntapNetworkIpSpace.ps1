@@ -35,7 +35,7 @@ function Get-AbrOntapNetworkIpSpace {
                             'Ports' = $Item.Ports -join '; '
                             'Broadcast Domains' = $Item.BroadcastDomains -join '; '
                         }
-                        $IPSpaceObj = [pscustomobject]$inobj
+                        $IPSpaceObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         $TableParams = @{
                             Name = "Network IPSpace - $($Item.Ipspace)"

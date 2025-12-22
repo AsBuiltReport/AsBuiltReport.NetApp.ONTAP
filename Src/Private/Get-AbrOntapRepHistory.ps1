@@ -36,7 +36,7 @@ function Get-AbrOntapRepHistory {
                             'Result' = $Item.Result
                             'Start' = $Item.Start
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

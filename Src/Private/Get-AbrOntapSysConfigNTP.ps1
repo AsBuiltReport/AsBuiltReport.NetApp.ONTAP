@@ -35,7 +35,7 @@ function Get-AbrOntapSysConfigNTP {
                             'Preferred' = ConvertTo-TextYN $Item.IsPreferred
                             'Authentication Enabled' = ConvertTo-TextYN $Item.IsAuthenticationEnabled
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -70,7 +70,7 @@ function Get-AbrOntapSysConfigNTP {
                     'Preferred' = 'N/A'
                     'Authentication Enabled' = 'N/A'
                 }
-                $OutObj = [pscustomobject]$inObj
+                $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                 if ($Healthcheck.System.NTP) {
                     $OutObj | Set-Style -Style Warning

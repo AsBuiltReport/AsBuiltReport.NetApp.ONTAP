@@ -41,7 +41,7 @@ function Get-AbrOntapVserverCIFSDC {
                             'Prefer Type' = $Item.PreferType
                             'Status' = $Item.Status
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

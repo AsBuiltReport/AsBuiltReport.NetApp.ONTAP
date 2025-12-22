@@ -39,7 +39,7 @@ function Get-AbrOntapRepMediator {
                                 default { $Item.reachable }
                             }
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

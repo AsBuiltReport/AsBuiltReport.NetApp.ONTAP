@@ -38,7 +38,7 @@ function Get-AbrOntapNetworkVlan {
                             'Parent Interface' = $Item.ParentInterface
                             'Vlan ID' = $Item.VlanID
                         }
-                        $VlanObj += [pscustomobject]$inobj
+                        $VlanObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

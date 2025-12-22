@@ -37,7 +37,7 @@ function Get-AbrOntapNetworkSubnet {
                             'Used IP' = $Item.Used
                             'Ip Ranges' = $Item.IpRanges
                         }
-                        $SubnetObj += [pscustomobject]$inobj
+                        $SubnetObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

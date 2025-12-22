@@ -38,7 +38,7 @@ function Get-AbrOntapSysConfigEMS {
                             'Severity' = $Item.Severity
                             'Event' = $Item.Event
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -38,7 +38,7 @@ function Get-AbrOntapVserverCIFSShare {
                             'Volume' = $Item.Volume
                             'Path' = $Item.Path
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

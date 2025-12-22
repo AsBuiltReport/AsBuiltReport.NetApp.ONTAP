@@ -58,7 +58,7 @@ function Get-AbrOntapVserverLunIgroup {
                                 default { $reportingnodes }
                             }
                         }
-                        $VserverObj = [pscustomobject]$inobj
+                        $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
                         if ($Healthcheck.Vserver.Status) {
                             $VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 } | Set-Style -Style Warning -Property 'Reporting Nodes'
                         }

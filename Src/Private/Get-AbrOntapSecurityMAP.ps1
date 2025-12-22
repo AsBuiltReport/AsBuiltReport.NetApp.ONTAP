@@ -42,7 +42,7 @@ function Get-AbrOntapSecurityMAP {
                                 default { '-' }
                             }
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

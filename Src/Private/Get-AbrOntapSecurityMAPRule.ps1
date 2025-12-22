@@ -41,7 +41,7 @@ function Get-AbrOntapSecurityMAPRule {
                             'System Defined' = ConvertTo-TextYN $Item.system_defined
 
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

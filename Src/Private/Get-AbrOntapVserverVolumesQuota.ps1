@@ -41,7 +41,7 @@ function Get-AbrOntapVserverVolumesQuota {
                                 'Status' = $Item.Status
                                 'Substatus' = $Item.Substatus
                             }
-                            $VserverObj += [pscustomobject]$inobj
+                            $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             if ($null -ne $Item.QuotaErrorMsgs) {
                                 $VserverObj.Add('Quota Error', $Item.QuotaErrorMsgs)
                             }
@@ -108,7 +108,7 @@ function Get-AbrOntapVserverVolumesQuota {
                                             default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
                                         }
                                     }
-                                    $VserverObj += [pscustomobject]$inobj
+                                    $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                     if ($null -ne $Item.QuotaError) {
                                         $VserverObj.Add('Quota Error', $Item.QuotaError)
                                     }
@@ -158,7 +158,7 @@ function Get-AbrOntapVserverVolumesQuota {
                                         }
                                         'Disk Used' = $Item.DiskUsed | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                                     }
-                                    $VserverObj += [pscustomobject]$inobj
+                                    $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
@@ -207,7 +207,7 @@ function Get-AbrOntapVserverVolumesQuota {
                                         }
                                         'Files Used' = $Item.FilesUsed | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
                                     }
-                                    $VserverObj += [pscustomobject]$inobj
+                                    $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }

@@ -49,7 +49,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                                 'Default Retention Period' = $SnapLockVolAttr.DefaultRetentionPeriod
                                 'Litigation Count' = $SnapLockVolAttr.LitigationCount
                             }
-                            $OutObj = [pscustomobject]$inobj
+                            $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                             $TableParams = @{
                                 Name = "Snaplock Volume Attributes - $($vol.Name)"

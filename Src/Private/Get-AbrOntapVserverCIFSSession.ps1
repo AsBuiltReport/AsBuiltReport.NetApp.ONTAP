@@ -40,7 +40,7 @@ function Get-AbrOntapVserverCIFSSession {
                             'Address' = $Item.Address
                             'User' = $Item.WindowsUser
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

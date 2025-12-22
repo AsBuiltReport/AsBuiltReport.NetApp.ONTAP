@@ -44,7 +44,7 @@ function Get-AbrOntapNetworkIfgrp {
                             'Mac Address' = $Nics.MacAddress
                             'Port Participation' = $Nics.PortParticipation
                         }
-                        $AggregatePorts += [pscustomobject]$inobj
+                        $AggregatePorts += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

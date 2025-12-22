@@ -41,7 +41,7 @@ function Get-AbrOntapSecuritySSLDetailed {
                             }
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -37,7 +37,7 @@ function Get-AbrOntapSysConfigImage {
                             'Install Time' = $Item.InstallTimeDT
                             'Version' = $Item.Version
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

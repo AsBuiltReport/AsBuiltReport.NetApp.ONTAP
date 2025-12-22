@@ -66,7 +66,7 @@ function Get-AbrOntapVserverCIFSOption {
                                     'Shadow Copy Dir Depth' = $Item.ShadowcopyDirDepth
                                     'Smb1 Max Buffer Size' = $Item.Smb1MaxBufferSize
                                 }
-                                $VserverObj += [pscustomobject]$inobj
+                                $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }

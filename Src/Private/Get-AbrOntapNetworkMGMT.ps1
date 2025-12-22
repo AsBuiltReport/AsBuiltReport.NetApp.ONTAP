@@ -43,7 +43,7 @@ function Get-AbrOntapNetworkMgmt {
                                         'Address' = $Item.Address
                                         'Vserver' = $Item.Vserver
                                     }
-                                    $ClusterObj += [pscustomobject]$inobj
+                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
@@ -94,7 +94,7 @@ function Get-AbrOntapNetworkMgmt {
                                     'Address' = $Item.Address
                                     'Vserver' = $Item.Vserver
                                 }
-                                $ClusterObj += [pscustomobject]$inobj
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
@@ -145,7 +145,7 @@ function Get-AbrOntapNetworkMgmt {
                                         'Address' = $Item.Address
                                         'Vserver' = $Item.Vserver
                                     }
-                                    $ClusterObj += [pscustomobject]$inobj
+                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
@@ -199,7 +199,7 @@ function Get-AbrOntapNetworkMgmt {
                                     'Address' = $AddressData
                                     'Vserver' = $Item.Vserver
                                 }
-                                $ClusterObj += [pscustomobject]$inobj
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
@@ -252,7 +252,7 @@ function Get-AbrOntapNetworkMgmt {
                                         }
                                         'Vserver' = $Item.Vserver
                                     }
-                                    $ClusterObj += [pscustomobject]$inobj
+                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }

@@ -40,7 +40,7 @@ function Get-AbrOntapVserverSummary {
                             'IPSpace' = $Item.Ipspace
                             'Status' = $Item.State
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -84,7 +84,7 @@ function Get-AbrOntapVserverSummary {
                                     'Dedup' = ConvertTo-TextYN $Item.Dedupe
                                     'Aggregate' = $Item.Aggregate
                                 }
-                                $VserverObj += [pscustomobject]$inobj
+                                $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
@@ -122,7 +122,7 @@ function Get-AbrOntapVserverSummary {
                                         'SnapLock Type' = $Item.SnaplockType
                                         'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                                     }
-                                    $VserverObj += [pscustomobject]$inobj
+                                    $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }

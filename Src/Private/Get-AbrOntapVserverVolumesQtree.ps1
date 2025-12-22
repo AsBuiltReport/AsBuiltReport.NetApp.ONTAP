@@ -40,7 +40,7 @@ function Get-AbrOntapVserverVolumesQtree {
                             'Security Style' = $Item.SecurityStyle
                             'Export Policy' = $Item.ExportPolicy
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -38,7 +38,7 @@ function Get-AbrOntapEfficiencyAggr {
                             'Data Reduction' = $Saving.AggrDataReductionStorageEfficiencyRatio
 
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -69,7 +69,7 @@ function Get-AbrOntapEfficiencyAggr {
                                     'Aggregate' = $Item.Name
                                     'Volumes without Deduplication' = $VolFilter.Name -join ', '
                                 }
-                                $OutObj += [pscustomobject]$inobj
+                                $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             }
                         } catch {
                             Write-PScriboMessage -IsWarning $_.Exception.Message

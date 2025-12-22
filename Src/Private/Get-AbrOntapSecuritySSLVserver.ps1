@@ -37,7 +37,7 @@ function Get-AbrOntapSecuritySSLVserver {
                             'Serial Number' = $Item.CertificateSerialNumber
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -35,7 +35,7 @@ function Get-AbrOntapNetworkBdomain {
                         'MTU' = $Item.Mtu
                         'Ports' = $Item.Ports
                     }
-                    $BDomainObj += [pscustomobject]$inobj
+                    $BDomainObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                 }
 
                 if ($Healthcheck.Network.Port) {

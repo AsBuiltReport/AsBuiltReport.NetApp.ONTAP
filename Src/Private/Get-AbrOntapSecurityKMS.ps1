@@ -34,7 +34,7 @@ function Get-AbrOntapSecurityKMS {
                             'Key Store' = $TextInfo.ToTitleCase($Item.KeyStore)
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

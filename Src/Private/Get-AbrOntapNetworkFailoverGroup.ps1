@@ -34,7 +34,7 @@ function Get-AbrOntapNetworkFailoverGroup {
                             'Vserver' = $Item.Vserver
                             'Target' = $Item.Target
                         }
-                        $FGObj += [pscustomobject]$inobj
+                        $FGObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -37,7 +37,7 @@ function Get-AbrOntapVserverCIFSLGMember {
                             'Group Name' = $Item.GroupName
                             'Description' = $Item.Member
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

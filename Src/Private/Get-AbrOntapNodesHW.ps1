@@ -55,7 +55,7 @@ function Get-AbrOntapNodesHW {
                             }
                             'NVRAM Battery Healthy' = $NodeInfo.NvramBatteryStatus
                         }
-                        $Outobj = [PSCustomObject]$Inobj
+                        $Outobj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Node.HW) {
                             $Outobj | Where-Object { $_.'System Healthy' -like 'UnHealthy' } | Set-Style -Style Critical -Property 'System Healthy'

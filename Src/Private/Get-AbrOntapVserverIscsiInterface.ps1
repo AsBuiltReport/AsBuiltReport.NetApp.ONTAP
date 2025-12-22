@@ -43,7 +43,7 @@ function Get-AbrOntapVserverIscsiInterface {
                                 default { $Item.IsInterfaceEnabled }
                             }
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

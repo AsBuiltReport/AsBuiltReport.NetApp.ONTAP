@@ -40,7 +40,7 @@ function Get-AbrOntapSecurityUser {
                             'Role Name' = $Item.RoleName
                             'Locked' = ConvertTo-TextYN $Item.IsLocked
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

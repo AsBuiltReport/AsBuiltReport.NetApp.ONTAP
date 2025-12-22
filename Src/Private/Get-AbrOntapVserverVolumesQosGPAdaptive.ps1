@@ -36,7 +36,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
                             'Min Iops' = $Item.AbsoluteMinIops
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

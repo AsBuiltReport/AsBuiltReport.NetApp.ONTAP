@@ -52,7 +52,7 @@ function Get-AbrOntapVserverCGLun {
 
 
                         }
-                        $CGLunObj += [pscustomobject]$inobj
+                        $CGLunObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

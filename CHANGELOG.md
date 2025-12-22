@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Per Volume export policy information
 - Add `Node Name` to FCP Interfaces section in FCP Vserver configuration
 - Apply powershell best practices
+- Add ConvertTo-HashToYN function
 
 ### Changed
 

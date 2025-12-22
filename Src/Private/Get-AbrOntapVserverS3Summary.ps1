@@ -44,7 +44,7 @@ function Get-AbrOntapVserverS3Summary {
                                 default { $Item.enabled }
                             }
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

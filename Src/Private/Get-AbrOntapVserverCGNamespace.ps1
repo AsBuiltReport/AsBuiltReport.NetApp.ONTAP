@@ -52,7 +52,7 @@ function Get-AbrOntapVserverCGNamespace {
 
 
                         }
-                        $CGNamespaceObj += [pscustomobject]$inobj
+                        $CGNamespaceObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

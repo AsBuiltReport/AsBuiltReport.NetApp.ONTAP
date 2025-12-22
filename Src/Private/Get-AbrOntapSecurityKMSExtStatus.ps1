@@ -35,7 +35,7 @@ function Get-AbrOntapSecurityKMSExtStatus {
                             'Key Manager Port' = $Item.KeyManagerTcpPort
                             'Status' = $TextInfo.ToTitleCase($Item.KeyManagerServerStatus)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

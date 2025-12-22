@@ -40,7 +40,7 @@ function Get-AbrOntapSysConfigNTPHost {
                                 default { $Item.IsPeerReachable }
                             }
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

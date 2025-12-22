@@ -44,7 +44,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
                             'Efficiency %' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                             'Efficiency % w/o Snapshots' = [Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

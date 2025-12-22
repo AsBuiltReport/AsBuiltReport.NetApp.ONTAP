@@ -35,7 +35,7 @@ function Get-AbrOntapSecurityNVE {
                             'Encrypted' = ConvertTo-TextYN $Item.Encrypt
                             'State' = $TextInfo.ToTitleCase($Item.State)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

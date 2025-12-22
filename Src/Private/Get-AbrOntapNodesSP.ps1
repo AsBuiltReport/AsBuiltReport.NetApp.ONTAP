@@ -81,7 +81,7 @@ function Get-AbrOntapNodesSP {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
 
-                    $SPObj += [pscustomobject]$inobj
+                    $SPObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                 }
                 if ($Healthcheck.Node.ServiceProcessor) {
                     $SPObj | Where-Object { $_.'Status' -like 'offline' -or $_.'Status' -like 'degraded' } | Set-Style -Style Critical -Property 'Status'

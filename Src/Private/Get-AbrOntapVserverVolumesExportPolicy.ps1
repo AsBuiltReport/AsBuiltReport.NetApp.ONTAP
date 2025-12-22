@@ -41,7 +41,7 @@ function Get-AbrOntapVserverVolumesExportPolicy {
                             'Ro Rule' = $Item.RoRule
                             'Rw Rule' = $Item.RwRule
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -37,7 +37,7 @@ function Get-AbrOntapSecuritySnapLockClock {
                                 default { $SnapLockClock.FormattedSnaplockComplianceClock }
                             }
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

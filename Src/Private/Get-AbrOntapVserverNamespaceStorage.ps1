@@ -64,7 +64,7 @@ function Get-AbrOntapVserverNamespaceStorage {
                                 default { $Item.Online }
                             }
                         }
-                        $VserverObj = [pscustomobject]$inobj
+                        $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Vserver.Status) {
                             $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'

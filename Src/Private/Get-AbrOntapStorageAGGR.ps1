@@ -172,7 +172,7 @@ function Get-AbrOntapStorageAGGR {
                                         'striping' = $TextInfo.ToTitleCase($Option.striping)
                                         'thorough_scrub' = $TextInfo.ToTitleCase($Option.thorough_scrub)
                                     }
-                                    $OutObj += [pscustomobject]$inobj
+                                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
 
                                     $TableParams = @{
                                         Name = "Aggregates Options - $($Aggregate.Name)"

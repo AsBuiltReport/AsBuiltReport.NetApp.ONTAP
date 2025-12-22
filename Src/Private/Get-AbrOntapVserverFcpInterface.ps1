@@ -39,7 +39,7 @@ function Get-AbrOntapVserverFcpInterface {
                             'Node Name' = $Item.CurrentNode
                             'Home Port' = $Item.CurrentPort
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

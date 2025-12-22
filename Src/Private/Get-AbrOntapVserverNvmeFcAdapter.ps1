@@ -45,7 +45,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                                 default { $Item.StatusAdmin }
                             }
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

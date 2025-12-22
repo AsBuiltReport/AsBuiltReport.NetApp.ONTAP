@@ -38,7 +38,7 @@ function Get-AbrOntapSysConfigWebStatus {
                             'Status' = $TextInfo.ToTitleCase($Item.Status)
                             'Status Code' = $Item.StatusCode
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

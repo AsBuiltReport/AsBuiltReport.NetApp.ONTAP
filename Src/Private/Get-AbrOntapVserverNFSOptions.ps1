@@ -48,7 +48,7 @@ function Get-AbrOntapVserverNFSOption {
                             'Nfsv40 Acl Enabled' = ConvertTo-TextYN $Item.IsNfsv40AclEnabled
                             'Nfsv40 Enabled' = ConvertTo-TextYN $Item.IsNfsv40Enabled
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

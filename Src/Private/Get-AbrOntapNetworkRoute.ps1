@@ -39,7 +39,7 @@ function Get-AbrOntapNetworkRoute {
                             'Metric' = $Item.Metric
                             'Address Family' = $Item.AddressFamily.ToString()
                         }
-                        $RoutesObj += [pscustomobject]$inobj
+                        $RoutesObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

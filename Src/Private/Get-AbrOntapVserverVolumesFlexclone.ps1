@@ -44,7 +44,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
                             'Used' = $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
                             'Aggregate' = $Item.Aggregate
                         }
-                        $VserverObj = [pscustomobject]$inobj
+                        $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Vserver.Status) {
                             $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'

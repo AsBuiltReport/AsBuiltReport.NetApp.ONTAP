@@ -36,7 +36,7 @@ function Get-AbrOntapClusterASUP {
                             'Last Time Stamp' = $NodesAUTO.LastTimestampDT
                             'Last Subject' = $NodesAUTO.LastSubject
                         }
-                        $Outobj = [PSCustomObject]$Inobj
+                        $Outobj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Cluster.AutoSupport) {
                             $Outobj | Where-Object { $_.'Enabled' -like 'No' } | Set-Style -Style Warning -Property 'Enabled'

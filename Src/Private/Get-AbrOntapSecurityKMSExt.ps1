@@ -36,7 +36,7 @@ function Get-AbrOntapSecurityKMSExt {
                             'Timeout' = $Item.Timeout
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -37,7 +37,7 @@ function Get-AbrOntapStorageFabricPool {
                             'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
                             'Status' = $Item.ObjectStoreAvailability
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

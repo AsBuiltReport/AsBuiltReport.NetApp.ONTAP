@@ -37,7 +37,7 @@ function Get-AbrOntapVserverIscsiInitiator {
                             'Initiator Name' = $Item.InitiatorNodeName
                             'Target Port Group' = $Item.TpGroupName
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -53,7 +53,7 @@ function Get-AbrOntapVserverSubsystem {
                                 default { $MappedNamespace }
                             }
                         }
-                        $VserverObj = [pscustomobject]$inobj
+                        $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
                         if ($Healthcheck.Vserver.Status) {
                             $VserverObj | Where-Object { ($_.'Mapped Namespace').count -eq 0 } | Set-Style -Style Warning -Property 'Mapped Namespace'
                         }

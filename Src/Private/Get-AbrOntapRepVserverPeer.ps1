@@ -36,7 +36,7 @@ function Get-AbrOntapRepVserverPeer {
                             'Applications' = $Item.Applications
                             'Peer State' = $Item.PeerState
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

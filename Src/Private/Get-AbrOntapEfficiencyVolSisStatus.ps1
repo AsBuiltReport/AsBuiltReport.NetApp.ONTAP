@@ -45,7 +45,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                             'Schedule Or Policy' = ConvertTo-EmptyToFiller $Item.ScheduleOrPolicy
                             'Progress' = ConvertTo-EmptyToFiller $Item.Progress
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -45,7 +45,7 @@ function Get-AbrOntapVserverCIFSSummary {
                                 'Status Details' = $SVM.StatusDetails
                                 'Status' = $SVM.Status.ToString()
                             }
-                            $VserverObj = [pscustomobject]$inobj
+                            $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                             if ($Healthcheck.Vserver.CIFS) {
                                 $VserverObj | Where-Object { $_.'Cifs Server Status' -notlike 'Running' } | Set-Style -Style Warning -Property 'Cifs Server Status'

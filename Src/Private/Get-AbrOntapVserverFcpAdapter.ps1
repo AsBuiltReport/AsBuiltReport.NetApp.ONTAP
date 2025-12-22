@@ -40,7 +40,7 @@ function Get-AbrOntapVserverFcpAdapter {
                                 default { $Item.State }
                             }
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

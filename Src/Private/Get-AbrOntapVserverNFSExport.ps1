@@ -44,7 +44,7 @@ function Get-AbrOntapVserverNFSExport {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

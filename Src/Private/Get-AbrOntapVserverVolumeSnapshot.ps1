@@ -44,7 +44,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                             'Policy' = $SnapPolicy.SnapshotPolicy
                         }
 
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -38,7 +38,7 @@ function Get-AbrOntapVserverCIFSShareProp {
                             'Share ACL' = $Item.Acl
                             'Share Properties' = ($Item).ShareProperties -join ', '
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

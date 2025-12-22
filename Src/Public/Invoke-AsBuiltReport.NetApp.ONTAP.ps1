@@ -375,6 +375,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Paragraph "The following section provides the configuration of the vserver $($SVM)."
                                 BlankLine
                                 Get-AbrOntapVserverSummary -Vserver $SVM
+
+                                if (Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'data' -and $_.Vserver -notin $options.Exclude.Vserver -and $_.Vserver -eq $SVM }) {
+                                    Section -Style Heading4 'Interfaces (Lifs)' {
+                                        Get-AbrOntapVserverNetworkInterface -Vserver $SVM
+                                    }
+                                }
+
                                 if ($InfoLevel.Vserver -ge 2) {
                                     if (Get-NcVol -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes) {
                                         Section -Style Heading4 'Volumes QoS Policy' {

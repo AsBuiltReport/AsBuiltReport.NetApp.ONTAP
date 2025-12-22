@@ -45,7 +45,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                                 'Created Time' = $Item.Created
                                 'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
                             }
-                            $VserverObj += [pscustomobject]$inobj
+                            $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {
                             Write-PScriboMessage -IsWarning $_.Exception.Message
                         }

@@ -40,7 +40,7 @@ function Get-AbrOntapSysConfigBackup {
                             'Schedule' = $Item.Schedule
                             'Is Auto' = ConvertTo-TextYN $Item.IsAuto
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

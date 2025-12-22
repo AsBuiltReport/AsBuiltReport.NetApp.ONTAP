@@ -40,7 +40,7 @@ function Get-AbrOntapEfficiencyConfig {
                             'Total Data Reduction' = $TotalStorageEfficiencyRatio.TotalStorageEfficiencyRatio
 
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

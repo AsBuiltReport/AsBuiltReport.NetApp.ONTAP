@@ -41,7 +41,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
                             'Mapped' = 'No'
                             'State' = $Item.State
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

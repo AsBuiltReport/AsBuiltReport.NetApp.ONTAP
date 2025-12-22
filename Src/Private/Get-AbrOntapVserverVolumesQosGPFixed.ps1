@@ -36,7 +36,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
                             'Is Shared' = ConvertTo-TextYN $Item.IsShared
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

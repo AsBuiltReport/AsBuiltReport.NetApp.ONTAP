@@ -52,7 +52,7 @@ function Get-AbrOntapVserverNFSSummary {
                             'General Access' = ConvertTo-TextYN $Item.GeneralAccess
 
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -35,7 +35,7 @@ function Get-AbrOntapSecuritySnapLockVol {
                             'Aggregate' = $Item.Aggregate
                             'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

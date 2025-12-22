@@ -51,7 +51,7 @@ function Get-AbrOntapRepDestination {
                                 default { $Item.RelationshipStatus }
                             }
                         }
-                        $ReplicaObj = [pscustomobject]$inobj
+                        $ReplicaObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Replication.Relationship) {
                             $ReplicaObj | Where-Object { $_.'Status' -eq 'Unknown' } | Set-Style -Style Warning -Property 'Status'

@@ -155,7 +155,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                 }
 
                 # Cluster Network Diagram
-                $ClusterNetwork = Add-DiaNodeImage -Name 'ClusterSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug
+                $ClusterNetwork = Add-DiaNodeImage -Name 'ClusterSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug -TableBackgroundColor '#a1e3fd'
 
                 Add-DiaHtmlSubGraph -Name 'ClusterNetwork' -TableArray $ClusterNetwork -Label 'Cluster Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 20 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#a1e3fd'
 

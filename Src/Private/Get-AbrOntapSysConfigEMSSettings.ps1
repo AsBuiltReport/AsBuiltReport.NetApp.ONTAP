@@ -52,7 +52,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                                 default { $Item.SyslogFacility }
                             }
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -94,7 +94,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                                 'Enable ONTAPI Get request' = ConvertTo-TextYN $Item.OntapiGet
                                 'Enable CLI Get request' = ConvertTo-TextYN $Item.CliGet
                             }
-                            $OutObj += [pscustomobject]$inobj
+                            $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {
                             Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
@@ -123,7 +123,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                                             'Protocol' = $Item.Protocol
                                             'Server Verification' = ConvertTo-TextYN $Item.VerifyServerSpecified
                                         }
-                                        $OutObj += [pscustomobject]$inobj
+                                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                     } catch {
                                         Write-PScriboMessage -IsWarning $_.Exception.Message
                                     }

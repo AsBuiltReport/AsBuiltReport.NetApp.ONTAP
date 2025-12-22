@@ -45,7 +45,7 @@ function Get-AbrOntapVserverVolumesQosSetting {
                                 default { $VolQoS.AdaptivePolicyGroupName }
                             }
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
