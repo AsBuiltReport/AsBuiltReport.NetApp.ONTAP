@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityMAPRule {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,14 +31,10 @@ function Get-AbrOntapSecurityMAPRule {
                     try {
                         $inObj = [ordered] @{
                             'operation' = $Item.operation
-                            'query' = ConvertTo-EmptyToFiller $Item.query
-                            'Approval Groups' = switch ([string]::IsNullOrEmpty($Item.approval_groups.name)) {
-                                $true { '-' }
-                                $false { $Item.approval_groups.name }
-                                default { '-' }
-                            }
-                            'Required Approvers' = ConvertTo-EmptyToFiller $Item.required_approvers
-                            'System Defined' = ConvertTo-TextYN $Item.system_defined
+                            'query' = $Item.query
+                            'Approval Groups' = $Item.approval_groups.name
+                            'Required Approvers' = $Item.required_approvers
+                            'System Defined' = $Item.system_defined
 
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

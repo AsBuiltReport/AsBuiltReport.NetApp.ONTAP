@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCGSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,27 +35,11 @@ function Get-AbrOntapVserverCGSummary {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Capacity' = switch ([string]::IsNullOrEmpty($Item.space.size)) {
-                                $true { '-' }
-                                $false { $Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { '-' }
-                            }
-                            'Available' = switch ([string]::IsNullOrEmpty($Item.space.available)) {
-                                $true { '-' }
-                                $false { $Item.space.available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { '-' }
-                            }
-                            'Used' = switch ([string]::IsNullOrEmpty($Item.space.used)) {
-                                $true { '-' }
-                                $false { $Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { '-' }
-                            }
-                            'Replicated' = ConvertTo-TextYN $Item.replicated
-                            'Lun Count' = switch ([string]::IsNullOrEmpty($Item.luns.name)) {
-                                $true { '-' }
-                                $false { ($Item.luns.name).count }
-                                default { '-' }
-                            }
+                            'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Available' = ($Item.space.available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Item.space.used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Replicated' = $Item.replicated
+                            'Lun Count' = ($Item.luns.name).count
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

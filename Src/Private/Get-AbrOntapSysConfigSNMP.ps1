@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigSNMP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,11 +34,7 @@ function Get-AbrOntapSysConfigSNMP {
                             'Location' = $Item.Location
                             'Communities' = $Item.Communities
                             'Traphosts' = $Item.Traphosts
-                            'Status' = switch ($Item.IsTrapEnabled) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsTrapEnabled }
-                            }
+                            'Status' = $Item.IsTrapEnabled -eq $True ? 'Enabled': 'Disabled'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

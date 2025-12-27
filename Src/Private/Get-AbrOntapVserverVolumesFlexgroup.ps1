@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,7 +36,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Status' = $Item.State
-                            'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

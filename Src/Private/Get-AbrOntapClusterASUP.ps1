@@ -5,7 +5,7 @@ function Get-AbrOntapClusterASUP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,7 +32,7 @@ function Get-AbrOntapClusterASUP {
                         $Inobj = [ordered] @{
                             'Node Name' = $NodesAUTO.NodeName
                             'Protocol' = $NodesAUTO.Transport
-                            'Enabled' = ConvertTo-TextYN $NodesAUTO.IsEnabled
+                            'Enabled' = $NodesAUTO.IsEnabled
                             'Last Time Stamp' = $NodesAUTO.LastTimestampDT
                             'Last Subject' = $NodesAUTO.LastSubject
                         }

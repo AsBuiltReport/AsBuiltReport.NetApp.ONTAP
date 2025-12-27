@@ -5,7 +5,7 @@ function Get-AbrOntapDiskInv {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-AbrOntapDiskInv {
                             'Disk Name' = $Disk
                             'Shelf' = $Disks.Shelf
                             'Bay' = $Disks.Bay
-                            'Capacity' = $Disks.Capacity | ConvertTo-FormattedNumber -Type Disksize -ErrorAction SilentlyContinue
+                            'Capacity' = ($Disks.Capacity | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Disksize) ?? '--'
                             'Model' = $Disks.Model
                             'Serial Number' = $DiskType.SerialNumber
                             'Type' = $DiskType.DiskType

@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAggrDiagram {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -102,8 +102,8 @@ function Get-AbrOntapStorageAggrDiagram {
                                 'NodeName' = $Node.Node
                                 'AggregateName' = $Aggr.Name
                                 'AdditionalInfo' = [PSCustomObject][ordered]@{
-                                    'Total Size' = $Aggr.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    'Used Space' = ($Aggr.TotalSize - $Aggr.Available) | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                    'Total Size' = $Aggr.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize -ErrorAction SilentlyContinue
+                                    'Used Space' = ($Aggr.TotalSize - $Aggr.Available) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize -ErrorAction SilentlyContinue
                                     'Assigned Disk' = $Aggr.Disks
                                     'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
                                         $true { 'Unknown' }

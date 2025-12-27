@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigEMSSetting {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,31 +31,20 @@ function Get-AbrOntapSysConfigEMSSetting {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Email Destinations' = switch ($Item.Mail) {
-                                $Null { '-' }
-                                default { $Item.Mail }
-                            }
-                            'Snmp Traphost' = switch ($Item.Snmp) {
-                                $Null { '-' }
-                                default { $Item.Snmp }
-                            }
-                            'Snmp Community' = switch ($Item.SnmpCommunity) {
-                                $Null { '-' }
-                                default { $Item.SnmpCommunity }
-                            }
-                            'Syslog' = switch ($Item.Syslog) {
-                                $Null { '-' }
-                                default { $Item.Syslog }
-                            }
-                            'Syslog Facility' = switch ($Item.SyslogFacility) {
-                                $Null { '-' }
-                                default { $Item.SyslogFacility }
-                            }
+                            'Email Destinations' = $Item.Mail
+                            'Snmp Traphost' = $Item.Snmp
+                            'Snmp Community' = $Item.SnmpCommunity
+                            'Syslog' = $Item.Syslog
+                            'Syslog Facility' = $Item.SyslogFacility
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
+                }
+
+                if ($Healthcheck.System.EMS) {
+                    $OutObj | Where-Object { $_.'Email Destinations' -eq '--' -or $_.'Snmp Traphost' -eq '--' -or $_.'Syslog' -eq '--' } | Set-Style -Style Warning
                 }
 
                 $TableParams = @{
@@ -67,7 +56,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
-                if ($Healthcheck.System.EMS -and ($OutObj | Where-Object { $_.'Email Destinations' -eq '-' -and $_.'Snmp Traphost' -eq '-' -and $_.'Syslog' -eq '-' })) {
+                if ($Healthcheck.System.EMS -and ($OutObj | Where-Object { $_.'Email Destinations' -eq '--' -and $_.'Snmp Traphost' -eq '--' -and $_.'Syslog' -eq '--' })) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
@@ -90,9 +79,9 @@ function Get-AbrOntapSysConfigEMSSetting {
                     foreach ($Item in $Data) {
                         try {
                             $inObj = [ordered] @{
-                                'Enable HTTP Get request' = ConvertTo-TextYN $Item.HttpGet
-                                'Enable ONTAPI Get request' = ConvertTo-TextYN $Item.OntapiGet
-                                'Enable CLI Get request' = ConvertTo-TextYN $Item.CliGet
+                                'Enable HTTP Get request' = $Item.HttpGet
+                                'Enable ONTAPI Get request' = $Item.OntapiGet
+                                'Enable CLI Get request' = $Item.CliGet
                             }
                             $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {
@@ -121,7 +110,7 @@ function Get-AbrOntapSysConfigEMSSetting {
                                             'Facility' = $Item.Facility
                                             'Port' = $Item.Port
                                             'Protocol' = $Item.Protocol
-                                            'Server Verification' = ConvertTo-TextYN $Item.VerifyServerSpecified
+                                            'Server Verification' = $Item.VerifyServerSpecified
                                         }
                                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                     } catch {

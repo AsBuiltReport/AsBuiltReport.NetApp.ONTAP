@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,11 +40,7 @@ function Get-AbrOntapVserverIscsiSummary {
                             'Max Cmds Per Session' = $Item.MaxCmdsPerSession
                             'Max Conn Per Session' = $Item.MaxConnPerSession
                             'Login Timeout' = $Item.LoginTimeout
-                            'Status' = switch ($Item.IsAvailable) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsAvailable }
-                            }
+                            'Status' = ($Item.IsAvailable -eq $true) ? 'Up': 'Down'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

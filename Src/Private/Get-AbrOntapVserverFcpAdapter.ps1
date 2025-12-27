@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpAdapter {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,11 +34,7 @@ function Get-AbrOntapVserverFcpAdapter {
                             'Adapter' = $Item.Adapter
                             'Protocol' = $Item.PhysicalProtocol
                             'Speed' = $Item.Speed
-                            'Status' = switch ($Item.State) {
-                                'online' { 'Up' }
-                                'offline' { 'Down' }
-                                default { $Item.State }
-                            }
+                            'Status' = ($Item.State -eq 'online') ? 'Up': 'Down'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

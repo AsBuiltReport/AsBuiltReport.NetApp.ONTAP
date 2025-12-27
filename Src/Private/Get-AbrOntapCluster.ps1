@@ -5,7 +5,7 @@ function Get-AbrOntapCluster {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,16 +35,12 @@ function Get-AbrOntapCluster {
                     'Cluster UUID' = $ClusterInfo.ClusterUuid
                     'Cluster Serial' = $ClusterInfo.ClusterSerialNumber
                     'Cluster Controller' = $ClusterInfo.NcController
-                    'Cluster Contact' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterContact
-                    'Cluster Location' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterLocation
+                    'Cluster Contact' = $ClusterInfo.ClusterContact
+                    'Cluster Location' = $ClusterInfo.ClusterLocation
                     'Ontap Version' = $ClusterVersion.value
                     'Number of Aggregates' = $ArrayAggr.count
                     'Number of Volumes' = $ArrayVolumes.count
-                    'Overall System Health' = switch ([string]::IsNullOrEmpty($ClusterDiag.Status)) {
-                        $true { '--' }
-                        $false { $ClusterDiag.Status.ToUpper() }
-                        default { 'Unknown' }
-                    }
+                    'Overall System Health' = ${ClusterDiag}?.Status?.ToUpper()
                 }
                 if ($Healthcheck.Cluster.Summary) {
                     $ClusterSummary | Where-Object { $_.'Overall System Health' -like 'OK' } | Set-Style -Style OK -Property 'Overall System Health'

@@ -1,3 +1,4 @@
+- [] Migrate [PSCustomObject] @{ to $inObj
 - [] Network Port Diagram
   - [] Cluster Network Ports:
     - [] Document all ports and lifs used by the cluster nodes for cluster communication.
@@ -16,7 +17,7 @@
   - [] Data Network Ports:
     - [] Document all ports used for data access to the vservers running on the cluster
 
-- [] Add Per Volumes Export Policies
+- [x] Add Per Volumes Export Policies
 - [] Implement InfoLevel 1/2 on every section
   - Example
     - Aggegate Option
@@ -26,17 +27,19 @@
 - [] Vserver Information
   - [x] Add Vserver Lifs
       - [] IP
+  - [] Add healthcheck for no route in vserver
+    - [] Configure at least one route to ensure accurate client can assess the vserver services.
 
 
 ```powershell
-$password = ConvertTo-SecureString "" -AsPlainText -Force
+$password = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
 $Cred = New-Object System.Management.Automation.PSCredential ("admin", $password)
 
-Connect-NcController 192.168.5.70 -Credential $Cred
+Connect-NcController 192.168.7.60 -Credential $Cred
 
 Import-Module AsBuiltReport.NetApp.ONTAP -Force
 Import-Module NetApp.ONTAP -Force
 Import-Module Diagrammer.Core -Force
 
-New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)\script\AsBuiltReport.json" -OutputFolderPath "$($env:HOME)\" -Target 192.168.5.70 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)\script\AsBuiltReport.NetApp.ONTAP.json"
+New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)\script\AsBuiltReport.json" -OutputFolderPath "$($env:HOME)\" -Target 192.168.7.60 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)\script\AsBuiltReport.NetApp.ONTAP.json"
 ```

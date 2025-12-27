@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNonMappedLun {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,12 +33,11 @@ function Get-AbrOntapVserverNonMappedLun {
             if ($LunFilter) {
                 foreach ($Item in $LunFilter) {
                     try {
-                        $lunname = (($Item.Path).split('/'))[3]
                         $inObj = [ordered] @{
                             'Volume Name' = $Item.Volume
-                            'Lun Name' = $lunname
-                            'Online' = ConvertTo-TextYN $Item.Online
-                            'Mapped' = ConvertTo-TextYN $Item.Mapped
+                            'Lun Name' = ($Item.Path).split('/')[3]
+                            'Online' = $Item.Online
+                            'Mapped' = $Item.Mapped
                             'Lun Format' = $Item.Protocol
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

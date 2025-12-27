@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,17 +33,12 @@ function Get-AbrOntapEfficiencyVolSisStatus {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $Volume = $Item.Path.split('/')
                         $inObj = [ordered] @{
-                            'Volume' = $Volume[2]
-                            'State' = switch ($Item.State) {
-                                'enabled' { 'Enabled' }
-                                'disabled' { 'Disabled' }
-                                default { $Item.State }
-                            }
+                            'Volume' = ($Item.Path.split('/'))[2] ?? '--'
+                            'State' = ($Item.State -eq 'enabled') ? 'Enabled': 'Disabled'
                             'Status' = $Item.Status
-                            'Schedule Or Policy' = ConvertTo-EmptyToFiller $Item.ScheduleOrPolicy
-                            'Progress' = ConvertTo-EmptyToFiller $Item.Progress
+                            'Schedule Or Policy' = $Item.ScheduleOrPolicy
+                            'Progress' = $Item.Progress
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

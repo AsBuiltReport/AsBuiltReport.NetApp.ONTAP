@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTPHost {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,11 +34,7 @@ function Get-AbrOntapSysConfigNTPHost {
                             'Time Offset' = $Item.Offset
                             'Selection State' = $Item.SelectionState
                             'Server' = $Item.Server
-                            'Peer Status' = switch ($Item.IsPeerReachable) {
-                                'True' { 'Reachable' }
-                                'False' { 'Unreachable' }
-                                default { $Item.IsPeerReachable }
-                            }
+                            'Peer Status' = ($Item.IsPeerReachable -eq $True) ? 'Reachable': 'Unreachable'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

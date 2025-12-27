@@ -32,8 +32,8 @@ function Get-AbrOntapSysConfigNTP {
                         $inObj = [ordered] @{
                             'Server Name' = $Item.ServerName
                             'NTP Version' = $TextInfo.ToTitleCase($Item.Version)
-                            'Preferred' = ConvertTo-TextYN $Item.IsPreferred
-                            'Authentication Enabled' = ConvertTo-TextYN $Item.IsAuthenticationEnabled
+                            'Preferred' = $Item.IsPreferred
+                            'Authentication Enabled' = $Item.IsAuthenticationEnabled
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -41,8 +41,8 @@ function Get-AbrOntapSysConfigNTP {
                     }
                 }
 
-                if ($Healthcheck.System.NTP) {
-                    $OutObj.Count -eq 1 | Set-Style -Style Warning
+                if ($Healthcheck.System.NTP -and $OutObj.Count -eq 1) {
+                    $OutObj | Set-Style -Style Warning
                 }
 
                 $TableParams = @{

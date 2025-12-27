@@ -34,18 +34,11 @@ function Get-AbrOntapVserverNetworkInterface {
             if ($ClusterData) {
                 foreach ($Item in $ClusterData) {
                     try {
-                        if ($Item.Wwpn) {
-                            $AddressData = $Item.Wwpn
-                        } else { $AddressData = $Item.Address }
                         $inObj = [ordered] @{
                             'Data Interface' = $Item.InterfaceName
-                            'Status' = switch ($Item.OpStatus) {
-                                '' { 'Unknown' }
-                                $Null { 'Unknown' }
-                                default { $Item.OpStatus.ToString().ToUpper() }
-                            }
+                            'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                             'Data Protocols' = [string]$Item.DataProtocols
-                            'Address' = $AddressData
+                            'Address' = ($Null -eq $Item.Wwpn) ? $Item.Address: $Item.Wwpn
                             'Is Home' = $Item.IsHome
                         }
                         $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)

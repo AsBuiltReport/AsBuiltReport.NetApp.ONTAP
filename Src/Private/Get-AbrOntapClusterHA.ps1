@@ -31,17 +31,9 @@ function Get-AbrOntapClusterHA {
                         $ClusterHa = Get-NcClusterHa -Node $Nodes.Node -Controller $Array
                         [PSCustomObject] @{
                             'Name' = $Nodes.Node
-                            'Partner' = switch ([string]::IsNullOrEmpty($ClusterHa.Partner)) {
-                                'True' { '-' }
-                                'False' { $ClusterHa.Partner }
-                                default { 'Unknwon' }
-                            }
-                            'TakeOver Possible' = ConvertTo-TextYN $ClusterHa.TakeoverPossible
-                            'TakeOver State' = switch ([string]::IsNullOrEmpty($ClusterHa.TakeoverState)) {
-                                'True' { '-' }
-                                'False' { $ClusterHa.TakeoverState }
-                                default { 'Unknwon' }
-                            }
+                            'Partner' = $ClusterHa.Partner ?? '--'
+                            'TakeOver Possible' = $ClusterHa.TakeoverPossible
+                            'TakeOver State' = $ClusterHa.TakeoverState ?? '--'
                             'HA Mode' = $ClusterHa.CurrentMode
                             'HA State' = $ClusterHa.State
                         }

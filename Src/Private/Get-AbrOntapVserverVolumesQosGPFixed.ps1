@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,7 +33,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
                             'Policy Name' = $Item.PolicyGroup
                             'Max Throughput' = $Item.MaxThroughput
                             'Min Throughput' = $Item.MinThroughput
-                            'Is Shared' = ConvertTo-TextYN $Item.IsShared
+                            'Is Shared' = $Item.IsShared
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

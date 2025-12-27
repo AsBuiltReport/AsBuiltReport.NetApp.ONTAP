@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSShareProp {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,7 +36,7 @@ function Get-AbrOntapVserverCIFSShareProp {
                         $inObj = [ordered] @{
                             'Share Name' = $Item.ShareName
                             'Share ACL' = $Item.Acl
-                            'Share Properties' = ($Item).ShareProperties -join ', '
+                            'Share Properties' = $Item.ShareProperties -join ', '
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

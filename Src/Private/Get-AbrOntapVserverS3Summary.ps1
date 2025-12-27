@@ -5,7 +5,7 @@ function Get-AbrOntapVserverS3Summary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,15 +34,11 @@ function Get-AbrOntapVserverS3Summary {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'HTTP' = ConvertTo-TextYN $Item.is_http_enabled
+                            'HTTP' = $Item.is_http_enabled
                             'HTTP Port' = $Item.port
-                            'HTTPS' = ConvertTo-TextYN $Item.is_https_enabled
+                            'HTTPS' = $Item.is_https_enabled
                             'HTTPS Port' = $Item.secure_port
-                            'Status' = switch ($Item.enabled) {
-                                'True' { 'UP' }
-                                'False' { 'Down' }
-                                default { $Item.enabled }
-                            }
+                            'Status' = $Item.enabled -eq $true ? 'Up': 'Down'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

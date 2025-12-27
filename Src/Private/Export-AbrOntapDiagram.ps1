@@ -5,7 +5,7 @@ function Export-AbrOntapDiagram {
     .DESCRIPTION
         Documents the configuration of NetApp Ontap in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                                 'Volume Name' = $Item.Volume
                                 'Snapshot Name' = $Item.Name
                                 'Created Time' = $Item.Created
-                                'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                'Used' = ($Item.Total | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             }
                             $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {

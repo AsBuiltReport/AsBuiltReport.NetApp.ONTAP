@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackupURL {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -30,14 +30,8 @@ function Get-AbrOntapSysConfigBackupURL {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
-                            'Url' = switch ($Item.Url) {
-                                $Null { 'Not Configured' }
-                                default { $Item.Url }
-                            }
-                            'Username' = switch ($Item.Username) {
-                                $Null { 'Not Configured' }
-                                default { $Item.Username }
-                            }
+                            'Url' = ($Null -eq $Item.Url) ? 'Not Configured': $Item.Url
+                            'Username' = ($Null -eq $Item.Username) ? 'Not Configured': $Item.Username
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,10 +39,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                                 'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockVolAttr.Type)
                                 'Maximum Retention Period' = $SnapLockVolAttr.MaximumRetentionPeriod
                                 'Minimum Retention Period' = $SnapLockVolAttr.MinimumRetentionPeriod
-                                'Privileged Delete State' = switch ($SnapLockVolAttr.PrivilegedDeleteState) {
-                                    $Null { '-' }
-                                    default { $SnapLockVolAttr.PrivilegedDeleteState }
-                                }
+                                'Privileged Delete State' = $SnapLockVolAttr.PrivilegedDeleteState
                                 'Volume Expiry Time' = $SnapLockVolAttr.VolumeExpiryTime
                                 'Volume Expiry Time Secs' = $SnapLockVolAttr.VolumeExpiryTimeSecs
                                 'Auto Commit Period' = $SnapLockVolAttr.AutocommitPeriod

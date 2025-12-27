@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,11 +35,7 @@ function Get-AbrOntapVserverFcpSummary {
                     try {
                         $inObj = [ordered] @{
                             'FCP WWNN' = $Item.NodeName
-                            'Status' = switch ($Item.IsAvailable) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsAvailable }
-                            }
+                            'Status' = $Item.IsAvailable -eq $true ? 'Up': 'Down'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

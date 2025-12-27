@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigWebStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,10 +31,10 @@ function Get-AbrOntapSysConfigWebStatus {
                     try {
                         $inObj = [ordered] @{
                             'Node' = $Item.Node
-                            'Http Enabled' = ConvertTo-TextYN $Item.HttpEnabled
+                            'Http Enabled' = $Item.HttpEnabled
                             'Http Port' = $Item.HttpPort
                             'Https Port' = $Item.HttpsPort
-                            'External' = ConvertTo-TextYN $Item.External
+                            'External' = $Item.External
                             'Status' = $TextInfo.ToTitleCase($Item.Status)
                             'Status Code' = $Item.StatusCode
                         }

@@ -5,7 +5,7 @@ function Get-AbrOntapRepMediator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,11 +33,7 @@ function Get-AbrOntapRepMediator {
                             'Peer cluster' = $Item.peer_cluster.name
                             'IP Address' = $Item.ip_address
                             'port' = $Item.port
-                            'Status' = switch ($Item.reachable) {
-                                'True' { 'Reachable' }
-                                'False' { 'Unreachable' }
-                                default { $Item.reachable }
-                            }
+                            'Status' = ($Item.reachable -eq $True) ? 'Reachable': 'Unreachable'
                         }
                         $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

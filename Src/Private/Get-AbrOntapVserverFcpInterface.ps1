@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -28,7 +28,7 @@ function Get-AbrOntapVserverFcpInterface {
 
     process {
         try {
-            $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array
+            $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array | Sort-Object -Property CurrentNode
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {

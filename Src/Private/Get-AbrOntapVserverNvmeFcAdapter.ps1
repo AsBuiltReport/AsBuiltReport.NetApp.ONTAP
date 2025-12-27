@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,11 +39,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                             'Protocol' = $Item.PhysicalProtocol
                             'WWNN' = $Item.FcWwnn
                             'WWPN' = $Item.FcWwpn
-                            'Status' = switch ($Item.StatusAdmin) {
-                                'up' { 'Up' }
-                                'down' { 'Down' }
-                                default { $Item.StatusAdmin }
-                            }
+                            'Status' = ($Item.StatusAdmin -eq 'up') ? 'Up': 'Down'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

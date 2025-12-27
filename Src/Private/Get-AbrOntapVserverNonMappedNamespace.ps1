@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,10 +33,9 @@ function Get-AbrOntapVserverNonMappedNamespace {
             if ($NamespaceFilter) {
                 foreach ($Item in $NamespaceFilter) {
                     try {
-                        $namespacename = (($Item.Path).split('/'))[3]
                         $inObj = [ordered] @{
                             'Volume Name' = $Item.Volume
-                            'Lun Name' = $namespacename
+                            'Namespace Name' = ($Item.Path).split('/')[3]
                             'Type' = $Item.Ostype
                             'Mapped' = 'No'
                             'State' = $Item.State

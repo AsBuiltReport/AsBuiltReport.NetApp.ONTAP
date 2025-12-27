@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,22 +34,10 @@ function Get-AbrOntapVserverNFSSummary {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'Nfs v3' = switch ($Item.IsNfsv3) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsNfsv3 }
-                            }
-                            'Nfs v4' = switch ($Item.IsNfsv4) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsNfsv4 }
-                            }
-                            'Nfs v41' = switch ($Item.IsNfsv41) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsNfsv41 }
-                            }
-                            'General Access' = ConvertTo-TextYN $Item.GeneralAccess
+                            'Nfs v3' = $Item.IsNfsv3 -eq $true ? 'Enabled': 'Disabled'
+                            'Nfs v4' = $Item.IsNfsv4 -eq $true ? 'Enabled': 'Disabled'
+                            'Nfs v41' = $Item.IsNfsv41 -eq $true ? 'Enabled': 'Disabled'
+                            'General Access' = $Item.GeneralAccess
 
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)

@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,13 +36,13 @@ function Get-AbrOntapEfficiencyVolDetailed {
                         $Saving = Get-NcEfficiency -Volume $Item.Name -Vserver $Vserver -Controller $Array
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Capacity' = $Saving.Capacity | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Dedupe Savings' = $Saving.Returns.Dedupe | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Compression Savings' = $Saving.Returns.Compression | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Snapshot Savings' = $Saving.Returns.Snapshot | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Cloning Savings' = $Saving.Returns.Cloning | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Efficiency %' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
-                            'Efficiency % w/o Snapshots' = [Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -Type Percent -NumberFormatString '0.0' -ErrorAction SilentlyContinue
+                            'Capacity' = ($Saving.Capacity | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Dedupe Savings' = ($Saving.Returns.Dedupe | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Compression Savings' = ($Saving.Returns.Compression | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Snapshot Savings' = ($Saving.Returns.Snapshot | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Cloning Savings' = ($Saving.Returns.Cloning | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Efficiency %' = ($Saving.EfficiencyPercent | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Percent ) ?? '--'
+                            'Efficiency % w/o Snapshots' = ([Math]::Round((($Saving.Returns.Dedupe + $Saving.Returns.Compression) / ($Saving.Used + $Saving.Returns.Dedupe + $Saving.Returns.Compression)) * 100) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Percent) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

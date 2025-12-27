@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -41,7 +41,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
                             'Cache Volume' = $Item.CacheVolume
                             'Origin Vserver' = $Item.OriginVserver
                             'Origin Volume' = $Item.OriginVolume
-                            'Capacity' = $VolumeUsage.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            'Capacity' = ($VolumeUsage.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -72,7 +72,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
                                 'Origin Volume' = $Item.OriginVolume
                                 'Cache Vserver' = $Item.Vserver
                                 'Cache Volume' = $Item.Volume
-                                'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             }
                             $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSubsystem {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -48,10 +48,7 @@ function Get-AbrOntapVserverSubsystem {
                             'Type' = $Item.Ostype
                             'Target NQN' = $Item.TargetNqn
                             'Host NQN' = $Item.Hosts.Nqn
-                            'Mapped Namespace' = switch (($MappedNamespace).count) {
-                                0 { 'None' }
-                                default { $MappedNamespace }
-                            }
+                            'Mapped Namespace' = (($MappedNamespace).count -eq 0) ? 'None': $MappedNamespaces
                         }
                         $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
                         if ($Healthcheck.Vserver.Status) {

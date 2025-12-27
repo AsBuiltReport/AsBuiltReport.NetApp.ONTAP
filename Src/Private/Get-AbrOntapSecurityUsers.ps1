@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityUser {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -38,7 +38,7 @@ function Get-AbrOntapSecurityUser {
                             'Application' = $TextInfo.ToTitleCase($Item.Application)
                             'Auth Method' = $Item.AuthMethod
                             'Role Name' = $Item.RoleName
-                            'Locked' = ConvertTo-TextYN $Item.IsLocked
+                            'Locked' = $Item.IsLocked
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

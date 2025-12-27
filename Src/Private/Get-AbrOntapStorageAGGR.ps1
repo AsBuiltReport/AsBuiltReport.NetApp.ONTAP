@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAGGR {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -24,64 +24,89 @@ function Get-AbrOntapStorageAGGR {
 
     process {
         try {
-            $AggrSpace = Get-NcAggr -Controller $Array
-            if ($AggrSpace) {
-                $AggrSpaceSummary = foreach ($Aggr in $AggrSpace) {
-                    try {
-                        $RootAggr = Get-NcAggr $Aggr.Name -Controller $Array | ForEach-Object { $_.AggrRaidAttributes.HasLocalRoot }
-                        [PSCustomObject] @{
-                            'Name' = $Aggr.Name
-                            'Capacity' = switch ([string]::IsNullOrEmpty($Aggr.Totalsize)) {
-                                $true { 'Unknown' }
-                                $false { $Aggr.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { 'Unknown' }
+            try {
+                $ObjectData = Get-NcAggr -Controller $Array
+                if ($ObjectData) {
+                    $ObjectDataInfo = @()
+                    foreach ($Data in $ObjectData) {
+                        try {
+                            $AggrOwner = (Get-NcAggr -Name $Data.Name ).AggrOwnershipAttributes
+                            $inObj = [Ordered]@{
+                                'Name' = $Data.Name
+                                'Home Nodes' = ${AggrOwner}?.HomeName ?? '--'
+                                'Owner Nodes' = ${AggrOwner}?.OwnerName ?? '--'
+                                'Capacity' = ($Data.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Available' = ($Data.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Used' = (($Data.Totalsize - $Data.Available ) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Disk Count' = $Data.Disks
+                                'Root' = ((Get-NcAggr -Name $Data.Name -Controller $Array | ForEach-Object { $_.AggrRaidAttributes.HasLocalRoot }) -eq 'False') ? 'No': 'Yes'
+                                'Raid Type' = (($Data.RaidType.Split(',')[0]).ToUpper()) ?? '--'
+                                'Raid Size' = $Data.RaidSize
+                                'Volumes in Aggregate' = $Data.Volumes
+                                'State' = $Data.State
                             }
-                            'Available' = switch ([string]::IsNullOrEmpty($Aggr.Available)) {
-                                $true { 'Unknown' }
-                                $false { $Aggr.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { 'Unknown' }
-                            }
-                            'Used' = switch ([string]::IsNullOrEmpty($Aggr.Used)) {
-                                $true { 'Unknown' }
-                                $false { $Aggr.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue }
-                                default { 'Unknown' }
-                            }
-                            'Disk Count' = $Aggr.Disks
-                            'Root' = ConvertTo-TextYN $RootAggr
-                            'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
-                                $true { 'Unknown' }
-                                $false { ($Aggr.RaidType.Split(',')[0]).ToUpper() }
-                                default { 'Unknown' }
-                            }
-                            'State' = $Aggr.State
+                            $ObjectDataInfo += [pscustomobject](ConvertTo-HashToYN $inObj)
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
-                    } catch {
-                        Write-PScriboMessage -IsWarning $_.Exception.Message
+                    }
+
+                    if ($Healthcheck.Storage.Aggr) {
+                        $ObjectDataInfo | Where-Object { $_.'State' -eq 'failed' } | Set-Style -Style Critical -Property 'State'
+                        $ObjectDataInfo | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' } | Set-Style -Style Warning -Property 'State'
+                        $ObjectDataInfo | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
+                    }
+
+                    if ($InfoLevel.Storage -ge 2) {
+                        Paragraph "The following sections detail the $($Data.Name) aggregate configuration."
+                        foreach ($Data in $ObjectDataInfo) {
+                            Section -Style NOTOCHeading4 -ExcludeFromTOC "$($Data.Name)" {
+                                $TableParams = @{
+                                    Name = "Aggregates - $($Data.Name)"
+                                    List = $true
+                                    ColumnWidths = 40, 60
+                                }
+                                if ($Report.ShowTableCaptions) {
+                                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                                }
+                                $Data | Table @TableParams
+                                if ($Healthcheck.Storage.Aggr -and (($Data | Where-Object { $_.'State' -eq 'failed' } ) -or ($Data | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' }) -or ($Data | Where-Object { $_.'Used' -ge 90 -and $_.'Root' -ne 'Yes' }))) {
+                                    Paragraph 'Health Check:' -Bold -Underline
+                                    BlankLine
+                                    Paragraph {
+                                        Text 'Best Practice:' -Bold
+                                        Text 'Ensure that all Aggregates are in healthy state to maintain optimal storage performance and client access availability.'
+                                    }
+                                    BlankLine
+                                }
+                            }
+                        }
+                    } else {
+                        Paragraph "The following table summarises the aggregates in $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        $TableParams = @{
+                            Name = "Aggregates - $($ClusterInfo.ClusterName)"
+                            List = $false
+                            Columns = 'Name', 'Capacity', 'Available', 'Used', 'Disk Count', 'Root', 'Raid Type', 'State'
+                            ColumnWidths = 27, 10, 10, 10, 10, 8, 15, 10
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $ObjectDataInfo | Table @TableParams
+                        if ($Healthcheck.Storage.Aggr -and (($ObjectDataInfo | Where-Object { $_.'State' -eq 'failed' } ) -or ($ObjectDataInfo | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' }) -or ($ObjectDataInfo | Where-Object { $_.'Used' -ge 90 -and $_.'Root' -ne 'Yes' }))) {
+                            Paragraph 'Health Check:' -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all Aggregates are in healthy state to maintain optimal storage performance and client access availability.'
+                            }
+                            BlankLine
+                        }
                     }
                 }
-                if ($Healthcheck.Storage.Aggr) {
-                    $AggrSpaceSummary | Where-Object { $_.'State' -eq 'failed' } | Set-Style -Style Critical -Property 'State'
-                    $AggrSpaceSummary | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' } | Set-Style -Style Warning -Property 'State'
-                    $AggrSpaceSummary | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
-                }
-                $TableParams = @{
-                    Name = "Aggregates - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 27, 10, 10, 10, 10, 8, 15, 10
-                }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $AggrSpaceSummary | Table @TableParams
-                if ($Healthcheck.Storage.Aggr -and (($AggrSpaceSummary | Where-Object { $_.'State' -eq 'failed' } ) -or ($AggrSpaceSummary | Where-Object { $_.'State' -eq 'unknown' -or $_.'State' -eq 'offline' }) -or ($AggrSpaceSummary | Where-Object { $_.'Used' -ge 90 -and $_.'Root' -ne 'Yes' }))) {
-                    Paragraph 'Health Check:' -Bold -Underline
-                    BlankLine
-                    Paragraph {
-                        Text 'Best Practice:' -Bold
-                        Text 'Ensure that all Aggregates are in healthy state to maintain optimal storage performance and client access availability.'
-                    }
-                    BlankLine
-                }
+            } catch {
+                Write-PScriboMessage -IsWarning $($_.Exception.Message)
             }
             try {
                 $AggrSpare = Get-NcAggrSpare -Controller $Array
@@ -91,23 +116,11 @@ function Get-AbrOntapStorageAGGR {
                             try {
                                 [PSCustomObject] @{
                                     'Name' = $Spare.Disk
-                                    'Capacity' = switch ([string]::IsNullOrEmpty($Spare.TotalSize)) {
-                                        $true { '-' }
-                                        $false { $Spare.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                        default { '-' }
-                                    }
-                                    'Root Usable' = switch ([string]::IsNullOrEmpty($Spare.LocalUsableRootSize)) {
-                                        $true { '-' }
-                                        $false { $Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                        default { '-' }
-                                    }
-                                    'Data Usable' = switch ([string]::IsNullOrEmpty($Spare.LocalUsableDataSize)) {
-                                        $true { '-' }
-                                        $false { $Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                        default { '-' }
-                                    }
-                                    'Shared Disk' = ConvertTo-TextYN $Spare.IsDiskShared
-                                    'Disk Zeroed' = ConvertTo-TextYN $Spare.IsDiskZeroed
+                                    'Capacity' = ($Spare.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Root Usable' = ($Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Data Usable' = ($Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Shared Disk' = $Spare.IsDiskShared
+                                    'Disk Zeroed' = $Spare.IsDiskZeroed
                                     'Owner' = $Spare.OriginalOwner
                                 }
                             } catch {
@@ -144,17 +157,17 @@ function Get-AbrOntapStorageAGGR {
                                     $Options | ForEach-Object { $Option.add($_.Name, $_.Value) }
                                     $inObj = [ordered] @{
                                         'azcs_read_optimization' = $TextInfo.ToTitleCase($Option.azcs_read_optimization)
-                                        'dir_holes' = ConvertTo-TextYN $Option.dir_holes
+                                        'dir_holes' = $Option.dir_holes
                                         'dlog_hole_reserve' = $TextInfo.ToTitleCase($Option.dlog_hole_reserve)
-                                        'enable_cold_data_reporting' = ConvertTo-TextYN $Option.enable_cold_data_reporting
-                                        'encrypt_with_aggr_key' = ConvertTo-TextYN $Option.encrypt_with_aggr_key
+                                        'enable_cold_data_reporting' = $Option.enable_cold_data_reporting
+                                        'encrypt_with_aggr_key' = $Option.encrypt_with_aggr_key
                                         'free_space_realloc' = $TextInfo.ToTitleCase($Option.free_space_realloc)
                                         'fs_size_fixed' = $TextInfo.ToTitleCase($Option.fs_size_fixed)
                                         'ha_policy' = $TextInfo.ToTitleCase($Option.ha_policy)
-                                        'hybrid_enabled' = ConvertTo-TextYN $Option.hybrid_enabled
+                                        'hybrid_enabled' = $Option.hybrid_enabled
                                         'ignore_inconsistent' = $TextInfo.ToTitleCase($Option.ignore_inconsistent)
-                                        'logical_space_enforcement' = ConvertTo-TextYN $Option.logical_space_enforcement
-                                        'logical_space_reporting' = ConvertTo-TextYN $Option.logical_space_reporting
+                                        'logical_space_enforcement' = $Option.logical_space_enforcement
+                                        'logical_space_reporting' = $Option.logical_space_reporting
                                         'max_write_alloc_blocks' = $TextInfo.ToTitleCase($Option.max_write_alloc_blocks)
                                         'nearly_full_threshold' = $TextInfo.ToTitleCase($Option.nearly_full_threshold)
                                         'no_delete_log' = $TextInfo.ToTitleCase($Option.no_delete_log)

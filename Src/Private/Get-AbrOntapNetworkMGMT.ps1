@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkMgmt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,11 +34,7 @@ function Get-AbrOntapNetworkMgmt {
                                 try {
                                     $inObj = [ordered] @{
                                         'Cluster Interface' = $Item.InterfaceName
-                                        'Status' = switch ($Item.OpStatus) {
-                                            '' { 'Unknown' }
-                                            $Null { 'Unknown' }
-                                            default { $Item.OpStatus.ToString().ToUpper() }
-                                        }
+                                        'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                         'Data Protocols' = $Item.DataProtocols
                                         'Address' = $Item.Address
                                         'Vserver' = $Item.Vserver
@@ -85,11 +81,7 @@ function Get-AbrOntapNetworkMgmt {
                             try {
                                 $inObj = [ordered] @{
                                     'MGMT Interface' = $Item.InterfaceName
-                                    'Status' = switch ($Item.OpStatus) {
-                                        '' { 'Unknown' }
-                                        $Null { 'Unknown' }
-                                        default { $Item.OpStatus.ToString().ToUpper() }
-                                    }
+                                    'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = $Item.DataProtocols
                                     'Address' = $Item.Address
                                     'Vserver' = $Item.Vserver
@@ -136,11 +128,7 @@ function Get-AbrOntapNetworkMgmt {
                                 try {
                                     $inObj = [ordered] @{
                                         'Intercluster Interface' = $Item.InterfaceName
-                                        'Status' = switch ($Item.OpStatus) {
-                                            '' { 'Unknown' }
-                                            $Null { 'Unknown' }
-                                            default { $Item.OpStatus.ToString().ToUpper() }
-                                        }
+                                        'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                         'Data Protocols' = $Item.DataProtocols
                                         'Address' = $Item.Address
                                         'Vserver' = $Item.Vserver
@@ -190,11 +178,7 @@ function Get-AbrOntapNetworkMgmt {
                                 } else { $AddressData = $Item.Address }
                                 $inObj = [ordered] @{
                                     'Data Interface' = $Item.InterfaceName
-                                    'Status' = switch ($Item.OpStatus) {
-                                        '' { 'Unknown' }
-                                        $Null { 'Unknown' }
-                                        default { $Item.OpStatus.ToString().ToUpper() }
-                                    }
+                                    'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = [string]$Item.DataProtocols
                                     'Address' = $AddressData
                                     'Vserver' = $Item.Vserver
@@ -245,11 +229,7 @@ function Get-AbrOntapNetworkMgmt {
                                         'Network Interface' = $Item.InterfaceName
                                         'Home Port' = $Item.HomeNode + ':' + $Item.HomePort
                                         'Current Port' = $Item.CurrentNode + ':' + $Item.CurrentPort
-                                        'IsHome' = switch ($Item.IsHome) {
-                                            'True' { 'Yes' }
-                                            'False' { 'No' }
-                                            default { $Item.IsHome }
-                                        }
+                                        'IsHome' = ($Item.IsHome -eq $True) ? 'Yes': 'No'
                                         'Vserver' = $Item.Vserver
                                     }
                                     $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)

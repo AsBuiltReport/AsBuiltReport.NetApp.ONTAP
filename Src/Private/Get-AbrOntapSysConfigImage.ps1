@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigImage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,8 +32,8 @@ function Get-AbrOntapSysConfigImage {
                         $inObj = [ordered] @{
                             'Node' = $Item.Node
                             'Location' = $Item.Image
-                            'Is Current' = ConvertTo-TextYN $Item.IsCurrent
-                            'Is Default' = ConvertTo-TextYN $Item.IsDefault
+                            'Is Current' = $Item.IsCurrent
+                            'Is Default' = $Item.IsDefault
                             'Install Time' = $Item.InstallTimeDT
                             'Version' = $Item.Version
                         }

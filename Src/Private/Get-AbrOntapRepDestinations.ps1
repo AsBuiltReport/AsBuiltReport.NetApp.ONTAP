@@ -5,7 +5,7 @@ function Get-AbrOntapRepDestination {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -46,10 +46,7 @@ function Get-AbrOntapRepDestination {
                                 default { $Item.RelationshipType }
                             }
                             'Policy Type' = $Item.PolicyType
-                            'Status' = switch ($Item.RelationshipStatus) {
-                                $Null { 'Unknown' }
-                                default { $Item.RelationshipStatus }
-                            }
+                            'Status' = ($Null -eq $Item.RelationshipStatus) ? 'Unknown': $Item.RelationshipStatus
                         }
                         $ReplicaObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 

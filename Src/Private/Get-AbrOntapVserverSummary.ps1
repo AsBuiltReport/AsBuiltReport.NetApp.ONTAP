@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -78,10 +78,10 @@ function Get-AbrOntapVserverSummary {
                                 $inObj = [ordered] @{
                                     'Root Volume' = $Item.Name
                                     'Status' = $Item.State
-                                    'Total Size' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                                    'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    'Dedup' = ConvertTo-TextYN $Item.Dedupe
+                                    'Total Size' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                                    'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Dedup' = $Item.Dedupe
                                     'Aggregate' = $Item.Aggregate
                                 }
                                 $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
@@ -120,7 +120,7 @@ function Get-AbrOntapVserverSummary {
                                         'Aggregate' = $Item.AggregateName
                                         'Type' = $Item.AggregateType
                                         'SnapLock Type' = $Item.SnaplockType
-                                        'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                        'Available' = ($Item.AvailableSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverS3Bucket {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,8 +36,8 @@ function Get-AbrOntapVserverS3Bucket {
                         $inObj = [ordered] @{
                             'Bucket' = $Item.Name
                             'Volume' = $Item.volume.name
-                            'Total' = $Item.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Used' = $Item.logical_used_size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            'Total' = ($Item.size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Item.logical_used_size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

@@ -5,7 +5,7 @@ function Get-AbrOntapRepRelationship {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -38,11 +38,7 @@ function Get-AbrOntapRepRelationship {
                             'Destination Vserver' = $Item.DestinationVserver
                             'Destination Location' = $Item.DestinationLocation
                             'Mirror State' = $Item.MirrorState
-                            'Schedule' = switch ([string]::IsNullOrEmpty($Item.Schedule)) {
-                                $true { 'None' }
-                                $false { ($Item.Schedule).toUpper() }
-                                default { 'Unknown' }
-                            }
+                            'Schedule' = ${Item}?.Schedule.toUpper()
                             'Relationship Type' = switch ($Item.RelationshipType) {
                                 'extended_data_protection' { 'XDP' }
                                 'data_protection' { 'DP' }
@@ -53,16 +49,9 @@ function Get-AbrOntapRepRelationship {
                             }
                             'Policy' = $Item.Policy
                             'Policy Type' = $Item.PolicyType
-                            'Unhealthy Reason' = switch ($Item.UnhealthyReason) {
-                                $NULL { 'None' }
-                                default { $Item.UnhealthyReason }
-                            }
+                            'Unhealthy Reason' = ($Null -eq $Item.UnhealthyReason) ? 'None': $Item.UnhealthyReason
                             'Lag Time' = $lagtime
-                            'Status' = switch ([string]::IsNullOrEmpty($Item.Status)) {
-                                $true { '--' }
-                                $false { ($Item.Status).toUpper() }
-                                default { 'Unknown' }
-                            }
+                            'Status' = ${Item}?.Status.toUpper()
                         }
                         $ReplicaObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 

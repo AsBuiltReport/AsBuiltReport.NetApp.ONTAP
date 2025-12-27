@@ -5,7 +5,7 @@ function Get-AbrOntapClusterLicenseUsage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -30,10 +30,7 @@ function Get-AbrOntapClusterLicenseUsage {
                     [PSCustomObject] @{
                         'Name' = $NodeLFs.FeatureName
                         'Status' = $NodeLFs.Status
-                        'Notes' = switch ($NodeLFs.Notes) {
-                            '-' { 'None' }
-                            default { $NodeLFs.Notes }
-                        }
+                        'Notes' = $NodeLFs.Notes
                     }
                 }
                 $TableParams = @{

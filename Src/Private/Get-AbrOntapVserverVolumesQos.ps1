@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosSetting {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,14 +36,8 @@ function Get-AbrOntapVserverVolumesQosSetting {
                         $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Fixed Policy Name' = switch ($VolQoS.PolicyGroupName) {
-                                $Null { 'None' }
-                                default { $VolQoS.PolicyGroupName }
-                            }
-                            'Adaptive Policy Name' = switch ($VolQoS.AdaptivePolicyGroupName) {
-                                $Null { 'None' }
-                                default { $VolQoS.AdaptivePolicyGroupName }
-                            }
+                            'Fixed Policy Name' = ($Null -eq $VolQoS.PolicyGroupName) ? 'None': $VolQoS.PolicyGroupName
+                            'Adaptive Policy Name' = ($Null -eq $VolQoS.PolicyGroupName) ? 'None': $VolQoS.AdaptivePolicyGroupName
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

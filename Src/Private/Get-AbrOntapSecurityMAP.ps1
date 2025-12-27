@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityMAP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,16 +31,8 @@ function Get-AbrOntapSecurityMAP {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Approvers' = switch ([string]::IsNullOrEmpty($Item.Approvers)) {
-                                $true { '-' }
-                                $false { $Item.Approvers -join ', ' }
-                                default { '-' }
-                            }
-                            'Email' = switch ([string]::IsNullOrEmpty($Item.Email)) {
-                                $true { '-' }
-                                $false { $Item.Email -join ', ' }
-                                default { '-' }
-                            }
+                            'Approvers' = $Item.Approvers -join ', '
+                            'Email' = $Item.Email -join ', '
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

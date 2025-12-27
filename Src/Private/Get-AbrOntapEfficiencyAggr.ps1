@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,10 +32,10 @@ function Get-AbrOntapEfficiencyAggr {
                         $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAggrInfo
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
-                            'Logical Used' = $Saving.AggrLogicalUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Physical Used' = $Saving.AggrPhysicalUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Compaction Saved' = $Saving.AggrCompactionSaved | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Data Reduction' = $Saving.AggrDataReductionStorageEfficiencyRatio
+                            'Logical Used' = ($Saving.AggrLogicalUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Physical Used' = ($Saving.AggrPhysicalUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Compaction Saved' = ($Saving.AggrCompactionSaved | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Data Reduction' = ${Saving}?.AggrDataReductionStorageEfficiencyRatio
 
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

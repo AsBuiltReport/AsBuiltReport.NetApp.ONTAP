@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -37,11 +37,7 @@ function Get-AbrOntapVserverIscsiInterface {
                             'Interface Name' = $Item.InterfaceName
                             'IP Address' = $Item.IpAddress
                             'Port' = $Item.IpPort
-                            'Status' = switch ($Item.IsInterfaceEnabled) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsInterfaceEnabled }
-                            }
+                            'Status' = ($Item.IsInterfaceEnabled -eq $true) ? 'Up': 'Down'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

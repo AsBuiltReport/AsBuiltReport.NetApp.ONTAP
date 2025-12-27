@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,9 +34,9 @@ function Get-AbrOntapEfficiencyAggrConfig {
                             'S3 Name' = $Item.S3Name
                             'Server FQDN' = $Item.Server
                             'Port' = $Item.Port
-                            'SSL Enabled' = ConvertTo-TextYN $Item.SslEnabled
+                            'SSL Enabled' = $Item.SslEnabled
                             'Provider Type' = $Item.ProviderType
-                            'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
+                            'Used Space' = ($Item.UsedSpace | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize -NumberFormatString 0.0) ?? '--'
                         }
                         $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 

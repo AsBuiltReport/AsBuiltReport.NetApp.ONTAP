@@ -36,7 +36,7 @@ function Get-AbrOntapClusterLicense {
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)
                                     'Description' = $Licenses.Description
-                                    'Risk' = ConvertTo-EmptyToFiller $EntitlementRisk.Risk
+                                    'Risk' = (Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array).Risk ?? '--'
                                 }
                             }
                             if ($Healthcheck.License.RiskSummary) {

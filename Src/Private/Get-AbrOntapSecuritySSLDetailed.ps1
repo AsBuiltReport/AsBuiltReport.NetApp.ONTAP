@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,11 +34,7 @@ function Get-AbrOntapSecuritySSLDetailed {
                             'Protocol' = $Item.Protocol
                             'Hash Function' = $Item.HashFunction
                             'Serial Number' = $Item.SerialNumber
-                            'Expiration' = switch ([string]::IsNullOrEmpty($Item.ExpirationDateDT)) {
-                                $true { '-' }
-                                $false { ($Item.ExpirationDateDT).ToString().Split(' ')[0] }
-                                default { 'Unknown' }
-                            }
+                            'Expiration' = ${Item}?.ExpirationDateDT?.ToString()?.Split(' ')[0]
                             'Vserver' = $Item.Vserver
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

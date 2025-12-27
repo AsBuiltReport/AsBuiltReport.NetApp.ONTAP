@@ -5,7 +5,7 @@ function Get-AbrOntapStorageFabricPool {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,7 +34,7 @@ function Get-AbrOntapStorageFabricPool {
                             'Aggregate' = $Item.Aggregate
                             'Fabric Pool Name' = $Item.ObjectStoreName
                             'Type' = $Item.ProviderType
-                            'Used Space' = $Item.UsedSpace | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
+                            'Used Space' = ($Item.UsedSpace | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize -NumberFormatString 0.0) ?? '--'
                             'Status' = $Item.ObjectStoreAvailability
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

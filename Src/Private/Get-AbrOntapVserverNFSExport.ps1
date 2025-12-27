@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSExport {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -28,39 +28,32 @@ function Get-AbrOntapVserverNFSExport {
 
     process {
         try {
-            $VserverData = Get-NcVserver -VserverContext $Vserver -Controller $Array | Where-Object { $_.VserverType -eq 'data' -and $_.AllowedProtocols -eq 'nfs' -and $_.State -eq 'running' }
             $VserverObj = @()
-            if ($VserverData) {
-                foreach ($SVM in $VserverData) {
+            $NFSVserver = Get-NcNfsExport -VS $Vserver -Controller $Array
+            if ($NFSVserver ) {
+                foreach ($Item in $NFSVserver) {
                     try {
-                        $NFSVserver = Get-NcNfsExport -VS $SVM.Vserver -Controller $Array
-                        foreach ($Item in $NFSVserver) {
-                            try {
-                                $inObj = [ordered] @{
-                                    'Vserver' = $SVM.Vserver
-                                    'Path Name' = $Item.Pathname
-                                }
-                            } catch {
-                                Write-PScriboMessage -IsWarning $_.Exception.Message
-                            }
+                        $inObj = [ordered] @{
+                            'Path Name' = $Item.Pathname
+                            'Export Policy' = (((Get-NcVol -VS $Vserver -Controller $Array | Where-Object { $_.JunctionPath -eq $Item.Pathname }).VolumeExportAttributes).Policy) ?? 'None'
                         }
-                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
+                    $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                 }
+            }
 
-                $TableParams = @{
-                    Name = "NFS Service Volume Export - $($Vserver)"
-                    List = $false
-                    ColumnWidths = 35, 65
-                }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                if ($VserverObj) {
-                    $VserverObj | Table @TableParams
-                }
+            $TableParams = @{
+                Name = "NFS Service Volume Export - $($Vserver)"
+                List = $false
+                ColumnWidths = 50, 50
+            }
+            if ($Report.ShowTableCaptions) {
+                $TableParams['Caption'] = "- $($TableParams.Name)"
+            }
+            if ($VserverObj) {
+                $VserverObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

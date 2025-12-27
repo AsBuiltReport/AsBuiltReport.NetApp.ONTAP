@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyConfig {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,10 +33,10 @@ function Get-AbrOntapEfficiencyConfig {
                         $TotalStorageEfficiencyRatio = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
-                            'Used %' = $Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                            'Capacity Tier Used' = $Saving.CapacityTierUsed | ConvertTo-FormattedNumber -Type Datasize -NumberFormatString '0.0' -ErrorAction SilentlyContinue
-                            'Compaction Saved %' = $Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                            'Deduplication Saved %' = $Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Used %' = ($Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                            'Capacity Tier Used' = ($Saving.CapacityTierUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Compaction Saved %' = ($Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                            'Deduplication Saved %' = ($Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                             'Total Data Reduction' = $TotalStorageEfficiencyRatio.TotalStorageEfficiencyRatio
 
                         }

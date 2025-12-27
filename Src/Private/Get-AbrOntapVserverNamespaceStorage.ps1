@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNamespaceStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,30 +34,24 @@ function Get-AbrOntapVserverNamespaceStorage {
                 foreach ($Item in $VserverNamespace) {
                     try {
                         $namespacemap = Get-NcNvmeSubsystemMap -Vserver $Vserver -Controller $Array | Where-Object { $_.Path -eq $Item.Path }
-                        $namespacepath = $Item.Path.split('/')
-                        $namespace = $namespacepath[3]
-                        $available = $Item.Size - $Item.SizeUsed
-                        $used = ($Item.SizeUsed / $Item.Size) * 100
+                        $namespace = $Item.Path.split('/')[3]
                         $inObj = [ordered] @{
                             'Namespace Name' = $namespace
                             'Parent Volume' = $Item.Volume
                             'Path' = $Item.Path
                             'Serial Number' = $Item.Uuid
-                            'Subsystem Map' = switch (($namespacemap).count) {
-                                0 { 'None' }
-                                default { $namespacemap.Subsystem }
-                            }
+                            'Subsystem Map' = ($namespacemap).count -eq 0 ? 'None': $namespacemap.Subsystem
                             'Home Node ' = $Item.Node
-                            'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Available' = (($Item.Size - $Item.SizeUsed) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ((($Item.SizeUsed / $Item.Size) * 100) | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                             'OS Type' = $Item.Ostype
                             'Is Mapped' = switch ([string]::IsNullOrEmpty($Item.Subsystem)) {
                                 $true { 'No' }
                                 $false { 'Yes' }
                                 default { $Item.Subsystem }
                             }
-                            'ReadOnly' = ConvertTo-TextYN $Item.IsReadOnly
+                            'ReadOnly' = $Item.IsReadOnly
                             'Status' = switch ($Item.State) {
                                 'online' { 'Up' }
                                 'offline' { 'Down' }

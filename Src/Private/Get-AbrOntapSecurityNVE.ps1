@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNVE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,7 +32,7 @@ function Get-AbrOntapSecurityNVE {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
                             'Aggregate' = $Item.Aggregate
-                            'Encrypted' = ConvertTo-TextYN $Item.Encrypt
+                            'Encrypted' = $Item.Encrypt
                             'State' = $TextInfo.ToTitleCase($Item.State)
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

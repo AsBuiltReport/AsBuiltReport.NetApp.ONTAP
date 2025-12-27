@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIfgrp {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,14 +33,11 @@ function Get-AbrOntapNetworkIfgrp {
             if ($IFGRPPorts) {
                 foreach ($Nics in $IFGRPPorts) {
                     try {
-                        if ($Nics.DownPorts) {
-                            $UPPort = "$($Nics.UpPorts) $($Nics.DownPorts)(Down)"
-                        } else { $UPPort = [String]$Nics.UpPorts }
                         $inObj = [ordered] @{
                             'Port Name' = $Nics.IfgrpName
                             'Distribution Function' = $Nics.DistributionFunction
                             'Mode' = $Nics.Mode
-                            'Port' = $UPPort
+                            'Port' = ($Null -eq $Nics.DownPorts) ? [String]$Nics.UpPorts: "$($Nics.UpPorts) - {$($Nics.DownPorts)}(Down)"
                             'Mac Address' = $Nics.MacAddress
                             'Port Participation' = $Nics.PortParticipation
                         }

@@ -5,7 +5,7 @@ function Get-AbrOntapDiskType {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -24,9 +24,8 @@ function Get-AbrOntapDiskType {
 
     process {
         try {
-            $NodeDiskContainerType = Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskRaidInfo.ContainerType } | Group-Object
             if ($NodeDiskContainerType) {
-                $DiskType = foreach ($DiskContainers in $NodeDiskContainerType) {
+                $DiskType = foreach ($DiskContainers in (Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskRaidInfo.ContainerType } | Group-Object)) {
                     try {
                         [PSCustomObject] @{
                             'Container' = $DiskContainers.Name
@@ -53,10 +52,9 @@ function Get-AbrOntapDiskType {
             if ($Node -and (Confirm-NcAggrSpareLow | Where-Object { $_.Value -eq 'True' })) {
                 $OutObj = foreach ($Item in $Node) {
                     try {
-                        $DiskSpareLow = Confirm-NcAggrSpareLow -Node $Item.Node
                         [PSCustomObject] @{
                             'Node' = $Item.Node
-                            'Aggregate Spare Low' = $DiskSpareLow.Value.ToString().Replace('True', 'Yes').Replace('False', 'No')
+                            'Aggregate Spare Low' = (Confirm-NcAggrSpareLow -Node $Item.Node).Value.ToString().Replace('True', 'Yes').Replace('False', 'No')
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message

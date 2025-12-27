@@ -5,7 +5,7 @@ function Get-AbrOntapNodeStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -33,9 +33,9 @@ function Get-AbrOntapNodeStorage {
                             'Node' = $Item.Vserver
                             'Aggregate' = $Item.Aggregate
                             'Volume' = $Item.Name
-                            'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

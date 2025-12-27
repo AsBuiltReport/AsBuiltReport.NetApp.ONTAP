@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQuota {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -91,22 +91,10 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Type' = $Item.QuotaType
                                         'Target' = $Item.QuotaTarget
-                                        'Disk Limit' = switch ($Item.DiskLimit) {
-                                            '-' { $Item.DiskLimit }
-                                            default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
-                                        }
-                                        'File Limit' = switch ($Item.FileLimit) {
-                                            '-' { $Item.FileLimit }
-                                            default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
-                                        }
-                                        'Soft Disk Limit' = switch ($Item.SoftDiskLimit) {
-                                            '-' { $Item.SoftDiskLimit }
-                                            default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
-                                        }
-                                        'Soft File Limit' = switch ($Item.SoftFileLimit) {
-                                            '-' { $Item.SoftFileLimit }
-                                            default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
-                                        }
+                                        'Disk Limit' = ($Item.DiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'File Limit' = ($Item.FileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
+                                        'Soft Disk Limit' = ($Item.SoftDiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Soft File Limit' = ($Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                     if ($null -ne $Item.QuotaError) {
@@ -148,15 +136,9 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
-                                        'Disk Limit' = switch ($Item.DiskLimit) {
-                                            '-' { $Item.DiskLimit }
-                                            default { $Item.DiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
-                                        }
-                                        'Soft Disk Limit' = switch ($Item.SoftDiskLimit) {
-                                            '-' { $Item.SoftDiskLimit }
-                                            default { $Item.SoftDiskLimit | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue }
-                                        }
-                                        'Disk Used' = $Item.DiskUsed | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                                        'Disk Limit' = ($Item.DiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Soft Disk Limit' = ($Item.SoftDiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Disk Used' = ($Item.DiskUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
@@ -197,15 +179,9 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
-                                        'File Limit' = switch ($Item.FileLimit) {
-                                            '-' { $Item.FileLimit }
-                                            default { $Item.FileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
-                                        }
-                                        'Soft File Limit' = switch ($Item.SoftFileLimit) {
-                                            '-' { $Item.SoftFileLimit }
-                                            default { $Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue }
-                                        }
-                                        'Files Used' = $Item.FilesUsed | ConvertTo-FormattedNumber -Type Count -ErrorAction SilentlyContinue
+                                        'File Limit' = ($Item.FileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
+                                        'Soft File Limit' = ($Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
+                                        'Files Used' = ($Item.FilesUsed | ConvertTo-FormattedNumber -Type Count) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {

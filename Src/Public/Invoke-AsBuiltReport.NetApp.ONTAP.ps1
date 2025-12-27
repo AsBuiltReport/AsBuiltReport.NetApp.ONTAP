@@ -22,6 +22,8 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Scope = 'Function')]
 
     #Requires -RunAsAdministrator
+    #Requires -Version 7.5
+    #Requires -PSEdition Core
 
     # Do not remove or add to these parameters
     param (
@@ -29,23 +31,40 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         [PSCredential] $Credential
     )
 
-    #Requires -RunAsAdministrator
-
     if ($psISE) {
         Write-Error -Message 'You cannot run this script inside the PowerShell ISE. Please execute it from the PowerShell Command Window.'
         break
     }
 
-    Write-Host '- Please refer to the AsBuiltReport.NetApp.ONTAP github website for more detailed information about this project.'
-    Write-Host '- Do not forget to update your report configuration file after each new version release.'
-    Write-Host '- Documentation: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP'
-    Write-Host '- Issues or bug reporting: https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues'
-    Write-Host '- This project is community maintained and has no sponsorship from NetApp, its employees or any of its affiliates.'
-    Write-Host '- To sponsor this project, please visit: ' -NoNewline
+    # Check the version of the dependency modules
+    if ($Options.UpdateCheck) {
+        Write-ReportModuleInfo -ModuleName 'Netapp.ONTAP'
+    }
+    Write-Host '  - To sponsor this project, please visit: ' -NoNewline
     Write-Host 'https://ko-fi.com/F1F8DEV80' -ForegroundColor Cyan
-    Write-Host '- Getting dependency information:'
 
+    if ($Options.UpdateCheck) {
+        Write-Host '  - Getting dependency information:'
+        # Check the version of the dependency modules
+        $ModuleArray = @('AsBuiltReport.Netapp.ONTAP', 'Diagrammer.Core')
 
+        foreach ($Module in $ModuleArray) {
+            try {
+                $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+
+                if ($InstalledVersion) {
+                    Write-Host "    - $Module module v$($InstalledVersion.ToString()) is currently installed."
+                    $LatestVersion = Find-Module -Name $Module -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+                    if ($InstalledVersion -lt $LatestVersion) {
+                        Write-Host "      - $Module module v$($LatestVersion.ToString()) is available." -ForegroundColor Red
+                        Write-Host "      - Run 'Update-Module -Name $Module -Force' to install the latest version." -ForegroundColor Red
+                    }
+                }
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
+            }
+        }
+    }
     # Check the version of the dependency modules
     $ModuleArray = @('AsBuiltReport.Netapp.ONTAP', 'Diagrammer.Core')
 
@@ -188,8 +207,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                     Paragraph "The following section provides a summary of the storage hardware in $($ClusterInfo.ClusterName)."
                     BlankLine
                     Section -Style Heading3 'Aggregate Inventory' {
-                        Paragraph "The following section provides the Aggregates in $($ClusterInfo.ClusterName)."
-                        BlankLine
                         if (Get-NcAggr -Controller $Array) {
                             Get-AbrOntapStorageAGGR
                             $StorageAggrDiagram = Get-AbrOntapStorageAggrDiagram
@@ -403,7 +420,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 if (Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }) {
                                     Section -Style Heading4 'Storage Volumes' {
                                         Get-AbrOntapVserverVolume -Vserver $SVM
-                                        if (Get-NcVol -VserverContext $SVM -Controller $Array | Select-Object -ExpandProperty VolumeExportAttributes) {
+                                        if ((Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' } | Select-Object -ExpandProperty VolumeExportAttributes) ) {
                                             Section -Style Heading5 'Per Volumes Export Policies' {
                                                 Get-AbrOntapVserverVolumesExportPolicy -Vserver $SVM
                                             }

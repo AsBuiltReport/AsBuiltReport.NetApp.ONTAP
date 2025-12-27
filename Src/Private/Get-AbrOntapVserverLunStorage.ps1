@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -34,41 +34,23 @@ function Get-AbrOntapVserverLunStorage {
                 foreach ($Item in $VserverLun) {
                     try {
                         $lunmap = Get-NcLunMap -Path $Item.Path -Controller $Array | Select-Object -ExpandProperty InitiatorGroup
-                        $lunpath = $Item.Path.split('/')
-                        $lun = $lunpath[3]
-                        $available = $Item.Size - $Item.SizeUsed
-                        $used = ($Item.SizeUsed / $Item.Size) * 100
+                        $lun = $Item.Path.split('/')[3]
                         $inObj = [ordered] @{
                             'Lun Name' = $lun
                             'Parent Volume' = $Item.Volume
                             'Path' = $Item.Path
                             'Serial Number' = $Item.SerialNumber
-                            'Initiator Group' = switch (($lunmap).count) {
-                                0 { 'None' }
-                                default { $lunmap }
-                            }
+                            'Initiator Group' = ($lunmap.count -eq 0) ? 'None': $lunmap
                             'Home Node ' = $Item.Node
-                            'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Available' = $available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Used' = $used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Available' = (($Item.Size - $Item.SizeUsed) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ((($Item.SizeUsed / $Item.Size) * 100) | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                             'OS Type' = $Item.Protocol
-                            'Is Thin' = ConvertTo-TextYN $Item.Thin
-                            'Space Allocation' = switch ($Item.IsSpaceAllocEnabled) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsSpaceAllocEnabled }
-                            }
-                            'Space Reservation' = switch ($Item.IsSpaceReservationEnabled) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsSpaceReservationEnabled }
-                            }
-                            'Is Mapped' = ConvertTo-TextYN $Item.Mapped
-                            'Status' = switch ($Item.Online) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.Online }
-                            }
+                            'Is Thin' = $Item.Thin
+                            'Space Allocation' = $Item.IsSpaceAllocEnabled -eq $True ? 'Enabled': 'Disabled'
+                            'Space Reservation' = $Item.IsSpaceReservationEnabled -eq $True ? 'Enabled': 'Disabled'
+                            'Is Mapped' = $Item.Mapped
+                            'Status' = $Item.Online -eq $True ? 'Up': 'Down'
                         }
                         $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 

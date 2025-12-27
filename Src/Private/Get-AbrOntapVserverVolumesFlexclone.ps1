@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexclone {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,13 +35,13 @@ function Get-AbrOntapVserverVolumesFlexclone {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Parent Volume' = $Item.ParentVolume
-                            'Volume Type' = $Item.VolumeType.ToUpper()
+                            'Volume Type' = ${Item}?.VolumeType?.ToUpper()
                             'Parent Snapshot' = $Item.ParentSnapshot
                             'Space Reserve' = $Item.SpaceReserve
-                            'Space Guarantee' = ConvertTo-TextYN $Item.SpaceGuaranteeEnabled
-                            'Capacity' = $Item.Size | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Available' = $Item.Size - $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Used' = $Item.Used | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                            'Space Guarantee' = $Item.SpaceGuaranteeEnabled
+                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Size - $Item.Used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
                             'Aggregate' = $Item.Aggregate
                         }
                         $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)

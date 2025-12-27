@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunIgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -49,14 +49,8 @@ function Get-AbrOntapVserverLunIgroup {
                             'Type' = $Item.Type
                             'Protocol' = $Item.Protocol
                             'Initiators' = $Item.Initiators.InitiatorName
-                            'Mapped Lun' = switch (($MappedLun).count) {
-                                0 { 'None' }
-                                default { $MappedLun }
-                            }
-                            'Reporting Nodes' = switch (($reportingnodes).count) {
-                                0 { 'None' }
-                                default { $reportingnodes }
-                            }
+                            'Mapped Lun' = (($MappedLun).count -eq 0) ? 'None': $MappedLun
+                            'Reporting Nodes' = (($reportingnodes).count) ? 'None': $reportingnodes
                         }
                         $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
                         if ($Healthcheck.Vserver.Status) {

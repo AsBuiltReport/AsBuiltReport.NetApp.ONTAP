@@ -32,7 +32,7 @@ function Get-AbrOntapNodesSP {
             #         'Type' = 'BMC'
             #         'IpAddress' = '192.168.0.1'
             #         'MacAddress' = '00:02:23:24:43:AA'
-            #         'IsIpConfigured' = ConvertTo-TextYN 'True'
+            #         'IsIpConfigured' = 'True'
             #         'FirmwareVersion' = '8.1'
             #         'Status' = 'Online'
             #     },
@@ -41,7 +41,7 @@ function Get-AbrOntapNodesSP {
             #         'Type' = 'BMC'
             #         'IpAddress' = '192.168.0.2'
             #         'MacAddress' = '00:02:23:24:43:AB'
-            #         'IsIpConfigured' = ConvertTo-TextYN 'True'
+            #         'IsIpConfigured' = 'True'
             #         'FirmwareVersion' = '8.1'
             #         'Status' = 'Online'
             #     },
@@ -50,7 +50,7 @@ function Get-AbrOntapNodesSP {
             #         'Type' = 'BMC'
             #         'IpAddress' = '192.168.0.2'
             #         'MacAddress' = '00:02:23:24:43:AB'
-            #         'IsIpConfigured' = ConvertTo-TextYN 'True'
+            #         'IsIpConfigured' = 'True'
             #         'FirmwareVersion' = '8.1'
             #         'Status' = 'Unknown'
             #     },
@@ -59,7 +59,7 @@ function Get-AbrOntapNodesSP {
             #         'Type' = 'BMC'
             #         'IpAddress' = ''
             #         'MacAddress' = '00:02:23:24:43:AB'
-            #         'IsIpConfigured' = ConvertTo-TextYN 'False'
+            #         'IsIpConfigured' = 'False'
             #         'FirmwareVersion' = '8.1'
             #         'Status' = 'Offline'
             #     }
@@ -73,7 +73,7 @@ function Get-AbrOntapNodesSP {
                             'Type' = $NodeSPs.Type
                             'IP Address' = $NodeSPs.IpAddress
                             'MAC Address' = $NodeSPs.MacAddress
-                            'Network Configured' = ConvertTo-TextYN $NodeSPs.IsIpConfigured
+                            'Network Configured' = $NodeSPs.IsIpConfigured
                             'Firmware' = $NodeSPs.FirmwareVersion
                             'Status' = $NodeSPs.Status
                         }
