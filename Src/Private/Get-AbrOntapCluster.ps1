@@ -5,7 +5,7 @@ function Get-AbrOntapCluster {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapCluster {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP cluster information."
+        Write-PScriboMessage 'Collecting ONTAP cluster information.'
     }
 
     process {
@@ -35,16 +35,12 @@ function Get-AbrOntapCluster {
                     'Cluster UUID' = $ClusterInfo.ClusterUuid
                     'Cluster Serial' = $ClusterInfo.ClusterSerialNumber
                     'Cluster Controller' = $ClusterInfo.NcController
-                    'Cluster Contact' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterContact
-                    'Cluster Location' = ConvertTo-EmptyToFiller $ClusterInfo.ClusterLocation
+                    'Cluster Contact' = $ClusterInfo.ClusterContact
+                    'Cluster Location' = $ClusterInfo.ClusterLocation
                     'Ontap Version' = $ClusterVersion.value
                     'Number of Aggregates' = $ArrayAggr.count
                     'Number of Volumes' = $ArrayVolumes.count
-                    'Overall System Health' = switch ([string]::IsNullOrEmpty($ClusterDiag.Status)) {
-                        $true { '--' }
-                        $false { $ClusterDiag.Status.ToUpper() }
-                        default { 'Unknown' }
-                    }
+                    'Overall System Health' = ${ClusterDiag}?.Status?.ToUpper()
                 }
                 if ($Healthcheck.Cluster.Summary) {
                     $ClusterSummary | Where-Object { $_.'Overall System Health' -like 'OK' } | Set-Style -Style OK -Property 'Overall System Health'
@@ -61,11 +57,11 @@ function Get-AbrOntapCluster {
                 }
                 $ClusterSummary | Table @TableParams
                 if ($Healthcheck.Cluster.Summary -and ($ClusterSummary | Where-Object { $_.'Overall System Health' -notlike 'OK' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "The overall system health is not OK. It is recommended to investigate the issue further to ensure the cluster is functioning properly."
+                        Text 'Best Practice:' -Bold
+                        Text 'The overall system health is not OK. It is recommended to investigate the issue further to ensure the cluster is functioning properly.'
                     }
                     BlankLine
                 }

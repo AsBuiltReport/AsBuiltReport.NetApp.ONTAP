@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTPHost {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigNTPHost {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System NTP Host Status information."
+        Write-PScriboMessage 'Collecting ONTAP System NTP Host Status information.'
     }
 
     process {
@@ -34,13 +34,9 @@ function Get-AbrOntapSysConfigNTPHost {
                             'Time Offset' = $Item.Offset
                             'Selection State' = $Item.SelectionState
                             'Server' = $Item.Server
-                            'Peer Status' = switch ($Item.IsPeerReachable) {
-                                'True' { 'Reachable' }
-                                'False' { 'Unreachable' }
-                                default { $Item.IsPeerReachable }
-                            }
+                            'Peer Status' = ($Item.IsPeerReachable -eq $True) ? 'Reachable': 'Unreachable'
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -59,11 +55,11 @@ function Get-AbrOntapSysConfigNTPHost {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.NTP -and ($OutObj | Where-Object { $_.'Peer Status' -notlike 'Reachable' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all configured NTP servers are reachable to maintain accurate time synchronization across the cluster."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all configured NTP servers are reachable to maintain accurate time synchronization across the cluster.'
                     }
                     BlankLine
                 }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQtree {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumesQtree {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qtree information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qtree information.'
     }
 
     process {
@@ -40,7 +40,7 @@ function Get-AbrOntapVserverVolumesQtree {
                             'Security Style' = $Item.SecurityStyle
                             'Export Policy' = $Item.ExportPolicy
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -59,10 +59,10 @@ function Get-AbrOntapVserverVolumesQtree {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -notlike 'normal' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all qtrees are in 'normal' status to maintain data integrity and accessibility."
                     }
                     BlankLine

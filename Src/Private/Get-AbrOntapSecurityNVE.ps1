@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNVE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSecurityNVE {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Volume NVE information."
+        Write-PScriboMessage 'Collecting ONTAP Security Volume NVE information.'
     }
 
     process {
         try {
-            $Data = Get-NcVol -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True" }  | Select-Object -Property vserver, name, aggregate, state, @{Label = "Node"; expression = { $_.VolumeIdAttributes.Nodes } }, encrypt, @{Label = "encryptionstate"; expression = { (Get-NcVolumeEncryptionConversion -Vserver $_.vserver -Volume $_.name -Controller $Array).status } }
+            $Data = Get-NcVol -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne 'True' } | Select-Object -Property vserver, name, aggregate, state, @{Label = 'Node'; expression = { $_.VolumeIdAttributes.Nodes } }, encrypt, @{Label = 'encryptionstate'; expression = { (Get-NcVolumeEncryptionConversion -Vserver $_.vserver -Volume $_.name -Controller $Array).status } }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -32,10 +32,10 @@ function Get-AbrOntapSecurityNVE {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
                             'Aggregate' = $Item.Aggregate
-                            'Encrypted' = ConvertTo-TextYN $Item.Encrypt
+                            'Encrypted' = $Item.Encrypt
                             'State' = $TextInfo.ToTitleCase($Item.State)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

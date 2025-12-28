@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkFailoverGroup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Failover Group information."
+        Write-PScriboMessage 'Collecting ONTAP Failover Group information.'
     }
 
     process {
@@ -34,7 +34,7 @@ function Get-AbrOntapNetworkFailoverGroup {
                             'Vserver' = $Item.Vserver
                             'Target' = $Item.Target
                         }
-                        $FGObj += [pscustomobject]$inobj
+                        $FGObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

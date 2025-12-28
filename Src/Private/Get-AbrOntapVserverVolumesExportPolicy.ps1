@@ -1,11 +1,11 @@
 function Get-AbrOntapVserverVolumesExportPolicy {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP vserver volumes export policy information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP vserver per volumes export policy information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,39 +23,35 @@ function Get-AbrOntapVserverVolumesExportPolicy {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes export policy information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver per volumes export policy information.'
     }
 
     process {
         try {
-            $VserverData = Get-NcExportRule -VserverContext $Vserver -Controller $Array
-            $VserverObj = @()
-            if ($VserverData) {
-                foreach ($Item in $VserverData) {
+            $VolumeData = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
+            $VolumeObj = @()
+            if ($VolumeData) {
+                foreach ($Volume in $VolumeData) {
                     try {
                         $inObj = [ordered] @{
-                            'Policy Name' = $Item.PolicyName
-                            'Rule Index' = $Item.RuleIndex
-                            'Client Match' = $Item.ClientMatch
-                            'Protocol' = $Item.Protocol -join ", "
-                            'Ro Rule' = $Item.RoRule
-                            'Rw Rule' = $Item.RwRule
+                            'Volume Name' = $Volume.Name
+                            'Export Policy' = (((Get-NcVol -VS $Vserver -Controller $Array | Where-Object { $_.Name -eq $Volume.Name }).VolumeExportAttributes).Policy) ?? 'None'
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VolumeObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 $TableParams = @{
-                    Name = "Volume Export Policy - $($Vserver)"
+                    Name = "Per Volume Export Policy - $($Vserver)"
                     List = $false
-                    ColumnWidths = 20, 15, 20, 15, 15, 15
+                    ColumnWidths = 50, 50
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $VserverObj | Table @TableParams
+                $VolumeObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

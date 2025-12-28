@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkRoute {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkRoute {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP network route information."
+        Write-PScriboMessage 'Collecting ONTAP network route information.'
     }
 
     process {
@@ -37,9 +37,9 @@ function Get-AbrOntapNetworkRoute {
                             'Destination' = $Item.Destination
                             'Gateway' = $Item.Gateway
                             'Metric' = $Item.Metric
-                            'Address Family' = $Item.AddressFamily.ToString()
+                            'Address Family' = ${Item}?.AddressFamily?.ToString()
                         }
-                        $RoutesObj += [pscustomobject]$inobj
+                        $RoutesObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNvmeInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNvmeInterface {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver NVME interface information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver NVME interface information.'
     }
 
     process {
@@ -37,13 +37,9 @@ function Get-AbrOntapVserverNvmeInterface {
                             'Interface Name' = $Item.Lif
                             'Transport Address' = $Item.TransportAddress
                             'Transport Protocols' = $Item.TransportProtocols
-                            'Status' = switch ($Item.StatusAdmin) {
-                                'up' { 'Up' }
-                                'down' { 'Down' }
-                                default { $Item.StatusAdmin }
-                            }
+                            'Status' = $Item.StatusAdmin -eq 'up' ? 'Up': 'Down'
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -62,10 +58,10 @@ function Get-AbrOntapVserverNvmeInterface {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Nvme -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all NVME interfaces are in 'Up' status to maintain optimal connectivity and performance."
                     }
                     BlankLine

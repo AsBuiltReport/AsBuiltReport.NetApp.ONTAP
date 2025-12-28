@@ -5,7 +5,7 @@ function Get-AbrOntapDiskAssign {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapDiskAssign {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk assignment per node information."
+        Write-PScriboMessage 'Collecting ONTAP disk assignment per node information.'
     }
 
     process {

@@ -5,7 +5,7 @@ function Get-AbrOntapDiskInv {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,13 +19,13 @@ function Get-AbrOntapDiskInv {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk inventory per node."
+        Write-PScriboMessage 'Collecting ONTAP disk inventory per node.'
     }
 
     process {
         try {
             $DiskInv = Get-NcDisk -Controller $Array
-            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq "broken" }
+            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }
             if ($DiskInv) {
                 $DiskInventory = foreach ($Disks in $DiskInv) {
                     try {
@@ -40,7 +40,7 @@ function Get-AbrOntapDiskInv {
                             'Disk Name' = $Disk
                             'Shelf' = $Disks.Shelf
                             'Bay' = $Disks.Bay
-                            'Capacity' = $Disks.Capacity | ConvertTo-FormattedNumber -Type Disksize -ErrorAction SilentlyContinue
+                            'Capacity' = ($Disks.Capacity | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Disksize) ?? '--'
                             'Model' = $Disks.Model
                             'Serial Number' = $DiskType.SerialNumber
                             'Type' = $DiskType.DiskType

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI information.'
     }
 
     process {
@@ -40,13 +40,9 @@ function Get-AbrOntapVserverIscsiSummary {
                             'Max Cmds Per Session' = $Item.MaxCmdsPerSession
                             'Max Conn Per Session' = $Item.MaxConnPerSession
                             'Login Timeout' = $Item.LoginTimeout
-                            'Status' = switch ($Item.IsAvailable) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsAvailable }
-                            }
+                            'Status' = ($Item.IsAvailable -eq $true) ? 'Up': 'Down'
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -65,11 +61,11 @@ function Get-AbrOntapVserverIscsiSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Iscsi -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all ISCSI services are operational to maintain optimal storage connectivity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all ISCSI services are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

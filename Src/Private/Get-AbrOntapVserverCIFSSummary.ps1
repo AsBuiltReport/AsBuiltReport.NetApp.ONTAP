@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver CIFS information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver CIFS information.'
     }
 
     process {
@@ -43,9 +43,9 @@ function Get-AbrOntapVserverCIFSSummary {
                                 'AD Server Site' = $SVM.CifsServerSite
                                 'Cifs Server Status' = $SVM.CifsServerStatus
                                 'Status Details' = $SVM.StatusDetails
-                                'Status' = $SVM.Status.ToString()
+                                'Status' = ${SVM}?.Status?.ToString()
                             }
-                            $VserverObj = [pscustomobject]$inobj
+                            $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                             if ($Healthcheck.Vserver.CIFS) {
                                 $VserverObj | Where-Object { $_.'Cifs Server Status' -notlike 'Running' } | Set-Style -Style Warning -Property 'Cifs Server Status'
@@ -62,11 +62,11 @@ function Get-AbrOntapVserverCIFSSummary {
                             }
                             $VserverObj | Table @TableParams
                             if ($Healthcheck.Vserver.CIFS -and ($VserverObj | Where-Object { $_.'Status' -like 'down' })) {
-                                Paragraph "Health Check:" -Bold -Underline
+                                Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {
-                                    Text "Best Practice:" -Bold
-                                    Text "Ensure that the CIFS service is running on all nodes to maintain file sharing capabilities."
+                                    Text 'Best Practice:' -Bold
+                                    Text 'Ensure that the CIFS service is running on all nodes to maintain file sharing capabilities.'
                                 }
                                 BlankLine
                             }

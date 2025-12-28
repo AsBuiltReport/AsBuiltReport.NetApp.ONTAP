@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCGNamespace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -22,7 +22,7 @@ function Get-AbrOntapVserverCGNamespace {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Consistency Groups namespace information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Consistency Groups namespace information.'
     }
 
     process {
@@ -34,25 +34,17 @@ function Get-AbrOntapVserverCGNamespace {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name.Split('/')[3]
-                            'Capacity' = switch ([string]::IsNullOrEmpty($Item.space.size)) {
-                                $true { '-' }
-                                $false { $Item.space.size | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { '-' }
-                            }
-                            'Used' = switch ([string]::IsNullOrEmpty($Item.space.used)) {
-                                $true { '-' }
-                                $false { $Item.space.used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue }
-                                default { '-' }
-                            }
-                            'OS Type' = ConvertTo-EmptyToFiller $Item.os_type
+                            'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Item.space.used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'OS Type' = $Item.os_type
                             'Volume State' = $Item.status.container_state
-                            'Mapped' = ConvertTo-TextYN $Item.status.mapped
-                            'Read Only' = ConvertTo-TextYN $Item.status.read_only
+                            'Mapped' = $Item.status.mapped
+                            'Read Only' = $Item.status.read_only
                             'State' = $Item.status.state
 
 
                         }
-                        $CGNamespaceObj += [pscustomobject]$inobj
+                        $CGNamespaceObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -75,11 +67,11 @@ function Get-AbrOntapVserverCGNamespace {
                 }
                 $CGNamespaceObj | Sort-Object -Property Name | Table @TableParams
                 if ($Healthcheck.Vserver.CG -and ($CGNamespaceObj | Where-Object { $_.'State' -eq 'offline' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all namespaces within the Consistency Group are online to maintain data availability and integrity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all namespaces within the Consistency Group are online to maintain data availability and integrity.'
                     }
                     BlankLine
                 }

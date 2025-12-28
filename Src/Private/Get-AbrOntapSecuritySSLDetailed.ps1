@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLDetailed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapSecuritySSLDetailed {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Vserver SSL Detailed information."
+        Write-PScriboMessage 'Collecting ONTAP Security Vserver SSL Detailed information.'
     }
 
     process {
         try {
-            $Data = Get-NcSecurityCertificate -Controller $Array | Where-Object { $_.Type -eq "server" -and $_.Vserver -notin $Options.Exclude.Vserver }
+            $Data = Get-NcSecurityCertificate -Controller $Array | Where-Object { $_.Type -eq 'server' -and $_.Vserver -notin $Options.Exclude.Vserver }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -34,14 +34,10 @@ function Get-AbrOntapSecuritySSLDetailed {
                             'Protocol' = $Item.Protocol
                             'Hash Function' = $Item.HashFunction
                             'Serial Number' = $Item.SerialNumber
-                            'Expiration' = Switch ([string]::IsNullOrEmpty($Item.ExpirationDateDT)) {
-                                $true { '-' }
-                                $false { ($Item.ExpirationDateDT).ToString().Split(" ")[0] }
-                                default { 'Unknown' }
-                            }
+                            'Expiration' = ${Item}?.ExpirationDateDT?.ToString()?.Split(' ')[0]
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkBdomain {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkBdomain {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Broadcast information."
+        Write-PScriboMessage 'Collecting ONTAP Broadcast information.'
     }
 
     process {
@@ -35,7 +35,11 @@ function Get-AbrOntapNetworkBdomain {
                         'MTU' = $Item.Mtu
                         'Ports' = $Item.Ports
                     }
-                    $BDomainObj += [pscustomobject]$inobj
+                    $BDomainObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                }
+
+                if ($Healthcheck.Network.Port) {
+                    $BDomainObj | Where-Object { $null -eq $_.'Failover Groups' -and $null -eq $_.'Ports' } | Set-Style -Style Warning
                 }
 
                 $TableParams = @{
@@ -47,6 +51,15 @@ function Get-AbrOntapNetworkBdomain {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $BDomainObj | Table @TableParams
+                if ($Healthcheck.Network.Port -and ($BDomainObj | Where-Object { $null -eq $_.'Failover Groups' -and $null -eq $_.'Ports' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text 'Best Practice:' -Bold
+                        Text ' Broadcast Domains should have associated Failover Groups and Ports assigned to them, review the highlighted Broadcast Domains above and take corrective action as necessary.'
+                    }
+                    BlankLine
+                }
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos group fixed information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qos group fixed information.'
     }
 
     process {
         try {
-            $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object { $_.PolicyGroupClass -eq "user_defined" }
+            $QoSFilter = Get-NcQosPolicyGroup -Controller $Array | Where-Object { $_.PolicyGroupClass -eq 'user_defined' }
             $OutObj = @()
             if ($QoSFilter) {
                 foreach ($Item in $QoSFilter) {
@@ -33,10 +33,10 @@ function Get-AbrOntapVserverVolumesQosGPFixed {
                             'Policy Name' = $Item.PolicyGroup
                             'Max Throughput' = $Item.MaxThroughput
                             'Min Throughput' = $Item.MinThroughput
-                            'Is Shared' = ConvertTo-TextYN $Item.IsShared
+                            'Is Shared' = $Item.IsShared
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

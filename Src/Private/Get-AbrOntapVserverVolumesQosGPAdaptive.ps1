@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos group adaptive information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qos group adaptive information.'
     }
 
     process {
@@ -36,7 +36,7 @@ function Get-AbrOntapVserverVolumesQosGPAdaptive {
                             'Min Iops' = $Item.AbsoluteMinIops
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

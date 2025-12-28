@@ -5,7 +5,7 @@ function Get-AbrOntapClusterDiagram {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapClusterDiagram {
     )
 
     begin {
-        Write-PScriboMessage "Generating Cluster Diagram for NetApp ONTAP."
+        Write-PScriboMessage 'Generating Cluster Diagram for NetApp ONTAP.'
         # Used for DiagramDebug
         if ($Options.EnableDiagramDebug) {
             $EdgeDebug = @{style = 'filled'; color = 'red' }
@@ -101,8 +101,8 @@ function Get-AbrOntapClusterDiagram {
             #     }
             # )
 
-            SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = "dashed,rounded"; color = "gray" } {
-                SubGraph ClusterInfo -Attributes @{Label = "Management: $($ClusterInfo.NcController)"; fontsize = 12; penwidth = 1.5; labelloc = 'b'; labeljust = 'r'; style = "dashed,rounded"; color = "transparent" } {
+            SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray' } {
+                SubGraph ClusterInfo -Attributes @{Label = "Management: $($ClusterInfo.NcController)"; fontsize = 12; penwidth = 1.5; labelloc = 'b'; labeljust = 'r'; style = 'dashed,rounded'; color = 'transparent' } {
                     try {
 
                         if ($NodeSum.Count -eq 1) {
@@ -126,22 +126,22 @@ function Get-AbrOntapClusterDiagram {
 
                             if ($ClusterHa.Name -notin $HAObject.Partner) {
                                 $HAObject += [PSCustomObject][ordered]@{
-                                    "Name" = $ClusterHa.Name
-                                    "Partner" = $ClusterHa.Partner
-                                    "HAState" = $ClusterHa.State
+                                    'Name' = $ClusterHa.Name
+                                    'Partner' = $ClusterHa.Partner
+                                    'HAState' = $ClusterHa.State
                                 }
                             }
 
                             $NodeAdditionalInfo += [PSCustomObject][ordered]@{
                                 'NodeName' = $Node.Node
                                 'AdditionalInfo' = [PSCustomObject][ordered]@{
-                                    "System Id" = $Node.NodeSystemId
-                                    "Serial" = $Node.NodeSerialNumber
-                                    "Model" = $Node.NodeModel
-                                    "Mgmt" = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
-                                        $true { "Unknown" }
+                                    'System Id' = $Node.NodeSystemId
+                                    'Serial' = $Node.NodeSerialNumber
+                                    'Model' = $Node.NodeModel
+                                    'Mgmt' = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
+                                        $true { 'Unknown' }
                                         $false { $NodeMgmtAddress }
-                                        default { "Unknown" }
+                                        default { 'Unknown' }
                                     }
                                 }
                             }
@@ -150,14 +150,14 @@ function Get-AbrOntapClusterDiagram {
                         if ($HAObject.Name -and $HAObject.Partner) {
                             foreach ($HA in $HAObject) {
                                 $HAClusterName = Remove-SpecialChar -String "HA$($HA.Name)$($HA.Partner)" -SpecialChars '\-_'
-                                SubGraph $HAClusterName -Attributes @{Label = "HA Pair"; fontsize = 14; penwidth = 1.5; labelloc = 't'; style = "dashed,rounded"; color = "gray"; labeljust = 'c' } {
+                                SubGraph $HAClusterName -Attributes @{Label = 'HA Pair'; fontsize = 14; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray'; labeljust = 'c' } {
 
                                     $HAName = Remove-SpecialChar -String $HA.Name -SpecialChars '\-_'
                                     $HAPartner = Remove-SpecialChar -String $HA.Partner -SpecialChars '\-_'
 
-                                    Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType "Ontap_Node" -Align "Center" -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                                    Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
-                                    Node $HAPartner @{Label = Add-DiaNodeIcon -Name $HA.Partner -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Partner }).AdditionalInfo -ImagesObj $Images -IconType "Ontap_Node" -Align "Center" -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                                    Node $HAPartner @{Label = Add-DiaNodeIcon -Name $HA.Partner -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Partner }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
                                     Rank $HAName, $HAPartner
 
@@ -167,9 +167,9 @@ function Get-AbrOntapClusterDiagram {
                         } else {
                             foreach ($HA in $HAObject) {
                                 $HAClusterName = Remove-SpecialChar -String "HA$($HA.Name)" -SpecialChars '\-_'
-                                SubGraph $HAClusterName -Attributes @{Label = "Single Node Cluster"; fontsize = 12; penwidth = 1.5; labelloc = 't'; style = "dashed,rounded"; color = "gray"; labeljust = 'c' } {
+                                SubGraph $HAClusterName -Attributes @{Label = 'Single Node Cluster'; fontsize = 12; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray'; labeljust = 'c' } {
                                     $HAName = Remove-SpecialChar -String $HA.Name -SpecialChars '\-_'
-                                    Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType "Ontap_Node" -Align "Center" -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                                    Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
                                 }
                             }
                         }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesQosSetting {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,12 +23,12 @@ function Get-AbrOntapVserverVolumesQosSetting {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes qos information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes qos information.'
     }
 
     process {
         try {
-            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne "True" }
+            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsConstituent -ne 'True' }
             $OutObj = @()
             if ($VolumeFilter) {
                 foreach ($Item in $VolumeFilter) {
@@ -36,16 +36,10 @@ function Get-AbrOntapVserverVolumesQosSetting {
                         $VolQoS = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeQosAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Fixed Policy Name' = Switch ($VolQoS.PolicyGroupName) {
-                                $Null { 'None' }
-                                default { $VolQoS.PolicyGroupName }
-                            }
-                            'Adaptive Policy Name' = Switch ($VolQoS.AdaptivePolicyGroupName) {
-                                $Null { 'None' }
-                                default { $VolQoS.AdaptivePolicyGroupName }
-                            }
+                            'Fixed Policy Name' = ($Null -eq $VolQoS.PolicyGroupName) ? 'None': $VolQoS.PolicyGroupName
+                            'Adaptive Policy Name' = ($Null -eq $VolQoS.PolicyGroupName) ? 'None': $VolQoS.AdaptivePolicyGroupName
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

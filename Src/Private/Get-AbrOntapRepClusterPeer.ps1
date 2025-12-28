@@ -5,7 +5,7 @@ function Get-AbrOntapRepClusterPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepClusterPeer {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Replication information."
+        Write-PScriboMessage 'Collecting ONTAP Replication information.'
     }
 
     process {
@@ -37,7 +37,7 @@ function Get-AbrOntapRepClusterPeer {
                             'IP Space' = $Item.IpspaceName
                             'Status' = ($Item.Availability)
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -56,11 +56,11 @@ function Get-AbrOntapRepClusterPeer {
                 }
                 $ReplicaObj | Table @TableParams
                 if ($Healthcheck.Replication.ClusterPeer -and ($ReplicaObj | Where-Object { $_.'Status' -notlike 'Available' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all cluster peers are available to maintain replication integrity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all cluster peers are available to maintain replication integrity.'
                     }
                     BlankLine
                 }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNonMappedLun {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,25 +23,24 @@ function Get-AbrOntapVserverNonMappedLun {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP ISCSI/FCP Non Mapped Lun information."
+        Write-PScriboMessage 'Collecting ONTAP ISCSI/FCP Non Mapped Lun information.'
     }
 
     process {
         try {
-            $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object { $_.Mapped -ne "True" }
+            $LunFilter = Get-NcLun -VserverContext $Vserver -Controller $Array | Where-Object { $_.Mapped -ne 'True' }
             $OutObj = @()
             if ($LunFilter) {
                 foreach ($Item in $LunFilter) {
                     try {
-                        $lunname = (($Item.Path).split('/'))[3]
                         $inObj = [ordered] @{
                             'Volume Name' = $Item.Volume
-                            'Lun Name' = $lunname
-                            'Online' = ConvertTo-TextYN $Item.Online
-                            'Mapped' = ConvertTo-TextYN $Item.Mapped
+                            'Lun Name' = ($Item.Path).split('/')[3]
+                            'Online' = $Item.Online
+                            'Mapped' = $Item.Mapped
                             'Lun Format' = $Item.Protocol
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -60,11 +59,11 @@ function Get-AbrOntapVserverNonMappedLun {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($OutObj)) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Review non-mapped LUNs to determine if they are still required or can be removed to optimize storage resources."
+                        Text 'Best Practice:' -Bold
+                        Text 'Review non-mapped LUNs to determine if they are still required or can be removed to optimize storage resources.'
                     }
                     BlankLine
                 }

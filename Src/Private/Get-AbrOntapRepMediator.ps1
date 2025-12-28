@@ -5,7 +5,7 @@ function Get-AbrOntapRepMediator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapRepMediator {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP SnapMirror Mediator relationship information."
+        Write-PScriboMessage 'Collecting ONTAP SnapMirror Mediator relationship information.'
     }
 
     process {
         try {
-            $ReplicaData = Get-NetAppOntapAPI -uri "/api/cluster/mediators?fields=*&return_records=true&return_timeout=15"
+            $ReplicaData = Get-NetAppOntapAPI -uri '/api/cluster/mediators?fields=*&return_records=true&return_timeout=15'
             $ReplicaObj = @()
             if ($ReplicaData) {
                 foreach ($Item in $ReplicaData) {
@@ -33,19 +33,15 @@ function Get-AbrOntapRepMediator {
                             'Peer cluster' = $Item.peer_cluster.name
                             'IP Address' = $Item.ip_address
                             'port' = $Item.port
-                            'Status' = switch ($Item.reachable) {
-                                'True' { 'Reachable' }
-                                'False' { 'Unreachable' }
-                                default { $Item.reachable }
-                            }
+                            'Status' = ($Item.reachable -eq $True) ? 'Reachable': 'Unreachable'
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Replication.Mediator) {
-                    $ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable" } | Set-Style -Style Critical -Property 'Status'
+                    $ReplicaObj | Where-Object { $_.'Status' -eq 'Unreachable' } | Set-Style -Style Critical -Property 'Status'
                 }
 
                 $TableParams = @{
@@ -57,12 +53,12 @@ function Get-AbrOntapRepMediator {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ReplicaObj | Table @TableParams
-                if ($Healthcheck.Replication.Mediator -and ($ReplicaObj | Where-Object { $_.'Status' -eq "Unreachable" })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                if ($Healthcheck.Replication.Mediator -and ($ReplicaObj | Where-Object { $_.'Status' -eq 'Unreachable' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all SnapMirror Mediator relationships are reachable to facilitate proper replication management."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all SnapMirror Mediator relationships are reachable to facilitate proper replication management.'
                     }
                     BlankLine
                 }

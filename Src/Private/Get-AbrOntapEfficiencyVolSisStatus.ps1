@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapEfficiencyVolSisStatus {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Volume Deduplication information."
+        Write-PScriboMessage 'Collecting ONTAP Volume Deduplication information.'
     }
 
     process {
@@ -33,19 +33,14 @@ function Get-AbrOntapEfficiencyVolSisStatus {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $Volume = $Item.Path.split('/')
                         $inObj = [ordered] @{
-                            'Volume' = $Volume[2]
-                            'State' = switch ($Item.State) {
-                                'enabled' { 'Enabled' }
-                                'disabled' { 'Disabled' }
-                                default { $Item.State }
-                            }
+                            'Volume' = ($Item.Path.split('/'))[2] ?? '--'
+                            'State' = ($Item.State -eq 'enabled') ? 'Enabled': 'Disabled'
                             'Status' = $Item.Status
-                            'Schedule Or Policy' = ConvertTo-EmptyToFiller $Item.ScheduleOrPolicy
-                            'Progress' = ConvertTo-EmptyToFiller $Item.Progress
+                            'Schedule Or Policy' = $Item.ScheduleOrPolicy
+                            'Progress' = $Item.Progress
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -64,11 +59,11 @@ function Get-AbrOntapEfficiencyVolSisStatus {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Storage.Efficiency -and ($OutObj | Where-Object { $_.'State' -like 'Disabled' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that volume deduplication is enabled on volumes where data reduction is beneficial to optimize storage efficiency."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that volume deduplication is enabled on volumes where data reduction is beneficial to optimize storage efficiency.'
                     }
                     BlankLine
                 }

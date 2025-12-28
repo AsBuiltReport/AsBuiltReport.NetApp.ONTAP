@@ -5,7 +5,7 @@ function Get-AbrOntapRepVserverPeer {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepVserverPeer {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Peer information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Peer information.'
     }
 
     process {
@@ -36,7 +36,7 @@ function Get-AbrOntapRepVserverPeer {
                             'Applications' = $Item.Applications
                             'Peer State' = $Item.PeerState
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -55,10 +55,10 @@ function Get-AbrOntapRepVserverPeer {
                 }
                 $ReplicaObj | Table @TableParams
                 if ($Healthcheck.Replication.VserverPeer -and ($ReplicaObj | Where-Object { $_.'Peer State' -notlike 'peered' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all Vserver Peer relationships are in 'peered' state to maintain proper data replication."
                     }
                     BlankLine

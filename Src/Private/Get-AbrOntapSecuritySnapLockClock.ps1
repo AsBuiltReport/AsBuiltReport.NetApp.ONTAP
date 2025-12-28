@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockClock {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockClock {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Snaplock compliance clock information."
+        Write-PScriboMessage 'Collecting ONTAP Security Snaplock compliance clock information.'
     }
 
     process {
@@ -32,12 +32,12 @@ function Get-AbrOntapSecuritySnapLockClock {
                         $SnapLockClock = Get-NcSnaplockComplianceClock $Item.Node -Controller $Array
                         $inObj = [ordered] @{
                             'Node Name' = $Item.Node
-                            'Compliance Clock' = Switch ($SnapLockClock.FormattedSnaplockComplianceClock) {
+                            'Compliance Clock' = switch (($SnapLockClock).FormattedSnaplockComplianceClock) {
                                 $Null { 'Uninitialized' }
                                 default { $SnapLockClock.FormattedSnaplockComplianceClock }
                             }
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

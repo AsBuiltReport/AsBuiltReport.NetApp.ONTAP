@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityUser {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapSecurityUser {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Local Users information."
+        Write-PScriboMessage 'Collecting ONTAP Security Local Users information.'
     }
 
     process {
@@ -38,15 +38,15 @@ function Get-AbrOntapSecurityUser {
                             'Application' = $TextInfo.ToTitleCase($Item.Application)
                             'Auth Method' = $Item.AuthMethod
                             'Role Name' = $Item.RoleName
-                            'Locked' = ConvertTo-TextYN $Item.IsLocked
+                            'Locked' = $Item.IsLocked
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Security.Users) {
-                    $OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne "vsadmin" } | Set-Style -Style Warning -Property 'Locked'
+                    $OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne 'vsadmin' } | Set-Style -Style Warning -Property 'Locked'
                 }
 
                 $TableParams = @{
@@ -58,12 +58,12 @@ function Get-AbrOntapSecurityUser {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
-                if ($Healthcheck.Security.Users -and ($OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne "vsadmin" })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                if ($Healthcheck.Security.Users -and ($OutObj | Where-Object { $_.'Locked' -eq 'Yes' -and $_.'User Name' -ne 'vsadmin' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that local users are not locked out to maintain proper access to the system. Review locked users and unlock them if necessary."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that local users are not locked out to maintain proper access to the system. Review locked users and unlock them if necessary.'
                     }
                     BlankLine
                 }

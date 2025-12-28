@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,12 +23,12 @@ function Get-AbrOntapVserverSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver information.'
     }
 
     process {
         try {
-            $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq "data" }
+            $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' }
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
@@ -40,7 +40,7 @@ function Get-AbrOntapVserverSummary {
                             'IPSpace' = $Item.Ipspace
                             'Status' = $Item.State
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -59,10 +59,10 @@ function Get-AbrOntapVserverSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'stopped' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all Vservers are in 'running' status to provide uninterrupted services."
                     }
                     BlankLine
@@ -78,13 +78,13 @@ function Get-AbrOntapVserverSummary {
                                 $inObj = [ordered] @{
                                     'Root Volume' = $Item.Name
                                     'Status' = $Item.State
-                                    'Total Size' = $Item.Totalsize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
-                                    'Available' = $Item.Available | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    'Dedup' = ConvertTo-TextYN $Item.Dedupe
+                                    'Total Size' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                                    'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Dedup' = $Item.Dedupe
                                     'Aggregate' = $Item.Aggregate
                                 }
-                                $VserverObj += [pscustomobject]$inobj
+                                $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
@@ -109,7 +109,7 @@ function Get-AbrOntapVserverSummary {
                 Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                if (Get-NcVserverAggr) {
+                if (Get-NcVserverAggr -VserverContext $Vserver) {
                     Section -Style Heading4 'Aggregate Resource Allocation' {
                         $VserverAGGR = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
                         $VserverObj = @()
@@ -120,9 +120,9 @@ function Get-AbrOntapVserverSummary {
                                         'Aggregate' = $Item.AggregateName
                                         'Type' = $Item.AggregateType
                                         'SnapLock Type' = $Item.SnaplockType
-                                        'Available' = $Item.AvailableSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                        'Available' = ($Item.AvailableSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                     }
-                                    $VserverObj += [pscustomobject]$inobj
+                                    $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }

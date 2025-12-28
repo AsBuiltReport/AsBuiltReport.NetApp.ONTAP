@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityKMS {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityKMS {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Key Management Service information."
+        Write-PScriboMessage 'Collecting ONTAP Security Key Management Service information.'
     }
 
     process {
@@ -34,7 +34,7 @@ function Get-AbrOntapSecurityKMS {
                             'Key Store' = $TextInfo.ToTitleCase($Item.KeyStore)
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpAdapter {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapVserverFcpAdapter {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP adapter information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver FCP adapter information.'
     }
 
     process {
@@ -34,13 +34,9 @@ function Get-AbrOntapVserverFcpAdapter {
                             'Adapter' = $Item.Adapter
                             'Protocol' = $Item.PhysicalProtocol
                             'Speed' = $Item.Speed
-                            'Status' = switch ($Item.State) {
-                                'online' { 'Up' }
-                                'offline' { 'Down' }
-                                default { $Item.State }
-                            }
+                            'Status' = ($Item.State -eq 'online') ? 'Up': 'Down'
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -59,11 +55,11 @@ function Get-AbrOntapVserverFcpAdapter {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all FCP adapters are operational to maintain optimal storage connectivity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all FCP adapters are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

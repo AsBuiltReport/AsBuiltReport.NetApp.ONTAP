@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,12 +23,12 @@ function Get-AbrOntapVserverVolumesFlexgroup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver flexgroup volumes information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver flexgroup volumes information.'
     }
 
     process {
         try {
-            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq "True" }
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq 'True' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -36,9 +36,9 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Status' = $Item.State
-                            'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -57,10 +57,10 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($OutObj | Where-Object { $_.'Status' -like 'offline' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all flexgroup volumes are in 'online' status to maintain data availability."
                     }
                     BlankLine

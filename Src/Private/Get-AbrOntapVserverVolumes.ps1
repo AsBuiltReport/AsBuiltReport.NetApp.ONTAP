@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolume {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolume {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes information.'
     }
 
     process {
@@ -36,12 +36,12 @@ function Get-AbrOntapVserverVolume {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Status' = $Item.State
-                            'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue) ?? '--'
                             'Aggregate' = $Item.Aggregate
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -61,10 +61,10 @@ function Get-AbrOntapVserverVolume {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'offline' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure all volumes are in 'online' status and monitor volume usage to prevent capacity issues."
                     }
                     BlankLine

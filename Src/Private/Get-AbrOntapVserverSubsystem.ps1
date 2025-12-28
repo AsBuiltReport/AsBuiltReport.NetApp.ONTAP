@@ -5,7 +5,7 @@ function Get-AbrOntapVserverSubsystem {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverSubsystem {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Subsystem information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Subsystem information.'
     }
 
     process {
@@ -48,12 +48,9 @@ function Get-AbrOntapVserverSubsystem {
                             'Type' = $Item.Ostype
                             'Target NQN' = $Item.TargetNqn
                             'Host NQN' = $Item.Hosts.Nqn
-                            'Mapped Namespace' = switch (($MappedNamespace).count) {
-                                0 { "None" }
-                                default { $MappedNamespace }
-                            }
+                            'Mapped Namespace' = (($MappedNamespace).count -eq 0) ? 'None': $MappedNamespaces
                         }
-                        $VserverObj = [pscustomobject]$inobj
+                        $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
                         if ($Healthcheck.Vserver.Status) {
                             $VserverObj | Where-Object { ($_.'Mapped Namespace').count -eq 0 } | Set-Style -Style Warning -Property 'Mapped Namespace'
                         }
@@ -68,11 +65,11 @@ function Get-AbrOntapVserverSubsystem {
                         }
                         $VserverObj | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { ($_.'Mapped Namespace').count -eq 0 })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure all subsystems have mapped namespaces to guarantee proper functionality and performance."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure all subsystems have mapped namespaces to guarantee proper functionality and performance.'
                             }
                             BlankLine
                         }

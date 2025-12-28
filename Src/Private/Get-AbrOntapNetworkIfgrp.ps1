@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIfgrp {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkIfgrp {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP physical aggregata interface information."
+        Write-PScriboMessage 'Collecting ONTAP physical aggregata interface information.'
     }
 
     process {
@@ -33,25 +33,22 @@ function Get-AbrOntapNetworkIfgrp {
             if ($IFGRPPorts) {
                 foreach ($Nics in $IFGRPPorts) {
                     try {
-                        if ($Nics.DownPorts) {
-                            $UPPort = "$($Nics.UpPorts) $($Nics.DownPorts)(Down)"
-                        } else { $UPPort = [String]$Nics.UpPorts }
                         $inObj = [ordered] @{
                             'Port Name' = $Nics.IfgrpName
                             'Distribution Function' = $Nics.DistributionFunction
                             'Mode' = $Nics.Mode
-                            'Port' = $UPPort
+                            'Port' = ($Null -eq $Nics.DownPorts) ? [String]$Nics.UpPorts: "$($Nics.UpPorts) - {$($Nics.DownPorts)}(Down)"
                             'Mac Address' = $Nics.MacAddress
                             'Port Participation' = $Nics.PortParticipation
                         }
-                        $AggregatePorts += [pscustomobject]$inobj
+                        $AggregatePorts += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Network.Port) {
-                    $AggregatePorts | Where-Object { $_.'Port' -match "Down" } | Set-Style -Style Warning -Property 'Port'
-                    $AggregatePorts | Where-Object { $_.'Port Participation' -ne "full" } | Set-Style -Style Warning -Property 'Port Participation'
+                    $AggregatePorts | Where-Object { $_.'Port' -match 'Down' } | Set-Style -Style Warning -Property 'Port'
+                    $AggregatePorts | Where-Object { $_.'Port Participation' -ne 'full' } | Set-Style -Style Warning -Property 'Port Participation'
                 }
 
 
@@ -64,12 +61,12 @@ function Get-AbrOntapNetworkIfgrp {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $AggregatePorts | Table @TableParams
-                if ($Healthcheck.Network.Port -and ($AggregatePorts | Where-Object { $_.'Port Participation' -ne "full" })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                if ($Healthcheck.Network.Port -and ($AggregatePorts | Where-Object { $_.'Port Participation' -ne 'full' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all ports in the interface group are active and participating fully to maintain optimal network performance and redundancy."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all ports in the interface group are active and participating fully to maintain optimal network performance and redundancy.'
                     }
                     BlankLine
                 }

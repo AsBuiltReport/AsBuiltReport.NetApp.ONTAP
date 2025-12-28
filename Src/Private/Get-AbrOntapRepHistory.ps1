@@ -5,7 +5,7 @@ function Get-AbrOntapRepHistory {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepHistory {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP SnapMirror replication history information."
+        Write-PScriboMessage 'Collecting ONTAP SnapMirror replication history information.'
     }
 
     process {
@@ -36,7 +36,7 @@ function Get-AbrOntapRepHistory {
                             'Result' = $Item.Result
                             'Start' = $Item.Start
                         }
-                        $ReplicaObj += [pscustomobject]$inobj
+                        $ReplicaObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -55,11 +55,11 @@ function Get-AbrOntapRepHistory {
                 }
                 $ReplicaObj | Table @TableParams
                 if ($Healthcheck.Replication.History -and ($ReplicaObj | Where-Object { $_.'Result' -ne 'success' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all SnapMirror replication operations complete successfully to maintain data integrity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all SnapMirror replication operations complete successfully to maintain data integrity.'
                     }
                     BlankLine
                 }

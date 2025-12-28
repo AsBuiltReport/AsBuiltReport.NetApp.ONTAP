@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigWebStatus {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigWebStatus {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System Web Service information."
+        Write-PScriboMessage 'Collecting ONTAP System Web Service information.'
     }
 
     process {
@@ -31,14 +31,14 @@ function Get-AbrOntapSysConfigWebStatus {
                     try {
                         $inObj = [ordered] @{
                             'Node' = $Item.Node
-                            'Http Enabled' = ConvertTo-TextYN $Item.HttpEnabled
+                            'Http Enabled' = $Item.HttpEnabled
                             'Http Port' = $Item.HttpPort
                             'Https Port' = $Item.HttpsPort
-                            'External' = ConvertTo-TextYN $Item.External
+                            'External' = $Item.External
                             'Status' = $TextInfo.ToTitleCase($Item.Status)
                             'Status Code' = $Item.StatusCode
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -59,11 +59,11 @@ function Get-AbrOntapSysConfigWebStatus {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.System.Web -and (($OutObj | Where-Object { $_.'Http Enabled' -eq 'Yes' }))) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "It is recommended to enable HTTPS and disable HTTP on all nodes to ensure secure communication with the cluster management interface."
+                        Text 'Best Practice:' -Bold
+                        Text 'It is recommended to enable HTTPS and disable HTTP on all nodes to ensure secure communication with the cluster management interface.'
                     }
                     BlankLine
                 }

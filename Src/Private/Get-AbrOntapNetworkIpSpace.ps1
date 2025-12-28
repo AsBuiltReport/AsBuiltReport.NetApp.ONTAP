@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkIpSpace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkIpSpace {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP IPSpace information."
+        Write-PScriboMessage 'Collecting ONTAP IPSpace information.'
     }
 
     process {
@@ -35,7 +35,7 @@ function Get-AbrOntapNetworkIpSpace {
                             'Ports' = $Item.Ports -join '; '
                             'Broadcast Domains' = $Item.BroadcastDomains -join '; '
                         }
-                        $IPSpaceObj = [pscustomobject]$inobj
+                        $IPSpaceObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         $TableParams = @{
                             Name = "Network IPSpace - $($Item.Ipspace)"

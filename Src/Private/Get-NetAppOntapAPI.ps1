@@ -5,7 +5,7 @@ function Get-NetAppOntapAPI {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Tim Carman
         Editor:         Jonathan Colon
         Twitter:        @jcolonfzenpr
@@ -26,7 +26,7 @@ function Get-NetAppOntapAPI {
     )
 
     begin {
-        $certCallback = @"
+        $certCallback = @'
         using System;
         using System.Net;
         using System.Net.Security;
@@ -51,23 +51,23 @@ function Get-NetAppOntapAPI {
                 }
             }
         }
-"@
+'@
         if ($PSVersionTable.PSEdition -ne 'Core') {
             #region Workaround for SelfSigned Cert an force TLS 1.2
             if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
                 Add-Type $certCallback
             }
             [ServerCertificateValidationCallback]::Ignore()
-            [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+            [Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls'
             #endregion Workaround for SelfSigned Cert an force TLS 1.2
         }
 
         $username = $Credential.UserName
         $password = $Credential.GetNetworkCredential().Password
-        $auth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($username + ":" + $password ))
+        $auth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($username + ':' + $password ))
         $ClusterIP = $ClusterInfo.NcController.Address.IPAddressToString
         #$fields = 'fields=*&return_records=true&return_timeout=15'
-        $api = "https://" + $($ClusterIP)
+        $api = 'https://' + $($ClusterIP)
         $headers = @{
             'Accept' = 'application/json'
             'Authorization' = "Basic $auth"

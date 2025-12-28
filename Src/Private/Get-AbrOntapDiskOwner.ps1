@@ -5,7 +5,7 @@ function Get-AbrOntapDiskOwner {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -24,7 +24,7 @@ function Get-AbrOntapDiskOwner {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk owned per node information."
+        Write-PScriboMessage 'Collecting ONTAP disk owned per node information.'
     }
 
     process {
@@ -32,8 +32,7 @@ function Get-AbrOntapDiskOwner {
             if ($Node) {
                 $DiskSummary = foreach ($Owner in $Node) {
                     try {
-                        $DiskOwner = Get-NcDiskOwner -Node $Owner -Controller $Array
-                        foreach ($Disk in $DiskOwner) {
+                        foreach ($Disk in (Get-NcDiskOwner -Node $Owner -Controller $Array)) {
                             [PSCustomObject] @{
                                 'Disk' = $Disk.Name
                                 'Owner Id' = $Disk.OwnerId

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP NVME Non Mapped Namespace information."
+        Write-PScriboMessage 'Collecting ONTAP NVME Non Mapped Namespace information.'
     }
 
     process {
@@ -33,15 +33,14 @@ function Get-AbrOntapVserverNonMappedNamespace {
             if ($NamespaceFilter) {
                 foreach ($Item in $NamespaceFilter) {
                     try {
-                        $namespacename = (($Item.Path).split('/'))[3]
                         $inObj = [ordered] @{
                             'Volume Name' = $Item.Volume
-                            'Lun Name' = $namespacename
+                            'Namespace Name' = ($Item.Path).split('/')[3]
                             'Type' = $Item.Ostype
-                            'Mapped' = "No"
+                            'Mapped' = 'No'
                             'State' = $Item.State
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -60,11 +59,11 @@ function Get-AbrOntapVserverNonMappedNamespace {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Vserver.Status -and ($OutObj)) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Review non-mapped Namespaces to determine if they are still required or can be removed to optimize storage resources."
+                        Text 'Best Practice:' -Bold
+                        Text 'Review non-mapped Namespaces to determine if they are still required or can be removed to optimize storage resources.'
                     }
                     BlankLine
                 }

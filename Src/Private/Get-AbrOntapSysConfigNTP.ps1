@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigNTP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSysConfigNTP {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System NTP information."
+        Write-PScriboMessage 'Collecting ONTAP System NTP information.'
     }
 
     process {
@@ -32,13 +32,17 @@ function Get-AbrOntapSysConfigNTP {
                         $inObj = [ordered] @{
                             'Server Name' = $Item.ServerName
                             'NTP Version' = $TextInfo.ToTitleCase($Item.Version)
-                            'Preferred' = ConvertTo-TextYN $Item.IsPreferred
-                            'Authentication Enabled' = ConvertTo-TextYN $Item.IsAuthenticationEnabled
+                            'Preferred' = $Item.IsPreferred
+                            'Authentication Enabled' = $Item.IsAuthenticationEnabled
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
+                }
+
+                if ($Healthcheck.System.NTP -and $OutObj.Count -eq 1) {
+                    $OutObj | Set-Style -Style Warning
                 }
 
                 $TableParams = @{
@@ -50,6 +54,15 @@ function Get-AbrOntapSysConfigNTP {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $OutObj | Table @TableParams
+                if ($Healthcheck.System.NTP -and ($OutObj.Count -eq 1)) {
+                    Paragraph 'Health Check:' -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text 'Best Practice:' -Bold
+                        Text 'It is recommended to configure multiple NTP servers for redundancy and reliability.'
+                    }
+                    BlankLine
+                }
             } else {
                 $inObj = [ordered] @{
                     'Server Name' = 'No NTP Servers Configured'
@@ -57,7 +70,7 @@ function Get-AbrOntapSysConfigNTP {
                     'Preferred' = 'N/A'
                     'Authentication Enabled' = 'N/A'
                 }
-                $OutObj = [pscustomobject]$inObj
+                $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                 if ($Healthcheck.System.NTP) {
                     $OutObj | Set-Style -Style Warning
@@ -73,11 +86,11 @@ function Get-AbrOntapSysConfigNTP {
                 }
                 $OutObj | Table @TableParams
 
-                Paragraph "Health Check:" -Bold -Underline
+                Paragraph 'Health Check:' -Bold -Underline
                 BlankLine
                 Paragraph {
-                    Text "Best Practice:" -Bold
-                    Text "Configure at least one NTP server to ensure accurate time synchronization across the cluster."
+                    Text 'Best Practice:' -Bold
+                    Text 'Configure at least one NTP server to ensure accurate time synchronization across the cluster.'
                 }
                 BlankLine
 

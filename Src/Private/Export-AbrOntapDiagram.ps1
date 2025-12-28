@@ -5,7 +5,7 @@ function Export-AbrOntapDiagram {
     .DESCRIPTION
         Documents the configuration of NetApp Ontap in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -15,7 +15,7 @@ function Export-AbrOntapDiagram {
         https://github.com/AsBuiltReport/AsBuiltReport.NetApp.Ontap
     #>
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingCmdletAliases", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingCmdletAliases', '', Scope = 'Function')]
 
     [CmdletBinding()]
     param (
@@ -31,7 +31,7 @@ function Export-AbrOntapDiagram {
 
     process {
         if ($Options.EnableDiagrams) {
-            Write-PScriboMessage -Message "Collecting NetApp Ontap Infrastructure diagram"
+            Write-PScriboMessage -Message 'Collecting NetApp Ontap Infrastructure diagram'
 
             $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
             [System.IO.FileInfo]$IconPath = Join-Path $RootPath 'icons'
@@ -83,7 +83,7 @@ function Export-AbrOntapDiagram {
                 }
                 $DiagramParams.Add('Format', $DiagramFormat)
             } else {
-                $DiagramParams.Add('Format', "base64")
+                $DiagramParams.Add('Format', 'base64')
             }
 
             if ($Options.EnableDiagramDebug) {
@@ -100,10 +100,10 @@ function Export-AbrOntapDiagram {
 
             if ($Options.ExportDiagrams) {
                 try {
-                    Write-PScriboMessage -Message "Generating NetApp Ontap diagram"
+                    Write-PScriboMessage -Message 'Generating NetApp Ontap diagram'
                     $Graph = $DiagramObject
                     if ($Graph) {
-                        Write-PScriboMessage -Message "Saving NetApp Ontap diagram"
+                        Write-PScriboMessage -Message 'Saving NetApp Ontap diagram'
                         $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
                         if ($Diagram) {
                             foreach ($OutputFormat in $DiagramFormat) {
@@ -117,15 +117,15 @@ function Export-AbrOntapDiagram {
             }
             try {
                 $DiagramParams.Remove('Format')
-                $DiagramParams.Add('Format', "base64")
+                $DiagramParams.Add('Format', 'base64')
 
                 $Graph = $DiagramObject
                 $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
                 if ($Diagram) {
                     if ((Get-DiaImagePercent -GraphObj $Diagram).Width -gt 600) { $ImagePrty = 40 } else { $ImagePrty = 30 }
                     Section -Style Heading2 $MainDiagramLabel {
-                        Image -Base64 $Diagram -Text "NetApp Ontap Diagram" -Percent $ImagePrty -Align Center
-                        Paragraph "Image preview: Opens the image in a new tab to view it at full resolution." -Tabs 2
+                        Image -Base64 $Diagram -Text 'NetApp Ontap Diagram' -Percent $ImagePrty -Align Center
+                        Paragraph 'Image preview: Opens the image in a new tab to view it at full resolution.' -Tabs 2
                     }
                 }
             } catch {

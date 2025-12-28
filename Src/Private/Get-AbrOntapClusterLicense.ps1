@@ -5,7 +5,7 @@ function Get-AbrOntapClusterLicense {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapClusterLicense {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP cluster license information."
+        Write-PScriboMessage 'Collecting ONTAP cluster license information.'
     }
 
     process {
@@ -27,16 +27,16 @@ function Get-AbrOntapClusterLicense {
             $Nodes = Get-NcNode -Controller $Array
             foreach ($Node in $Nodes) {
                 try {
-                    Section -Style Heading3 "$Node License Usage" {
-                        $License = Get-NcLicense -Owner $Node -Controller $Array
-                        if ($License) {
+                    $License = Get-NcLicense -Owner $Node -Controller $Array
+                    if ($License) {
+                        Section -Style Heading3 "$Node License Usage" {
                             $LicenseSummary = foreach ($Licenses in $License) {
                                 $EntitlementRisk = try { Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                                 [PSCustomObject] @{
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)
                                     'Description' = $Licenses.Description
-                                    'Risk' = ConvertTo-EmptyToFiller $EntitlementRisk.Risk
+                                    'Risk' = (Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array).Risk ?? '--'
                                 }
                             }
                             if ($Healthcheck.License.RiskSummary) {
@@ -53,11 +53,11 @@ function Get-AbrOntapClusterLicense {
                             }
                             $LicenseSummary | Table @TableParams
                             if ($Healthcheck.License.RiskSummary -and ($LicenseSummary | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' -or $_.'Risk' -like 'unlicensed' }) -or ($LicenseSummary | Where-Object { $_.'Risk' -like 'High' })) {
-                                Paragraph "Health Check:" -Bold -Underline
+                                Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {
-                                    Text "Best Practice:" -Bold
-                                    Text "Review the license risk summary above. It is recommended to address any licenses with medium, high, unknown, or unlicensed risk to ensure compliance and avoid potential disruptions."
+                                    Text 'Best Practice:' -Bold
+                                    Text 'Review the license risk summary above. It is recommended to address any licenses with medium, high, unknown, or unlicensed risk to ensure compliance and avoid potential disruptions.'
                                 }
                                 BlankLine
                             }

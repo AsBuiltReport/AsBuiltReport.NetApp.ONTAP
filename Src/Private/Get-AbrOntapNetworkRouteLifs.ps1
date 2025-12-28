@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkRouteLif {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkRouteLif {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP network route per lif information."
+        Write-PScriboMessage 'Collecting ONTAP network route per lif information.'
     }
 
     process {
@@ -37,9 +37,9 @@ function Get-AbrOntapNetworkRouteLif {
                             'Destination' = $Item.Destination
                             'Gateway' = $Item.Gateway
                             'Lif Names' = $Item.LifNames
-                            'Address Family' = $Item.AddressFamily.ToString()
+                            'Address Family' = ${Item}?.AddressFamily?.ToString()
                         }
-                        $RoutesObj += [pscustomobject]$inobj
+                        $RoutesObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

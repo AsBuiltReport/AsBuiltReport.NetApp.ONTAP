@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkMgmt {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNetworkMgmt {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP network management interface information."
+        Write-PScriboMessage 'Collecting ONTAP network management interface information.'
     }
 
     process {
@@ -34,16 +34,12 @@ function Get-AbrOntapNetworkMgmt {
                                 try {
                                     $inObj = [ordered] @{
                                         'Cluster Interface' = $Item.InterfaceName
-                                        'Status' = switch ($Item.OpStatus) {
-                                            "" { "Unknown" }
-                                            $Null { "Unknown" }
-                                            default { $Item.OpStatus.ToString().ToUpper() }
-                                        }
+                                        'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                         'Data Protocols' = $Item.DataProtocols
                                         'Address' = $Item.Address
                                         'Vserver' = $Item.Vserver
                                     }
-                                    $ClusterObj += [pscustomobject]$inobj
+                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
@@ -62,11 +58,11 @@ function Get-AbrOntapNetworkMgmt {
                             }
                             $ClusterObj | Table @TableParams
                             if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
-                                Paragraph "Health Check:" -Bold -Underline
+                                Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {
-                                    Text "Best Practice:" -Bold
-                                    Text "Ensure that all cluster network interfaces are operational (UP) to maintain cluster connectivity and performance."
+                                    Text 'Best Practice:' -Bold
+                                    Text 'Ensure that all cluster network interfaces are operational (UP) to maintain cluster connectivity and performance.'
                                 }
                                 BlankLine
                             }
@@ -85,16 +81,12 @@ function Get-AbrOntapNetworkMgmt {
                             try {
                                 $inObj = [ordered] @{
                                     'MGMT Interface' = $Item.InterfaceName
-                                    'Status' = switch ($Item.OpStatus) {
-                                        "" { "Unknown" }
-                                        $Null { "Unknown" }
-                                        default { $Item.OpStatus.ToString().ToUpper() }
-                                    }
+                                    'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = $Item.DataProtocols
                                     'Address' = $Item.Address
                                     'Vserver' = $Item.Vserver
                                 }
-                                $ClusterObj += [pscustomobject]$inobj
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
@@ -113,11 +105,11 @@ function Get-AbrOntapNetworkMgmt {
                         }
                         $ClusterObj | Table @TableParams
                         if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that all management network interfaces are operational (UP) to maintain proper management access to the cluster."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all management network interfaces are operational (UP) to maintain proper management access to the cluster.'
                             }
                             BlankLine
                         }
@@ -136,16 +128,12 @@ function Get-AbrOntapNetworkMgmt {
                                 try {
                                     $inObj = [ordered] @{
                                         'Intercluster Interface' = $Item.InterfaceName
-                                        'Status' = switch ($Item.OpStatus) {
-                                            "" { "Unknown" }
-                                            $Null { "Unknown" }
-                                            default { $Item.OpStatus.ToString().ToUpper() }
-                                        }
+                                        'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                         'Data Protocols' = $Item.DataProtocols
                                         'Address' = $Item.Address
                                         'Vserver' = $Item.Vserver
                                     }
-                                    $ClusterObj += [pscustomobject]$inobj
+                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
@@ -164,11 +152,11 @@ function Get-AbrOntapNetworkMgmt {
                             }
                             $ClusterObj | Table @TableParams
                             if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
-                                Paragraph "Health Check:" -Bold -Underline
+                                Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {
-                                    Text "Best Practice:" -Bold
-                                    Text "Ensure that all intercluster network interfaces are operational (UP) to maintain cluster-to-cluster communication."
+                                    Text 'Best Practice:' -Bold
+                                    Text 'Ensure that all intercluster network interfaces are operational (UP) to maintain cluster-to-cluster communication.'
                                 }
                                 BlankLine
                             }
@@ -190,16 +178,12 @@ function Get-AbrOntapNetworkMgmt {
                                 } else { $AddressData = $Item.Address }
                                 $inObj = [ordered] @{
                                     'Data Interface' = $Item.InterfaceName
-                                    'Status' = switch ($Item.OpStatus) {
-                                        "" { "Unknown" }
-                                        $Null { "Unknown" }
-                                        default { $Item.OpStatus.ToString().ToUpper() }
-                                    }
+                                    'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = [string]$Item.DataProtocols
                                     'Address' = $AddressData
                                     'Vserver' = $Item.Vserver
                                 }
-                                $ClusterObj += [pscustomobject]$inobj
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
@@ -218,11 +202,11 @@ function Get-AbrOntapNetworkMgmt {
                         }
                         $ClusterObj | Table @TableParams
                         if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that all data network interfaces are operational (UP) to maintain optimal data access and performance."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all data network interfaces are operational (UP) to maintain optimal data access and performance.'
                             }
                             BlankLine
                         }
@@ -232,27 +216,23 @@ function Get-AbrOntapNetworkMgmt {
                 Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                if ((Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False" }) -and $Healthcheck.Network.Interface) {
+                if ((Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like 'False' }) -and $Healthcheck.Network.Interface) {
                     Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
                         Paragraph "The following table provides the LIF Home Status Information in $($ClusterInfo.ClusterName)."
                         BlankLine
-                        $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like "False" }
+                        $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like 'False' }
                         $ClusterObj = @()
                         if ($ClusterData) {
                             foreach ($Item in $ClusterData) {
                                 try {
                                     $inObj = [ordered] @{
                                         'Network Interface' = $Item.InterfaceName
-                                        'Home Port' = $Item.HomeNode + ":" + $Item.HomePort
-                                        'Current Port' = $Item.CurrentNode + ":" + $Item.CurrentPort
-                                        'IsHome' = switch ($Item.IsHome) {
-                                            "True" { 'Yes' }
-                                            "False" { "No" }
-                                            default { $Item.IsHome }
-                                        }
+                                        'Home Port' = $Item.HomeNode + ':' + $Item.HomePort
+                                        'Current Port' = $Item.CurrentNode + ':' + $Item.CurrentPort
+                                        'IsHome' = ($Item.IsHome -eq $True) ? 'Yes': 'No'
                                         'Vserver' = $Item.Vserver
                                     }
-                                    $ClusterObj += [pscustomobject]$inobj
+                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
                                     Write-PScriboMessage -IsWarning $_.Exception.Message
                                 }
@@ -271,11 +251,11 @@ function Get-AbrOntapNetworkMgmt {
                             }
                             $ClusterObj | Table @TableParams
                             if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' })) {
-                                Paragraph "Health Check:" -Bold -Underline
+                                Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {
-                                    Text "Best Practice:" -Bold
-                                    Text "Ensure that all network interfaces are on their designated home ports to maintain optimal network performance and reliability."
+                                    Text 'Best Practice:' -Bold
+                                    Text 'Ensure that all network interfaces are on their designated home ports to maintain optimal network performance and reliability.'
                                 }
                                 BlankLine
                             }

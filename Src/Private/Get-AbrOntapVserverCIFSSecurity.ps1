@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSecurity {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSSecurity {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver CIFS Security information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver CIFS Security information.'
     }
 
     process {
@@ -40,12 +40,12 @@ function Get-AbrOntapVserverCIFSSecurity {
                                     'Kerberos Clock Skew' = $SVM.KerberosClockSkew
                                     'Kerberos Renew Age' = $SVM.KerberosRenewAge
                                     'Kerberos Ticket Age' = $SVM.KerberosTicketAge
-                                    'Aes Encryption Enabled' = ConvertTo-TextYN $SVM.IsAesEncryptionEnabled
-                                    'Signing Required' = ConvertTo-TextYN $SVM.IsSigningRequired
-                                    'Smb Encryption Required' = ConvertTo-TextYN $SVM.IsSmbEncryptionRequired
+                                    'Aes Encryption Enabled' = $SVM.IsAesEncryptionEnabled
+                                    'Signing Required' = $SVM.IsSigningRequired
+                                    'Smb Encryption Required' = $SVM.IsSmbEncryptionRequired
                                     'Lm Compatibility Level' = $SVM.LmCompatibilityLevel
                                 }
-                                $VserverObj += [pscustomobject]$inobj
+                                $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } else { continue }
                         }
                     } catch {

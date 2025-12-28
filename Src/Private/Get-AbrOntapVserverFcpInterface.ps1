@@ -5,7 +5,7 @@ function Get-AbrOntapVserverFcpInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,12 +23,12 @@ function Get-AbrOntapVserverFcpInterface {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver FCP interface information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver FCP interface information.'
     }
 
     process {
         try {
-            $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array
+            $VserverData = Get-NcFcpInterface -VserverContext $Vserver -Controller $Array | Sort-Object -Property CurrentNode
             $VserverObj = @()
             if ($VserverData) {
                 foreach ($Item in $VserverData) {
@@ -36,9 +36,10 @@ function Get-AbrOntapVserverFcpInterface {
                         $inObj = [ordered] @{
                             'Interface Name' = $Item.InterfaceName
                             'FCP WWPN' = $Item.PortName
+                            'Node Name' = $Item.CurrentNode
                             'Home Port' = $Item.CurrentPort
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -47,7 +48,7 @@ function Get-AbrOntapVserverFcpInterface {
                 $TableParams = @{
                     Name = "FCP Interface - $($Vserver)"
                     List = $false
-                    ColumnWidths = 35, 35, 30
+                    ColumnWidths = 30, 30, 20, 20
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

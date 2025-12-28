@@ -5,7 +5,7 @@ function Get-AbrOntapRepRelationship {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapRepRelationship {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP SnapMirror relationship information."
+        Write-PScriboMessage 'Collecting ONTAP SnapMirror relationship information.'
     }
 
     process {
@@ -30,19 +30,15 @@ function Get-AbrOntapRepRelationship {
                 foreach ($Item in $ReplicaData) {
                     try {
                         $lag = [timespan]::fromseconds($Item.LagTime).tostring()
-                        $time = $lag.Split(".").Split(":")
-                        $lagtime = $time[0] + " days, " + $time[1] + " hrs, " + $time[2] + " mins, " + $time[0] + " secs"
+                        $time = $lag.Split('.').Split(':')
+                        $lagtime = $time[0] + ' days, ' + $time[1] + ' hrs, ' + $time[2] + ' mins, ' + $time[0] + ' secs'
                         $inObj = [ordered] @{
                             'Source Vserver' = $Item.SourceVserver
                             'Source Location' = $Item.SourceLocation
                             'Destination Vserver' = $Item.DestinationVserver
                             'Destination Location' = $Item.DestinationLocation
                             'Mirror State' = $Item.MirrorState
-                            'Schedule' = switch ([string]::IsNullOrEmpty($Item.Schedule)) {
-                                $true { "None" }
-                                $false { ($Item.Schedule).toUpper() }
-                                default { "Unknown" }
-                            }
+                            'Schedule' = ${Item}?.Schedule.toUpper()
                             'Relationship Type' = switch ($Item.RelationshipType) {
                                 'extended_data_protection' { 'XDP' }
                                 'data_protection' { 'DP' }
@@ -53,21 +49,14 @@ function Get-AbrOntapRepRelationship {
                             }
                             'Policy' = $Item.Policy
                             'Policy Type' = $Item.PolicyType
-                            'Unhealthy Reason' = switch ($Item.UnhealthyReason) {
-                                $NULL { "None" }
-                                default { $Item.UnhealthyReason }
-                            }
+                            'Unhealthy Reason' = ($Null -eq $Item.UnhealthyReason) ? 'None': $Item.UnhealthyReason
                             'Lag Time' = $lagtime
-                            'Status' = switch ([string]::IsNullOrEmpty($Item.Status)) {
-                                $true { '--' }
-                                $false { ($Item.Status).toUpper() }
-                                default { 'Unknown' }
-                            }
+                            'Status' = ${Item}?.Status.toUpper()
                         }
-                        $ReplicaObj = [pscustomobject]$inobj
+                        $ReplicaObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Replication.Relationship) {
-                            $ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne "None" } | Set-Style -Style Warning -Property 'Unhealthy Reason'
+                            $ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne 'None' } | Set-Style -Style Warning -Property 'Unhealthy Reason'
                         }
 
                         $TableParams = @{
@@ -79,12 +68,12 @@ function Get-AbrOntapRepRelationship {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
                         $ReplicaObj | Table @TableParams
-                        if ($Healthcheck.Replication.Relationship -and ($ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne "None" })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                        if ($Healthcheck.Replication.Relationship -and ($ReplicaObj | Where-Object { $_.'Unhealthy Reason' -ne 'None' })) {
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that all SnapMirror relationships are healthy to maintain data replication integrity."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all SnapMirror relationships are healthy to maintain data replication integrity.'
                             }
                             BlankLine
                         }

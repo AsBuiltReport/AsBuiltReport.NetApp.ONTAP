@@ -5,7 +5,7 @@ function Get-AbrOntapClusterASUP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapClusterASUP {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP AutoSupport information."
+        Write-PScriboMessage 'Collecting ONTAP AutoSupport information.'
     }
 
     process {
@@ -32,11 +32,11 @@ function Get-AbrOntapClusterASUP {
                         $Inobj = [ordered] @{
                             'Node Name' = $NodesAUTO.NodeName
                             'Protocol' = $NodesAUTO.Transport
-                            'Enabled' = ConvertTo-TextYN $NodesAUTO.IsEnabled
+                            'Enabled' = $NodesAUTO.IsEnabled
                             'Last Time Stamp' = $NodesAUTO.LastTimestampDT
                             'Last Subject' = $NodesAUTO.LastSubject
                         }
-                        $Outobj = [PSCustomObject]$Inobj
+                        $Outobj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         if ($Healthcheck.Cluster.AutoSupport) {
                             $Outobj | Where-Object { $_.'Enabled' -like 'No' } | Set-Style -Style Warning -Property 'Enabled'
@@ -52,11 +52,11 @@ function Get-AbrOntapClusterASUP {
                         }
                         $Outobj | Table @TableParams
                         if ($Healthcheck.Cluster.AutoSupport -and ($Outobj | Where-Object { $_.'Enabled' -like 'No' })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "AutoSupport is disabled on one or more nodes. It is recommended to enable AutoSupport to ensure proactive monitoring and issue resolution."
+                                Text 'Best Practice:' -Bold
+                                Text 'AutoSupport is disabled on one or more nodes. It is recommended to enable AutoSupport to ensure proactive monitoring and issue resolution.'
                             }
                             BlankLine
                         }

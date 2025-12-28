@@ -5,7 +5,7 @@ function Get-AbrOntapNetworkPort {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapNetworkPort {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP physical interface information."
+        Write-PScriboMessage 'Collecting ONTAP physical interface information.'
     }
 
     process {
@@ -38,11 +38,7 @@ function Get-AbrOntapNetworkPort {
                             'Mac Address' = $Nics.MacAddress
                             'MTU' = $Nics.MTU
                             'Link Status' = $TextInfo.ToTitleCase($Nics.LinkStatus)
-                            'Admin Status' = switch ($Nics.IsAdministrativeUp) {
-                                "True" { 'Up' }
-                                "False" { 'Down' }
-                                default { $Nics.IsAdministrativeUp }
-                            }
+                            'Admin Status' = $Nics.IsAdministrativeUp -eq $True ? 'Up': 'Down'
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
@@ -62,10 +58,10 @@ function Get-AbrOntapNetworkPort {
                 }
                 $PhysicalNic | Table @TableParams
                 if ($Healthcheck.Network.Port -and ($PhysicalNic | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all physical network ports with an administrative status of 'Up' also have a link status of 'Up' to maintain optimal network connectivity."
                     }
                     BlankLine

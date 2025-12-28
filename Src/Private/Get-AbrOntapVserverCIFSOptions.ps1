@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSOption {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSOption {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver CIFS Option information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver CIFS Option information.'
     }
 
     process {
@@ -33,29 +33,29 @@ function Get-AbrOntapVserverCIFSOption {
             if ($VserverData) {
                 foreach ($SVM in $VserverData) {
                     try {
-                        $CIFSSVM = Get-NcCifsOption -VserverContext $SVM.Vserver -Controller $Array
+                        $CIFSSVM = Get-NcCifsOption -VserverContext $SVM -Controller $Array
                         foreach ($Item in $CIFSSVM) {
                             try {
                                 $inObj = [ordered] @{
                                     'Client Session Timeout' = $Item.ClientSessionTimeout
                                     'Default Unix User' = $Item.DefaultUnixUser
-                                    'Client Version Reporting Enabled' = ConvertTo-TextYN $Item.IsClientVersionReportingEnabled
-                                    'Copy Offload Direct Copy Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadDirectCopyEnabled
-                                    'Copy Offload Enabled' = ConvertTo-TextYN $Item.IsCopyOffloadEnabled
-                                    'Dac Enabled' = ConvertTo-TextYN $Item.IsDacEnabled
-                                    'Export Policy Enabled' = ConvertTo-TextYN $Item.IsExportpolicyEnabled
-                                    'Large MTU Enabled' = ConvertTo-TextYN $Item.IsLargeMtuEnabled
-                                    'Local Auth Enabled' = ConvertTo-TextYN $Item.IsLocalAuthEnabled
-                                    'Local Users And Groups Enabled' = ConvertTo-TextYN $Item.IsLocalUsersAndGroupsEnabled
-                                    'Multi Channel Enabled' = ConvertTo-TextYN $Item.IsMultichannelEnabled
-                                    'Nbns Enabled' = ConvertTo-TextYN $Item.IsNbnsEnabled
-                                    'Netbios Over Tcp Enabled' = ConvertTo-TextYN $Item.IsNetbiosOverTcpEnabled
-                                    'Referral Enabled' = ConvertTo-TextYN $Item.IsReferralEnabled
-                                    'Shadow Copy Enabled' = ConvertTo-TextYN $Item.IsShadowcopyEnabled
-                                    'Smb1 Enabled' = ConvertTo-TextYN $Item.IsSmb1Enabled
-                                    'Smb2 Enabled' = ConvertTo-TextYN $Item.IsSmb2Enabled
-                                    'Smb31 Enabled' = ConvertTo-TextYN $Item.IsSmb31Enabled
-                                    'Smb3 Enabled' = ConvertTo-TextYN $Item.IsSmb3Enabled
+                                    'Client Version Reporting Enabled' = $Item.IsClientVersionReportingEnabled
+                                    'Copy Offload Direct Copy Enabled' = $Item.IsCopyOffloadDirectCopyEnabled
+                                    'Copy Offload Enabled' = $Item.IsCopyOffloadEnabled
+                                    'Dac Enabled' = $Item.IsDacEnabled
+                                    'Export Policy Enabled' = $Item.IsExportpolicyEnabled
+                                    'Large MTU Enabled' = $Item.IsLargeMtuEnabled
+                                    'Local Auth Enabled' = $Item.IsLocalAuthEnabled
+                                    'Local Users And Groups Enabled' = $Item.IsLocalUsersAndGroupsEnabled
+                                    'Multi Channel Enabled' = $Item.IsMultichannelEnabled
+                                    'Nbns Enabled' = $Item.IsNbnsEnabled
+                                    'Netbios Over Tcp Enabled' = $Item.IsNetbiosOverTcpEnabled
+                                    'Referral Enabled' = $Item.IsReferralEnabled
+                                    'Shadow Copy Enabled' = $Item.IsShadowcopyEnabled
+                                    'Smb1 Enabled' = $Item.IsSmb1Enabled
+                                    'Smb2 Enabled' = $Item.IsSmb2Enabled
+                                    'Smb31 Enabled' = $Item.IsSmb31Enabled
+                                    'Smb3 Enabled' = $Item.IsSmb3Enabled
                                     'Max Connections Per Session' = $Item.MaxConnectionsPerSession
                                     'Max Credits' = $Item.MaxCredits
                                     'Max File Write Zero Length' = $Item.MaxFileWriteZeroLength
@@ -66,7 +66,7 @@ function Get-AbrOntapVserverCIFSOption {
                                     'Shadow Copy Dir Depth' = $Item.ShadowcopyDirDepth
                                     'Smb1 Max Buffer Size' = $Item.Smb1MaxBufferSize
                                 }
-                                $VserverObj += [pscustomobject]$inobj
+                                $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }

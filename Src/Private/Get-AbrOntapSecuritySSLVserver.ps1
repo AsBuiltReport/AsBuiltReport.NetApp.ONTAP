@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySSLVserver {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySSLVserver {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Vserver SSL information."
+        Write-PScriboMessage 'Collecting ONTAP Security Vserver SSL information.'
     }
 
     process {
@@ -32,12 +32,12 @@ function Get-AbrOntapSecuritySSLVserver {
                         $inObj = [ordered] @{
                             'Common Name' = $Item.CommonName
                             'Certificate Authority' = $Item.CertificateAuthority
-                            'Client Auth' = ConvertTo-TextYN $Item.ClientAuth
-                            'Server Auth' = ConvertTo-TextYN $Item.ServerAuth
+                            'Client Auth' = $Item.ClientAuth
+                            'Server Auth' = $Item.ServerAuth
                             'Serial Number' = $Item.CertificateSerialNumber
                             'Vserver' = $Item.Vserver
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

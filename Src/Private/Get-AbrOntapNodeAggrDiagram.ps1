@@ -5,7 +5,7 @@ function Get-AbrOntapStorageAggrDiagram {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapStorageAggrDiagram {
     )
 
     begin {
-        Write-PScriboMessage "Generating Storage Aggregates Diagram for NetApp ONTAP."
+        Write-PScriboMessage 'Generating Storage Aggregates Diagram for NetApp ONTAP.'
         # Used for DiagramDebug
         if ($Options.EnableDiagramDebug) {
             $EdgeDebug = @{style = 'filled'; color = 'red' }
@@ -52,7 +52,7 @@ function Get-AbrOntapStorageAggrDiagram {
             $ClusterInfo = Get-NcCluster -Controller $Array
             $NodeSum = Get-NcNode -Controller $Array
 
-            SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = "dashed,rounded"; color = "gray" } {
+            SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray' } {
                 try {
 
                     if ($NodeSum.Count -eq 1) {
@@ -76,22 +76,22 @@ function Get-AbrOntapStorageAggrDiagram {
 
                         if ($ClusterHa.Name -notin $HAObject.Partner) {
                             $HAObject += [PSCustomObject][ordered]@{
-                                "Name" = $ClusterHa.Name
-                                "Partner" = $ClusterHa.Partner
-                                "HAState" = $ClusterHa.State
+                                'Name' = $ClusterHa.Name
+                                'Partner' = $ClusterHa.Partner
+                                'HAState' = $ClusterHa.State
                             }
                         }
 
                         $NodeAdditionalInfo += [PSCustomObject][ordered]@{
                             'NodeName' = $Node.Node
                             'AdditionalInfo' = [PSCustomObject][ordered]@{
-                                "System Id" = $Node.NodeSystemId
-                                "Serial" = $Node.NodeSerialNumber
-                                "Model" = $Node.NodeSerialNumber
-                                "Mgmt" = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
-                                    $true { "Unknown" }
+                                'System Id' = $Node.NodeSystemId
+                                'Serial' = $Node.NodeSerialNumber
+                                'Model' = $Node.NodeModel
+                                'Mgmt' = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
+                                    $true { 'Unknown' }
                                     $false { $NodeMgmtAddress }
-                                    default { "Unknown" }
+                                    default { 'Unknown' }
                                 }
                             }
                         }
@@ -99,33 +99,33 @@ function Get-AbrOntapStorageAggrDiagram {
                         $NodeAggr = Get-NcAggr | Where-Object { $_.Nodes -eq $Node.Node }
                         foreach ($Aggr in $NodeAggr) {
                             $AggrInfo += [PSCustomObject][ordered]@{
-                                "NodeName" = $Node.Node
-                                "AggregateName" = $Aggr.Name
-                                "AdditionalInfo" = [PSCustomObject][ordered]@{
-                                    "Total Size" = $Aggr.TotalSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    "Used Space" = ($Aggr.TotalSize - $Aggr.Available) | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                                    "Assigned Disk" = $Aggr.Disks
-                                    "Raid Type" = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
-                                        $true { "Unknown" }
+                                'NodeName' = $Node.Node
+                                'AggregateName' = $Aggr.Name
+                                'AdditionalInfo' = [PSCustomObject][ordered]@{
+                                    'Total Size' = $Aggr.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize -ErrorAction SilentlyContinue
+                                    'Used Space' = ($Aggr.TotalSize - $Aggr.Available) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize -ErrorAction SilentlyContinue
+                                    'Assigned Disk' = $Aggr.Disks
+                                    'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
+                                        $true { 'Unknown' }
                                         $false {
                                             & {
-                                                switch ($Aggr.RaidType.Split(", ")[0]) {
-                                                    "raid4" { "RAID 4" }
-                                                    "raid_dp" { "RAID DP" }
-                                                    "raid0" { "RAID 0" }
-                                                    "raid1" { "RAID 1" }
-                                                    "raid10" { "RAID 10" }
-                                                    default { "Unknown" }
+                                                switch ($Aggr.RaidType.Split(', ')[0]) {
+                                                    'raid4' { 'RAID 4' }
+                                                    'raid_dp' { 'RAID DP' }
+                                                    'raid0' { 'RAID 0' }
+                                                    'raid1' { 'RAID 1' }
+                                                    'raid10' { 'RAID 10' }
+                                                    default { 'Unknown' }
                                                 }
                                             }
                                         }
-                                        default { "Unknown" }
+                                        default { 'Unknown' }
                                     }
-                                    "Raid Size" = $Aggr.RaidSize
-                                    "State" = switch ([string]::IsNullOrEmpty($Aggr.State)) {
-                                        $true { "Unknown" }
+                                    'Raid Size' = $Aggr.RaidSize
+                                    'State' = switch ([string]::IsNullOrEmpty($Aggr.State)) {
+                                        $true { 'Unknown' }
                                         $false { $Aggr.State.ToUpper() }
-                                        default { "Unknown" }
+                                        default { 'Unknown' }
                                     }
                                 }
                             }
@@ -136,7 +136,7 @@ function Get-AbrOntapStorageAggrDiagram {
 
                     foreach ($Node in $NodeAdditionalInfo) {
                         $ClusterNodeObj = @()
-                        $ClusterNodeObj += Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject $Node.NodeName -Align "Center" -iconType "Ontap_Node" -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
+                        $ClusterNodeObj += Add-DiaHtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject $Node.NodeName -Align 'Center' -iconType 'Ontap_Node' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
 
                         if ($ClusterNodeObj) {
                             if ($AggrInfo.Count -eq 1) {
@@ -146,11 +146,11 @@ function Get-AbrOntapStorageAggrDiagram {
                             } else {
                                 $AggrInfoColumnSize = $AggrInfo.Count
                             }
-                            $ClusterNodeObj += Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align "Center" -iconType "Ontap_Aggregate" -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel "Aggregates" -SubgraphLabelPos "top" -SubgraphTableStyle "dashed,rounded" -TableBorderColor "#71797E" -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
+                            $ClusterNodeObj += Add-DiaHtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align 'Center' -iconType 'Ontap_Aggregate' -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel 'Aggregates' -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
                         }
 
                         if ($ClusterNodeObj) {
-                            $ClusterNodeSubgraphObj = Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label " " -LabelPos 'top' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
+                            $ClusterNodeSubgraphObj = Add-DiaHtmlSubGraph -Name 'ClusterNodeSubgraphObj' -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label ' ' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
                         }
 
                         $ClusterNodesObj += $ClusterNodeSubgraphObj
@@ -164,13 +164,13 @@ function Get-AbrOntapStorageAggrDiagram {
                         } else {
                             $ClusterNodesObjColumnSize = $ClusterNodesObj.Count
                         }
-                        $ClusterMgmtObj = Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController.Name)" -LabelPos 'down' -TableStyle "dashed,rounded" -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize $ClusterNodesObjColumnSize -FontSize 18
+                        $ClusterMgmtObj = Add-DiaHtmlSubGraph -Name 'ClusterMgmtObj' -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController.Name)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize $ClusterNodesObjColumnSize -FontSize 18
 
                         if ($ClusterMgmtObj) {
                             Node ClusterAggrs @{Label = $ClusterMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
                         } else {
-                            Write-PScriboMessage -IsWarning "Unable to create ClusterNodesObj. No Cluster Management Object found."
+                            Write-PScriboMessage -IsWarning 'Unable to create ClusterNodesObj. No Cluster Management Object found.'
                         }
                     }
                 } catch {

@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Volume Snaplock Type information."
+        Write-PScriboMessage 'Collecting ONTAP Security Volume Snaplock Type information.'
     }
 
     process {
@@ -29,13 +29,12 @@ function Get-AbrOntapSecuritySnapLockVol {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $SnapLockType = Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Aggregate' = $Item.Aggregate
-                            'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
+                            'Snaplock Type' = $TextInfo.ToTitleCase((Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes).SnaplockType)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

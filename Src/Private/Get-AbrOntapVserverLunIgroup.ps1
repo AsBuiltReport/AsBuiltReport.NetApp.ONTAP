@@ -5,7 +5,7 @@ function Get-AbrOntapVserverLunIgroup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverLunIgroup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver Igroup information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver Igroup information.'
     }
 
     process {
@@ -49,16 +49,10 @@ function Get-AbrOntapVserverLunIgroup {
                             'Type' = $Item.Type
                             'Protocol' = $Item.Protocol
                             'Initiators' = $Item.Initiators.InitiatorName
-                            'Mapped Lun' = switch (($MappedLun).count) {
-                                0 { "None" }
-                                default { $MappedLun }
-                            }
-                            'Reporting Nodes' = switch (($reportingnodes).count) {
-                                0 { "None" }
-                                default { $reportingnodes }
-                            }
+                            'Mapped Lun' = (($MappedLun).count -eq 0) ? 'None': $MappedLun
+                            'Reporting Nodes' = (($reportingnodes).count) ? 'None': $reportingnodes
                         }
-                        $VserverObj = [pscustomobject]$inobj
+                        $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)
                         if ($Healthcheck.Vserver.Status) {
                             $VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 } | Set-Style -Style Warning -Property 'Reporting Nodes'
                         }
@@ -73,11 +67,11 @@ function Get-AbrOntapVserverLunIgroup {
                         }
                         $VserverObj | Table @TableParams
                         if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { ($_.'Reporting Nodes').count -gt 2 })) {
-                            Paragraph "Health Check:" -Bold -Underline
+                            Paragraph 'Health Check:' -Bold -Underline
                             BlankLine
                             Paragraph {
-                                Text "Best Practice:" -Bold
-                                Text "Ensure that igroups have an optimal number of reporting nodes to maintain performance and reliability."
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that igroups have an optimal number of reporting nodes to maintain performance and reliability.'
                             }
                             BlankLine
                         }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiInterface {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiInterface {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI interface information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI interface information.'
     }
 
     process {
@@ -37,13 +37,9 @@ function Get-AbrOntapVserverIscsiInterface {
                             'Interface Name' = $Item.InterfaceName
                             'IP Address' = $Item.IpAddress
                             'Port' = $Item.IpPort
-                            'Status' = switch ($Item.IsInterfaceEnabled) {
-                                'True' { 'Up' }
-                                'False' { 'Down' }
-                                default { $Item.IsInterfaceEnabled }
-                            }
+                            'Status' = ($Item.IsInterfaceEnabled -eq $true) ? 'Up': 'Down'
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -62,11 +58,11 @@ function Get-AbrOntapVserverIscsiInterface {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.Iscsi -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all ISCSI interfaces are operational to maintain optimal storage connectivity."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all ISCSI interfaces are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

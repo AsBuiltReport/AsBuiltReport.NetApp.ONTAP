@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSLGMember {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSLGMember {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Local Group Members information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Local Group Members information.'
     }
 
     process {
@@ -37,7 +37,7 @@ function Get-AbrOntapVserverCIFSLGMember {
                             'Group Name' = $Item.GroupName
                             'Description' = $Item.Member
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

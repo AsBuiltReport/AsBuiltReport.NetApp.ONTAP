@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSSession {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSSession {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Session information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Session information.'
     }
 
     process {
@@ -40,7 +40,7 @@ function Get-AbrOntapVserverCIFSSession {
                             'Address' = $Item.Address
                             'User' = $Item.WindowsUser
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

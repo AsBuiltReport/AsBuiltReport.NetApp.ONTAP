@@ -5,7 +5,7 @@ function Get-AbrOntapDiskShelf {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapDiskShelf {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP disk shelf information."
+        Write-PScriboMessage 'Collecting ONTAP disk shelf information.'
     }
 
     process {
@@ -59,11 +59,11 @@ function Get-AbrOntapDiskShelf {
                 }
                 $ShelfInventory | Table @TableParams
                 if ($Healthcheck.Storage.ShelfStatus -and ($ShelfInventory | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure all disk shelves are online and operational. Investigate any shelves marked as offline or missing."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure all disk shelves are online and operational. Investigate any shelves marked as offline or missing.'
                     }
                     BlankLine
                 }

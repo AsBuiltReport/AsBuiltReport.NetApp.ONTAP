@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityNAE {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecurityNAE {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Aggregate NAE information."
+        Write-PScriboMessage 'Collecting ONTAP Security Aggregate NAE information.'
     }
 
     process {
@@ -29,19 +29,14 @@ function Get-AbrOntapSecurityNAE {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $NAE = try { (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq "encrypt_with_aggr_key" }).Value } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
+                        $NAE = try { (Get-NcAggrOption -Name $Item.Name -Controller $Array | Where-Object { $_.Name -eq 'encrypt_with_aggr_key' }).Value } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
-                            'Aggregate Encryption' = switch ($NAE) {
-                                'true' { 'Yes' }
-                                'false' { 'No' }
-                                $Null { 'Unknown' }
-                                default { $NAE }
-                            }
+                            'Aggregate Encryption' = $NAE
                             'Volume Count' = $Item.Volumes
                             'State' = $TextInfo.ToTitleCase($Item.State)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -60,10 +55,10 @@ function Get-AbrOntapSecurityNAE {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Storage.Aggr -and ($OutObj | Where-Object { $_.'State' -ne 'Online' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
+                        Text 'Best Practice:' -Bold
                         Text "Ensure that all Aggregates are in 'Online' state to maintain optimal storage performance and client access availability."
                     }
                     BlankLine

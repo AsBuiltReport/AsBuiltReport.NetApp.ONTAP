@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,17 +23,17 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes snapshot healthcheck information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes snapshot healthcheck information.'
     }
 
     process {
         try {
-            $SnapshotDays = 7
+            $SnapshotDays = 30
             $Now = Get-Date
             $VserverFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
-            $SnapShotData = Get-NcSnapshot -Volume $VserverFilter -Vserver $Vserver -Controller $Array | Where-Object { $_.Name -notmatch "snapmirror.*" -and $_.Created -le $Now.AddDays(-$SnapshotDays) }
+            $SnapShotData = Get-NcSnapshot -Volume $VserverFilter -Vserver $Vserver -Controller $Array | Where-Object { $_.Name -notmatch 'snapmirror.*' -and $_.Created -le $Now.AddDays(-$SnapshotDays) }
             if ($SnapShotData) {
-                Section -Style Heading4 "HealthCheck - Volumes Snapshot" {
+                Section -Style Heading4 'HealthCheck - Volumes Snapshot' {
                     Paragraph "The following section provides the Vserver Volumes Snapshot HealthCheck in $($SVM)."
                     BlankLine
                     $VserverObj = @()
@@ -43,16 +43,16 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                                 'Volume Name' = $Item.Volume
                                 'Snapshot Name' = $Item.Name
                                 'Created Time' = $Item.Created
-                                'Used' = $Item.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                                'Used' = ($Item.Total | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             }
-                            $VserverObj += [pscustomobject]$inobj
+                            $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {
                             Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
                     }
 
                     $TableParams = @{
-                        Name = "HealthCheck - Volume Snapshot over 7 days - $($Vserver)"
+                        Name = "HealthCheck - Volume Snapshot over $($SnapshotDays) days - $($Vserver)"
                         List = $false
                         ColumnWidths = 25, 35, 25, 15
                     }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSDC {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSDC {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Domain Controller Properties information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Domain Controller Properties information.'
     }
 
     process {
@@ -41,7 +41,7 @@ function Get-AbrOntapVserverCIFSDC {
                             'Prefer Type' = $Item.PreferType
                             'Status' = $Item.Status
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

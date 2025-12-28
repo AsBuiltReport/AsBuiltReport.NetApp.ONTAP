@@ -5,7 +5,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver volumes snapshot information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes snapshot information.'
     }
 
     process {
@@ -37,20 +37,20 @@ function Get-AbrOntapVserverVolumeSnapshot {
                         $SnapPolicy = Get-NcVol $Item.Name -VserverContext $Vserver -Controller $Array | Select-Object -ExpandProperty VolumeSnapshotAttributes
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Snapshot Enabled' = ConvertTo-TextYN $SnapPolicy.AutoSnapshotsEnabled
-                            'Reserve Size' = $SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Reserve Available' = $SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Used' = $SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            'Snapshot Enabled' = $SnapPolicy.AutoSnapshotsEnabled
+                            'Reserve Size' = ($SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Reserve Available' = ($SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Policy' = $SnapPolicy.SnapshotPolicy
                         }
 
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Vserver.Snapshot) {
-                    $VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and $_.'Reserve Available' -eq 0 } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
+                    $VserverObj | Where-Object { $_.'Used'.split()[0] -gt $_.'Reserve Size'.split()[0] } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
                 }
 
                 $TableParams = @{
@@ -63,12 +63,12 @@ function Get-AbrOntapVserverVolumeSnapshot {
                 }
                 if ($VserverObj) {
                     $VserverObj | Table @TableParams
-                    if ($Healthcheck.Vserver.Snapshot -and ($VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and $_.'Reserve Available' -eq 0 })) {
-                        Paragraph "Health Check:" -Bold -Underline
+                    if ($Healthcheck.Vserver.Snapshot -and ($VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and ($_.'Used'.split()[0] -gt $_.'Reserve Size'.split()[0]) })) {
+                        Paragraph 'Health Check:' -Bold -Underline
                         BlankLine
                         Paragraph {
-                            Text "Best Practice:" -Bold
-                            Text "Snapshots are enabled on volumes but there is no available snapshot reserve space. It is recommended to increase the snapshot reserve size to avoid snapshot failures."
+                            Text 'Best Practice:' -Bold
+                            Text 'Snapshots are enabled on volumes but there is no available snapshot reserve space. It is recommended to increase the snapshot reserve size to avoid snapshot failures.'
                         }
                         BlankLine
                     }

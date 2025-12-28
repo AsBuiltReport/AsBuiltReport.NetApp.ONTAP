@@ -5,7 +5,7 @@ function Get-AbrOntapEfficiencyVol {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.8
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,12 +23,12 @@ function Get-AbrOntapEfficiencyVol {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Volume Efficiency Savings information."
+        Write-PScriboMessage 'Collecting ONTAP Volume Efficiency Savings information.'
     }
 
     process {
         try {
-            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq "online" }
+            $Data = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.State -eq 'online' }
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
@@ -36,14 +36,14 @@ function Get-AbrOntapEfficiencyVol {
                         $Saving = Get-NcEfficiency -Volume $Item.Name -Vserver $Vserver -Controller $Array
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Capacity' = $Saving.Capacity | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Used' = $Saving.Used | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Snapshot Used' = $Saving.SnapshotUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Total Savings' = $Saving.Returns.Total | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Effective Used' = $Saving.EffectiveUsed | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
-                            'Efficiency Percent' = $Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString "0.0" -ErrorAction SilentlyContinue
+                            'Capacity' = ($Saving.Capacity | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Saving.Used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Snapshot Used' = ($Saving.SnapshotUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Total Savings' = ($Saving.Returns.Total | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Effective Used' = ($Saving.EffectiveUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Efficiency Percent' = ($Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString 0.0) ?? '--'
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

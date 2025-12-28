@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityMAP {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,30 +19,22 @@ function Get-AbrOntapSecurityMAP {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Vserver Multi-Admin Approval information."
+        Write-PScriboMessage 'Collecting ONTAP Security Vserver Multi-Admin Approval information.'
     }
 
     process {
         try {
-            $Data = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/approval-groups?fields=**&return_records=true&return_timeout=15"
+            $Data = Get-NetAppOntapAPI -uri '/api/security/multi-admin-verify/approval-groups?fields=**&return_records=true&return_timeout=15'
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Approvers' = Switch ([string]::IsNullOrEmpty($Item.Approvers)) {
-                                $true { '-' }
-                                $false { $Item.Approvers -join ', ' }
-                                default { '-' }
-                            }
-                            'Email' = Switch ([string]::IsNullOrEmpty($Item.Email)) {
-                                $true { '-' }
-                                $false { $Item.Email -join ', ' }
-                                default { '-' }
-                            }
+                            'Approvers' = $Item.Approvers -join ', '
+                            'Email' = $Item.Email -join ', '
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

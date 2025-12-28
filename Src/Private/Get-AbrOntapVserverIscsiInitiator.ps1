@@ -5,7 +5,7 @@ function Get-AbrOntapVserverIscsiInitiator {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiInitiator {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver ISCSI Client Initiators information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI Client Initiators information.'
     }
 
     process {
@@ -37,7 +37,7 @@ function Get-AbrOntapVserverIscsiInitiator {
                             'Initiator Name' = $Item.InitiatorNodeName
                             'Target Port Group' = $Item.TpGroupName
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

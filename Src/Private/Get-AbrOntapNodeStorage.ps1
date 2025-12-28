@@ -5,7 +5,7 @@ function Get-AbrOntapNodeStorage {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapNodeStorage {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Node Storage information."
+        Write-PScriboMessage 'Collecting ONTAP Node Storage information.'
     }
 
     process {
@@ -33,11 +33,11 @@ function Get-AbrOntapNodeStorage {
                             'Node' = $Item.Vserver
                             'Aggregate' = $Item.Aggregate
                             'Volume' = $Item.Name
-                            'Capacity' = $Item.Totalsize | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Available' = $Item.Available | ConvertTo-FormattedNumber -Type DataSize -ErrorAction SilentlyContinue
-                            'Used' = $Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -57,11 +57,11 @@ function Get-AbrOntapNodeStorage {
                 }
                 $OutObj | Table @TableParams
                 if ($Healthcheck.Node.HW -and (($OutObj | Where-Object { $_.'Status' -like 'offline' }) -or ($OutObj | Where-Object { $_.'Used' -ge 90 }))) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Ensure that all nodes are online and that storage usage is within acceptable limits."
+                        Text 'Best Practice:' -Bold
+                        Text 'Ensure that all nodes are online and that storage usage is within acceptable limits.'
                     }
                     BlankLine
                 }

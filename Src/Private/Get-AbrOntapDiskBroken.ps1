@@ -5,7 +5,7 @@ function Get-AbrOntapDiskBroken {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,12 +19,12 @@ function Get-AbrOntapDiskBroken {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP failed disk per node information."
+        Write-PScriboMessage 'Collecting ONTAP failed disk per node information.'
     }
 
     process {
         try {
-            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq "broken" }
+            $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }
             if ($NodeDiskBroken) {
                 $DiskFailed = foreach ($DiskBroken in $NodeDiskBroken) {
                     [PSCustomObject] @{
@@ -48,11 +48,11 @@ function Get-AbrOntapDiskBroken {
                 }
                 $DiskFailed | Table @TableParams
                 if ($Healthcheck.Storage.DiskStatus -and ($DiskFailed)) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Review the failed disk information above. It is recommended to replace any broken disks promptly to maintain data integrity and system performance."
+                        Text 'Best Practice:' -Bold
+                        Text 'Review the failed disk information above. It is recommended to replace any broken disks promptly to maintain data integrity and system performance.'
                     }
                     BlankLine
                 }

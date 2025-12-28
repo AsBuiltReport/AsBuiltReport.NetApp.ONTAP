@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCIFSShare {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverCIFSShare {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP CIFS Share information."
+        Write-PScriboMessage 'Collecting ONTAP CIFS Share information.'
     }
 
     process {
@@ -38,7 +38,7 @@ function Get-AbrOntapVserverCIFSShare {
                             'Volume' = $Item.Volume
                             'Path' = $Item.Path
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

@@ -5,7 +5,7 @@ function Get-AbrOntapSysConfigBackup {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapSysConfigBackup {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP System Configuration Backups information."
+        Write-PScriboMessage 'Collecting ONTAP System Configuration Backups information.'
     }
 
     process {
@@ -36,11 +36,11 @@ function Get-AbrOntapSysConfigBackup {
                         $inObj = [ordered] @{
                             'Backup Name' = $Item.BackupName
                             'Created' = $Item.Created
-                            'Size' = $Item.BackupSize | ConvertTo-FormattedNumber -Type Datasize -ErrorAction SilentlyContinue
+                            'Size' = ($Item.BackupSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Schedule' = $Item.Schedule
-                            'Is Auto' = ConvertTo-TextYN $Item.IsAuto
+                            'Is Auto' = $Item.IsAuto
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

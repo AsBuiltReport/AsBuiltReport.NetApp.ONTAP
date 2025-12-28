@@ -5,7 +5,7 @@ function Get-AbrOntapSecurityMAPRule {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,29 +19,25 @@ function Get-AbrOntapSecurityMAPRule {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Vserver Multi-Admin Approval rules information."
+        Write-PScriboMessage 'Collecting ONTAP Security Vserver Multi-Admin Approval rules information.'
     }
 
     process {
         try {
-            $Data = Get-NetAppOntapAPI -uri "/api/security/multi-admin-verify/rules?fields=**&return_records=true&return_timeout=15"
+            $Data = Get-NetAppOntapAPI -uri '/api/security/multi-admin-verify/rules?fields=**&return_records=true&return_timeout=15'
             $OutObj = @()
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
                         $inObj = [ordered] @{
                             'operation' = $Item.operation
-                            'query' = ConvertTo-EmptyToFiller $Item.query
-                            'Approval Groups' = Switch ([string]::IsNullOrEmpty($Item.approval_groups.name)) {
-                                $true { '-' }
-                                $false { $Item.approval_groups.name }
-                                default { '-' }
-                            }
-                            'Required Approvers' = ConvertTo-EmptyToFiller $Item.required_approvers
-                            'System Defined' = ConvertTo-TextYN $Item.system_defined
+                            'query' = $Item.query
+                            'Approval Groups' = $Item.approval_groups.name
+                            'Required Approvers' = $Item.required_approvers
+                            'System Defined' = $Item.system_defined
 
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

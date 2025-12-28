@@ -5,7 +5,7 @@ function Get-AbrOntapVserverNFSSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNFSSummary {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Vserver NFS information."
+        Write-PScriboMessage 'Collecting ONTAP Vserver NFS information.'
     }
 
     process {
@@ -34,25 +34,13 @@ function Get-AbrOntapVserverNFSSummary {
                 foreach ($Item in $VserverData) {
                     try {
                         $inObj = [ordered] @{
-                            'Nfs v3' = switch ($Item.IsNfsv3) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsNfsv3 }
-                            }
-                            'Nfs v4' = switch ($Item.IsNfsv4) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsNfsv4 }
-                            }
-                            'Nfs v41' = switch ($Item.IsNfsv41) {
-                                'True' { 'Enabled' }
-                                'False' { 'Disabled' }
-                                default { $Item.IsNfsv41 }
-                            }
-                            'General Access' = ConvertTo-TextYN $Item.GeneralAccess
+                            'Nfs v3' = $Item.IsNfsv3 -eq $true ? 'Enabled': 'Disabled'
+                            'Nfs v4' = $Item.IsNfsv4 -eq $true ? 'Enabled': 'Disabled'
+                            'Nfs v41' = $Item.IsNfsv41 -eq $true ? 'Enabled': 'Disabled'
+                            'General Access' = $Item.GeneralAccess
 
                         }
-                        $VserverObj += [pscustomobject]$inobj
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -71,11 +59,11 @@ function Get-AbrOntapVserverNFSSummary {
                 }
                 $VserverObj | Table @TableParams
                 if ($Healthcheck.Vserver.NFS -and ($VserverObj | Where-Object { $_.'Nfs v3' -like 'Disabled' -and $_.'Nfs v4' -like 'Disabled' -and $_.'Nfs v41' -like 'Disabled' })) {
-                    Paragraph "Health Check:" -Bold -Underline
+                    Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {
-                        Text "Best Practice:" -Bold
-                        Text "Evaluate enabling NFS services to support client connectivity and file sharing."
+                        Text 'Best Practice:' -Bold
+                        Text 'Evaluate enabling NFS services to support client connectivity and file sharing.'
                     }
                     BlankLine
                 }

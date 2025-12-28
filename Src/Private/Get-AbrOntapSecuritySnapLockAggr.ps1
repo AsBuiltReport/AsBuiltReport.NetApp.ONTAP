@@ -5,7 +5,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.7
+        Version:        0.6.12
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
     )
 
     begin {
-        Write-PScriboMessage "Collecting ONTAP Security Aggregate Snaplock Type information."
+        Write-PScriboMessage 'Collecting ONTAP Security Aggregate Snaplock Type information.'
     }
 
     process {
@@ -29,12 +29,11 @@ function Get-AbrOntapSecuritySnapLockAggr {
             if ($Data) {
                 foreach ($Item in $Data) {
                     try {
-                        $SnapLockType = Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes
                         $inObj = [ordered] @{
                             'Aggregate Name' = $Item.Name
-                            'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockType.SnaplockType)
+                            'Snaplock Type' = $TextInfo.ToTitleCase((Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes).SnaplockType)
                         }
-                        $OutObj += [pscustomobject]$inobj
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
