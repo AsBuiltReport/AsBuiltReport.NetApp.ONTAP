@@ -50,7 +50,7 @@ function Get-AbrOntapVserverVolumeSnapshot {
                     }
                 }
                 if ($Healthcheck.Vserver.Snapshot) {
-                    $VserverObj | Where-Object { $_.'Used'.split()[0] -gt $_.'Reserve Size'.split()[0] } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
+                    $VserverObj | Where-Object { $_.'Used' -gt $_.'Reserve Size' } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
                 }
 
                 $TableParams = @{

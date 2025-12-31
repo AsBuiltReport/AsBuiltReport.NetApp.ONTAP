@@ -27,16 +27,17 @@ function Get-AbrOntapDiskInv {
             $DiskInv = Get-NcDisk -Controller $Array
             $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }
             if ($DiskInv) {
-                $DiskInventory = foreach ($Disks in $DiskInv) {
+                $OutObj = @()
+                foreach ($Disks in $DiskInv) {
                     try {
-                        $DiskType = Get-NcDisk -Controller $Array -Name $Disks.Name | ForEach-Object { $_.DiskInventoryInfo }
+                        $DiskType = Get-NcDisk -Controller $Array -Name $Disks.Name | ForEach-Object { $_.OutObjInfo }
                         $DiskFailed = $NodeDiskBroken | Where-Object { $_.'Name' -eq $Disks.Name }
                         if ($DiskFailed.Name -eq $Disks.Name ) {
                             $Disk = " $($DiskFailed.Name)(*)"
                         } else {
                             $Disk = $Disks.Name
                         }
-                        [PSCustomObject] @{
+                        $inObj = [ordered] @{
                             'Disk Name' = $Disk
                             'Shelf' = $Disks.Shelf
                             'Bay' = $Disks.Bay
@@ -45,12 +46,13 @@ function Get-AbrOntapDiskInv {
                             'Serial Number' = $DiskType.SerialNumber
                             'Type' = $DiskType.DiskType
                         }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.DiskStatus) {
-                    $DiskInventory | Where-Object { $_.'Disk Name' -like '*(*)' } | Set-Style -Style Critical -Property 'Disk Name'
+                    $OutObj | Where-Object { $_.'Disk Name' -like '*(*)' } | Set-Style -Style Critical -Property 'Disk Name'
                 }
                 $TableParams = @{
                     Name = "Disk Inventory - $($ClusterInfo.ClusterName)"
@@ -60,7 +62,7 @@ function Get-AbrOntapDiskInv {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $DiskInventory | Table @TableParams
+                $OutObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

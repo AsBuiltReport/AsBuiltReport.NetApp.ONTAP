@@ -30,16 +30,18 @@ function Get-AbrOntapDiskOwner {
     process {
         try {
             if ($Node) {
-                $DiskSummary = foreach ($Owner in $Node) {
+                $OutObj = @()
+                foreach ($Owner in $Node) {
                     try {
                         foreach ($Disk in (Get-NcDiskOwner -Node $Owner -Controller $Array)) {
-                            [PSCustomObject] @{
+                            $inObj = [ordered] @{
                                 'Disk' = $Disk.Name
                                 'Owner Id' = $Disk.OwnerId
                                 'Home' = $Disk.Home
                                 'Home Id' = $Disk.HomeId
                                 'Type' = $Disk.Type
                             }
+                            $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
@@ -53,7 +55,7 @@ function Get-AbrOntapDiskOwner {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $DiskSummary | Table @TableParams
+                $OutObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

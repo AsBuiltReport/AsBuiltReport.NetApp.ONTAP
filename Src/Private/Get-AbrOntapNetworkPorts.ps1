@@ -30,9 +30,10 @@ function Get-AbrOntapNetworkPort {
         try {
             $PhysicalPorts = Get-NcNetPort -Node $Node -Controller $Array | Where-Object { $_.PortType -like 'physical' }
             if ($PhysicalPorts) {
-                $PhysicalNic = foreach ($Nics in $PhysicalPorts) {
+                $OutObj = @()
+                foreach ($Nics in $PhysicalPorts) {
                     try {
-                        [PSCustomObject] @{
+                        $inObj = [ordered] @{
                             'Port Name' = $Nics.Port
                             'Role' = $TextInfo.ToTitleCase($Nics.Role)
                             'Mac Address' = $Nics.MacAddress
@@ -40,12 +41,13 @@ function Get-AbrOntapNetworkPort {
                             'Link Status' = $TextInfo.ToTitleCase($Nics.LinkStatus)
                             'Admin Status' = $Nics.IsAdministrativeUp -eq $True ? 'Up': 'Down'
                         }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Network.Port) {
-                    $PhysicalNic | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' } | Set-Style -Style Warning -Property 'Link Status'
+                    $OutObj | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' } | Set-Style -Style Warning -Property 'Link Status'
                 }
 
                 $TableParams = @{
@@ -56,8 +58,8 @@ function Get-AbrOntapNetworkPort {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $PhysicalNic | Table @TableParams
-                if ($Healthcheck.Network.Port -and ($PhysicalNic | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' })) {
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Network.Port -and ($OutObj | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' })) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {

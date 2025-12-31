@@ -1,4 +1,4 @@
-function Get-AbrOntapNetworkBdomain {
+function Get-AbrOntapNetworkBroadCastDomain {
     <#
     .SYNOPSIS
     Used by As Built Report to retrieve NetApp ONTAP Network Broadcast Domain information from the Cluster Management Network

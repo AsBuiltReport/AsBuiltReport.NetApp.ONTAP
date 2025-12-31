@@ -30,18 +30,20 @@ function Get-AbrOntapClusterLicense {
                     $License = Get-NcLicense -Owner $Node -Controller $Array
                     if ($License) {
                         Section -Style Heading3 "$Node License Usage" {
-                            $LicenseSummary = foreach ($Licenses in $License) {
+                            $OutObj = @()
+                            foreach ($Licenses in $License) {
                                 $EntitlementRisk = try { Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
-                                [PSCustomObject] @{
+                                $inObj = [ordered] @{
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)
                                     'Description' = $Licenses.Description
                                     'Risk' = (Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array).Risk ?? '--'
                                 }
+                                $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             }
                             if ($Healthcheck.License.RiskSummary) {
-                                $LicenseSummary | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' -or $_.'Risk' -like 'unlicensed' } | Set-Style -Style Warning -Property 'Risk'
-                                $LicenseSummary | Where-Object { $_.'Risk' -like 'High' } | Set-Style -Style Critical -Property 'Risk'
+                                $OutObj | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' -or $_.'Risk' -like 'unlicensed' } | Set-Style -Style Warning -Property 'Risk'
+                                $OutObj | Where-Object { $_.'Risk' -like 'High' } | Set-Style -Style Critical -Property 'Risk'
                             }
                             $TableParams = @{
                                 Name = "License Usage - $($Node)"
@@ -51,8 +53,8 @@ function Get-AbrOntapClusterLicense {
                             if ($Report.ShowTableCaptions) {
                                 $TableParams['Caption'] = "- $($TableParams.Name)"
                             }
-                            $LicenseSummary | Table @TableParams
-                            if ($Healthcheck.License.RiskSummary -and ($LicenseSummary | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' -or $_.'Risk' -like 'unlicensed' }) -or ($LicenseSummary | Where-Object { $_.'Risk' -like 'High' })) {
+                            $OutObj | Table @TableParams
+                            if ($Healthcheck.License.RiskSummary -and ($OutObj | Where-Object { $_.'Risk' -like 'medium' -or $_.'Risk' -like 'unknown' -or $_.'Risk' -like 'unlicensed' }) -or ($OutObj | Where-Object { $_.'Risk' -like 'High' })) {
                                 Paragraph 'Health Check:' -Bold -Underline
                                 BlankLine
                                 Paragraph {

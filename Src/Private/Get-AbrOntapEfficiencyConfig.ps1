@@ -30,14 +30,13 @@ function Get-AbrOntapEfficiencyConfig {
                 foreach ($Item in $Data) {
                     try {
                         $Saving = Get-NcAggr -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSpaceAttributes
-                        $TotalStorageEfficiencyRatio = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
                             'Used %' = ($Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                             'Capacity Tier Used' = ($Saving.CapacityTierUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Compaction Saved %' = ($Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent) ?? '--'
                             'Deduplication Saved %' = ($Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent) ?? '--'
-                            'Total Data Reduction' = $TotalStorageEfficiencyRatio.TotalStorageEfficiencyRatio
+                            'Total Data Reduction' = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty ).TotalStorageEfficiencyRatio ?? '--'
 
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

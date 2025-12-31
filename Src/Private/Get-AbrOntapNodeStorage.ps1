@@ -32,7 +32,6 @@ function Get-AbrOntapNodeStorage {
                         $inObj = [ordered] @{
                             'Node' = $Item.Vserver
                             'Aggregate' = $Item.Aggregate
-                            'Volume' = $Item.Name
                             'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
                             'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
                             'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
@@ -50,7 +49,7 @@ function Get-AbrOntapNodeStorage {
                 $TableParams = @{
                     Name = "Node Storage - $($ClusterInfo.ClusterName)"
                     List = $false
-                    ColumnWidths = 30, 30, 10, 10, 10, 10
+                    ColumnWidths = 30, 30, 15, 15, 10
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

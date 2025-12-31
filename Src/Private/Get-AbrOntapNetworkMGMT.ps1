@@ -24,59 +24,58 @@ function Get-AbrOntapNetworkMgmt {
 
     process {
         try {
-            if (Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'cluster' }) {
+            $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'cluster' }
+            if ($ClusterData) {
                 try {
                     Section -ExcludeFromTOC -Style Heading6 'Cluster Network Interfaces' {
-                        $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'cluster' }
                         $ClusterObj = @()
-                        if ($ClusterData) {
-                            foreach ($Item in $ClusterData) {
-                                try {
-                                    $inObj = [ordered] @{
-                                        'Cluster Interface' = $Item.InterfaceName
-                                        'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
-                                        'Data Protocols' = $Item.DataProtocols
-                                        'Address' = $Item.Address
-                                        'Vserver' = $Item.Vserver
-                                    }
-                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
-                                } catch {
-                                    Write-PScriboMessage -IsWarning $_.Exception.Message
+                        foreach ($Item in $ClusterData) {
+                            try {
+                                $inObj = [ordered] @{
+                                    'Cluster Interface' = $Item.InterfaceName
+                                    'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
+                                    'Data Protocols' = $Item.DataProtocols
+                                    'Address' = $Item.Address
+                                    'Vserver' = $Item.Vserver
                                 }
-                            }
-                            if ($Healthcheck.Network.Interface) {
-                                $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
-                            }
-
-                            $TableParams = @{
-                                Name = "Cluster Network - $($ClusterInfo.ClusterName)"
-                                List = $false
-                                ColumnWidths = 35, 8, 21, 18, 18
-                            }
-                            if ($Report.ShowTableCaptions) {
-                                $TableParams['Caption'] = "- $($TableParams.Name)"
-                            }
-                            $ClusterObj | Table @TableParams
-                            if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
-                                Paragraph 'Health Check:' -Bold -Underline
-                                BlankLine
-                                Paragraph {
-                                    Text 'Best Practice:' -Bold
-                                    Text 'Ensure that all cluster network interfaces are operational (UP) to maintain cluster connectivity and performance.'
-                                }
-                                BlankLine
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
+                        if ($Healthcheck.Network.Interface) {
+                            $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
+                        }
+
+                        $TableParams = @{
+                            Name = "Cluster Network - $($ClusterInfo.ClusterName)"
+                            List = $false
+                            ColumnWidths = 35, 8, 21, 18, 18
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $ClusterObj | Table @TableParams
+                        if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
+                            Paragraph 'Health Check:' -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all cluster network interfaces are operational (UP) to maintain cluster connectivity and performance.'
+                            }
+                            BlankLine
+                        }
                     }
+
                 } catch {
                     Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
             }
             try {
-                Section -ExcludeFromTOC -Style Heading6 'Management Network Interfaces' {
-                    $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt' }
-                    $ClusterObj = @()
-                    if ($ClusterData) {
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'cluster_mgmt' -or $_.Role -eq 'node_mgmt' }
+                if ($ClusterData) {
+                    Section -ExcludeFromTOC -Style Heading6 'Management Network Interfaces' {
+                        $ClusterObj = @()
                         foreach ($Item in $ClusterData) {
                             try {
                                 $inObj = [ordered] @{
@@ -119,58 +118,57 @@ function Get-AbrOntapNetworkMgmt {
                 Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                if (Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'intercluster' }) {
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'intercluster' }
+                if ($ClusterData) {
                     Section -ExcludeFromTOC -Style Heading6 'Intercluster Network Interfaces' {
-                        $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'intercluster' }
                         $ClusterObj = @()
-                        if ($ClusterData) {
-                            foreach ($Item in $ClusterData) {
-                                try {
-                                    $inObj = [ordered] @{
-                                        'Intercluster Interface' = $Item.InterfaceName
-                                        'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
-                                        'Data Protocols' = $Item.DataProtocols
-                                        'Address' = $Item.Address
-                                        'Vserver' = $Item.Vserver
-                                    }
-                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
-                                } catch {
-                                    Write-PScriboMessage -IsWarning $_.Exception.Message
+                        foreach ($Item in $ClusterData) {
+                            try {
+                                $inObj = [ordered] @{
+                                    'Intercluster Interface' = $Item.InterfaceName
+                                    'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
+                                    'Data Protocols' = $Item.DataProtocols
+                                    'Address' = $Item.Address
+                                    'Vserver' = $Item.Vserver
                                 }
-                            }
-                            if ($Healthcheck.Network.Interface) {
-                                $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
-                            }
-
-                            $TableParams = @{
-                                Name = "Intercluster Network - $($ClusterInfo.ClusterName)"
-                                List = $false
-                                ColumnWidths = 35, 8, 21, 18, 18
-                            }
-                            if ($Report.ShowTableCaptions) {
-                                $TableParams['Caption'] = "- $($TableParams.Name)"
-                            }
-                            $ClusterObj | Table @TableParams
-                            if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
-                                Paragraph 'Health Check:' -Bold -Underline
-                                BlankLine
-                                Paragraph {
-                                    Text 'Best Practice:' -Bold
-                                    Text 'Ensure that all intercluster network interfaces are operational (UP) to maintain cluster-to-cluster communication.'
-                                }
-                                BlankLine
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
+                        if ($Healthcheck.Network.Interface) {
+                            $ClusterObj | Where-Object { $_.'Status' -notlike 'UP' } | Set-Style -Style Warning -Property 'Status'
+                        }
+
+                        $TableParams = @{
+                            Name = "Intercluster Network - $($ClusterInfo.ClusterName)"
+                            List = $false
+                            ColumnWidths = 35, 8, 21, 18, 18
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $ClusterObj | Table @TableParams
+                        if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' })) {
+                            Paragraph 'Health Check:' -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all intercluster network interfaces are operational (UP) to maintain cluster-to-cluster communication.'
+                            }
+                            BlankLine
+                        }
+
                     }
                 }
             } catch {
                 Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                Section -ExcludeFromTOC -Style Heading6 'Data Network Interfaces' {
-                    $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'data' -and $_.Vserver -notin $options.Exclude.Vserver }
-                    $ClusterObj = @()
-                    if ($ClusterData) {
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'data' -and $_.Vserver -notin $options.Exclude.Vserver }
+                if ($ClusterData) {
+                    Section -ExcludeFromTOC -Style Heading6 'Data Network Interfaces' {
+                        $ClusterObj = @()
                         foreach ($Item in $ClusterData) {
                             try {
                                 if ($Item.Wwpn) {
@@ -216,50 +214,49 @@ function Get-AbrOntapNetworkMgmt {
                 Write-PScriboMessage -IsWarning $_.Exception.Message
             }
             try {
-                if ((Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like 'False' }) -and $Healthcheck.Network.Interface) {
-                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Check If Network Interface is Home' {
+                $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like 'False' }
+                if ($ClusterData) {
+                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Network Interface Home Status' {
                         Paragraph "The following table provides the LIF Home Status Information in $($ClusterInfo.ClusterName)."
                         BlankLine
-                        $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like 'False' }
                         $ClusterObj = @()
-                        if ($ClusterData) {
-                            foreach ($Item in $ClusterData) {
-                                try {
-                                    $inObj = [ordered] @{
-                                        'Network Interface' = $Item.InterfaceName
-                                        'Home Port' = $Item.HomeNode + ':' + $Item.HomePort
-                                        'Current Port' = $Item.CurrentNode + ':' + $Item.CurrentPort
-                                        'IsHome' = ($Item.IsHome -eq $True) ? 'Yes': 'No'
-                                        'Vserver' = $Item.Vserver
-                                    }
-                                    $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
-                                } catch {
-                                    Write-PScriboMessage -IsWarning $_.Exception.Message
+                        foreach ($Item in $ClusterData) {
+                            try {
+                                $inObj = [ordered] @{
+                                    'Network Interface' = $Item.InterfaceName
+                                    'Home Port' = $Item.HomeNode + ':' + $Item.HomePort
+                                    'Current Port' = $Item.CurrentNode + ':' + $Item.CurrentPort
+                                    'IsHome' = ($Item.IsHome -eq $True) ? 'Yes': 'No'
+                                    'Vserver' = $Item.Vserver
                                 }
-                            }
-                            if ($Healthcheck.Network.Interface) {
-                                $ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' } | Set-Style -Style Warning -Property 'Network Interface', 'IsHome', 'Home Port', 'Current Port', 'Vserver'
-                            }
-
-                            $TableParams = @{
-                                Name = "Network Interface Home Status - $($ClusterInfo.ClusterName)"
-                                List = $false
-                                ColumnWidths = 20, 25, 25, 10, 20
-                            }
-                            if ($Report.ShowTableCaptions) {
-                                $TableParams['Caption'] = "- $($TableParams.Name)"
-                            }
-                            $ClusterObj | Table @TableParams
-                            if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' })) {
-                                Paragraph 'Health Check:' -Bold -Underline
-                                BlankLine
-                                Paragraph {
-                                    Text 'Best Practice:' -Bold
-                                    Text 'Ensure that all network interfaces are on their designated home ports to maintain optimal network performance and reliability.'
-                                }
-                                BlankLine
+                                $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                            } catch {
+                                Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
+                        if ($Healthcheck.Network.Interface) {
+                            $ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' } | Set-Style -Style Warning -Property 'Network Interface', 'IsHome', 'Home Port', 'Current Port', 'Vserver'
+                        }
+
+                        $TableParams = @{
+                            Name = "Network Interface Home Status - $($ClusterInfo.ClusterName)"
+                            List = $false
+                            ColumnWidths = 20, 25, 25, 10, 20
+                        }
+                        if ($Report.ShowTableCaptions) {
+                            $TableParams['Caption'] = "- $($TableParams.Name)"
+                        }
+                        $ClusterObj | Table @TableParams
+                        if ($Healthcheck.Network.Interface -and ($ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' })) {
+                            Paragraph 'Health Check:' -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that all network interfaces are on their designated home ports to maintain optimal network performance and reliability.'
+                            }
+                            BlankLine
+                        }
+
                     }
                 }
             } catch {

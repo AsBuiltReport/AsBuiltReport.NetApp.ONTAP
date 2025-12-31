@@ -26,12 +26,14 @@ function Get-AbrOntapClusterLicenseUsage {
         try {
             $LicenseFeature = Get-NcFeatureStatus -Controller $Array
             if ($LicenseFeature) {
-                $LicenseFeature = foreach ($NodeLFs in $LicenseFeature) {
-                    [PSCustomObject] @{
+                $OutObj = @()
+                foreach ($NodeLFs in $LicenseFeature) {
+                    $inObj = [ordered] @{
                         'Name' = $NodeLFs.FeatureName
                         'Status' = $NodeLFs.Status
                         'Notes' = $NodeLFs.Notes
                     }
+                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                 }
                 $TableParams = @{
                     Name = "License Feature - $($ClusterInfo.ClusterName)"
@@ -41,7 +43,7 @@ function Get-AbrOntapClusterLicenseUsage {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $LicenseFeature | Table @TableParams
+                $OutObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

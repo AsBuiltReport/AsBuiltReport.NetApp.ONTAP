@@ -26,15 +26,17 @@ function Get-AbrOntapNode {
         try {
             $NodeSum = Get-NcNode -Controller $Array
             if ($NodeSum) {
-                $NodeSummary = foreach ($Nodes in $NodeSum) {
+                $OutObj = @()
+                foreach ($Nodes in $NodeSum) {
                     try {
-                        [PSCustomObject] @{
+                        $inObj = [ordered] @{
                             'Name' = $Nodes.Node
                             'Model' = $Nodes.NodeModel
                             'Id' = $Nodes.NodeSystemId
                             'Serial' = $Nodes.NodeSerialNumber
                             'Uptime' = $Nodes.NodeUptimeTS
                         }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
@@ -47,7 +49,7 @@ function Get-AbrOntapNode {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $NodeSummary | Table @TableParams
+                $OutObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

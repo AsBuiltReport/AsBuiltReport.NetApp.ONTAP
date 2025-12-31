@@ -26,17 +26,19 @@ function Get-AbrOntapDiskBroken {
         try {
             $NodeDiskBroken = Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }
             if ($NodeDiskBroken) {
-                $DiskFailed = foreach ($DiskBroken in $NodeDiskBroken) {
-                    [PSCustomObject] @{
+                $OutObj = @()
+                foreach ($DiskBroken in $NodeDiskBroken) {
+                    $inObj = [ordered] @{
                         'Disk Name' = $DiskBroken.Name
                         'Shelf' = $DiskBroken.Shelf
                         'Bay' = $DiskBroken.Bay
                         'Pool' = $DiskBroken.Pool
                         'Disk Paths' = $DiskBroken.DiskPaths
                     }
+                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                 }
                 if ($Healthcheck.Storage.DiskStatus) {
-                    $DiskFailed | Set-Style -Style Critical -Property 'Disk Name', 'Shelf', 'Bay', 'Pool', 'Disk Paths'
+                    $OutObj | Set-Style -Style Critical -Property 'Disk Name', 'Shelf', 'Bay', 'Pool', 'Disk Paths'
                 }
                 $TableParams = @{
                     Name = "Failed Disk - $($ClusterInfo.ClusterName)"
@@ -46,8 +48,8 @@ function Get-AbrOntapDiskBroken {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $DiskFailed | Table @TableParams
-                if ($Healthcheck.Storage.DiskStatus -and ($DiskFailed)) {
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Storage.DiskStatus -and ($OutObj)) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {

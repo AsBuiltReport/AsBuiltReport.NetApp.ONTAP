@@ -343,7 +343,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                         Section -Style Heading4 'Broadcast Domain' {
-                            Get-AbrOntapNetworkBdomain
+                            Get-AbrOntapNetworkBroadcastDomain
                         }
                         Section -Style Heading4 'Failover Groups' {
                             Get-AbrOntapNetworkFailoverGroup
