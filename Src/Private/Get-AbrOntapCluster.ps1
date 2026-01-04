@@ -26,25 +26,28 @@ function Get-AbrOntapCluster {
         try {
             $ClusterInfo = Get-NcCluster -Controller $Array
             if ($ClusterInfo) {
-                $ClusterDiag = Get-NcDiagnosisStatus -Controller $Array
-                $ClusterVersion = Get-NcSystemVersion -Controller $Array
-                $ArrayAggr = Get-NcAggr -Controller $Array
-                $ArrayVolumes = Get-NcVol -Controller $Array
-                $ClusterSummary = [PSCustomObject] @{
-                    'Cluster Name' = $ClusterInfo.ClusterName
-                    'Cluster UUID' = $ClusterInfo.ClusterUuid
-                    'Cluster Serial' = $ClusterInfo.ClusterSerialNumber
-                    'Cluster Controller' = $ClusterInfo.NcController
-                    'Cluster Contact' = $ClusterInfo.ClusterContact
-                    'Cluster Location' = $ClusterInfo.ClusterLocation
-                    'Ontap Version' = $ClusterVersion.value
-                    'Number of Aggregates' = $ArrayAggr.count
-                    'Number of Volumes' = $ArrayVolumes.count
-                    'Overall System Health' = ${ClusterDiag}?.Status?.ToUpper()
+                $OutObj = @()
+                try {
+                    $inObj = [ordered] @{
+                        'Cluster Name' = $ClusterInfo.ClusterName
+                        'Cluster UUID' = $ClusterInfo.ClusterUuid
+                        'Cluster Serial' = $ClusterInfo.ClusterSerialNumber
+                        'Cluster Controller' = $ClusterInfo.NcController
+                        'Cluster Contact' = $ClusterInfo.ClusterContact ?? '--'
+                        'Cluster Location' = $ClusterInfo.ClusterLocation ?? '--'
+                        'Ontap Version' = (Get-NcSystemVersion -Controller $Array).value ?? 'Unknown'
+                        'Number of Aggregates' = (Get-NcAggr -Controller $Array).count ?? 'Unknown'
+                        'Number of Volumes' = (Get-NcVol -Controller $Array).count ?? 'Unknown'
+                        'Overall System Health' = (Get-NcDiagnosisStatus -Controller $Array).Status?.ToUpper() ?? 'Unknown'
+                    }
+                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
+
                 if ($Healthcheck.Cluster.Summary) {
-                    $ClusterSummary | Where-Object { $_.'Overall System Health' -like 'OK' } | Set-Style -Style OK -Property 'Overall System Health'
-                    $ClusterSummary | Where-Object { $_.'Overall System Health' -notlike 'OK' } | Set-Style -Style Critical -Property 'Overall System Health'
+                    $OutObj | Where-Object { $_.'Overall System Health' -like 'OK' } | Set-Style -Style OK -Property 'Overall System Health'
+                    $OutObj | Where-Object { $_.'Overall System Health' -notlike 'OK' } | Set-Style -Style Critical -Property 'Overall System Health'
                 }
 
                 $TableParams = @{
@@ -55,8 +58,8 @@ function Get-AbrOntapCluster {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $ClusterSummary | Table @TableParams
-                if ($Healthcheck.Cluster.Summary -and ($ClusterSummary | Where-Object { $_.'Overall System Health' -notlike 'OK' })) {
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Cluster.Summary -and ($OutObj | Where-Object { $_.'Overall System Health' -notlike 'OK' })) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {

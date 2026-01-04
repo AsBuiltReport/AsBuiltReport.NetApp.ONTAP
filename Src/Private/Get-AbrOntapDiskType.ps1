@@ -25,18 +25,20 @@ function Get-AbrOntapDiskType {
     process {
         try {
             if ($NodeDiskContainerType) {
-                $DiskType = foreach ($DiskContainers in (Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskRaidInfo.ContainerType } | Group-Object)) {
+                $OutObj = @()
+                foreach ($DiskContainers in (Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskRaidInfo.ContainerType } | Group-Object)) {
                     try {
-                        [PSCustomObject] @{
+                        $inObj = [ordered] @{
                             'Container' = $DiskContainers.Name
                             'Disk Count' = $DiskContainers | Select-Object -ExpandProperty Count
                         }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.DiskStatus) {
-                    $DiskType | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
+                    $OutObj | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
                 }
                 $TableParams = @{
                     Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
@@ -46,16 +48,18 @@ function Get-AbrOntapDiskType {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $DiskType | Table @TableParams
+                $OutObj | Table @TableParams
             }
             $Node = Get-NcNode | Where-Object { $_.IsNodeHealthy -eq 'True' }
             if ($Node -and (Confirm-NcAggrSpareLow | Where-Object { $_.Value -eq 'True' })) {
-                $OutObj = foreach ($Item in $Node) {
+                $OutObj = @()
+                foreach ($Item in $Node) {
                     try {
-                        [PSCustomObject] @{
+                        $inObj = [ordered] @{
                             'Node' = $Item.Node
                             'Aggregate Spare Low' = (Confirm-NcAggrSpareLow -Node $Item.Node).Value.ToString().Replace('True', 'Yes').Replace('False', 'No')
                         }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }

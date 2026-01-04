@@ -26,11 +26,12 @@ function Get-AbrOntapDiskShelf {
         try {
             $NodeSum = Get-NcNode -Controller $Array
             if ($NodeSum) {
-                $ShelfInventory = foreach ($Nodes in $NodeSum) {
+                $OutObj = @()
+                foreach ($Nodes in $NodeSum) {
                     try {
                         $Nodeshelf = Get-NcShelf -NodeName $Nodes.Node -Controller $Array
                         if ($Nodeshelf) {
-                            [PSCustomObject] @{
+                            $inObj = [ordered] @{
                                 'Node Name' = $Nodeshelf.NodeName
                                 'Channel' = $Nodeshelf.ChannelName
                                 'Shelf Name' = $Nodeshelf.ShelfName
@@ -40,14 +41,15 @@ function Get-AbrOntapDiskShelf {
                                 'Firmware' = $Nodeshelf.FirmwareRevA + $Nodeshelf.FirmwareRevB
                                 'Bay Count' = $Nodeshelf.ShelfBayCount
                             }
+                            $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Storage.ShelfStatus) {
-                    $ShelfInventory | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' } | Set-Style -Style Critical -Property 'State'
-                    $ShelfInventory | Where-Object { $_.'State' -like 'unknown' -or $_.'State' -like 'no-status' } | Set-Style -Style Warning -Property 'State'
+                    $OutObj | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' } | Set-Style -Style Critical -Property 'State'
+                    $OutObj | Where-Object { $_.'State' -like 'unknown' -or $_.'State' -like 'no-status' } | Set-Style -Style Warning -Property 'State'
                 }
                 $TableParams = @{
                     Name = "Shelf Inventory - $($ClusterInfo.ClusterName)"
@@ -57,8 +59,8 @@ function Get-AbrOntapDiskShelf {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $ShelfInventory | Table @TableParams
-                if ($Healthcheck.Storage.ShelfStatus -and ($ShelfInventory | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' })) {
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Storage.ShelfStatus -and ($OutObj | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' })) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     Paragraph {

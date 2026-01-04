@@ -26,11 +26,13 @@ function Get-AbrOntapDiskAssign {
         try {
             $NodeDiskCount = Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskOwnershipInfo.HomeNodeName } | Group-Object
             if ($NodeDiskCount) {
-                $DiskSummary = foreach ($Disks in $NodeDiskCount) {
-                    [PSCustomObject] @{
+                $OutObj = @()
+                foreach ($Disks in $NodeDiskCount) {
+                    $inObj = [ordered] @{
                         'Node' = $Disks.Name
                         'Disk Count' = $Disks | Select-Object -ExpandProperty Count
                     }
+                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                 }
                 $TableParams = @{
                     Name = "Assigned Disk - $($ClusterInfo.ClusterName)"
@@ -40,7 +42,7 @@ function Get-AbrOntapDiskAssign {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $DiskSummary | Table @TableParams
+                $OutObj | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

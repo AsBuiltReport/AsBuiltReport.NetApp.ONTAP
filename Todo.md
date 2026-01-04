@@ -1,4 +1,4 @@
-- [] Migrate [PSCustomObject] @{ to $inObj
+- [x] Migrate [PSCustomObject] @{ to $inObj
 - [] Network Port Diagram
   - [] Cluster Network Ports:
     - [] Document all ports and lifs used by the cluster nodes for cluster communication.
@@ -17,6 +17,8 @@
   - [] Data Network Ports:
     - [] Document all ports used for data access to the vservers running on the cluster
 
+- [] Add Health check for Nodes without intercluster interface (Replication Information)
+
 - [x] Add Per Volumes Export Policies
 - [] Implement InfoLevel 1/2 on every section
   - Example
@@ -28,7 +30,7 @@
   - [x] Add Vserver Lifs
       - [] IP
   - [] Add healthcheck for no route in vserver
-    - [] Configure at least one route to ensure accurate client can assess the vserver services.
+    - [] Configure at least one route to ensure client can assess the vserver services.
 
 
 ```powershell

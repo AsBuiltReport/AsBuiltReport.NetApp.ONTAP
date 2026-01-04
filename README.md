@@ -54,9 +54,9 @@ The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 This report is compatible with the following PowerShell versions;
 
-|   PowerShell 5.1   |    PowerShell 7    |
-| :----------------: | :----------------: |
-| :white_check_mark: | :white_check_mark: |
+| PowerShell 5.1 |    PowerShell 7    |
+| :------------: | :----------------: |
+|      :x:       | :white_check_mark: |
 
 ## :wrench: System Requirements
 
@@ -74,7 +74,7 @@ These modules may also be manually installed.
 
 ### PowerShell
 
-Open a PowerShell terminal window and install each of the required modules as follows;
+Open a PowerShell 7 terminal window and install each of the required modules as follows;
 
 ```powershell
 Install-Module -Name AsBuiltReport.NetApp.ONTAP

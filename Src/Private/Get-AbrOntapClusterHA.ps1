@@ -26,10 +26,11 @@ function Get-AbrOntapClusterHA {
         try {
             $NodeSum = Get-NcNode -Controller $Array | Where-Object { $null -ne $_.NodeModel }
             if ($NodeSum) {
-                $NodeSummary = foreach ($Nodes in $NodeSum) {
+                $OutObj = @()
+                foreach ($Nodes in $NodeSum) {
                     try {
                         $ClusterHa = Get-NcClusterHa -Node $Nodes.Node -Controller $Array
-                        [PSCustomObject] @{
+                        $inObj = [ordered] @{
                             'Name' = $Nodes.Node
                             'Partner' = $ClusterHa.Partner ?? '--'
                             'TakeOver Possible' = $ClusterHa.TakeoverPossible
@@ -37,14 +38,15 @@ function Get-AbrOntapClusterHA {
                             'HA Mode' = $ClusterHa.CurrentMode
                             'HA State' = $ClusterHa.State
                         }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
                 if ($Healthcheck.Cluster.HA) {
-                    $NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' } | Set-Style -Style Warning -Property 'TakeOver State'
-                    $NodeSummary | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' } | Set-Style -Style Warning -Property 'HA State'
-                    $NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' -and $_.'HA Mode' -ne 'non_ha' } | Set-Style -Style Warning -Property 'TakeOver Possible'
+                    $OutObj | Where-Object { $_.'TakeOver State' -like 'in_takeover' } | Set-Style -Style Warning -Property 'TakeOver State'
+                    $OutObj | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' } | Set-Style -Style Warning -Property 'HA State'
+                    $OutObj | Where-Object { $_.'TakeOver Possible' -eq 'No' -and $_.'HA Mode' -ne 'non_ha' } | Set-Style -Style Warning -Property 'TakeOver Possible'
                 }
 
                 $TableParams = @{
@@ -55,25 +57,25 @@ function Get-AbrOntapClusterHA {
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $NodeSummary | Table @TableParams
-                if ($Healthcheck.Cluster.HA -and (($NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' } ) -or ($NodeSummary | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' }) -or ($NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' -and $_.'HA Mode' -ne 'non_ha' }))) {
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Cluster.HA -and (($OutObj | Where-Object { $_.'TakeOver State' -like 'in_takeover' } ) -or ($OutObj | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' }) -or ($OutObj | Where-Object { $_.'TakeOver Possible' -eq 'No' -and $_.'HA Mode' -ne 'non_ha' }))) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
-                    if ($NodeSummary | Where-Object { $_.'TakeOver State' -like 'in_takeover' }) {
+                    if ($OutObj | Where-Object { $_.'TakeOver State' -like 'in_takeover' }) {
                         Paragraph {
                             Text 'Best Practice:' -Bold
                             Text 'One or more nodes are currently in takeover state. It is recommended to investigate the cause of the takeover and ensure that the affected node is restored to normal operation as soon as possible.'
                         }
                         BlankLine
                     }
-                    if ($NodeSummary | Where-Object { $_.'TakeOver Possible' -eq 'No' }) {
+                    if ($OutObj | Where-Object { $_.'TakeOver Possible' -eq 'No' }) {
                         Paragraph {
                             Text 'Best Practice:' -Bold
                             Text 'One or more nodes have takeover capability disabled. It is recommended to enable storage failover capability to ensure high availability in case of node failures.'
                         }
                         BlankLine
                     }
-                    if ($NodeSummary | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' }) {
+                    if ($OutObj | Where-Object { $_.'HA Mode' -ne 'non_ha' -and $_.'HA State' -notlike 'connected' }) {
                         Paragraph {
                             Text 'Best Practice:' -Bold
                             Text 'One or more nodes are operating in HA mode and are not connected. It is recommended to verify the HA configuration and connectivity to ensure high availability is properly set up.'

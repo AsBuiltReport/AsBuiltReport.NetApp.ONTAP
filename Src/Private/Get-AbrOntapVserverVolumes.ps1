@@ -48,7 +48,7 @@ function Get-AbrOntapVserverVolume {
                 }
                 if ($Healthcheck.Vserver.Status) {
                     $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
-                    $VserverObj | Where-Object { $_.'Used' -ge 75 } | Set-Style -Style Warning -Property 'Used'
+                    $VserverObj | Where-Object { $_.'Used'.Split('%')[0] -ge 75 } | Set-Style -Style Warning -Property 'Used'
                 }
 
                 $TableParams = @{
@@ -60,14 +60,23 @@ function Get-AbrOntapVserverVolume {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $VserverObj | Table @TableParams
-                if ($Healthcheck.Vserver.Status -and ($VserverObj | Where-Object { $_.'Status' -like 'offline' })) {
+                if ($Healthcheck.Vserver.Status -and (($VserverObj | Where-Object { $_.'Status' -like 'offline' }) -or ($VserverObj | Where-Object { $_.'Used'.Split('%')[0] -ge 75 }))) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
-                    Paragraph {
-                        Text 'Best Practice:' -Bold
-                        Text "Ensure all volumes are in 'online' status and monitor volume usage to prevent capacity issues."
+                    if ($VserverObj | Where-Object { $_.'Status' -like 'offline' }) {
+                        Paragraph {
+                            Text 'Best Practice:' -Bold
+                            Text "Ensure all volumes are in 'online' status and monitor volume usage to prevent capacity issues."
+                        }
+                        BlankLine
                     }
-                    BlankLine
+                    if ($VserverObj | Where-Object { $_.'Used'.Split('%')[0] -ge 75 }) {
+                        Paragraph {
+                            Text 'Best Practice:' -Bold
+                            Text 'Ensure all volumes are below 95% usage to prevent capacity issues.'
+                        }
+                        BlankLine
+                    }
                 }
             }
         } catch {

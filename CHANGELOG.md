@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bump Diagrammer.Core module requirement to v0.2.36
 - Bump module version to v0.6.12
+- Update github actions to use latest version
 
 ### Fixed
 
@@ -29,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhance Get-AbrOntapNodesSP function with detailed service-processor information
 - Fix model property assignment in Get-AbrOntapStorageAggrDiagram function
 - Fix Volume SnapShot Configuration section showing healthcheck for non violated item
+- Fix CodeQL analysis issues 27
 
 ### Removed
 

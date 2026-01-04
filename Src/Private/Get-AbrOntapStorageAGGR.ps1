@@ -112,9 +112,10 @@ function Get-AbrOntapStorageAGGR {
                 $AggrSpare = Get-NcAggrSpare -Controller $Array
                 if ($AggrSpare) {
                     Section -Style Heading4 'Aggregate Spares' {
-                        $AggrSpareSummary = foreach ($Spare in $AggrSpare) {
+                        $OutObj = @()
+                        foreach ($Spare in $AggrSpare) {
                             try {
-                                [PSCustomObject] @{
+                                $inObj = [ordered] @{
                                     'Name' = $Spare.Disk
                                     'Capacity' = ($Spare.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                     'Root Usable' = ($Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
@@ -123,12 +124,13 @@ function Get-AbrOntapStorageAGGR {
                                     'Disk Zeroed' = $Spare.IsDiskZeroed
                                     'Owner' = $Spare.OriginalOwner
                                 }
+                                $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                             } catch {
                                 Write-PScriboMessage -IsWarning $_.Exception.Message
                             }
                         }
                         if ($Healthcheck.Storage.Aggr) {
-                            $AggrSpareSummary | Where-Object { $_.'Disk Zeroed' -eq 'No' } | Set-Style -Style Warning -Property 'Disk Zeroed'
+                            $OutObj | Where-Object { $_.'Disk Zeroed' -eq 'No' } | Set-Style -Style Warning -Property 'Disk Zeroed'
                         }
                         $TableParams = @{
                             Name = "Aggregates Spares - $($ClusterInfo.ClusterName)"
@@ -138,7 +140,7 @@ function Get-AbrOntapStorageAGGR {
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
                         }
-                        $AggrSpareSummary | Table @TableParams
+                        $OutObj | Table @TableParams
                     }
                 }
             } catch {
