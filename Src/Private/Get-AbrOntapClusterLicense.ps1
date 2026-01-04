@@ -32,7 +32,6 @@ function Get-AbrOntapClusterLicense {
                         Section -Style Heading3 "$Node License Usage" {
                             $OutObj = @()
                             foreach ($Licenses in $License) {
-                                $EntitlementRisk = try { Get-NcLicenseEntitlementRisk -Package $Licenses.Package -Controller $Array -ErrorAction SilentlyContinue } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
                                 $inObj = [ordered] @{
                                     'License' = $TextInfo.ToTitleCase($Licenses.Package)
                                     'Type' = $TextInfo.ToTitleCase($Licenses.Type)
