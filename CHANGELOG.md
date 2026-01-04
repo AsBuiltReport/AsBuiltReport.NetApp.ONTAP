@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhance Get-AbrOntapNodesSP function with detailed service-processor information
 - Fix model property assignment in Get-AbrOntapStorageAggrDiagram function
 - Fix Volume SnapShot Configuration section showing healthcheck for non violated item
+- Fix CodeQL analysis issues 27
 
 ### Removed
 
