@@ -34,8 +34,8 @@ function Get-AbrOntapVserverCGNamespace {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name.Split('/')[3]
-                            'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ($Item.space.used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Item.space.used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'OS Type' = $Item.os_type
                             'Volume State' = $Item.status.container_state
                             'Mapped' = $Item.status.mapped

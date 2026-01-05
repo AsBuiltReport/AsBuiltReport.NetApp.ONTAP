@@ -36,6 +36,11 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         break
     }
 
+    # Import Report Configuration
+    $script:Report = $ReportConfig.Report
+    $script:InfoLevel = $ReportConfig.InfoLevel
+    $script:Options = $ReportConfig.Options
+
     # Check the version of the dependency modules
     if ($Options.UpdateCheck) {
         Write-ReportModuleInfo -ModuleName 'Netapp.ONTAP'
@@ -46,7 +51,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     if ($Options.UpdateCheck) {
         Write-Host '  - Getting dependency information:'
         # Check the version of the dependency modules
-        $ModuleArray = @('AsBuiltReport.Netapp.ONTAP', 'Diagrammer.Core')
+        $ModuleArray = @('Diagrammer.Core')
 
         foreach ($Module in $ModuleArray) {
             try {
@@ -65,30 +70,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             }
         }
     }
-    # Check the version of the dependency modules
-    $ModuleArray = @('AsBuiltReport.Netapp.ONTAP', 'Diagrammer.Core')
-
-    foreach ($Module in $ModuleArray) {
-        try {
-            $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
-
-            if ($InstalledVersion) {
-                Write-Host "  - $Module module v$($InstalledVersion.ToString()) is currently installed."
-                $LatestVersion = Find-Module -Name $Module -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
-                if ($InstalledVersion -lt $LatestVersion) {
-                    Write-Host "    - $Module module v$($LatestVersion.ToString()) is available." -ForegroundColor Red
-                    Write-Host "    - Run 'Update-Module -Name $Module -Force' to install the latest version." -ForegroundColor Red
-                }
-            }
-        } catch {
-            Write-PScriboMessage -IsWarning $_.Exception.Message
-        }
-    }
-
-    # Import Report Configuration
-    $script:Report = $ReportConfig.Report
-    $script:InfoLevel = $ReportConfig.InfoLevel
-    $script:Options = $ReportConfig.Options
 
     # General information
     $script:TextInfo = (Get-Culture).TextInfo
@@ -174,23 +155,21 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
 
             Write-PScriboMessage "Node InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Node -gt 0) {
-                Section -Style Heading2 'Node Information' {
-                    Paragraph "The following section provides a summary of the Node in $($ClusterInfo.ClusterName)."
+                Section -Style Heading2 'Nodes' {
+                    Paragraph "The following section provides detailed information of nodes in cluster $($ClusterInfo.ClusterName)."
                     BlankLine
-                    Section -Style Heading3 'Node Inventory' {
-                        Paragraph "The following section provides the node inventory in $($ClusterInfo.ClusterName)."
-                        BlankLine
+                    Section -Style Heading3 'Inventory' {
                         Get-AbrOntapNode
-                        Section -Style Heading4 'Node Vol0' {
+                        Section -Style Heading4 'Root Volume Vol0' {
                             Get-AbrOntapNodeStorage
                         }
                         if ($InfoLevel.Node -ge 2) {
-                            Section -Style Heading4 'Node Hardware' {
+                            Section -Style Heading4 'Hardware Details' {
                                 Get-AbrOntapNodesHW
                             }
                         }
                         if (Get-NcServiceProcessor -Controller $Array) {
-                            Section -Style Heading4 'Node Service-Processor' {
+                            Section -Style Heading4 'Service-Processor' {
                                 Get-AbrOntapNodesSP
                             }
                         }
@@ -204,9 +183,9 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             Write-PScriboMessage "Storage InfoLevel set at $($InfoLevel.Node)."
             if ($InfoLevel.Storage -gt 0) {
                 Section -Style Heading2 'Storage Information' {
-                    Paragraph "The following section provides a summary of the storage hardware in $($ClusterInfo.ClusterName)."
+                    Paragraph "The following section provides detailed information about the storage configuration for cluster $($ClusterInfo.ClusterName)."
                     BlankLine
-                    Section -Style Heading3 'Aggregate Inventory' {
+                    Section -Style Heading3 'Aggregates (Local Tiers)' {
                         if (Get-NcAggr -Controller $Array) {
                             Get-AbrOntapStorageAGGR
                             $StorageAggrDiagram = Get-AbrOntapStorageAggrDiagram
@@ -230,36 +209,41 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             }
                         }
                     }
-                    Section -Style Heading3 'Disk Information' {
-                        Paragraph "The following section provides the disk summary information in controller $($ClusterInfo.ClusterName)."
-                        BlankLine
-                        Section -Style Heading4 'Per Node Disk Assignment' {
-                            Paragraph "The following section provides the number of disks assigned to each controller in $($ClusterInfo.ClusterName)."
+                    if ($InfoLevel.Storage -gt 0) {
+                        Section -Style Heading3 'Disks' {
+                            Paragraph "The following section provides a comprehensive summary of disk inventory and configuration across all controllers in the $($ClusterInfo.ClusterName) cluster."
                             BlankLine
-                            Get-AbrOntapDiskAssign
-                        }
-                        $Nodes = Get-NcNode -Controller $Array
-                        foreach ($Node in $Nodes) {
-                            Section -Style Heading4 "Disk Owned by Node $Node" {
-                                Get-AbrOntapDiskOwner -Node $Node
+                            Section -Style Heading4 'Per Node Disk Assignment' {
+                                Get-AbrOntapDiskAssign
+                                $Nodes = Get-NcNode -Controller $Array
+                                foreach ($Node in $Nodes) {
+                                    Section -ExcludeFromTOC -Style NOTOCHeading5 $Node {
+                                        Get-AbrOntapDiskOwner -Node $Node
+                                    }
+                                }
                             }
-                        }
-                        Section -Style Heading4 'Disk Container Type' {
-                            Get-AbrOntapDiskType
-                        }
-                        if (Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }) {
-                            Section -Style Heading4 'Failed Disk' {
-                                Get-AbrOntapDiskBroken
+                            Section -Style Heading4 'Disk Container Type' {
+                                Get-AbrOntapDiskType
                             }
-                        }
-                        if (Get-NcNode -Controller $Array | Select-Object Node | Get-NcShelf -Controller $Array -ErrorAction SilentlyContinue) {
-                            Section -Style Heading3 'Shelf Inventory' {
-                                Get-AbrOntapDiskShelf
+                            if (Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }) {
+                                Section -Style Heading4 'Failed Disk' {
+                                    Get-AbrOntapDiskBroken
+                                }
                             }
-                        }
-                        if ($InfoLevel.Storage -ge 2) {
-                            Section -Style Heading4 'Disk Inventory' {
-                                Get-AbrOntapDiskInv
+                            if (Get-NcNode -Controller $Array | Select-Object Node | Get-NcShelf -Controller $Array -ErrorAction SilentlyContinue) {
+                                Section -Style Heading3 'Storage Shelf' {
+                                    Get-AbrOntapDiskShelf
+                                }
+                            }
+                            if (Get-NcStorageShelf -Controller $Array -ErrorAction SilentlyContinue) {
+                                Section -Style Heading3 ' Disk Shelf' {
+                                    Get-AbrOntapDiskShelfStorage
+                                }
+                            }
+                            if (Get-NcDisk -Controller $Array) {
+                                Section -Style Heading4 'Disk Inventory' {
+                                    Get-AbrOntapDiskInv
+                                }
                             }
                         }
                     }
@@ -342,7 +326,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 }
                             }
                         }
-                        Section -Style Heading4 'Broadcast Domain' {
+                        Section -Style Heading4 'Broadcast Domains' {
                             Get-AbrOntapNetworkBroadcastDomain
                         }
                         Section -Style Heading4 'Failover Groups' {

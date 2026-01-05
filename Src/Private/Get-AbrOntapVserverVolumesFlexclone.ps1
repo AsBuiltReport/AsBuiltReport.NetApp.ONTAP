@@ -39,9 +39,9 @@ function Get-AbrOntapVserverVolumesFlexclone {
                             'Parent Snapshot' = $Item.ParentSnapshot
                             'Space Reserve' = $Item.SpaceReserve
                             'Space Guarantee' = $Item.SpaceGuaranteeEnabled
-                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                            'Available' = ($Item.Size - $Item.Used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Size - $Item.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
                             'Aggregate' = $Item.Aggregate
                         }
                         $VserverObj = [pscustomobject](ConvertTo-HashToYN $inObj)

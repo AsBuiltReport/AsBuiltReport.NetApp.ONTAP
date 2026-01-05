@@ -38,6 +38,7 @@ function Get-AbrOntapNodesHW {
                                 'Vendor' = $NodeHWs.VendorId
                                 'AFF/FAS' = $NodeHWs.ProdType
                                 'All Flash Optimized' = $NodeInfo.IsAllFlashOptimized
+                                'Cloud Optimized' = $NodeInfo.IsCloudOptimized
                                 'Epsilon' = $NodeInfo.IsEpsilonNode
                                 'System Healthy' = ($NodeInfo.IsNodeHealthy -eq $True) ? 'Healthy': 'UnHealthy'
                                 'Failed Fan Count' = $NodeInfo.EnvFailedFanCount

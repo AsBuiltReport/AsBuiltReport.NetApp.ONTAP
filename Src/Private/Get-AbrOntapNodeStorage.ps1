@@ -32,9 +32,9 @@ function Get-AbrOntapNodeStorage {
                         $inObj = [ordered] @{
                             'Node' = $Item.Vserver
                             'Aggregate' = $Item.Aggregate
-                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -42,7 +42,6 @@ function Get-AbrOntapNodeStorage {
                     }
                 }
                 if ($Healthcheck.Node.HW) {
-                    $OutObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
                     $OutObj | Where-Object { $_.'Used' -ge 90 } | Set-Style -Style Critical -Property 'Used'
                 }
 

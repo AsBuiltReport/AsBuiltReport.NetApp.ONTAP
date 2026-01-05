@@ -32,11 +32,11 @@ function Get-AbrOntapEfficiencyConfig {
                         $Saving = Get-NcAggr -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSpaceAttributes
                         $inObj = [ordered] @{
                             'Aggregate' = $Item.Name
-                            'Used %' = ($Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -Type Percent) ?? '--'
-                            'Capacity Tier Used' = ($Saving.CapacityTierUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Compaction Saved %' = ($Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent) ?? '--'
-                            'Deduplication Saved %' = ($Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -Type Percent) ?? '--'
-                            'Total Data Reduction' = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty ).TotalStorageEfficiencyRatio ?? '--'
+                            'Used %' = ($Saving.PercentUsedCapacity | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
+                            'Capacity Tier Used' = ($Saving.CapacityTierUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Compaction Saved %' = ($Saving.DataCompactionSpaceSavedPercent | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
+                            'Deduplication Saved %' = ($Saving.SisSpaceSavedPercent | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
+                            'Total Data Reduction' = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyCumulativeInfo).TotalStorageEfficiencyRatio ?? '--'
 
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)

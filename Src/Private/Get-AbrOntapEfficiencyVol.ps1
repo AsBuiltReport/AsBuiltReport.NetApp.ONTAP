@@ -36,12 +36,12 @@ function Get-AbrOntapEfficiencyVol {
                         $Saving = Get-NcEfficiency -Volume $Item.Name -Vserver $Vserver -Controller $Array
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
-                            'Capacity' = ($Saving.Capacity | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ($Saving.Used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Snapshot Used' = ($Saving.SnapshotUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Total Savings' = ($Saving.Returns.Total | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Effective Used' = ($Saving.EffectiveUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Efficiency Percent' = ($Saving.EfficiencyPercent | ConvertTo-FormattedNumber -Type Percent -NumberFormatString 0.0) ?? '--'
+                            'Capacity' = ($Saving.Capacity | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Saving.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Snapshot Used' = ($Saving.SnapshotUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Total Savings' = ($Saving.Returns.Total | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Effective Used' = ($Saving.EffectiveUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Efficiency Percent' = ($Saving.EfficiencyPercent | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent -NumberFormatString 0.0) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

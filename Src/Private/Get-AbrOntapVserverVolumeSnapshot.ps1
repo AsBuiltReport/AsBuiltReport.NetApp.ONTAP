@@ -38,9 +38,9 @@ function Get-AbrOntapVserverVolumeSnapshot {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Snapshot Enabled' = $SnapPolicy.AutoSnapshotsEnabled
-                            'Reserve Size' = ($SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Reserve Available' = ($SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ($SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Reserve Size' = ($SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Reserve Available' = ($SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Policy' = $SnapPolicy.SnapshotPolicy
                         }
 

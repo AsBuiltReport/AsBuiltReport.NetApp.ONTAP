@@ -36,9 +36,9 @@ function Get-AbrOntapVserverVolume {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Status' = $Item.State
-                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent -ErrorAction SilentlyContinue) ?? '--'
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Available' = ($Item.Available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Used' = ($Item.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
                             'Aggregate' = $Item.Aggregate
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)

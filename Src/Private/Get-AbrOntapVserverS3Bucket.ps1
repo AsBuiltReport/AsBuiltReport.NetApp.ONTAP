@@ -36,8 +36,8 @@ function Get-AbrOntapVserverS3Bucket {
                         $inObj = [ordered] @{
                             'Bucket' = $Item.Name
                             'Volume' = $Item.volume.name
-                            'Total' = ($Item.size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ($Item.logical_used_size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Total' = ($Item.size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Item.logical_used_size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
