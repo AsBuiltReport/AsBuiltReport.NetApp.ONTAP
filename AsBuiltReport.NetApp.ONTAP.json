@@ -18,9 +18,9 @@
         "DisableDiagramMainLogo": false,
         "DiagramTheme": "White",
         "DiagramWaterMark": "",
-        "ExportDiagrams": false,
+        "ExportDiagrams": true,
         "ExportDiagramsFormat": [
-            "png"
+            "pdf"
         ],
         "EnableDiagramSignature": false,
         "DiagramColumnSize": 4,

@@ -122,10 +122,9 @@ function Export-AbrOntapDiagram {
                 $Graph = $DiagramObject
                 $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
                 if ($Diagram) {
-                    if ((Get-DiaImagePercent -GraphObj $Diagram).Width -gt 600) { $ImagePrty = 40 } else { $ImagePrty = 30 }
+                    $BestAspectRatio = Get-DiaBestImageAspectRatio -GraphObj $Diagram -MaxWidth 600
                     Section -Style Heading2 $MainDiagramLabel {
-                        Image -Base64 $Diagram -Text 'NetApp Ontap Diagram' -Percent $ImagePrty -Align Center
-                        Paragraph 'Image preview: Opens the image in a new tab to view it at full resolution.' -Tabs 2
+                        Image -Base64 $Diagram -Text 'NetApp Ontap Diagram' -Width $BestAspectRatio.Width -Height $BestAspectRatio.Height -Align Center
                     }
                 }
             } catch {
