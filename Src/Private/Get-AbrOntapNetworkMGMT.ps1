@@ -216,8 +216,8 @@ function Get-AbrOntapNetworkMgmt {
             try {
                 $ClusterData = Get-NcNetInterface -Controller $Array | Where-Object { $_.DataProtocols -ne 'fcp' -and $_.IsHome -like 'False' }
                 if ($ClusterData) {
-                    Section -ExcludeFromTOC -Style Heading6 'HealthCheck - Network Interface Home Status' {
-                        Paragraph "The following table provides the LIF Home Status Information in $($ClusterInfo.ClusterName)."
+                    Section -ExcludeFromTOC -Style Heading6 'Network Interfaces Home Status' {
+                        Paragraph "The following table provides the LIF Home Status Information from $($ClusterInfo.ClusterName)."
                         BlankLine
                         $ClusterObj = @()
                         foreach ($Item in $ClusterData) {
@@ -239,7 +239,7 @@ function Get-AbrOntapNetworkMgmt {
                         }
 
                         $TableParams = @{
-                            Name = "Network Interface Home Status - $($ClusterInfo.ClusterName)"
+                            Name = "Network Interfaces Home Status - $($ClusterInfo.ClusterName)"
                             List = $false
                             ColumnWidths = 20, 25, 25, 10, 20
                         }

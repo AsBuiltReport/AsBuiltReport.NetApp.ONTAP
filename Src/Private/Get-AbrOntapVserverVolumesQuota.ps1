@@ -91,10 +91,10 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Type' = $Item.QuotaType
                                         'Target' = $Item.QuotaTarget
-                                        'Disk Limit' = ($Item.DiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                                        'File Limit' = ($Item.FileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
-                                        'Soft Disk Limit' = ($Item.SoftDiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                                        'Soft File Limit' = ($Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
+                                        'Disk Limit' = ($Item.DiskLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'File Limit' = ($Item.FileLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Count) ?? '--'
+                                        'Soft Disk Limit' = ($Item.SoftDiskLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Soft File Limit' = ($Item.SoftFileLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Count) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                     if ($null -ne $Item.QuotaError) {
@@ -136,9 +136,9 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
-                                        'Disk Limit' = ($Item.DiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                                        'Soft Disk Limit' = ($Item.SoftDiskLimit | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
-                                        'Disk Used' = ($Item.DiskUsed | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Disk Limit' = ($Item.DiskLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Soft Disk Limit' = ($Item.SoftDiskLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                                        'Disk Used' = ($Item.DiskUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {
@@ -179,9 +179,9 @@ function Get-AbrOntapVserverVolumesQuota {
                                         'Volume' = $Item.Volume
                                         'Quota Target' = $Item.QuotaTarget
                                         'Qtree' = $Item.Qtree
-                                        'File Limit' = ($Item.FileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
-                                        'Soft File Limit' = ($Item.SoftFileLimit | ConvertTo-FormattedNumber -Type Count) ?? '--'
-                                        'Files Used' = ($Item.FilesUsed | ConvertTo-FormattedNumber -Type Count) ?? '--'
+                                        'File Limit' = ($Item.FileLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Count) ?? '--'
+                                        'Soft File Limit' = ($Item.SoftFileLimit | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Count) ?? '--'
+                                        'Files Used' = ($Item.FilesUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Count) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {

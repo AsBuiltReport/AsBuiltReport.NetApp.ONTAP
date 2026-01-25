@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump Diagrammer.Core module requirement to v0.2.36
 - Bump module version to v0.6.12
 - Update github actions to use latest version
+- Export diagrams by default
 
 ### Fixed
 
@@ -31,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix model property assignment in Get-AbrOntapStorageAggrDiagram function
 - Fix Volume SnapShot Configuration section showing healthcheck for non violated item
 - Fix CodeQL analysis issues 27
+- Fix diagram size not respecting document border size
 
 ### Removed
 

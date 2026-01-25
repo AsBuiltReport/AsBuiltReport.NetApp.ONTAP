@@ -36,7 +36,7 @@ function Get-AbrOntapVserverVolumesFlexgroup {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Status' = $Item.State
-                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize) ?? '--'
+                            'Capacity' = ($Item.Totalsize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type DataSize) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {

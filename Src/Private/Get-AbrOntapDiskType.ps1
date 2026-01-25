@@ -24,66 +24,66 @@ function Get-AbrOntapDiskType {
 
     process {
         try {
-            if ($NodeDiskContainerType) {
-                $OutObj = @()
-                foreach ($DiskContainers in (Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskRaidInfo.ContainerType } | Group-Object)) {
-                    try {
-                        $inObj = [ordered] @{
-                            'Container' = $DiskContainers.Name
-                            'Disk Count' = $DiskContainers | Select-Object -ExpandProperty Count
-                        }
-                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
-                    } catch {
-                        Write-PScriboMessage -IsWarning $_.Exception.Message
+            $OutObj = @()
+            foreach ($DiskContainers in (Get-NcDisk -Controller $Array | ForEach-Object { $_.DiskRaidInfo.ContainerType } | Group-Object)) {
+                try {
+                    $inObj = [ordered] @{
+                        'Container' = $DiskContainers.Name
+                        'Disk Count' = $DiskContainers | Select-Object -ExpandProperty Count
                     }
+                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
                 }
-                if ($Healthcheck.Storage.DiskStatus) {
-                    $OutObj | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
-                }
-                $TableParams = @{
-                    Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 50, 50
-                }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $OutObj | Table @TableParams
             }
+            if ($Healthcheck.Storage.DiskStatus) {
+                $OutObj | Where-Object { $_.'Container' -like 'broken' } | Set-Style -Style Critical -Property 'Disk Count'
+            }
+            $TableParams = @{
+                Name = "Disk Container Type - $($ClusterInfo.ClusterName)"
+                List = $false
+                ColumnWidths = 50, 50
+            }
+            if ($Report.ShowTableCaptions) {
+                $TableParams['Caption'] = "- $($TableParams.Name)"
+            }
+            $OutObj | Table @TableParams
             $Node = Get-NcNode | Where-Object { $_.IsNodeHealthy -eq 'True' }
             if ($Node -and (Confirm-NcAggrSpareLow | Where-Object { $_.Value -eq 'True' })) {
-                $OutObj = @()
-                foreach ($Item in $Node) {
-                    try {
-                        $inObj = [ordered] @{
-                            'Node' = $Item.Node
-                            'Aggregate Spare Low' = (Confirm-NcAggrSpareLow -Node $Item.Node).Value.ToString().Replace('True', 'Yes').Replace('False', 'No')
+                Section -ExcludeFromTOC -Style NOTOCHeading5 'Aggregate Spare Low Warning Per Node' {
+                    $OutObj = @()
+                    foreach ($Item in $Node) {
+                        try {
+                            $inObj = [ordered] @{
+                                'Node' = $Item.Node
+                                'Aggregate Spare Low' = (Confirm-NcAggrSpareLow -Node $Item.Node).Value.ToString().Replace('True', 'Yes').Replace('False', 'No')
+                            }
+                            $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
                         }
-                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
-                    } catch {
-                        Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
-                }
-                if ($Healthcheck.Storage.DiskStatus) {
-                    $OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' } | Set-Style -Style Critical -Property 'Node', 'Aggregate Spare Low'
-                }
-                $TableParams = @{
-                    Name = "HealthCheck - Aggregate Disk Spare Low - $($ClusterInfo.ClusterName)"
-                    List = $false
-                    ColumnWidths = 50, 50
-                }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $OutObj | Table @TableParams
-                if ($Healthcheck.Storage.DiskStatus -and ($OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' })) {
-                    Paragraph 'Health Check:' -Bold -Underline
-                    BlankLine
-                    Paragraph {
-                        Text 'Best Practice:' -Bold
-                        Text 'Ensure that aggregate spare capacity is above the recommended threshold to maintain optimal performance and reliability.'
+                    if ($Healthcheck.Storage.DiskStatus) {
+                        $OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' } | Set-Style -Style Critical -Property 'Node', 'Aggregate Spare Low'
                     }
-                    BlankLine
+                    $TableParams = @{
+                        Name = "Aggregate Disk Spare Low - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 50, 50
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                    $OutObj | Table @TableParams
+                    if ($Healthcheck.Storage.DiskStatus -and ($OutObj | Where-Object { $_.'Aggregate Spare Low' -like 'Yes' })) {
+                        Paragraph 'Health Check:' -Bold -Underline
+                        BlankLine
+                        Paragraph {
+                            Text 'Best Practice:' -Bold
+                            Text 'Ensure that aggregate spare capacity is above the recommended threshold to maintain optimal performance and reliability.'
+                        }
+                        BlankLine
+                    }
                 }
             }
         } catch {

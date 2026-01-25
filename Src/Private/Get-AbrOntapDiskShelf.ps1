@@ -26,48 +26,52 @@ function Get-AbrOntapDiskShelf {
         try {
             $NodeSum = Get-NcNode -Controller $Array
             if ($NodeSum) {
-                $OutObj = @()
                 foreach ($Nodes in $NodeSum) {
                     try {
-                        $Nodeshelf = Get-NcShelf -NodeName $Nodes.Node -Controller $Array
+                        $Nodeshelf = Get-NcShelf -NodeName $Nodes.Node -Controller $Array -ErrorAction SilentlyContinue
                         if ($Nodeshelf) {
-                            $inObj = [ordered] @{
-                                'Node Name' = $Nodeshelf.NodeName
-                                'Channel' = $Nodeshelf.ChannelName
-                                'Shelf Name' = $Nodeshelf.ShelfName
-                                'Shelf ID' = $Nodeshelf.ShelfId
-                                'State' = $Nodeshelf.ShelfState
-                                'Type' = $Nodeshelf.ShelfType
-                                'Firmware' = $Nodeshelf.FirmwareRevA + $Nodeshelf.FirmwareRevB
-                                'Bay Count' = $Nodeshelf.ShelfBayCount
+                            Section -ExcludeFromTOC -Style NOTOCHeading4 $($Nodes.Node) {
+                                $OutObj = @()
+                                foreach ($Shelf in $Nodeshelf) {
+                                    $inObj = [ordered] @{
+                                        'Channel' = $Shelf.ChannelName
+                                        'Shelf Name' = $Shelf.ShelfName
+                                        'Shelf ID' = $Shelf.ShelfId
+                                        'Module' = $Shelf.Module
+                                        'Module State' = $Shelf.ModuleState
+                                        'State' = $Shelf.ShelfState
+                                        'Type' = $Shelf.ShelfType
+                                        'Firmware' = ($Shelf.FirmwareRevA + $Shelf.FirmwareRevB) ?? '--'
+                                    }
+                                    $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                                }
+                                if ($Healthcheck.Storage.ShelfStatus) {
+                                    $OutObj | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' } | Set-Style -Style Critical -Property 'State'
+                                    $OutObj | Where-Object { $_.'State' -like 'unknown' -or $_.'State' -like 'no-status' } | Set-Style -Style Warning -Property 'State'
+                                }
+                                $TableParams = @{
+                                    Name = "Storage Shelf - $($Nodes.Node)"
+                                    List = $false
+                                    ColumnWidths = 13, 13, 13, 13, 12, 12, 12, 12
+                                }
+                                if ($Report.ShowTableCaptions) {
+                                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                                }
+                                $OutObj | Table @TableParams
+                                if ($Healthcheck.Storage.ShelfStatus -and ($OutObj | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' })) {
+                                    Paragraph 'Health Check:' -Bold -Underline
+                                    BlankLine
+                                    Paragraph {
+                                        Text 'Best Practice:' -Bold
+                                        Text 'Ensure all disk shelves are online and operational. Investigate any shelves marked as offline or missing.'
+                                    }
+                                    BlankLine
+                                }
                             }
-                            $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
-                }
-                if ($Healthcheck.Storage.ShelfStatus) {
-                    $OutObj | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' } | Set-Style -Style Critical -Property 'State'
-                    $OutObj | Where-Object { $_.'State' -like 'unknown' -or $_.'State' -like 'no-status' } | Set-Style -Style Warning -Property 'State'
-                }
-                $TableParams = @{
-                    Name = "Shelf Inventory - $($ClusterInfo.ClusterName)"
-                    List = $true
-                    ColumnWidths = 35, 65
-                }
-                if ($Report.ShowTableCaptions) {
-                    $TableParams['Caption'] = "- $($TableParams.Name)"
-                }
-                $OutObj | Table @TableParams
-                if ($Healthcheck.Storage.ShelfStatus -and ($OutObj | Where-Object { $_.'State' -like 'offline' -or $_.'State' -like 'missing' })) {
-                    Paragraph 'Health Check:' -Bold -Underline
-                    BlankLine
-                    Paragraph {
-                        Text 'Best Practice:' -Bold
-                        Text 'Ensure all disk shelves are online and operational. Investigate any shelves marked as offline or missing.'
-                    }
-                    BlankLine
                 }
             }
         } catch {

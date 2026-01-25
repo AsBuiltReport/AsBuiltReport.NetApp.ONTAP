@@ -78,9 +78,9 @@ function Get-AbrOntapVserverSummary {
                                 $inObj = [ordered] @{
                                     'Root Volume' = $Item.Name
                                     'Status' = $Item.State
-                                    'Total Size' = ($Item.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                                    'Used' = ($Item.Used | ConvertTo-FormattedNumber -Type Percent) ?? '--'
-                                    'Available' = ($Item.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Total Size' = ($Item.Totalsize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Used' = ($Item.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
+                                    'Available' = ($Item.Available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                     'Dedup' = $Item.Dedupe
                                     'Aggregate' = $Item.Aggregate
                                 }
@@ -120,7 +120,7 @@ function Get-AbrOntapVserverSummary {
                                         'Aggregate' = $Item.AggregateName
                                         'Type' = $Item.AggregateType
                                         'SnapLock Type' = $Item.SnaplockType
-                                        'Available' = ($Item.AvailableSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                        'Available' = ($Item.AvailableSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                     }
                                     $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                                 } catch {

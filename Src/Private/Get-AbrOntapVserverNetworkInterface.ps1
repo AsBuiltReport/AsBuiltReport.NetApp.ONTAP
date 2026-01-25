@@ -60,7 +60,7 @@ function Get-AbrOntapVserverNetworkInterface {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
                 $ClusterObj | Table @TableParams
-                if ($Healthcheck.Network.Interface -and (($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' }) -or (($ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' })))) {
+                if ($Healthcheck.Network.Interface -and (($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' }) -or (($ClusterObj | Where-Object { $_.'Is Home' -ne 'Yes' })))) {
                     Paragraph 'Health Check:' -Bold -Underline
                     BlankLine
                     if ($ClusterObj | Where-Object { $_.'Status' -notlike 'UP' }) {
@@ -70,7 +70,7 @@ function Get-AbrOntapVserverNetworkInterface {
                         }
                         BlankLine
                     }
-                    if ($ClusterObj | Where-Object { $_.'IsHome' -ne 'Yes' }) {
+                    if ($ClusterObj | Where-Object { $_.'Is Home' -ne 'Yes' }) {
                         Paragraph {
                             Text 'Best Practice:' -Bold
                             Text 'Ensure that all network interfaces are on their designated home ports to maintain optimal network performance and reliability.'

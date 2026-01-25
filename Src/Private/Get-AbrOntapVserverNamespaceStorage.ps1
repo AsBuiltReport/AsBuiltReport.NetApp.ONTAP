@@ -42,9 +42,9 @@ function Get-AbrOntapVserverNamespaceStorage {
                             'Serial Number' = $Item.Uuid
                             'Subsystem Map' = ($namespacemap).count -eq 0 ? 'None': $namespacemap.Subsystem
                             'Home Node ' = $Item.Node
-                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Available' = (($Item.Size - $Item.SizeUsed) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ((($Item.SizeUsed / $Item.Size) * 100) | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Available' = (($Item.Size - $Item.SizeUsed) | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ((($Item.SizeUsed / $Item.Size) * 100) | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
                             'OS Type' = $Item.Ostype
                             'Is Mapped' = switch ([string]::IsNullOrEmpty($Item.Subsystem)) {
                                 $true { 'No' }

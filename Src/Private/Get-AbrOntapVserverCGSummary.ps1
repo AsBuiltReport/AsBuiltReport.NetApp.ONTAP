@@ -35,9 +35,9 @@ function Get-AbrOntapVserverCGSummary {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
-                            'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Available' = ($Item.space.available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ($Item.space.used | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Available' = ($Item.space.available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($Item.space.used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Replicated' = $Item.replicated
                             'Lun Count' = ($Item.luns.name).count
                         }

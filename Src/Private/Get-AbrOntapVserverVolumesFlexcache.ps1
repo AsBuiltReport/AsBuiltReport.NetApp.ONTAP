@@ -41,7 +41,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
                             'Cache Volume' = $Item.CacheVolume
                             'Origin Vserver' = $Item.OriginVserver
                             'Origin Volume' = $Item.OriginVolume
-                            'Capacity' = ($VolumeUsage.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Capacity' = ($VolumeUsage.TotalSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -72,7 +72,7 @@ function Get-AbrOntapVserverVolumesFlexcache {
                                 'Origin Volume' = $Item.OriginVolume
                                 'Cache Vserver' = $Item.Vserver
                                 'Cache Volume' = $Item.Volume
-                                'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             }
                             $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                         } catch {

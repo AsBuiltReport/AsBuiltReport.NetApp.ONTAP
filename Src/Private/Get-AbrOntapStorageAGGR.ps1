@@ -35,9 +35,9 @@ function Get-AbrOntapStorageAGGR {
                                 'Name' = $Data.Name
                                 'Home Nodes' = ${AggrOwner}?.HomeName ?? '--'
                                 'Owner Nodes' = ${AggrOwner}?.OwnerName ?? '--'
-                                'Capacity' = ($Data.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                                'Available' = ($Data.Available | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                                'Used' = (($Data.Totalsize - $Data.Available ) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Capacity' = ($Data.Totalsize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Available' = ($Data.Available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                'Used' = (($Data.Totalsize - $Data.Available ) | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                 'Disk Count' = $Data.Disks
                                 'Root' = ((Get-NcAggr -Name $Data.Name -Controller $Array | ForEach-Object { $_.AggrRaidAttributes.HasLocalRoot }) -eq 'False') ? 'No': 'Yes'
                                 'Raid Type' = (($Data.RaidType.Split(',')[0]).ToUpper()) ?? '--'
@@ -58,7 +58,7 @@ function Get-AbrOntapStorageAGGR {
                     }
 
                     if ($InfoLevel.Storage -ge 2) {
-                        Paragraph "The following sections detail the $($Data.Name) aggregate configuration."
+                        Paragraph "The following sections detail the storage aggregate configuration and health status in $($ClusterInfo.ClusterName)."
                         foreach ($Data in $ObjectDataInfo) {
                             Section -Style NOTOCHeading4 -ExcludeFromTOC "$($Data.Name)" {
                                 $TableParams = @{
@@ -111,15 +111,15 @@ function Get-AbrOntapStorageAGGR {
             try {
                 $AggrSpare = Get-NcAggrSpare -Controller $Array
                 if ($AggrSpare) {
-                    Section -Style Heading4 'Aggregate Spares' {
+                    Section -Style Heading4 'Disk Spares' {
                         $OutObj = @()
                         foreach ($Spare in $AggrSpare) {
                             try {
                                 $inObj = [ordered] @{
                                     'Name' = $Spare.Disk
-                                    'Capacity' = ($Spare.TotalSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                                    'Root Usable' = ($Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                                    'Data Usable' = ($Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Capacity' = ($Spare.TotalSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Root Usable' = ($Spare.LocalUsableRootSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                                    'Data Usable' = ($Spare.LocalUsableDataSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                                     'Shared Disk' = $Spare.IsDiskShared
                                     'Disk Zeroed' = $Spare.IsDiskZeroed
                                     'Owner' = $Spare.OriginalOwner
@@ -133,7 +133,7 @@ function Get-AbrOntapStorageAGGR {
                             $OutObj | Where-Object { $_.'Disk Zeroed' -eq 'No' } | Set-Style -Style Warning -Property 'Disk Zeroed'
                         }
                         $TableParams = @{
-                            Name = "Aggregates Spares - $($ClusterInfo.ClusterName)"
+                            Name = "Disk Spares - $($ClusterInfo.ClusterName)"
                             List = $false
                             ColumnWidths = 20, 12, 12, 12, 12, 12, 20
                         }
@@ -148,11 +148,11 @@ function Get-AbrOntapStorageAGGR {
             }
             try {
                 if ($InfoLevel.Storage -ge 2) {
-                    Section -Style Heading4 'Aggregate Options' {
+                    Section -Style Heading4 'Per Aggregate Options' {
                         $Aggregates = Get-NcAggr -Controller $Array | Where-Object { !$_.AggrRaidAttributes.HasLocalRoot }
                         foreach ($Aggregate in $Aggregates) {
                             try {
-                                Section -Style Heading5 "$($Aggregate.Name) Options" {
+                                Section -ExcludeFromTOC -Style NOTOCHeading5 "$($Aggregate.Name)" {
                                     $OutObj = @()
                                     $Options = Get-NcAggrOption -Controller $Array -Name $Aggregate.Name
                                     $Option = @{}
@@ -190,7 +190,7 @@ function Get-AbrOntapStorageAGGR {
                                     $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
 
                                     $TableParams = @{
-                                        Name = "Aggregates Options - $($Aggregate.Name)"
+                                        Name = "Options - $($Aggregate.Name)"
                                         List = $true
                                         ColumnWidths = 50, 50
                                     }

@@ -42,9 +42,9 @@ function Get-AbrOntapVserverLunStorage {
                             'Serial Number' = $Item.SerialNumber
                             'Initiator Group' = ($lunmap.count -eq 0) ? 'None': $lunmap
                             'Home Node ' = $Item.Node
-                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Available' = (($Item.Size - $Item.SizeUsed) | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Used' = ((($Item.SizeUsed / $Item.Size) * 100) | ConvertTo-FormattedNumber -Type Percent) ?? '--'
+                            'Capacity' = ($Item.Size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Available' = (($Item.Size - $Item.SizeUsed) | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ((($Item.SizeUsed / $Item.Size) * 100) | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) ?? '--'
                             'OS Type' = $Item.Protocol
                             'Is Thin' = $Item.Thin
                             'Space Allocation' = $Item.IsSpaceAllocEnabled -eq $True ? 'Enabled': 'Disabled'

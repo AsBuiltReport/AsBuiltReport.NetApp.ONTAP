@@ -36,7 +36,7 @@ function Get-AbrOntapSysConfigBackup {
                         $inObj = [ordered] @{
                             'Backup Name' = $Item.BackupName
                             'Created' = $Item.Created
-                            'Size' = ($Item.BackupSize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Size' = ($Item.BackupSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Schedule' = $Item.Schedule
                             'Is Auto' = $Item.IsAuto
                         }

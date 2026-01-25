@@ -1,4 +1,10 @@
 - [x] Migrate [PSCustomObject] @{ to $inObj
+- [x] Finish Get-AbrOntapDiskInv.ps1
+  - [x] Add Firmware
+  - [x] Add Type
+  - [x] Add Aggregate
+  - [x] Fix Capacity Formatting
+
 - [] Network Port Diagram
   - [] Cluster Network Ports:
     - [] Document all ports and lifs used by the cluster nodes for cluster communication.
@@ -44,4 +50,17 @@ Import-Module NetApp.ONTAP -Force
 Import-Module Diagrammer.Core -Force
 
 New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)\script\AsBuiltReport.json" -OutputFolderPath "$($env:HOME)\" -Target 192.168.7.60 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)\script\AsBuiltReport.NetApp.ONTAP.json"
+```
+
+```powershell
+$password = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
+$Cred = New-Object System.Management.Automation.PSCredential ("admin", $password)
+
+Connect-NcController 192.168.5.70 -Credential $Cred
+
+Import-Module AsBuiltReport.NetApp.ONTAP -Force
+Import-Module NetApp.ONTAP -Force
+Import-Module Diagrammer.Core -Force
+
+New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)\script\AsBuiltReport.json" -OutputFolderPath "$($env:HOME)\" -Target 192.168.5.70 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)\script\AsBuiltReport.NetApp.ONTAP.json"
 ```
