@@ -27,7 +27,7 @@
     #CompanyName = 'Unknown'
 
     # Copyright statement for this module
-    Copyright = '(c) 2025 Jonathan Colon Feliciano. All rights reserved.'
+    Copyright = '(c) 2026 Jonathan Colon Feliciano. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description = 'A PowerShell module to generate an as built report on the configuration of NetApp ONTAP.'
@@ -62,7 +62,7 @@
         },
         @{
             ModuleName = 'Diagrammer.Core';
-            ModuleVersion = '0.2.36'
+            ModuleVersion = '0.2.37'
         }
     )
 

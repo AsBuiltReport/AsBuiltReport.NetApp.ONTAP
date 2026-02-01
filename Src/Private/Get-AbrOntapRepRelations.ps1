@@ -38,7 +38,7 @@ function Get-AbrOntapRepRelationship {
                             'Destination Vserver' = $Item.DestinationVserver
                             'Destination Location' = $Item.DestinationLocation
                             'Mirror State' = $Item.MirrorState
-                            'Schedule' = ${Item}?.Schedule.toUpper()
+                            'Schedule' = ${Item}?.Schedule?.toUpper()
                             'Relationship Type' = switch ($Item.RelationshipType) {
                                 'extended_data_protection' { 'XDP' }
                                 'data_protection' { 'DP' }
@@ -51,7 +51,7 @@ function Get-AbrOntapRepRelationship {
                             'Policy Type' = $Item.PolicyType
                             'Unhealthy Reason' = ($Null -eq $Item.UnhealthyReason) ? 'None': $Item.UnhealthyReason
                             'Lag Time' = $lagtime
-                            'Status' = ${Item}?.Status.toUpper()
+                            'Status' = ${Item}?.Status?.toUpper()
                         }
                         $ReplicaObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 

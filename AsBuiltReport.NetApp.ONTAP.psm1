@@ -1,28 +1,19 @@
 # Get assemblies files and import them
-$assemblyName = switch ($PSVersionTable.PSEdition) {
+switch ($PSVersionTable.PSEdition) {
     'Core' {
         if ($IsMacOS) {
-            @(Get-ChildItem -Path ("$PSScriptRoot{0}Src{0}Bin{0}Assemblies{0}net90{0}osx-x64{0}*.dll" -f [System.IO.Path]::DirectorySeparatorChar) -ErrorAction SilentlyContinue)
+            Import-Module ("$PSScriptRoot{0}Src{0}Tools{0}Bin{0}osx-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
         } elseif ($IsLinux) {
-            @(Get-ChildItem -Path ("$PSScriptRoot{0}Src{0}Bin{0}Assemblies{0}net90{0}linux-x64{0}*.dll" -f [System.IO.Path]::DirectorySeparatorChar) -ErrorAction SilentlyContinue)
+            Import-Module ("$PSScriptRoot{0}Src{0}Tools{0}Bin{0}linux-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
         } elseif ($IsWindows) {
-            @(Get-ChildItem -Path ("$PSScriptRoot{0}Src{0}Bin{0}Assemblies{0}net90{0}win-x64{0}*.dll" -f [System.IO.Path]::DirectorySeparatorChar) -ErrorAction SilentlyContinue)
+            Import-Module ("$PSScriptRoot{0}Src{0}Tools{0}Bin{0}windows-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
         }
     }
     'Desktop' {
-        @(Get-ChildItem -Path ("$PSScriptRoot{0}Src{0}Bin{0}Assemblies{0}net48{0}*.dll" -f [System.IO.Path]::DirectorySeparatorChar) -ErrorAction SilentlyContinue)
+            Import-Module ("$PSScriptRoot{0}Src{0}Tools{0}Bin{0}windows-x64{0}AsBuiltReportChart.dll" -f [System.IO.Path]::DirectorySeparatorChar)
     }
     default {
         Write-Verbose -Message 'Unable to find compatible assemblies.'
-    }
-}
-
-foreach ($Assembly in $assemblyName) {
-    try {
-        Write-Verbose -Message "Loading assembly '$($Assembly.Name)'."
-        Add-Type -Path $Assembly.FullName -Verbose
-    } catch {
-        Write-Error -Message "Failed to add assembly $($Assembly.FullName): $_"
     }
 }
 
