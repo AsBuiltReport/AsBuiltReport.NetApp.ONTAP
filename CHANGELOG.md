@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Apply powershell best practices
 - Add ConvertTo-HashToYN function
 - Add EMS configuration setting health check
+- Add support for charts
+  - Aggragate Usage
+  - Per Node Disk Assignment
 
 ### Changed
 
@@ -33,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix Volume SnapShot Configuration section showing healthcheck for non violated item
 - Fix CodeQL analysis issues 27
 - Fix diagram size not respecting document border size
+- Fix HealthCheck - Volume without deduplication section displaying incorrect values
 
 ### Removed
 
