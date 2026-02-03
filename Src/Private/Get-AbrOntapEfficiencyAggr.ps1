@@ -55,10 +55,10 @@ function Get-AbrOntapEfficiencyAggr {
                 $OutObj | Table @TableParams
             }
             try {
+                $OutObj = @()
                 $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
                 $Savingfilter = (Get-NcAggrEfficiency -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
                 if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
-                    $OutObj = @()
                     foreach ($Item in $Data) {
                         try {
                             $Saving = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes
