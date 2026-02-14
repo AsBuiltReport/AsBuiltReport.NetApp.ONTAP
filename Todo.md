@@ -5,6 +5,10 @@
   - [x] Add Aggregate
   - [x] Fix Capacity Formatting
 
+- [ ] Aggregate Diagram
+- [ ] Add Raid group information to the Aggregate Diagram
+- [ ] Add Disk information to the Aggregate Diagram
+
 - [] Network Port Diagram
   - [] Cluster Network Ports:
     - [] Document all ports and lifs used by the cluster nodes for cluster communication.
@@ -58,4 +62,17 @@ Import-Module NetApp.ONTAP -Force
 Import-Module Diagrammer.Core -Force
 
 New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 192.168.5.72 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
+```
+
+```powershell
+$password = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
+$Cred = New-Object System.Management.Automation.PSCredential ("admin", $password)
+
+Connect-NcController 172.23.4.60 -Credential $Cred
+
+Import-Module AsBuiltReport.NetApp.ONTAP -Force
+Import-Module NetApp.ONTAP -Force
+Import-Module Diagrammer.Core -Force
+
+New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 172.23.4.60 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
 ```

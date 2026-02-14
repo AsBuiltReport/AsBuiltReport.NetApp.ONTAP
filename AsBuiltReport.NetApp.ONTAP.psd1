@@ -54,11 +54,11 @@
     RequiredModules = @(
         @{
             ModuleName = 'AsBuiltReport.Core';
-            ModuleVersion = '1.5.1'
+            ModuleVersion = '1.6.1'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
-            ModuleVersion = '9.17.1.2509'
+            ModuleVersion = '9.18.1.2601'
         },
         @{
             ModuleName = 'Diagrammer.Core';
