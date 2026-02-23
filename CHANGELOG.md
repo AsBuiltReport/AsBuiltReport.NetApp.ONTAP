@@ -23,7 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Bump Diagrammer.Core module requirement to v0.2.37
+- Bump Diagrammer.Core module requirement to v0.2.38
+- Bump AsBuiltReport.Chart module requirement to v0.2.0
+- Bump AsBuiltReport.Core module requirement to v1.6.2
 - Bump NetApp.ONTAP module requirement to v9.18.1.2601
 - Bump module version to v0.6.12
 - Update github actions to use latest version
