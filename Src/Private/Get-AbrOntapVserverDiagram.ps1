@@ -86,7 +86,7 @@ function Get-AbrOntapVserverDiagram {
             }
 
             # SVM node
-            $SVMNodeObj = Add-DiaHtmlNodeTable -Name 'SVMNodeObj' -ImagesObj $Images -inputObject $Vserver -Align 'Center' -iconType 'Ontap_SVM' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $SVMAdditionalInfo -Subgraph -SubgraphIconType 'Ontap_SVM_Icon' -SubgraphLabel $Vserver -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder '0' -SubgraphLabelFontSize 22 -FontSize 18
+            $SVMNodeObj = Add-DiaHtmlNodeTable -Name 'SVMNodeObj' -ImagesObj $Images -inputObject $Vserver -Align 'Center' -iconType 'Ontap_SVM' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $SVMAdditionalInfo -TableBorderColor '#71797E' -TableBorder '0' -FontSize 18
 
             if ($SVMNodeObj) {
                 $SVMMgmtObj = Add-DiaHtmlSubGraph -Name 'SVMMgmtObj' -ImagesObj $Images -TableArray $SVMNodeObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '0' -ColumnSize 1 -FontSize 12
@@ -141,7 +141,7 @@ function Get-AbrOntapVserverDiagram {
 
                         if ($AggrSubGraphObj) {
                             Node "$($VserverNodeName)Aggrs" @{Label = $AggrSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Edge -From "$($VserverNodeName)Aggrs" -To $VserverNodeName @{minlen = 2; color = $Edgecolor; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                            Edge -To "$($VserverNodeName)Aggrs" -From $VserverNodeName @{minlen = 2; color = $Edgecolor; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
                         }
                     }
                 } catch {
@@ -158,7 +158,8 @@ function Get-AbrOntapVserverDiagram {
                             'Name' = $Lif.InterfaceName
                             'AdditionalInfo' = [PSCustomObject][ordered]@{
                                 'IP' = switch ($Null -eq $Lif.Wwpn) {
-                                    $true { switch ([string]::IsNullOrEmpty($Lif.Address)) {
+                                    $true {
+                                        switch ([string]::IsNullOrEmpty($Lif.Address)) {
                                             $true { 'Unknown' }
                                             $false { $Lif.Address }
                                             default { 'Unknown' }
