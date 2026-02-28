@@ -39,6 +39,7 @@ function Get-AbrOntapVserverNetworkInterface {
                             'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                             'Data Protocols' = [string]$Item.DataProtocols
                             'Address' = ($Null -eq $Item.Wwpn) ? $Item.Address: $Item.Wwpn
+                            'Home Node' = $Item.HomeNode
                             'Is Home' = $Item.IsHome
                         }
                         $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
@@ -54,7 +55,7 @@ function Get-AbrOntapVserverNetworkInterface {
                 $TableParams = @{
                     Name = "Data Network - $($Vserver)"
                     List = $false
-                    ColumnWidths = 33, 10, 21, 18, 18
+                    ColumnWidths = 25, 9, 19, 17, 15, 15
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"

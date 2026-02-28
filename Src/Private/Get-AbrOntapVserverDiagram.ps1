@@ -238,6 +238,11 @@ function Get-AbrOntapVserverDiagram {
                                     $false { 'No' }
                                     default { 'Unknown' }
                                 }
+                                'Home Node' = switch ([string]::IsNullOrEmpty($Lif.HomeNode)) {
+                                    $true { 'Unknown' }
+                                    $false { $Lif.HomeNode }
+                                    default { 'Unknown' }
+                                }
                             }
                         }
                     }
@@ -247,7 +252,7 @@ function Get-AbrOntapVserverDiagram {
                     } elseif ($ColumnSize) {
                         $LifColumnSize = $ColumnSize
                     } else {
-                        $LifColumnSize = $LifInfo.Countno_icon.png
+                        $LifColumnSize = $LifInfo.Count
                     }
 
                     $LifNodeObj = Add-DiaHtmlNodeTable -Name 'LifNodeObj' -ImagesObj $Images -inputObject $LifInfo.Name -Align 'Center' -iconType 'Ontap_Network_Nic' -ColumnSize $LifColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $LifInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
