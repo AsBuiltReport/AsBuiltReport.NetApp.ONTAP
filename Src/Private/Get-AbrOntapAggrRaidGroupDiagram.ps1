@@ -1,0 +1,179 @@
+function Get-AbrOntapAggrRaidGroupDiagram {
+    <#
+    .SYNOPSIS
+        Used by As Built Report to built NetApp ONTAP aggregate RAID group diagram
+    .DESCRIPTION
+
+    .NOTES
+        Version:        0.6.12
+        Author:         Jonathan Colon
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
+    .EXAMPLE
+
+    .LINK
+
+    #>
+    [CmdletBinding()]
+    param (
+    )
+
+    begin {
+        Write-PScriboMessage 'Generating Aggregate RAID Group Diagram for NetApp ONTAP.'
+        # Used for DiagramDebug
+        if ($Options.EnableDiagramDebug) {
+            $EdgeDebug = @{style = 'filled'; color = 'red' }
+            $SubGraphDebug = @{style = 'dashed'; color = 'red' }
+            $NodeDebug = @{color = 'black'; style = 'red'; shape = 'plain' }
+            $NodeDebugEdge = @{color = 'black'; style = 'red'; shape = 'plain' }
+            $IconDebug = $true
+        } else {
+            $EdgeDebug = @{style = 'invis'; color = 'red' }
+            $SubGraphDebug = @{style = 'invis'; color = 'gray' }
+            $NodeDebug = @{color = 'transparent'; style = 'transparent'; shape = 'point' }
+            $NodeDebugEdge = @{color = 'transparent'; style = 'transparent'; shape = 'none' }
+            $IconDebug = $false
+        }
+
+        if ($Options.DiagramTheme -eq 'Black') {
+            $Edgecolor = 'White'
+            $Fontcolor = 'White'
+        } elseif ($Options.DiagramTheme -eq 'Neon') {
+            $Edgecolor = 'gold2'
+            $Fontcolor = 'gold2'
+        } else {
+            $Edgecolor = '#71797E'
+            $Fontcolor = '#565656'
+        }
+    }
+
+    process {
+        try {
+            $ClusterInfo = Get-NcCluster -Controller $Array
+            $NodeSum = Get-NcNode -Controller $Array
+
+            SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray' } {
+                try {
+
+                    if ($NodeSum.Count -eq 1) {
+                        $NodeSumColumnSize = 1
+                    } elseif ($ColumnSize) {
+                        $NodeSumColumnSize = $ColumnSize
+                    } else {
+                        $NodeSumColumnSize = $NodeSum.Count
+                    }
+
+                    $NodeAdditionalInfo = @()
+                    $AggrInfo = @()
+
+                    foreach ($Node in $NodeSum) {
+                        $NodeMgmtAddress = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'node_mgmt' -and $_.HomeNode -eq $Node.Node } | Select-Object -ExpandProperty Address
+
+                        $NodeAdditionalInfo += [PSCustomObject][ordered]@{
+                            'NodeName' = $Node.Node
+                            'AdditionalInfo' = [PSCustomObject][ordered]@{
+                                'Model' = $Node.NodeModel
+                                'Mgmt' = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
+                                    $true { 'Unknown' }
+                                    $false { $NodeMgmtAddress }
+                                    default { 'Unknown' }
+                                }
+                            }
+                        }
+
+                        $NodeAggr = Get-NcAggr -Controller $Array | Where-Object { $_.Nodes -eq $Node.Node }
+                        foreach ($Aggr in $NodeAggr) {
+                            # Get RAID group summary for this aggregate
+                            $AggrDisks = Get-NcDisk -Controller $Array | Where-Object {
+                                $_.DiskRaidInfo.ContainerType -eq 'aggregate' -and $_.Aggregate -eq $Aggr.Name
+                            }
+                            $RaidGroupCount = ($AggrDisks | Group-Object { $_.DiskRaidInfo.RaidGroup }).Count
+
+                            $AggrInfo += [PSCustomObject][ordered]@{
+                                'NodeName' = $Node.Node
+                                'AggregateName' = $Aggr.Name
+                                'AdditionalInfo' = [PSCustomObject][ordered]@{
+                                    'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
+                                        $true { 'Unknown' }
+                                        $false {
+                                            & {
+                                                switch ($Aggr.RaidType.Split(', ')[0]) {
+                                                    'raid4' { 'RAID 4' }
+                                                    'raid_dp' { 'RAID DP' }
+                                                    'raid0' { 'RAID 0' }
+                                                    'raid1' { 'RAID 1' }
+                                                    'raid10' { 'RAID 10' }
+                                                    default { 'Unknown' }
+                                                }
+                                            }
+                                        }
+                                        default { 'Unknown' }
+                                    }
+                                    'RAID Groups' = $RaidGroupCount
+                                    'Disk Count' = $Aggr.Disks
+                                    'State' = switch ([string]::IsNullOrEmpty($Aggr.State)) {
+                                        $true { 'Unknown' }
+                                        $false { $Aggr.State.ToUpper() }
+                                        default { 'Unknown' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $ClusterNodesObj = @()
+
+                    foreach ($Node in $NodeAdditionalInfo) {
+                        $ClusterNodeObj = @()
+                        $ClusterNodeObj += Add-DiaHtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject $Node.NodeName -Align 'Center' -iconType 'Ontap_Node' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
+
+                        if ($ClusterNodeObj) {
+                            $NodeAggrInfo = $AggrInfo | Where-Object { $_.NodeName -eq $Node.NodeName }
+                            if ($NodeAggrInfo) {
+                                if ($NodeAggrInfo.Count -eq 1) {
+                                    $AggrInfoColumnSize = 1
+                                } elseif ($ColumnSize) {
+                                    $AggrInfoColumnSize = $ColumnSize
+                                } else {
+                                    $AggrInfoColumnSize = $NodeAggrInfo.Count
+                                }
+                                $ClusterNodeObj += Add-DiaHtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject $NodeAggrInfo.AggregateName -Align 'Center' -iconType 'Ontap_Aggregate' -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $NodeAggrInfo.AdditionalInfo -Subgraph -SubgraphLabel 'Aggregates' -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
+                            }
+                        }
+
+                        if ($ClusterNodeObj) {
+                            $ClusterNodeSubgraphObj = Add-DiaHtmlSubGraph -Name 'ClusterNodeSubgraphObj' -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label ' ' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
+                        }
+
+                        $ClusterNodesObj += $ClusterNodeSubgraphObj
+                    }
+
+                    if ($ClusterNodesObj) {
+                        if ($ClusterNodesObj.Count -eq 1) {
+                            $ClusterNodesObjColumnSize = 1
+                        } elseif ($ColumnSize) {
+                            $ClusterNodesObjColumnSize = $ColumnSize
+                        } else {
+                            $ClusterNodesObjColumnSize = $ClusterNodesObj.Count
+                        }
+                        $ClusterMgmtObj = Add-DiaHtmlSubGraph -Name 'ClusterMgmtObj' -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController.Name)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize $ClusterNodesObjColumnSize -FontSize 18
+
+                        if ($ClusterMgmtObj) {
+                            Node ClusterRaidGroups @{Label = $ClusterMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+
+                        } else {
+                            Write-PScriboMessage -IsWarning 'Unable to create ClusterNodesObj. No Cluster Management Object found.'
+                        }
+                    }
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
+                }
+            }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
+        }
+    }
+
+    end {}
+
+}

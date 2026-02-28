@@ -196,6 +196,20 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Write-PScriboMessage -IsWarning 'Unable to generate the Aggregate Diagram.'
                             }
                         }
+                        if (Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'aggregate' }) {
+                            Section -Style Heading4 'RAID Groups' {
+                                Paragraph "The following section provides a summary of the RAID groups configured within each aggregate in $($ClusterInfo.ClusterName)."
+                                BlankLine
+                                Get-AbrOntapAggrRaidGroup
+                                $RaidGroupDiagram = Get-AbrOntapAggrRaidGroupDiagram
+                                if ($RaidGroupDiagram) {
+                                    Export-AbrOntapDiagram -DiagramObject $RaidGroupDiagram -MainDiagramLabel 'RAID Group Diagram' -FileName 'AsBuiltReport.NetApp.Ontap.RaidGroup'
+                                    BlankLine
+                                } else {
+                                    Write-PScriboMessage -IsWarning 'Unable to generate the RAID Group Diagram.'
+                                }
+                            }
+                        }
                         if (Get-NcAggrObjectStore -Controller $Array -Aggregate (Get-NcAggr -Controller $Array).Name) {
                             Section -Style Heading4 'FabricPool' {
                                 Get-AbrOntapStorageFabricPool
@@ -232,6 +246,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                             if (Get-NcDisk -Controller $Array | Where-Object { $_.DiskRaidInfo.ContainerType -eq 'broken' }) {
                                 Section -Style Heading4 'Failed Disk' {
                                     Get-AbrOntapDiskBroken
+                                }
+                            }
+                            if (Get-NcDisk -Controller $Array | Where-Object { $_.Name -match 'P\d+$' }) {
+                                Section -Style Heading4 'Disk Partitions' {
+                                    Paragraph "The following section provides information about disk partitions (Advanced Drive Partitioning) in $($ClusterInfo.ClusterName)."
+                                    BlankLine
+                                    Get-AbrOntapDiskPartition
                                 }
                             }
                             if (Get-NcNode -Controller $Array | Select-Object Node | Get-NcShelf -Controller $Array -ErrorAction SilentlyContinue) {

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add Disk Partition (ADP) information section [#42](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/42)
+- Add per-aggregate RAID Group information section [#42](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/42)
+- Add RAID Group Diagram showing Node → Aggregate → RAID Group relationships [#42](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/42)
 - Add Health Check best practices for Network Broadcast Domains
 - Add Health Check best practices for NTP configuration
   - Recommend multiple NTP servers for redundancy
