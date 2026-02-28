@@ -396,6 +396,12 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                 Section -Style Heading3 "$SVM Vserver Configuration" {
                                     Paragraph "The following section provides the configuration of the vserver $($SVM)."
                                     BlankLine
+                                    $VserverDiagram = Get-AbrOntapVserverDiagram -Vserver $SVM
+                                    if ($VserverDiagram) {
+                                        Export-AbrOntapDiagram -DiagramObject $VserverDiagram -MainDiagramLabel "$SVM Vserver Diagram" -FileName "AsBuiltReport.NetApp.Ontap.Vserver.$SVM"
+                                    } else {
+                                        Write-PScriboMessage -IsWarning "Unable to generate the $SVM Vserver Diagram."
+                                    }
                                     Get-AbrOntapVserverSummary -Vserver $SVM
 
                                     if (Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'data' -and $_.Vserver -notin $options.Exclude.Vserver -and $_.Vserver -eq $SVM }) {
