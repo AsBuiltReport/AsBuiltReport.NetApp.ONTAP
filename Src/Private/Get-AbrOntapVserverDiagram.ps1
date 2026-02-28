@@ -149,6 +149,62 @@ function Get-AbrOntapVserverDiagram {
                 }
             }
 
+            # Volumes
+            $VserverVolumes = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
+            if ($VserverVolumes) {
+                try {
+                    $VolInfo = @()
+                    foreach ($Vol in $VserverVolumes) {
+                        $VolInfo += [PSCustomObject][ordered]@{
+                            'Name' = $Vol.Name
+                            'AdditionalInfo' = [PSCustomObject][ordered]@{
+                                'State' = switch ([string]::IsNullOrEmpty($Vol.State)) {
+                                    $true { 'Unknown' }
+                                    $false { $TextInfo.ToTitleCase($Vol.State) }
+                                    default { 'Unknown' }
+                                }
+                                'Size' = switch ([string]::IsNullOrEmpty($Vol.Totalsize)) {
+                                    $true { 'Unknown' }
+                                    $false { ($Vol.Totalsize | ConvertTo-FormattedNumber -NumberFormatString 0.0 -Type DataSize -ErrorAction SilentlyContinue) }
+                                    default { 'Unknown' }
+                                }
+                                'Used' = switch ([string]::IsNullOrEmpty($Vol.Used)) {
+                                    $true { 'Unknown' }
+                                    $false { ($Vol.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) }
+                                    default { 'Unknown' }
+                                }
+                                'Aggregate' = switch ([string]::IsNullOrEmpty($Vol.Aggregate)) {
+                                    $true { 'Unknown' }
+                                    $false { $Vol.Aggregate }
+                                    default { 'Unknown' }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($VolInfo.Count -eq 1) {
+                        $VolColumnSize = 1
+                    } elseif ($ColumnSize) {
+                        $VolColumnSize = $ColumnSize
+                    } else {
+                        $VolColumnSize = $VolInfo.Count
+                    }
+
+                    $VolNodeObj = Add-DiaHtmlNodeTable -Name 'VolNodeObj' -ImagesObj $Images -inputObject $VolInfo.Name -Align 'Center' -iconType 'Ontap_Volume' -ColumnSize $VolColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $VolInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
+
+                    if ($VolNodeObj) {
+                        $VolSubGraphObj = Add-DiaHtmlSubGraph -Name 'VolSubGraphObj' -ImagesObj $Images -TableArray $VolNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Volumes' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
+
+                        if ($VolSubGraphObj) {
+                            Node "$($VserverNodeName)Vols" @{Label = $VolSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                            Edge -From $VserverNodeName -To "$($VserverNodeName)Vols" @{minlen = 2; color = $Edgecolor; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                        }
+                    }
+                } catch {
+                    Write-PScriboMessage -IsWarning $_.Exception.Message
+                }
+            }
+
             # LIFs
             if ($VserverLifs) {
                 try {

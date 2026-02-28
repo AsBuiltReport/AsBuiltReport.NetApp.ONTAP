@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add Vserver resources diagram showing SVM information, allocated aggregates, and network interfaces (LIFs)
+- Add Volume resources usage to the vserver diagram
 - Add Health Check best practices for Network Broadcast Domains
 - Add Health Check best practices for NTP configuration
   - Recommend multiple NTP servers for redundancy
