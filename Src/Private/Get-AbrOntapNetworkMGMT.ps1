@@ -51,7 +51,7 @@ function Get-AbrOntapNetworkMgmt {
                         $TableParams = @{
                             Name = "Cluster Network - $($ClusterInfo.ClusterName)"
                             List = $false
-                            ColumnWidths = 27, 8, 17, 15, 15, 18
+                            ColumnWidths = 27, 8, 12, 18, 17, 18
                         }
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
