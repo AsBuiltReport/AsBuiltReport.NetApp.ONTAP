@@ -19,13 +19,13 @@
     - [] Document all ports used by management access to the cluster nodes.
     - [] Document all ports used for replication traffic.
 
-- [] Vserver Diagram
-  - [] Document all vservers running on the cluster.
-  - [] Document the purpose of each vserver.
-  - [] Document the data access methods used by each vserver (NFS, SMB, iSCSI, etc.).
-  - [] Document the storage resources allocated to each vserver.
-  - [] Data Network Ports:
-    - [] Document all ports used for data access to the vservers running on the cluster
+- [x] Vserver Diagram
+  - [x] Document all vservers running on the cluster.
+  - [x] Document the purpose of each vserver.
+  - [x] Document the data access methods used by each vserver (NFS, SMB, iSCSI, etc.).
+  - [x] Document the storage resources allocated to each vserver.
+  - [x] Data Network Ports:
+    - [x] Document all ports used for data access to the vservers running on the cluster
 
 - [] Add Health check for Nodes without intercluster interface (Replication Information)
 
