@@ -1,10 +1,3 @@
-- [x] Migrate [PSCustomObject] @{ to $inObj
-- [x] Finish Get-AbrOntapDiskInv.ps1
-  - [x] Add Firmware
-  - [x] Add Type
-  - [x] Add Aggregate
-  - [x] Fix Capacity Formatting
-
 - [ ] Aggregate Diagram
 - [ ] Add Raid group information to the Aggregate Diagram
 - [ ] Add Disk information to the Aggregate Diagram
@@ -19,17 +12,8 @@
     - [] Document all ports used by management access to the cluster nodes.
     - [] Document all ports used for replication traffic.
 
-- [x] Vserver Diagram
-  - [x] Document all vservers running on the cluster.
-  - [x] Document the purpose of each vserver.
-  - [x] Document the data access methods used by each vserver (NFS, SMB, iSCSI, etc.).
-  - [x] Document the storage resources allocated to each vserver.
-  - [x] Data Network Ports:
-    - [x] Document all ports used for data access to the vservers running on the cluster
-
 - [] Add Health check for Nodes without intercluster interface (Replication Information)
 
-- [x] Add Per Volumes Export Policies
 - [] Implement InfoLevel 1/2 on every section
   - Example
     - Aggegate Option
@@ -37,8 +21,6 @@
     - Lun Summary vs Lun Full Information
 
 - [] Vserver Information
-  - [x] Add Vserver Lifs
-      - [] IP
   - [] Add healthcheck for no route in vserver
     - [] Configure at least one route to ensure client can assess the vserver services.
 
