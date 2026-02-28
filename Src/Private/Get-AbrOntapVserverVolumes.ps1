@@ -48,7 +48,7 @@ function Get-AbrOntapVserverVolume {
                 }
                 if ($Healthcheck.Vserver.Status) {
                     $VserverObj | Where-Object { $_.'Status' -like 'offline' } | Set-Style -Style Warning -Property 'Status'
-                    $VserverObj | Where-Object { $_.'Used'.Split('%')[0] -ge 75 } | Set-Style -Style Warning -Property 'Used'
+                    $VserverObj | Where-Object { [int]$_.'Used'.Split('%')[0] -ge 75 } | Set-Style -Style Warning -Property 'Used'
                 }
 
                 $TableParams = @{
@@ -70,7 +70,7 @@ function Get-AbrOntapVserverVolume {
                         }
                         BlankLine
                     }
-                    if ($VserverObj | Where-Object { $_.'Used'.Split('%')[0] -ge 75 }) {
+                    if ($VserverObj | Where-Object { [int]$_.'Used'.Split('%')[0] -ge 75 }) {
                         Paragraph {
                             Text 'Best Practice:' -Bold
                             Text 'Ensure all volumes are below 95% usage to prevent capacity issues.'
