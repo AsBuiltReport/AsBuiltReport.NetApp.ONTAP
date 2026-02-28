@@ -36,6 +36,7 @@ function Get-AbrOntapNetworkMgmt {
                                     'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = $Item.DataProtocols
                                     'Address' = $Item.Address
+                                    'Home Node' = $Item.HomeNode
                                     'Vserver' = $Item.Vserver
                                 }
                                 $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
@@ -50,7 +51,7 @@ function Get-AbrOntapNetworkMgmt {
                         $TableParams = @{
                             Name = "Cluster Network - $($ClusterInfo.ClusterName)"
                             List = $false
-                            ColumnWidths = 35, 8, 21, 18, 18
+                            ColumnWidths = 27, 8, 12, 18, 17, 18
                         }
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -83,6 +84,7 @@ function Get-AbrOntapNetworkMgmt {
                                     'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = $Item.DataProtocols
                                     'Address' = $Item.Address
+                                    'Home Node' = $Item.HomeNode
                                     'Vserver' = $Item.Vserver
                                 }
                                 $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
@@ -97,7 +99,7 @@ function Get-AbrOntapNetworkMgmt {
                         $TableParams = @{
                             Name = "Management Network - $($ClusterInfo.ClusterName)"
                             List = $false
-                            ColumnWidths = 35, 8, 21, 18, 18
+                            ColumnWidths = 27, 8, 17, 15, 15, 18
                         }
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -129,6 +131,7 @@ function Get-AbrOntapNetworkMgmt {
                                     'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = $Item.DataProtocols
                                     'Address' = $Item.Address
+                                    'Home Node' = $Item.HomeNode
                                     'Vserver' = $Item.Vserver
                                 }
                                 $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
@@ -143,7 +146,7 @@ function Get-AbrOntapNetworkMgmt {
                         $TableParams = @{
                             Name = "Intercluster Network - $($ClusterInfo.ClusterName)"
                             List = $false
-                            ColumnWidths = 35, 8, 21, 18, 18
+                            ColumnWidths = 27, 8, 17, 15, 15, 18
                         }
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"
@@ -179,6 +182,7 @@ function Get-AbrOntapNetworkMgmt {
                                     'Status' = ${Item}?.OpStatus?.ToString()?.ToUpper()
                                     'Data Protocols' = [string]$Item.DataProtocols
                                     'Address' = $AddressData
+                                    'Home Node' = $Item.HomeNode
                                     'Vserver' = $Item.Vserver
                                 }
                                 $ClusterObj += [pscustomobject](ConvertTo-HashToYN $inObj)
@@ -193,7 +197,7 @@ function Get-AbrOntapNetworkMgmt {
                         $TableParams = @{
                             Name = "Data Network - $($ClusterInfo.ClusterName)"
                             List = $false
-                            ColumnWidths = 33, 10, 21, 18, 18
+                            ColumnWidths = 25, 10, 17, 15, 15, 18
                         }
                         if ($Report.ShowTableCaptions) {
                             $TableParams['Caption'] = "- $($TableParams.Name)"

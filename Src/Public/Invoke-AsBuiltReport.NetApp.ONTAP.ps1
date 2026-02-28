@@ -119,6 +119,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
             'Ontap_Cluster_Network' = 'ontap_stack_switch.png'
             'Ontap_Single_Network' = 'ontap_single_switch.png'
             'Ontap_Network_Nic' = 'nic_port.png'
+            'Ontap_Volume' = 'FlexVol.png'
         }
         $script:ColumnSize = $Options.DiagramColumnSize
 
