@@ -54,15 +54,19 @@
     RequiredModules = @(
         @{
             ModuleName = 'AsBuiltReport.Core';
-            ModuleVersion = '1.5.1'
+            ModuleVersion = '1.6.2'
+        },
+        @{
+            ModuleName = 'AsBuiltReport.Chart';
+            ModuleVersion = '0.2.0'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
-            ModuleVersion = '9.17.1.2509'
+            ModuleVersion = '9.18.1.2601'
         },
         @{
             ModuleName = 'Diagrammer.Core';
-            ModuleVersion = '0.2.37'
+            ModuleVersion = '0.2.38'
         }
     )
 

@@ -110,7 +110,7 @@ function Get-AbrOntapStorageAGGR {
                             BlankLine
                         }
                     }
-                    $Chart = New-StackedBar -Values $ChartData -Labels $AggrName -LegendCategories @('Used', 'Free') -Title 'Aggregates Usage' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Width 600 -Height 600 -Format base64 -LabelYAxis '%' -LabelXAxis 'Aggregates' -TitleFontSize 20 -TitleFontBold -AreaOrientation Horizontal -EnableCustomColorPalette -CustomColorPalette @('#7b98bc', '#c0ddff')
+                    $Chart = New-StackedBarChart -Values $ChartData -Labels $AggrName -LegendCategories @('Used', 'Free') -Title 'Aggregates Usage' -EnableLegend -LegendOrientation Horizontal -LegendAlignment UpperCenter -Width 600 -Height 600 -Format base64 -LabelYAxis '%' -LabelXAxis 'Aggregates' -TitleFontSize 20 -TitleFontBold -AreaOrientation Horizontal -EnableCustomColorPalette -CustomColorPalette @('#7b98bc', '#c0ddff')
                     if ($Chart) {
                         Section -Style NOTOCHeading4 -ExcludeFromTOC 'Aggragate Usage - Chart' {
                             Image -Text 'Aggragate Usage - Chart' -Align 'Center' -Percent 100 -Base64 $Chart
