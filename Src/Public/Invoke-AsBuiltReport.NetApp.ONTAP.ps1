@@ -436,6 +436,18 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                         Get-AbrOntapVserverVolumesQosSetting -Vserver $SVM
                                                     }
                                                 }
+                                                Section -Style Heading5 'Per Volumes Space Attributes' {
+                                                    Get-AbrOntapVserverVolumesSpaceAttr -Vserver $SVM
+                                                }
+                                                Section -Style Heading5 'Per Volumes Autosize Attributes' {
+                                                    Get-AbrOntapVserverVolumesAutosize -Vserver $SVM
+                                                }
+                                                Section -Style Heading5 'Per Volumes Inode Attributes' {
+                                                    Get-AbrOntapVserverVolumesInodeAttr -Vserver $SVM
+                                                }
+                                                Section -Style Heading5 'Per Volumes Language Attributes' {
+                                                    Get-AbrOntapVserverVolumesLanguage -Vserver $SVM
+                                                }
                                             }
                                             if (Get-NcVol -VserverContext $SVM -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' -and $_.VolumeStateAttributes.IsFlexgroup -eq 'True' }) {
                                                 Section -Style Heading4 'FlexGroup Volumes' {
