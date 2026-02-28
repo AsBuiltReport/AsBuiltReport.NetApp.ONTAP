@@ -47,6 +47,7 @@
 Import-Module AsBuiltReport.NetApp.ONTAP -Force
 Import-Module NetApp.ONTAP -Force
 Import-Module Diagrammer.Core -Force
+Import-Module AsBuiltReport.Chart -Force
 
 New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 192.168.7.60 -Format HTML -EnableHealthCheck -UserName 'admin' -Password 'P@ssw0rd' -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
 ```
@@ -60,9 +61,9 @@ Connect-NcController 192.168.5.72 -Credential $Cred
 Import-Module AsBuiltReport.NetApp.ONTAP -Force
 Import-Module NetApp.ONTAP -Force
 Import-Module Diagrammer.Core -Force
+Import-Module AsBuiltReport.Chart -Force
 
-New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 192.168.5.72 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
-```
+New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 192.168.5.72 -Format HTML -EnableHealthCheck -UserName 'admin' -Password 'P@ssw0rd' -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
 
 ```powershell
 $password = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
@@ -73,6 +74,7 @@ Connect-NcController 172.23.4.60 -Credential $Cred
 Import-Module AsBuiltReport.NetApp.ONTAP -Force
 Import-Module NetApp.ONTAP -Force
 Import-Module Diagrammer.Core -Force
+Import-Module AsBuiltReport.Chart -Force
 
 New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 172.23.4.60 -Format HTML -EnableHealthCheck -Credential $Cred -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
 ```
