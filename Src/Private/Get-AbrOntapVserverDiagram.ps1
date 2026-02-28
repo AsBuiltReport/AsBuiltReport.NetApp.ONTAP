@@ -56,7 +56,7 @@ function Get-AbrOntapVserverDiagram {
         try {
             $ClusterInfo = Get-NcCluster -Controller $Array
             $VserverData = Get-NcVserver -VserverContext $Vserver | Where-Object { $_.VserverType -eq 'data' }
-            $VserverAggrs = Get-NcVserverAggr -VserverContext $Vserver -Controller $Array
+            $VserverAggrs = (Get-NcVol -VserverContext $Vserver -Controller $Array).Aggregate | ForEach-Object { Get-NcAggr -Name $_ } | Select-Object -Unique
             $VserverLifs = Get-NcNetInterface -Controller $Array | Where-Object { $_.Vserver -eq $Vserver -and $_.Role -eq 'data' }
 
             $VserverNodeName = Remove-SpecialChar -String $Vserver -SpecialChars '\-_'
@@ -89,7 +89,7 @@ function Get-AbrOntapVserverDiagram {
             $SVMNodeObj = Add-DiaHtmlNodeTable -Name 'SVMNodeObj' -ImagesObj $Images -inputObject $Vserver -Align 'Center' -iconType 'Ontap_SVM' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $SVMAdditionalInfo -TableBorderColor '#71797E' -TableBorder '0' -FontSize 18
 
             if ($SVMNodeObj) {
-                $SVMMgmtObj = Add-DiaHtmlSubGraph -Name 'SVMMgmtObj' -ImagesObj $Images -TableArray $SVMNodeObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '0' -ColumnSize 1 -FontSize 12
+                $SVMMgmtObj = Add-DiaHtmlSubGraph -Name 'SVMMgmtObj' -ImagesObj $Images -TableArray $SVMNodeObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -ColumnSize 1 -FontSize 12
 
                 if ($SVMMgmtObj) {
                     Node $VserverNodeName @{Label = $SVMMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
@@ -107,9 +107,9 @@ function Get-AbrOntapVserverDiagram {
                         $AggrInfo += [PSCustomObject][ordered]@{
                             'Name' = $Aggr.AggregateName
                             'AdditionalInfo' = [PSCustomObject][ordered]@{
-                                'Type' = switch ([string]::IsNullOrEmpty($Aggr.AggregateType)) {
+                                'Raid Type' = switch ([string]::IsNullOrEmpty($Aggr.RaidType)) {
                                     $true { 'Unknown' }
-                                    $false { $Aggr.AggregateType }
+                                    $false { $Aggr.RaidType }
                                     default { 'Unknown' }
                                 }
                                 'Available' = switch ([string]::IsNullOrEmpty($AggrData.Available)) {
@@ -173,7 +173,7 @@ function Get-AbrOntapVserverDiagram {
                                     $false { ($Vol.Used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -Type Percent) }
                                     default { 'Unknown' }
                                 }
-                                'Aggregate' = switch ([string]::IsNullOrEmpty($Vol.Aggregate)) {
+                                'Aggr' = switch ([string]::IsNullOrEmpty($Vol.Aggregate)) {
                                     $true { 'Unknown' }
                                     $false { $Vol.Aggregate }
                                     default { 'Unknown' }
@@ -247,7 +247,7 @@ function Get-AbrOntapVserverDiagram {
                     } elseif ($ColumnSize) {
                         $LifColumnSize = $ColumnSize
                     } else {
-                        $LifColumnSize = $LifInfo.Count
+                        $LifColumnSize = $LifInfo.Countno_icon.png
                     }
 
                     $LifNodeObj = Add-DiaHtmlNodeTable -Name 'LifNodeObj' -ImagesObj $Images -inputObject $LifInfo.Name -Align 'Center' -iconType 'Ontap_Network_Nic' -ColumnSize $LifColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $LifInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
