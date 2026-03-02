@@ -20,6 +20,9 @@ function Get-AbrOntapClusterDiagram {
 
     begin {
         Write-PScriboMessage 'Generating Cluster Diagram for NetApp ONTAP.'
+        # Set the root path for icons
+        $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+        [System.IO.FileInfo]$IconPath = Join-Path $RootPath 'icons'
         # Used for DiagramDebug
         if ($Options.EnableDiagramDebug) {
             $EdgeDebug = @{style = 'filled'; color = 'red' }
@@ -52,55 +55,6 @@ function Get-AbrOntapClusterDiagram {
             $ClusterInfo = Get-NcCluster -Controller $Array
             $NodeSum = Get-NcNode -Controller $Array
 
-            # $NodeSum = @(
-            #     [pscustomobject]@{
-            #         Node = "PHARMAX-HQ-01"
-            #         NodeModel = "A400"
-            #         NodeSystemId = "1234567890"
-            #         NodeSerialNumber = "SN1234567890"
-            #     },
-            #     [pscustomobject]@{
-            #         Node = "PHARMAX-HQ-02"
-            #         NodeModel = "A400"
-            #         NodeSystemId = "0987654321"
-            #         NodeSerialNumber = "SN0987654321"
-            #     },
-            #     [pscustomobject]@{
-            #         Node = "PHARMAX-HQ-03"
-            #         NodeModel = "FAS2720"
-            #         NodeSystemId = "0987654322"
-            #         NodeSerialNumber = "SN0987654322"
-            #     },
-            #     [pscustomobject]@{
-            #         Node = "PHARMAX-HQ-04"
-            #         NodeModel = "FAS2720"
-            #         NodeSystemId = "0987654323"
-            #         NodeSerialNumber = "SN0987654323"
-            #     }
-            # )
-            # $ClusterHaObj = @(
-            #     [pscustomobject]@{
-            #         Name = "PHARMAX-HQ-01"
-            #         Partner = "PHARMAX-HQ-02"
-            #         State = "connected"
-            #     },
-            #     [pscustomobject]@{
-            #         Name = "PHARMAX-HQ-02"
-            #         Partner = "PHARMAX-HQ-01"
-            #         State = "connected"
-            #     },
-            #     [pscustomobject]@{
-            #         Name = "PHARMAX-HQ-03"
-            #         Partner = "PHARMAX-HQ-04"
-            #         State = "connected"
-            #     },
-            #     [pscustomobject]@{
-            #         Name = "PHARMAX-HQ-04"
-            #         Partner = "PHARMAX-HQ-03"
-            #         State = "connected"
-            #     }
-            # )
-
             SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray' } {
                 SubGraph ClusterInfo -Attributes @{Label = "Management: $($ClusterInfo.NcController)"; fontsize = 12; penwidth = 1.5; labelloc = 'b'; labeljust = 'r'; style = 'dashed,rounded'; color = 'transparent' } {
                     try {
@@ -118,7 +72,6 @@ function Get-AbrOntapClusterDiagram {
                         $NodeAdditionalInfo = @()
 
                         foreach ($Node in $NodeSum) {
-                            # $ClusterHa = $ClusterHaObj | Where-Object { $_.Name -eq $Node.Node }
                             $ClusterHa = try { Get-NcClusterHa -Node $Node.Node -Controller $Array } catch { Write-PScriboMessage -IsWarning $_.Exception.Message }
 
                             $NodeMgmtAddress = Get-NcNetInterface -Controller $Array | Where-Object { $_.Role -eq 'node_mgmt' -and $_.HomeNode -eq $Node.Node } | Select-Object -ExpandProperty Address
@@ -143,9 +96,27 @@ function Get-AbrOntapClusterDiagram {
                                         $false { $NodeMgmtAddress }
                                         default { 'Unknown' }
                                     }
+                                    'Intercluster' = switch ([string]::IsNullOrEmpty($NodeInterClusterAddress)) {
+                                        $true { 'Unknown' }
+                                        $false { $NodeInterClusterAddress }
+                                        default { 'Unknown' }
+                                    }
                                 }
                             }
                         }
+
+                        # Build a flat list of all graphviz node names for edge creation
+                        $AllNodeNames = @()
+                        foreach ($HA in $HAObject) {
+                            $AllNodeNames += Remove-SpecialChar -String $HA.Name -SpecialChars '\-_'
+                            if ($HA.Partner) {
+                                $AllNodeNames += Remove-SpecialChar -String $HA.Partner -SpecialChars '\-_'
+                            }
+                        }
+
+                        # Cluster Network switch
+                        $ClusterNetworkImage = Add-DiaNodeImage -Name 'ClusterSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug -TableBackgroundColor '#a1e3fd'
+                        Add-DiaHtmlSubGraph -Name 'ClusterNetwork' -TableArray $ClusterNetworkImage -Label 'Cluster Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#a1e3fd'
 
                         if ($HAObject.Name -and $HAObject.Partner) {
                             foreach ($HA in $HAObject) {
@@ -172,6 +143,21 @@ function Get-AbrOntapClusterDiagram {
                                     Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
                                 }
                             }
+                        }
+
+                        # Management Network switch
+                        $MgmtNetworkImage = Add-DiaNodeImage -Name 'MgmtSwitch1' -ImagesObj $Images -IconType 'Ontap_Management_Network' -IconDebug $IconDebug -TableBackgroundColor '#d5e8d4'
+                        Add-DiaHtmlSubGraph -Name 'ManagementNetwork' -TableArray $MgmtNetworkImage -Label 'Management Network' -LabelPos bottom -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkgreen' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#d5e8d4'
+
+                        # Data Network switch
+                        $DataNetworkImage = Add-DiaNodeImage -Name 'DataSwitch1' -ImagesObj $Images -IconType 'Ontap_Single_Network' -IconDebug $IconDebug -TableBackgroundColor '#dae8fc'
+                        Add-DiaHtmlSubGraph -Name 'DataNetwork' -TableArray $DataNetworkImage -Label 'Data Network' -LabelPos bottom -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#dae8fc'
+
+                        # Connect all nodes to the network infrastructure elements
+                        foreach ($NodeName in $AllNodeNames) {
+                            Edge -From 'ClusterNetwork' -To $NodeName -Attributes @{minlen = 2; color = '#5B9BD5'; fontcolor = $Fontcolor; fontsize = 10; style = 'dashed'; penwidth = 1.5; arrowhead = 'none'; arrowtail = 'none' }
+                            Edge -From $NodeName -To 'ManagementNetwork' -Attributes @{minlen = 2; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 10; style = 'dashed'; penwidth = 1.5; arrowhead = 'none'; arrowtail = 'none' }
+                            Edge -From $NodeName -To 'DataNetwork' -Attributes @{minlen = 2; color = '#70AD47'; fontcolor = $Fontcolor; fontsize = 10; style = 'dashed'; penwidth = 1.5; arrowhead = 'none'; arrowtail = 'none' }
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
