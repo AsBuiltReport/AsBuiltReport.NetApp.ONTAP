@@ -151,7 +151,7 @@ function Get-AbrOntapClusterReplicationDiagram {
 
             if ($VserverPeerSubGraphObj) {
                 Node SourceVservers @{Label = $VserverPeerSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                Edge -From SourceVservers -To SourceCluster @{minlen = 2; color = '#71797E'; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                Add-DiaNodeEdge -From 'SourceVservers' -To 'SourceCluster' -EdgeColor '#71797E' -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
                 Rank SourceVservers, SourceCluster
             }
         } catch {
@@ -220,7 +220,7 @@ function Get-AbrOntapClusterReplicationDiagram {
                 }
 
                 if ($ClusterReplicaNodeObj) {
-                    Edge -From SourceCluster:e -To $RemoteClusterName @{minlen = 3; color = '#71797E'; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                    Add-DiaNodeEdge -From 'SourceCluster:e' -To $RemoteClusterName -EdgeColor '#71797E' -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 3 -GraphvizAttributes @{style = 'filled'}
                 }
 
                 try {
@@ -242,7 +242,7 @@ function Get-AbrOntapClusterReplicationDiagram {
 
                     if ($PeerVserverPeerSubGraphObj -and $RemoteClusterName) {
                         Node "$($RemoteClusterName)PeerVservers" @{Label = $PeerVserverPeerSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                        Edge -From $RemoteClusterName -To "$($RemoteClusterName)PeerVservers" @{minlen = 2; color = '#71797E'; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                        Add-DiaNodeEdge -From $RemoteClusterName -To "$($RemoteClusterName)PeerVservers" -EdgeColor '#71797E' -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
                     } else {
                         Write-PScriboMessage -IsWarning 'Unable to create Peer Vserver Node. No Peer Vserver Object found.'
                     }
