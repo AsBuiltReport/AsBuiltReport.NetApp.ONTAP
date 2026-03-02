@@ -68,6 +68,63 @@ function Get-AbrOntapStorageAggrDiagram {
                     $NodeAdditionalInfo = @()
                     $AggrInfo = @()
 
+                    # Collect RAID group data per aggregate
+                    # Primary: use REST API
+                    $AggrRaidGroupData = [ordered]@{}
+                    try {
+                        $AggrRestData = Get-NetAppOntapAPI -uri '/api/storage/aggregates?fields=name,block_storage.plexes&return_records=true&return_timeout=15'
+                        if ($AggrRestData) {
+                            foreach ($AggrRest in $AggrRestData) {
+                                $RgNames = @()
+                                if ($AggrRest.block_storage.plexes) {
+                                    foreach ($Plex in $AggrRest.block_storage.plexes) {
+                                        if ($Plex.raid_groups) {
+                                            foreach ($RG in $Plex.raid_groups) {
+                                                $RgNames += "$($Plex.name)/$($RG.name)"
+                                            }
+                                        }
+                                    }
+                                }
+                                $AggrRaidGroupData[$AggrRest.name] = $RgNames
+                            }
+                        }
+                    } catch {
+                        Write-PScriboMessage -IsWarning "Unable to retrieve aggregate RAID group info from REST API: $($_.Exception.Message)"
+                    }
+
+                    # Fallback: SSH if REST API returned no RAID group data
+                    if (($AggrRaidGroupData.Values | Where-Object { $_.Count -gt 0 }).Count -eq 0) {
+                        try {
+                            # Run diagnostics command to list disk partition RAID group assignments.
+                            # Output line format: <Partition> <Size> aggregate <ContainerPath> <Owner>
+                            # ContainerPath format: /AggregateName/PlexName/RaidGroupName
+                            $SshResult = Invoke-NcSsh -Command 'set diag -confirmations off;storage disk partition show' -Controller $Array
+                            if ($SshResult.Value) {
+                                foreach ($Line in ($SshResult.Value -split "`n")) {
+                                    # Match lines: <Partition> <Size> aggregate /<Aggregate>/<Plex>/<RaidGroup> <Owner>
+                                    if ($Line -match '^\s+\S+\s+\S+\s+aggregate\s+(\/\S+)\s+\S+') {
+                                        # ContainerPath parts: [0]=AggregateName, [1]=PlexName, [2]=RaidGroupName
+                                        $Parts = $Matches[1].TrimStart('/').Split('/')
+                                        if ($Parts.Count -ge 3) {
+                                            $AggrN = $Parts[0]
+                                            $PlexN = $Parts[1]
+                                            $RgN = $Parts[2]
+                                            $RgKey = "$PlexN/$RgN"
+                                            if (-not $AggrRaidGroupData.ContainsKey($AggrN)) {
+                                                $AggrRaidGroupData[$AggrN] = @()
+                                            }
+                                            if ($RgKey -notin $AggrRaidGroupData[$AggrN]) {
+                                                $AggrRaidGroupData[$AggrN] += $RgKey
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } catch {
+                            Write-PScriboMessage -IsWarning "Unable to retrieve partition info via SSH: $($_.Exception.Message)"
+                        }
+                    }
+
                     foreach ($Node in $NodeSum) {
                         $ClusterHa = Get-NcClusterHa -Node $Node.Node -Controller $Array
 
@@ -98,6 +155,11 @@ function Get-AbrOntapStorageAggrDiagram {
 
                         $NodeAggr = Get-NcAggr | Where-Object { $_.Nodes -eq $Node.Node }
                         foreach ($Aggr in $NodeAggr) {
+                            $RgInfo = if ($AggrRaidGroupData.ContainsKey($Aggr.Name) -and $AggrRaidGroupData[$Aggr.Name]) {
+                                ($AggrRaidGroupData[$Aggr.Name] | Sort-Object) -join ', '
+                            } else {
+                                'N/A'
+                            }
                             $AggrInfo += [PSCustomObject][ordered]@{
                                 'NodeName' = $Node.Node
                                 'AggregateName' = $Aggr.Name
@@ -122,6 +184,7 @@ function Get-AbrOntapStorageAggrDiagram {
                                         default { 'Unknown' }
                                     }
                                     'Raid Size' = $Aggr.RaidSize
+                                    'RAID Groups' = $RgInfo
                                     'State' = switch ([string]::IsNullOrEmpty($Aggr.State)) {
                                         $true { 'Unknown' }
                                         $false { $Aggr.State.ToUpper() }
