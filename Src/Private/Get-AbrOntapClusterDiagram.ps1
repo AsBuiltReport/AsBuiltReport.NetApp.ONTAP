@@ -156,6 +156,51 @@ function Get-AbrOntapClusterDiagram {
                             Add-DiaNodeEdge -From $NodeName -To 'ManagementNetwork' -EdgeColor $Edgecolor -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
                             Add-DiaNodeEdge -From $NodeName -To 'DataNetwork' -EdgeColor '#70AD47' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
                         }
+
+                        # Data Network - Per Broadcast Domain Information
+                        try {
+                            $DataBroadcastDomains = Get-NcNetPortBroadcastDomain -Controller $Array | Where-Object { $_.BroadcastDomain -ne 'Cluster' }
+
+                            if ($DataBroadcastDomains) {
+                                foreach ($BDomain in $DataBroadcastDomains) {
+                                    $BDomainSafeName = Remove-SpecialChar -String $BDomain.BroadcastDomain -SpecialChars '\-_:'
+
+                                    $PortTextItems = @()
+                                    if ($BDomain.Ports) {
+                                        foreach ($PortMember in $BDomain.Ports) {
+                                            $PortSafeName = Remove-SpecialChar -String $PortMember -SpecialChars '\-_:'
+                                            $PortTextItems += Add-DiaNodeText -Name "BD${BDomainSafeName}${PortSafeName}" -Text $PortMember -IconDebug $IconDebug -FontSize 12
+                                        }
+                                    } else {
+                                        $PortTextItems += Add-DiaNodeText -Name "BD${BDomainSafeName}NoPorts" -Text 'No Ports Assigned' -IconDebug $IconDebug -FontSize 12
+                                    }
+
+                                    Add-DiaHtmlSubGraph -Name "${BDomainSafeName}BroadcastDomain" `
+                                        -TableArray $PortTextItems `
+                                        -ImagesObj $Images `
+                                        -IconDebug $IconDebug `
+                                        -TableBorder 1 `
+                                        -Label "$($BDomain.BroadcastDomain) | IPSpace: $($BDomain.Ipspace) | MTU: $($BDomain.Mtu)" `
+                                        -LabelPos 'top' `
+                                        -TableStyle 'rounded,dashed' `
+                                        -TableBorderColor '#70AD47' `
+                                        -FontName 'Segoe Ui Bold' `
+                                        -NodeObject `
+                                        -ColumnSize 1 `
+                                        -FontSize 14
+
+                                    Add-DiaNodeEdge -From 'DataNetwork' -To "${BDomainSafeName}BroadcastDomain" `
+                                        -EdgeColor '#70AD47' `
+                                        -EdgeStyle 'dashed' `
+                                        -Arrowhead 'none' `
+                                        -Arrowtail 'none' `
+                                        -EdgeLength 2 `
+                                        -GraphvizAttributes @{penwidth = 1.5}
+                                }
+                            }
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
+                        }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
