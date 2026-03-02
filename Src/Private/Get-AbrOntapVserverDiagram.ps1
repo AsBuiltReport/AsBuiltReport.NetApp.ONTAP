@@ -197,7 +197,7 @@ function Get-AbrOntapVserverDiagram {
 
                         if ($VolSubGraphObj) {
                             Node "$($VserverNodeName)Vols" @{Label = $VolSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Edge -From $VserverNodeName -To "$($VserverNodeName)Vols" @{minlen = 2; color = $Edgecolor; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                            Add-DiaNodeEdge -From $VserverNodeName -To "$($VserverNodeName)Vols" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
                         }
                     }
                 } catch {
@@ -262,7 +262,7 @@ function Get-AbrOntapVserverDiagram {
 
                         if ($LifSubGraphObj) {
                             Node "$($VserverNodeName)Lifs" @{Label = $LifSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Edge -From $VserverNodeName -To "$($VserverNodeName)Lifs" @{minlen = 2; color = $Edgecolor; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                            Add-DiaNodeEdge -From $VserverNodeName -To "$($VserverNodeName)Lifs" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
                         }
                     }
                 } catch {

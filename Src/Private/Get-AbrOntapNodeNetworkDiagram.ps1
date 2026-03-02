@@ -192,9 +192,9 @@ function Get-AbrOntapNodeNetworkDiagram {
 
                         Add-DiaHtmlSubGraph -Name "$($Port.NodeName)ClusterPorts" -TableArray $ClusterPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label 'Cluster Network Ports' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $ClusterPortObjColumnSize -NodeObject
 
-                        Edge -From 'ClusterNetwork' -To "$($Port.NodeName)ClusterPorts" @{color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+                        Add-DiaNodeEdge -From 'ClusterNetwork' -To "$($Port.NodeName)ClusterPorts" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12
 
-                        Edge -From "$($Port.NodeName)ClusterPorts" -To $Node.NodeName @{minlen = 1; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+                        Add-DiaNodeEdge -From "$($Port.NodeName)ClusterPorts" -To $Node.NodeName -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
 
                         # Non-IFGRP Ports without Vlan Interfces
                         foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') -and $_.PortName -notmatch 'a0' -and $_.PortType -ne 'vlan' -and $_.IsParentVlan -eq $false })) {
@@ -215,20 +215,20 @@ function Get-AbrOntapNodeNetworkDiagram {
 
                             Add-DiaHtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $PerPortLifsColumnSize
 
-                            Edge -From $Node.NodeName -To "$($Port.NodeName)$($Port.PortName)_Lifs" @{minlen = 1; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+                            Add-DiaNodeEdge -From $Node.NodeName -To "$($Port.NodeName)$($Port.PortName)_Lifs" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
                         }
 
                         # foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Ifgrp Port' -notin @('None', 'Unknown') })) {
                         #     Add-DiaNodeIcon -Name "$($Port.NodeName)_$($Port.PortName)" -LabelName "$($Port.PortName)" -ImagesObj $Images -Align "Center" -IconType "Ontap_Network_Port" -IconDebug $IconDebug -AditionalInfo $Port.AdditionalInfo -NodeObject
 
-                        #     Edge -From $Node.NodeName -To "$($Port.NodeName)_$($Port.PortName)" @{minlen = 1; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 12; style = 'dashed'; penwidth = 1; arrowhead = 'box'; arrowtail = 'box' }
+                        #     Add-DiaNodeEdge -From $Node.NodeName -To "$($Port.NodeName)_$($Port.PortName)" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
                         # }
                     }
                 }
 
                 foreach ($HA in $HAObject) {
                     if ($HA.Partner) {
-                        Edge -From $HA.Name -To $HA.Partner @{tailport = $HA.Name; headport = $HA.Partner; minlen = 3; label = "HA: $($HA.HAState)"; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 16; style = 'solid'; penwidth = 2; arrowhead = 'box'; arrowtail = 'box' }
+                        Add-DiaNodeEdge -From $HA.Name -To $HA.Partner -EdgeColor $Edgecolor -EdgeStyle 'solid' -EdgeThickness 2 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabel "HA: $($HA.HAState)" -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 16 -EdgeLength 3 -TailPort $HA.Name -HeadPort $HA.Partner
                         Rank $HA.Name, $HA.Partner
                     }
                 }
