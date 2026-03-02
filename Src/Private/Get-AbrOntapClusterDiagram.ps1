@@ -132,7 +132,7 @@ function Get-AbrOntapClusterDiagram {
 
                                     Rank $HAName, $HAPartner
 
-                                    Edge -From $HAName -To $HAPartner -Attributes @{minlen = 2; label = "HA: $($HA.HAState)"; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 16; style = 'solid'; penwidth = 2; arrowhead = 'box'; arrowtail = 'box' }
+                                    Add-DiaNodeEdge -From $HAName -To $HAPartner -EdgeColor $Edgecolor -EdgeStyle 'solid' -EdgeThickness 2 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabel "HA: $($HA.HAState)" -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 16 -EdgeLength 2
                                 }
                             }
                         } else {
@@ -155,9 +155,9 @@ function Get-AbrOntapClusterDiagram {
 
                         # Connect all nodes to the network infrastructure elements
                         foreach ($NodeName in $AllNodeNames) {
-                            Edge -From 'ClusterNetwork' -To $NodeName -Attributes @{minlen = 2; color = '#5B9BD5'; fontcolor = $Fontcolor; fontsize = 10; style = 'dashed'; penwidth = 1.5; arrowhead = 'none'; arrowtail = 'none' }
-                            Edge -From $NodeName -To 'ManagementNetwork' -Attributes @{minlen = 2; color = $Edgecolor; fontcolor = $Fontcolor; fontsize = 10; style = 'dashed'; penwidth = 1.5; arrowhead = 'none'; arrowtail = 'none' }
-                            Edge -From $NodeName -To 'DataNetwork' -Attributes @{minlen = 2; color = '#70AD47'; fontcolor = $Fontcolor; fontsize = 10; style = 'dashed'; penwidth = 1.5; arrowhead = 'none'; arrowtail = 'none' }
+                            Add-DiaNodeEdge -From 'ClusterNetwork' -To $NodeName -EdgeColor '#5B9BD5' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
+                            Add-DiaNodeEdge -From $NodeName -To 'ManagementNetwork' -EdgeColor $Edgecolor -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
+                            Add-DiaNodeEdge -From $NodeName -To 'DataNetwork' -EdgeColor '#70AD47' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
                         }
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
