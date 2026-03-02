@@ -53,7 +53,7 @@ function Get-AbrOntapClusterDiagram {
             $NodeSum = Get-NcNode -Controller $Array
 
             SubGraph Cluster -Attributes @{Label = $ClusterInfo.ClusterName; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray' } {
-                SubGraph ClusterInfo -Attributes @{Label = "Management: $($ClusterInfo.NcController)"; fontsize = 12; penwidth = 1.5; labelloc = 'b'; labeljust = 'r'; style = 'dashed,rounded'; color = 'transparent' } {
+                SubGraph ClusterInfo -Attributes @{Label = "Management: $($ClusterInfo.NcController)"; fontsize = 16; penwidth = 1.5; labelloc = 'b'; labeljust = 'r'; style = 'dashed,rounded'; color = 'transparent' } {
                     try {
 
                         if ($NodeSum.Count -eq 1) {
@@ -118,7 +118,7 @@ function Get-AbrOntapClusterDiagram {
                         if ($HAObject.Name -and $HAObject.Partner) {
                             foreach ($HA in $HAObject) {
                                 $HAClusterName = Remove-SpecialChar -String "HA$($HA.Name)$($HA.Partner)" -SpecialChars '\-_'
-                                SubGraph $HAClusterName -Attributes @{Label = 'HA Pair'; fontsize = 14; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray'; labeljust = 'c' } {
+                                SubGraph $HAClusterName -Attributes @{Label = 'HA Pair'; fontsize = 16; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray'; labeljust = 'c' } {
 
                                     $HAName = Remove-SpecialChar -String $HA.Name -SpecialChars '\-_'
                                     $HAPartner = Remove-SpecialChar -String $HA.Partner -SpecialChars '\-_'
@@ -135,7 +135,7 @@ function Get-AbrOntapClusterDiagram {
                         } else {
                             foreach ($HA in $HAObject) {
                                 $HAClusterName = Remove-SpecialChar -String "HA$($HA.Name)" -SpecialChars '\-_'
-                                SubGraph $HAClusterName -Attributes @{Label = 'Single Node Cluster'; fontsize = 12; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray'; labeljust = 'c' } {
+                                SubGraph $HAClusterName -Attributes @{Label = 'Single Node Cluster'; fontsize = 16; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = 'gray'; labeljust = 'c' } {
                                     $HAName = Remove-SpecialChar -String $HA.Name -SpecialChars '\-_'
                                     Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
                                 }
@@ -143,18 +143,18 @@ function Get-AbrOntapClusterDiagram {
                         }
 
                         # Management Network switch
-                        $MgmtNetworkImage = Add-DiaNodeImage -Name 'MgmtSwitch1' -ImagesObj $Images -IconType 'Ontap_Management_Network' -IconDebug $IconDebug -TableBackgroundColor '#d5e8d4'
-                        Add-DiaHtmlSubGraph -Name 'ManagementNetwork' -TableArray $MgmtNetworkImage -Label 'Management Network' -LabelPos down -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkgreen' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#d5e8d4'
+                        $MgmtNetworkImage = Add-DiaNodeImage -Name 'MgmtSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug -TableBackgroundColor '#d5e8d4'
+                        Add-DiaHtmlSubGraph -Name 'ManagementNetwork' -TableArray $MgmtNetworkImage -Label 'Management Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkgreen' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#d5e8d4'
 
                         # Data Network switch
-                        $DataNetworkImage = Add-DiaNodeImage -Name 'DataSwitch1' -ImagesObj $Images -IconType 'Ontap_Single_Network' -IconDebug $IconDebug -TableBackgroundColor '#dae8fc'
-                        Add-DiaHtmlSubGraph -Name 'DataNetwork' -TableArray $DataNetworkImage -Label 'Data Network' -LabelPos down -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#dae8fc'
+                        $DataNetworkImage = Add-DiaNodeImage -Name 'DataSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug -TableBackgroundColor '#dae8fc'
+                        Add-DiaHtmlSubGraph -Name 'DataNetwork' -TableArray $DataNetworkImage -Label 'Data Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#dae8fc'
 
                         # Connect all nodes to the network infrastructure elements
                         foreach ($NodeName in $AllNodeNames) {
-                            Add-DiaNodeEdge -From 'ClusterNetwork' -To $NodeName -EdgeColor '#5B9BD5' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
-                            Add-DiaNodeEdge -From $NodeName -To 'ManagementNetwork' -EdgeColor $Edgecolor -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
-                            Add-DiaNodeEdge -From $NodeName -To 'DataNetwork' -EdgeColor '#70AD47' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -GraphvizAttributes @{penwidth = 1.5}
+                            Add-DiaNodeEdge -From 'ClusterNetwork' -To $NodeName -EdgeColor '#5B9BD5' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -EdgeThickness 3
+                            Add-DiaNodeEdge -From 'ManagementNetwork' -To $NodeName -EdgeColor $Edgecolor -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -EdgeThickness 3
+                            Add-DiaNodeEdge -From $NodeName -To 'DataNetwork' -EdgeColor '#70AD47' -EdgeStyle 'dashed' -Arrowhead 'none' -Arrowtail 'none' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 10 -EdgeLength 2 -EdgeThickness 3
                         }
 
                         # Data Network - Per Broadcast Domain Information
@@ -180,13 +180,13 @@ function Get-AbrOntapClusterDiagram {
                                         -ImagesObj $Images `
                                         -IconDebug $IconDebug `
                                         -TableBorder 1 `
-                                        -Label "$($BDomain.BroadcastDomain) | IPSpace: $($BDomain.Ipspace) | MTU: $($BDomain.Mtu)" `
+                                        -Label "$($BDomain.BroadcastDomain) | MTU: $($BDomain.Mtu)" `
                                         -LabelPos 'top' `
                                         -TableStyle 'rounded,dashed' `
                                         -TableBorderColor '#70AD47' `
                                         -FontName 'Segoe Ui Bold' `
                                         -NodeObject `
-                                        -ColumnSize 1 `
+                                        -ColumnSize 3 `
                                         -FontSize 14
 
                                     Add-DiaNodeEdge -From 'DataNetwork' -To "${BDomainSafeName}BroadcastDomain" `
@@ -195,7 +195,7 @@ function Get-AbrOntapClusterDiagram {
                                         -Arrowhead 'none' `
                                         -Arrowtail 'none' `
                                         -EdgeLength 2 `
-                                        -GraphvizAttributes @{penwidth = 1.5}
+                                        -EdgeThickness 3
                                 }
                             }
                         } catch {
