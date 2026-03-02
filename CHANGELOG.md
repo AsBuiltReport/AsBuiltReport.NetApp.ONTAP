@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix diagram size not respecting document border size
 - Fix HealthCheck - Volume without deduplication section displaying incorrect values
 - Fix type conversion for volume usage percentage checks in Get-AbrOntapVserverVolume function
+- Fix: Join management addresses into a comma-separated string in cluster and node diagrams
 
 ### Removed
 

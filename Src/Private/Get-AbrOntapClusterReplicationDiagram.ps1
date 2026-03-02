@@ -79,7 +79,7 @@ function Get-AbrOntapClusterReplicationDiagram {
                 $NodeAdditionalInfo += [PSCustomObject][ordered]@{
                     'Management' = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
                         $true { 'Unknown' }
-                        $false { $NodeMgmtAddress }
+                        $false { $NodeMgmtAddress -join ',' }
                         default { 'Unknown' }
                     }
                     'Intercluster' = switch ([string]::IsNullOrEmpty($NodeInterClusterAddress)) {
