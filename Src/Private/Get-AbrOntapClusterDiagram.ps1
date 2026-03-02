@@ -20,9 +20,6 @@ function Get-AbrOntapClusterDiagram {
 
     begin {
         Write-PScriboMessage 'Generating Cluster Diagram for NetApp ONTAP.'
-        # Set the root path for icons
-        $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-        [System.IO.FileInfo]$IconPath = Join-Path $RootPath 'icons'
         # Used for DiagramDebug
         if ($Options.EnableDiagramDebug) {
             $EdgeDebug = @{style = 'filled'; color = 'red' }
@@ -147,11 +144,11 @@ function Get-AbrOntapClusterDiagram {
 
                         # Management Network switch
                         $MgmtNetworkImage = Add-DiaNodeImage -Name 'MgmtSwitch1' -ImagesObj $Images -IconType 'Ontap_Management_Network' -IconDebug $IconDebug -TableBackgroundColor '#d5e8d4'
-                        Add-DiaHtmlSubGraph -Name 'ManagementNetwork' -TableArray $MgmtNetworkImage -Label 'Management Network' -LabelPos bottom -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkgreen' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#d5e8d4'
+                        Add-DiaHtmlSubGraph -Name 'ManagementNetwork' -TableArray $MgmtNetworkImage -Label 'Management Network' -LabelPos down -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkgreen' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#d5e8d4'
 
                         # Data Network switch
                         $DataNetworkImage = Add-DiaNodeImage -Name 'DataSwitch1' -ImagesObj $Images -IconType 'Ontap_Single_Network' -IconDebug $IconDebug -TableBackgroundColor '#dae8fc'
-                        Add-DiaHtmlSubGraph -Name 'DataNetwork' -TableArray $DataNetworkImage -Label 'Data Network' -LabelPos bottom -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#dae8fc'
+                        Add-DiaHtmlSubGraph -Name 'DataNetwork' -TableArray $DataNetworkImage -Label 'Data Network' -LabelPos down -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 16 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#dae8fc'
 
                         # Connect all nodes to the network infrastructure elements
                         foreach ($NodeName in $AllNodeNames) {
