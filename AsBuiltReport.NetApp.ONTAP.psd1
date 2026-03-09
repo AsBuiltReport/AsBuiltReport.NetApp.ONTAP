@@ -58,15 +58,15 @@
         },
         @{
             ModuleName = 'AsBuiltReport.Chart';
-            ModuleVersion = '0.2.0'
+            ModuleVersion = '0.3.0'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
             ModuleVersion = '9.18.1.2601'
         },
         @{
-            ModuleName = 'Diagrammer.Core';
-            ModuleVersion = '0.2.39'
+            ModuleName = 'AsBuiltReport.Diagram';
+            ModuleVersion = '1.0.0'
         }
     )
 
