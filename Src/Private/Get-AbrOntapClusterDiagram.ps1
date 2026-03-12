@@ -90,7 +90,7 @@ function Get-AbrOntapClusterDiagram {
                                     'Model' = $Node.NodeModel
                                     'Mgmt' = switch ([string]::IsNullOrEmpty($NodeMgmtAddress)) {
                                         $true { 'Unknown' }
-                                        $false { $NodeMgmtAddress -join ',' }
+                                        $false { @($NodeMgmtAddress) -join ', ' }
                                         default { 'Unknown' }
                                     }
                                     'Intercluster' = switch ([string]::IsNullOrEmpty($NodeInterClusterAddress)) {
