@@ -65,6 +65,9 @@
             ModuleVersion = '9.18.1.2601'
         },
         @{
+            ModuleName = 'Diagrammer.Core'
+        },
+        @{
             ModuleName = 'AsBuiltReport.Diagram';
             ModuleVersion = '1.0.0'
         }
