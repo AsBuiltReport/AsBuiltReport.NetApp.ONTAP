@@ -26,13 +26,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Bump Diagrammer.Core module requirement to v0.2.38
-- Bump AsBuiltReport.Chart module requirement to v0.2.0
+- Migrate from Diagrammer.Core to AsBuiltReport.Diagram for diagram generation
+- Bump AsBuiltReport.Chart module requirement to v0.3.0
 - Bump AsBuiltReport.Core module requirement to v1.6.2
 - Bump NetApp.ONTAP module requirement to v9.18.1.2601
 - Bump module version to v0.6.12
 - Update github actions to use latest version
 - Export diagrams by default
+- Improved Cluster diagram to show Broadcast Domains and network ports per node
 
 ### Fixed
 
@@ -44,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix diagram size not respecting document border size
 - Fix HealthCheck - Volume without deduplication section displaying incorrect values
 - Fix type conversion for volume usage percentage checks in Get-AbrOntapVserverVolume function
+- Fix: Join management addresses into a comma-separated string in cluster and node diagrams
 
 ### Removed
 
