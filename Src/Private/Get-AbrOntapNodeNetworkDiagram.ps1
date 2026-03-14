@@ -260,6 +260,28 @@ function Get-AbrOntapNodeNetworkDiagram {
 
                             $IfgrpPortObj += Add-DiaHtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_IfgrpLifs" -TableArray $IfgrpPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label $IfgrpPort.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpPortLifsColumnSize
 
+                            # Child VLAN interfaces grouped under this IFGRP port
+                            if ($NetVlanInfo) {
+                                foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.ParentInterface -eq $IfgrpPort.PortName })) {
+                                    $IfgrpVlanLifs = @()
+                                    foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
+                                        $IfgrpVlanLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
+                                            Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
+                                        } else {
+                                            Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                                        }
+                                    }
+
+                                    if (-not $IfgrpVlanLifs) {
+                                        $IfgrpVlanLifs = Add-DiaNodeText -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                    }
+
+                                    if ($IfgrpVlanLifs.Count -eq 1) { $IfgrpVlanLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpVlanLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpVlanLifsColumnSize = $IfgrpVlanLifs.Count }
+
+                                    $IfgrpPortObj += Add-DiaHtmlSubGraph -Name "$($VlanPort.NodeName)$($VlanPort.InterfaceName)_VlanLifs" -TableArray $IfgrpVlanLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label "$($VlanPort.InterfaceName) (VLAN $($VlanPort.VlanID))" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpVlanLifsColumnSize
+                                }
+                            }
+
                             if ($IfgrpPortObj.Count -eq 1) { $IfgrpPortObjColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpPortObjColumnSize = $Options.DiagramColumnSize } else { $IfgrpPortObjColumnSize = $IfgrpPortObj.Count }
 
                             Add-DiaHtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_Ifgrp" -TableArray $IfgrpPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label "$($IfgrpPort.PortName) (IFGRP)" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $IfgrpPortObjColumnSize
@@ -267,27 +289,36 @@ function Get-AbrOntapNodeNetworkDiagram {
                             Add-DiaNodeEdge -From $Node.NodeName -To "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_Ifgrp" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
                         }
 
-                        # VLAN Interface Ports with LIFs
+                        # Physical Parent Ports with grouped Child VLAN Interfaces
                         if ($NetVlanInfo) {
-                            foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.Nodename })) {
-                                $VlanPortLifs = @()
-                                foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
-                                    $VlanPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
-                                        Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
-                                    } else {
-                                        Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                            foreach ($ParentPort in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.IsParentVlan -eq $true -and $_.PortType -ne 'ifgrp' -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') })) {
+                                $ChildVlanObjs = @()
+                                foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.ParentInterface -eq $ParentPort.PortName })) {
+                                    $VlanPortLifs = @()
+                                    foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
+                                        $VlanPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
+                                            Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
+                                        } else {
+                                            Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                                        }
                                     }
+
+                                    if (-not $VlanPortLifs) {
+                                        $VlanPortLifs = Add-DiaNodeText -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                    }
+
+                                    if ($VlanPortLifs.Count -eq 1) { $VlanPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $VlanPortLifsColumnSize = $Options.DiagramColumnSize } else { $VlanPortLifsColumnSize = $VlanPortLifs.Count }
+
+                                    $ChildVlanObjs += Add-DiaHtmlSubGraph -Name "$($VlanPort.NodeName)$($VlanPort.InterfaceName)_VlanLifs" -TableArray $VlanPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label "$($VlanPort.InterfaceName) (VLAN $($VlanPort.VlanID))" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $VlanPortLifsColumnSize
                                 }
 
-                                if (-not $VlanPortLifs) {
-                                    $VlanPortLifs = Add-DiaNodeText -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                if ($ChildVlanObjs) {
+                                    if ($ChildVlanObjs.Count -eq 1) { $ChildVlanColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $ChildVlanColumnSize = $Options.DiagramColumnSize } else { $ChildVlanColumnSize = $ChildVlanObjs.Count }
+
+                                    Add-DiaHtmlSubGraph -Name "$($ParentPort.NodeName)$($ParentPort.PortName)_ParentVlanPort" -TableArray $ChildVlanObjs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label $ParentPort.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $ChildVlanColumnSize
+
+                                    Add-DiaNodeEdge -From $Node.NodeName -To "$($ParentPort.NodeName)$($ParentPort.PortName)_ParentVlanPort" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
                                 }
-
-                                if ($VlanPortLifs.Count -eq 1) { $VlanPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $VlanPortLifsColumnSize = $Options.DiagramColumnSize } else { $VlanPortLifsColumnSize = $VlanPortLifs.Count }
-
-                                Add-DiaHtmlSubGraph -Name "$($VlanPort.NodeName)$($VlanPort.InterfaceName)_Vlan" -TableArray $VlanPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label "$($VlanPort.InterfaceName) (VLAN $($VlanPort.VlanID))" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $VlanPortLifsColumnSize
-
-                                Add-DiaNodeEdge -From $Node.NodeName -To "$($VlanPort.NodeName)$($VlanPort.InterfaceName)_Vlan" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
                             }
                         }
                     }
