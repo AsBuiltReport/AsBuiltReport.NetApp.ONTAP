@@ -241,7 +241,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                             }
 
                             if (-not $IfgrpPortLifs) {
-                                $IfgrpPortLifs = Add-DiaNodeIcon -Name "$($IfgrpPort.NodeName)_$($Port.PortName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
+                                $IfgrpPortLifs = Add-DiaNodeIcon -Name "$($IfgrpPort.NodeName)_$($IfgrpPort.PortName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                             }
 
                             if ($IfgrpPortLifs.Count -eq 1) { $IfgrpPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpPortLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpPortLifsColumnSize = $IfgrpPortLifs.Count }
