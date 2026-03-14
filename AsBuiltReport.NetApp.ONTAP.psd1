@@ -65,9 +65,6 @@
             ModuleVersion = '9.18.1.2601'
         },
         @{
-            ModuleName = 'Diagrammer.Core'
-        },
-        @{
             ModuleName = 'AsBuiltReport.Diagram';
             ModuleVersion = '1.0.0'
         }
@@ -136,7 +133,7 @@
     # HelpInfo URI of this module
     # HelpInfoURI = ''
 
-    # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
+    # Default prefix for commands exported from this module. Override the default prefix using Import-Mod-Prefix.
     # DefaultCommandPrefix = ''
 
 }
