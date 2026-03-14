@@ -191,7 +191,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                             }
 
                             if (-not $PerPortLifs) {
-                                $PerPortLifs = Add-DiaNodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                $PerPortLifs = Add-DiaNodeIcon -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                             }
 
                             if ($PerPortLifs.Count -eq 1) { $PerPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $PerPortLifsColumnSize = $Options.DiagramColumnSize } else { $PerPortLifsColumnSize = $PerPortLifs.Count }
@@ -219,7 +219,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                             }
 
                             if (-not $PerPortLifs) {
-                                $PerPortLifs = Add-DiaNodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                $PerPortLifs = Add-DiaNodeIcon -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                             }
 
                             if ($PerPortLifs.Count -eq 1) { $PerPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $PerPortLifsColumnSize = $Options.DiagramColumnSize } else { $PerPortLifsColumnSize = $PerPortLifs.Count }
@@ -241,7 +241,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                             }
 
                             if (-not $IfgrpPortLifs) {
-                                $IfgrpPortLifs = Add-DiaNodeText -Name "$($IfgrpPort.NodeName)_$($IfgrpPort.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                $IfgrpPortLifs = Add-DiaNodeIcon -Name "$($IfgrpPort.NodeName)_$($Port.PortName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                             }
 
                             if ($IfgrpPortLifs.Count -eq 1) { $IfgrpPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpPortLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpPortLifsColumnSize = $IfgrpPortLifs.Count }
@@ -273,7 +273,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                                     }
 
                                     if (-not $IfgrpVlanLifs) {
-                                        $IfgrpVlanLifs = Add-DiaNodeText -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                        $IfgrpVlanLifs = Add-DiaNodeIcon -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                                     }
 
                                     if ($IfgrpVlanLifs.Count -eq 1) { $IfgrpVlanLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpVlanLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpVlanLifsColumnSize = $IfgrpVlanLifs.Count }
@@ -304,7 +304,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                                     }
 
                                     if (-not $VlanPortLifs) {
-                                        $VlanPortLifs = Add-DiaNodeText -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                        $VlanPortLifs = Add-DiaNodeIcon -Name "$($VlanPort.NodeName)_$($VlanPort.InterfaceName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                                     }
 
                                     if ($VlanPortLifs.Count -eq 1) { $VlanPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $VlanPortLifsColumnSize = $Options.DiagramColumnSize } else { $VlanPortLifsColumnSize = $VlanPortLifs.Count }
