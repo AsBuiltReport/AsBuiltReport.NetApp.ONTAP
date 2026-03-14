@@ -38,14 +38,14 @@ New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/scri
 $password = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
 $Cred = New-Object System.Management.Automation.PSCredential ("admin", $password)
 
-Connect-NcController 192.168.5.72 -Credential $Cred
+Connect-NcController 192.168.5.70 -Credential $Cred
 
 Import-Module AsBuiltReport.NetApp.ONTAP -Force
 Import-Module NetApp.ONTAP -Force
 Import-Module AsBuiltReport.Diagram -Force
 Import-Module AsBuiltReport.Chart -Force
 
-New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 192.168.5.72 -Format HTML -EnableHealthCheck -UserName 'admin' -Password 'P@ssw0rd' -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
+New-AsBuiltReport -Report NetApp.ONTAP -AsBuiltConfigFilePath "$($env:HOME)/script/AsBuiltReport.json" -OutputFolderPath "$($env:HOME)" -Target 192.168.5.70 -Format HTML -EnableHealthCheck -UserName 'admin' -Password 'P@ssw0rd' -ReportConfigFilePath "$($env:HOME)/script/AsBuiltReport.NetApp.ONTAP.json"
 
 ```powershell
 $password = ConvertTo-SecureString "P@ssw0rd" -AsPlainText -Force
