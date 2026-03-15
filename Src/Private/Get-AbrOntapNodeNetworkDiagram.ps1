@@ -155,14 +155,14 @@ function Get-AbrOntapNodeNetworkDiagram {
                 }
 
                 # Cluster Network Diagram
-                $ClusterNetwork = Add-DiaNodeImage -Name 'ClusterSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug -TableBackgroundColor '#a1e3fd'
+                $ClusterNetwork = Add-NodeImage -Name 'ClusterSwitch1' -ImagesObj $Images -IconType 'Ontap_Cluster_Network' -IconDebug $IconDebug -TableBackgroundColor '#a1e3fd'
 
-                Add-DiaHtmlSubGraph -Name 'ClusterNetwork' -TableArray $ClusterNetwork -Label 'Cluster Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 20 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#a1e3fd'
+                Add-HtmlSubGraph -Name 'ClusterNetwork' -TableArray $ClusterNetwork -Label 'Cluster Network' -LabelPos top -ImagesObj $Images -IconDebug $IconDebug -NodeObject -TableBorder 1 -FontSize 20 -TableBorderColor '#71797E' -TableStyle 'rounded,dashed' -FontColor 'darkblue' -FontBold -FontName 'Segoe Ui Bold' -TableBackgroundColor '#a1e3fd'
 
                 foreach ($Node in $NodeAdditionalInfo) {
 
                     # Ontap System Node
-                    Add-DiaNodeIcon -Name $Node.NodeName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Node' -IconDebug $IconDebug -AditionalInfo $Node.AdditionalInfo -TableBorder 1 -FontSize 18 -NodeObject -TableBorderColor '#71797E' -TableStyle 'rounded,dashed'
+                    Add-NodeIcon -Name $Node.NodeName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Node' -IconDebug $IconDebug -AditionalInfo $Node.AdditionalInfo -TableBorder 1 -FontSize 18 -NodeObject -TableBorderColor '#71797E' -TableStyle 'rounded,dashed'
 
 
                     if ($NetPortInfo) {
@@ -173,62 +173,56 @@ function Get-AbrOntapNodeNetworkDiagram {
                             $PerPortLifs = @()
                             foreach ($Lif in ($NetLifsInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.CurrentPort -eq $Port.PortName })) {
                                 $PerPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
-                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
+                                    Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                 } else {
-                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                                    Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
                                 }
                             }
 
                             if (-not $PerPortLifs) {
-                                $PerPortLifs = Add-DiaNodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                $PerPortLifs = Add-NodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
                             }
 
                             if ($PerPortLifs.Count -eq 1) { $PerPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $PerPortLifsColumnSize = $Options.DiagramColumnSize } else { $PerPortLifsColumnSize = $PerPortLifs.Count }
 
-                            $ClusterPortObj += Add-DiaHtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $PerPortLifsColumnSize
+                            $ClusterPortObj += Add-HtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $PerPortLifsColumnSize
                         }
 
                         if ($ClusterPortObj.Count -eq 1) { $ClusterPortObjColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $ClusterPortObjColumnSize = $Options.DiagramColumnSize } else { $ClusterPortObjColumnSize = $ClusterPortObj.Count }
 
-                        Add-DiaHtmlSubGraph -Name "$($Port.NodeName)ClusterPorts" -TableArray $ClusterPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label 'Cluster Network Ports' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $ClusterPortObjColumnSize -NodeObject
+                        Add-HtmlSubGraph -Name "$($Port.NodeName)ClusterPorts" -TableArray $ClusterPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label 'Cluster Network Ports' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $ClusterPortObjColumnSize -NodeObject
 
-                        Add-DiaNodeEdge -From 'ClusterNetwork' -To "$($Port.NodeName)ClusterPorts" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12
+                        Add-NodeEdge -From 'ClusterNetwork' -To "$($Port.NodeName)ClusterPorts" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12
 
-                        Add-DiaNodeEdge -From "$($Port.NodeName)ClusterPorts" -To $Node.NodeName -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
+                        Add-NodeEdge -From "$($Port.NodeName)ClusterPorts" -To $Node.NodeName -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
 
                         # Non-IFGRP Ports without Vlan Interfces
                         foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') -and $_.PortName -notmatch 'a0' -and $_.PortType -ne 'vlan' -and $_.IsParentVlan -eq $false })) {
                             $PerPortLifs = @()
                             foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $Port.PortName })) {
                                 $PerPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
-                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
+                                    Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                 } else {
-                                    Add-DiaNodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
+                                    Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12 -TableBackgroundColor '#ffcccc' -CellBackgroundColor '#ffcccc'
                                 }
                             }
 
                             if (-not $PerPortLifs) {
-                                $PerPortLifs = Add-DiaNodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
+                                $PerPortLifs = Add-NodeText -Name "$($Port.NodeName)_$($Port.PortName)_NoLifs" -Text 'No LIFs Assigned' -IconDebug $IconDebug -FontSize 14 -FontBold
                             }
 
                             if ($PerPortLifs.Count -eq 1) { $PerPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $PerPortLifsColumnSize = $Options.DiagramColumnSize } else { $PerPortLifsColumnSize = $PerPortLifs.Count }
 
-                            Add-DiaHtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $PerPortLifsColumnSize
+                            Add-HtmlSubGraph -Name "$($Port.NodeName)$($Port.PortName)_Lifs" -TableArray $PerPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -IconType 'Ontap_Network_Port' -Label $Port.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -NodeObject -ColumnSize $PerPortLifsColumnSize
 
-                            Add-DiaNodeEdge -From $Node.NodeName -To "$($Port.NodeName)$($Port.PortName)_Lifs" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
+                            Add-NodeEdge -From $Node.NodeName -To "$($Port.NodeName)$($Port.PortName)_Lifs" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
                         }
-
-                        # foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Ifgrp Port' -notin @('None', 'Unknown') })) {
-                        #     Add-DiaNodeIcon -Name "$($Port.NodeName)_$($Port.PortName)" -LabelName "$($Port.PortName)" -ImagesObj $Images -Align "Center" -IconType "Ontap_Network_Port" -IconDebug $IconDebug -AditionalInfo $Port.AdditionalInfo -NodeObject
-
-                        #     Add-DiaNodeEdge -From $Node.NodeName -To "$($Port.NodeName)_$($Port.PortName)" -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
-                        # }
                     }
                 }
 
                 foreach ($HA in $HAObject) {
                     if ($HA.Partner) {
-                        Add-DiaNodeEdge -From $HA.Name -To $HA.Partner -EdgeColor $Edgecolor -EdgeStyle 'solid' -EdgeThickness 2 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabel "HA: $($HA.HAState)" -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 16 -EdgeLength 3 -TailPort $HA.Name -HeadPort $HA.Partner
+                        Add-NodeEdge -From $HA.Name -To $HA.Partner -EdgeColor $Edgecolor -EdgeStyle 'solid' -EdgeThickness 2 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabel "HA: $($HA.HAState)" -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 16 -EdgeLength 3 -TailPort $HA.Name -HeadPort $HA.Partner
                         Rank $HA.Name, $HA.Partner
                     }
                 }
