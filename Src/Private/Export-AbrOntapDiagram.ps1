@@ -104,7 +104,7 @@ function Export-AbrOntapDiagram {
                     $Graph = $DiagramObject
                     if ($Graph) {
                         Write-PScriboMessage -Message 'Saving NetApp Ontap diagram'
-                        $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
+                        $Diagram = New-AbrDiagram @DiagramParams -InputObject $Graph
                         if ($Diagram) {
                             foreach ($OutputFormat in $DiagramFormat) {
                                 Write-Information -MessageData "Saved '$($FileName).$($OutputFormat)' diagram to '$($OutputFolderPath)'." -InformationAction Continue
@@ -120,9 +120,9 @@ function Export-AbrOntapDiagram {
                 $DiagramParams.Add('Format', 'base64')
 
                 $Graph = $DiagramObject
-                $Diagram = New-Diagrammer @DiagramParams -InputObject $Graph
+                $Diagram = New-AbrDiagram @DiagramParams -InputObject $Graph
                 if ($Diagram) {
-                    $BestAspectRatio = Get-DiaBestImageAspectRatio -GraphObj $Diagram -MaxWidth 600
+                    $BestAspectRatio = Get-BestImageAspectRatio -GraphObj $Diagram -MaxWidth 600
                     Section -Style Heading2 $MainDiagramLabel {
                         Image -Base64 $Diagram -Text 'NetApp Ontap Diagram' -Width $BestAspectRatio.Width -Height $BestAspectRatio.Height -Align Center
                     }

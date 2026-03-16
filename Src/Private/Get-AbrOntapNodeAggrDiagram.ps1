@@ -136,7 +136,7 @@ function Get-AbrOntapStorageAggrDiagram {
 
                     foreach ($Node in $NodeAdditionalInfo) {
                         $ClusterNodeObj = @()
-                        $ClusterNodeObj += Add-DiaHtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject $Node.NodeName -Align 'Center' -iconType 'Ontap_Node' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
+                        $ClusterNodeObj += Add-HtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject $Node.NodeName -Align 'Center' -iconType 'Ontap_Node' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $Node.AdditionalInfo -Subgraph -SubgraphLabel $Node.NodeName -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 0 -SubgraphLabelFontSize 22 -FontSize 18
 
                         if ($ClusterNodeObj) {
                             if ($AggrInfo.Count -eq 1) {
@@ -146,11 +146,11 @@ function Get-AbrOntapStorageAggrDiagram {
                             } else {
                                 $AggrInfoColumnSize = $AggrInfo.Count
                             }
-                            $ClusterNodeObj += Add-DiaHtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align 'Center' -iconType 'Ontap_Aggregate' -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel 'Aggregates' -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
+                            $ClusterNodeObj += Add-HtmlNodeTable -Name 'ClusterNodeObj' -ImagesObj $Images -inputObject ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AggregateName -Align 'Center' -iconType 'Ontap_Aggregate' -ColumnSize $AggrInfoColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo ($AggrInfo | Where-Object { $_.NodeName -eq $Node.Nodename }).AdditionalInfo -Subgraph -SubgraphLabel 'Aggregates' -SubgraphLabelPos 'top' -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -SubgraphLabelFontSize 22 -FontSize 18
                         }
 
                         if ($ClusterNodeObj) {
-                            $ClusterNodeSubgraphObj = Add-DiaHtmlSubGraph -Name 'ClusterNodeSubgraphObj' -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label ' ' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
+                            $ClusterNodeSubgraphObj = Add-HtmlSubGraph -Name 'ClusterNodeSubgraphObj' -ImagesObj $Images -TableArray $ClusterNodeObj -Align 'Center' -IconDebug $IconDebug -Label ' ' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 1 -ColumnSize 1 -FontSize 12
                         }
 
                         $ClusterNodesObj += $ClusterNodeSubgraphObj
@@ -164,7 +164,7 @@ function Get-AbrOntapStorageAggrDiagram {
                         } else {
                             $ClusterNodesObjColumnSize = $ClusterNodesObj.Count
                         }
-                        $ClusterMgmtObj = Add-DiaHtmlSubGraph -Name 'ClusterMgmtObj' -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController.Name)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize $ClusterNodesObjColumnSize -FontSize 18
+                        $ClusterMgmtObj = Add-HtmlSubGraph -Name 'ClusterMgmtObj' -ImagesObj $Images -TableArray $ClusterNodesObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController.Name)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder 0 -ColumnSize $ClusterNodesObjColumnSize -FontSize 18
 
                         if ($ClusterMgmtObj) {
                             Node ClusterAggrs @{Label = $ClusterMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
