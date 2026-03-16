@@ -64,11 +64,13 @@ Each of the following modules will be automatically installed by following the [
 
 These modules may also be manually installed.
 
-| Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
-| ------------------ | :----------------------: | :-------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
-| PScribo            |          0.11.1          |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
-| AsBuiltReport.Core |          1.5.1           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP       |       9.17.1.2509        |    [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)    |                                                                             |
+| Module Name           | Minimum Required Version |                                PS Gallery                                |                                   GitHub                                    |
+| --------------------- | :----------------------: | :----------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+| PScribo               |          0.11.1          |        [Link](https://www.powershellgallery.com/packages/PScribo)        |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
+| AsBuiltReport.Core    |          1.6.2           |  [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core)   | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
+| Netapp.ONTAP          |       9.18.1.2601        |     [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)      |         [Link](https://github.com/NetApp/ontap-powershell-modules)          |
+| AsBuiltReport.Chart   |          0.3.0           |  [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Chart)  |        [Link](https://github.com/AsBuiltReport/AsBuiltReport.Chart)         |
+| AsBuiltReport.Diagram |          1.0.3           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Diagram) |       [Link](https://github.com/AsBuiltReport/AsBuiltReport.Diagram)        |
 
 ## :package: Module Installation
 
