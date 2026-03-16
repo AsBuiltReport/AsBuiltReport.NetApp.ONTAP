@@ -86,10 +86,10 @@ function Get-AbrOntapVserverDiagram {
             }
 
             # SVM node
-            $SVMNodeObj = Add-DiaHtmlNodeTable -Name 'SVMNodeObj' -ImagesObj $Images -inputObject $Vserver -Align 'Center' -iconType 'Ontap_SVM' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $SVMAdditionalInfo -TableBorderColor '#71797E' -TableBorder '0' -FontSize 18
+            $SVMNodeObj = Add-HtmlNodeTable -Name 'SVMNodeObj' -ImagesObj $Images -inputObject $Vserver -Align 'Center' -iconType 'Ontap_SVM' -ColumnSize 1 -IconDebug $IconDebug -MultiIcon -AditionalInfo $SVMAdditionalInfo -TableBorderColor '#71797E' -TableBorder '0' -FontSize 18
 
             if ($SVMNodeObj) {
-                $SVMMgmtObj = Add-DiaHtmlSubGraph -Name 'SVMMgmtObj' -ImagesObj $Images -TableArray $SVMNodeObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -ColumnSize 1 -FontSize 12
+                $SVMMgmtObj = Add-HtmlSubGraph -Name 'SVMMgmtObj' -ImagesObj $Images -TableArray $SVMNodeObj -Align 'Right' -IconDebug $IconDebug -Label "Management: $($ClusterInfo.NcController)" -LabelPos 'down' -TableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -ColumnSize 1 -FontSize 12
 
                 if ($SVMMgmtObj) {
                     Node $VserverNodeName @{Label = $SVMMgmtObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
@@ -134,10 +134,10 @@ function Get-AbrOntapVserverDiagram {
                         $AggrColumnSize = $AggrInfo.Count
                     }
 
-                    $AggrNodeObj = Add-DiaHtmlNodeTable -Name 'AggrNodeObj' -ImagesObj $Images -inputObject $AggrInfo.Name -Align 'Center' -iconType 'Ontap_Aggregate' -ColumnSize $AggrColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $AggrInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
+                    $AggrNodeObj = Add-HtmlNodeTable -Name 'AggrNodeObj' -ImagesObj $Images -inputObject $AggrInfo.Name -Align 'Center' -iconType 'Ontap_Aggregate' -ColumnSize $AggrColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $AggrInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
 
                     if ($AggrNodeObj) {
-                        $AggrSubGraphObj = Add-DiaHtmlSubGraph -Name 'AggrSubGraphObj' -ImagesObj $Images -TableArray $AggrNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Aggregates' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
+                        $AggrSubGraphObj = Add-HtmlSubGraph -Name 'AggrSubGraphObj' -ImagesObj $Images -TableArray $AggrNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Aggregates' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
 
                         if ($AggrSubGraphObj) {
                             Node "$($VserverNodeName)Aggrs" @{Label = $AggrSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
@@ -190,14 +190,14 @@ function Get-AbrOntapVserverDiagram {
                         $VolColumnSize = $VolInfo.Count
                     }
 
-                    $VolNodeObj = Add-DiaHtmlNodeTable -Name 'VolNodeObj' -ImagesObj $Images -inputObject $VolInfo.Name -Align 'Center' -iconType 'Ontap_Volume' -ColumnSize $VolColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $VolInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
+                    $VolNodeObj = Add-HtmlNodeTable -Name 'VolNodeObj' -ImagesObj $Images -inputObject $VolInfo.Name -Align 'Center' -iconType 'Ontap_Volume' -ColumnSize $VolColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $VolInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
 
                     if ($VolNodeObj) {
-                        $VolSubGraphObj = Add-DiaHtmlSubGraph -Name 'VolSubGraphObj' -ImagesObj $Images -TableArray $VolNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Volumes' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
+                        $VolSubGraphObj = Add-HtmlSubGraph -Name 'VolSubGraphObj' -ImagesObj $Images -TableArray $VolNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Volumes' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
 
                         if ($VolSubGraphObj) {
                             Node "$($VserverNodeName)Vols" @{Label = $VolSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Add-DiaNodeEdge -From $VserverNodeName -To "$($VserverNodeName)Vols" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
+                            Add-NodeEdge -From $VserverNodeName -To "$($VserverNodeName)Vols" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
                         }
                     }
                 } catch {
@@ -255,14 +255,14 @@ function Get-AbrOntapVserverDiagram {
                         $LifColumnSize = $LifInfo.Count
                     }
 
-                    $LifNodeObj = Add-DiaHtmlNodeTable -Name 'LifNodeObj' -ImagesObj $Images -inputObject $LifInfo.Name -Align 'Center' -iconType 'Ontap_Network_Nic' -ColumnSize $LifColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $LifInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
+                    $LifNodeObj = Add-HtmlNodeTable -Name 'LifNodeObj' -ImagesObj $Images -inputObject $LifInfo.Name -Align 'Center' -iconType 'Ontap_Network_Nic' -ColumnSize $LifColumnSize -IconDebug $IconDebug -MultiIcon -AditionalInfo $LifInfo.AdditionalInfo -SubgraphTableStyle 'dashed,rounded' -TableBorderColor '#71797E' -TableBorder 1 -FontSize 18
 
                     if ($LifNodeObj) {
-                        $LifSubGraphObj = Add-DiaHtmlSubGraph -Name 'LifSubGraphObj' -ImagesObj $Images -TableArray $LifNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Network Interfaces (LIFs)' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
+                        $LifSubGraphObj = Add-HtmlSubGraph -Name 'LifSubGraphObj' -ImagesObj $Images -TableArray $LifNodeObj -Align 'Center' -IconDebug $IconDebug -Label 'Network Interfaces (LIFs)' -LabelPos 'top' -TableStyle 'dashed,rounded' -TableBorderColor $Edgecolor -TableBorder '1' -ColumnSize 1 -FontSize 18
 
                         if ($LifSubGraphObj) {
                             Node "$($VserverNodeName)Lifs" @{Label = $LifSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Add-DiaNodeEdge -From $VserverNodeName -To "$($VserverNodeName)Lifs" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
+                            Add-NodeEdge -From $VserverNodeName -To "$($VserverNodeName)Lifs" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
                         }
                     }
                 } catch {

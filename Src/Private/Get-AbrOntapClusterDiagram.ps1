@@ -123,9 +123,9 @@ function Get-AbrOntapClusterDiagram {
                                     $HAName = Remove-SpecialCharacter -String $HA.Name -SpecialChars '\-_'
                                     $HAPartner = Remove-SpecialCharacter -String $HA.Partner -SpecialChars '\-_'
 
-                                    Node $HAName @{Label = Add-DiaNodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                                    Node $HAName @{Label = Add-NodeIcon -Name $HA.Name -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Name }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
-                                    Node $HAPartner @{Label = Add-DiaNodeIcon -Name $HA.Partner -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Partner }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                                    Node $HAPartner @{Label = Add-NodeIcon -Name $HA.Partner -AditionalInfo ($NodeAdditionalInfo | Where-Object { $_.NodeName -eq $HA.Partner }).AdditionalInfo -ImagesObj $Images -IconType 'Ontap_Node' -Align 'Center' -IconDebug $IconDebug -FontSize 18; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
                                     Rank $HAName, $HAPartner
 
