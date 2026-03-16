@@ -1,0 +1,79 @@
+function Get-AbrOntapNetworkPort {
+    <#
+    .SYNOPSIS
+        Used by As Built Report to retrieve NetApp ONTAP physical interface port information from the Cluster Management Network
+    .DESCRIPTION
+
+    .NOTES
+        Version:        0.6.12
+        Author:         Jonathan Colon
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
+    .EXAMPLE
+
+    .LINK
+
+    #>
+    param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+        [string]
+        $Node
+    )
+
+    begin {
+        Write-PScriboMessage 'Collecting ONTAP physical interface information.'
+    }
+
+    process {
+        try {
+            $PhysicalPorts = Get-NcNetPort -Node $Node -Controller $Array | Where-Object { $_.PortType -like 'physical' }
+            if ($PhysicalPorts) {
+                $OutObj = @()
+                foreach ($Nics in $PhysicalPorts) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Port Name' = $Nics.Port
+                            'Role' = $TextInfo.ToTitleCase($Nics.Role)
+                            'Mac Address' = $Nics.MacAddress
+                            'MTU' = $Nics.MTU
+                            'Link Status' = $TextInfo.ToTitleCase($Nics.LinkStatus)
+                            'Admin Status' = $Nics.IsAdministrativeUp -eq $True ? 'Up': 'Down'
+                        }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
+                    }
+                }
+                if ($Healthcheck.Network.Port) {
+                    $OutObj | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' } | Set-Style -Style Warning -Property 'Link Status'
+                }
+
+                $TableParams = @{
+                    Name = "Physical Port - $($Node)"
+                    List = $false
+                    ColumnWidths = 20, 20, 30, 10, 10, 10
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Network.Port -and ($OutObj | Where-Object { $_.'Link Status' -like 'down' -and $_.'Admin Status' -like 'Up' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text 'Best Practice:' -Bold
+                        Text "Ensure that all physical network ports with an administrative status of 'Up' also have a link status of 'Up' to maintain optimal network connectivity."
+                    }
+                    BlankLine
+                }
+            }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
+        }
+    }
+
+    end {}
+
+}

@@ -1,0 +1,118 @@
+function Get-AbrOntapEfficiencyAggr {
+    <#
+    .SYNOPSIS
+        Used by As Built Report to retrieve NetApp ONTAP Aggregate Efficiency Savings information from the Cluster Management Network
+    .DESCRIPTION
+
+    .NOTES
+        Version:        0.6.12
+        Author:         Jonathan Colon
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
+    .EXAMPLE
+
+    .LINK
+
+    #>
+    [CmdletBinding()]
+    param (
+    )
+
+    begin {
+        Write-PScriboMessage 'Collecting ONTAP Aggregate Efficiency Savings information.'
+    }
+
+    process {
+        try {
+            $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $Saving = Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAggrInfo
+                        $inObj = [ordered] @{
+                            'Aggregate' = $Item.Name
+                            'Logical Used' = ($Saving.AggrLogicalUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Physical Used' = ($Saving.AggrPhysicalUsed | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Compaction Saved' = ($Saving.AggrCompactionSaved | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Data Reduction' = ${Saving}?.AggrDataReductionStorageEfficiencyRatio
+
+                        }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
+                    }
+                }
+
+                $TableParams = @{
+                    Name = "Aggregate Efficiency Savings - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 35, 15, 15, 15, 20
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
+            }
+            try {
+                $OutObj = @()
+                $Data = Get-NcAggr -Controller $Array | Where-Object { $_.AggrRaidAttributes.HasLocalRoot -ne 'True' }
+                $Savingfilter = (Get-NcAggrEfficiency -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes | Measure-Object -Sum
+                if ($Data -and $Savingfilter.Sum -gt 0 -and $Healthcheck.Storage.Efficiency) {
+                    foreach ($Item in $Data) {
+                        try {
+                            $Saving = (Get-NcAggrEfficiency -Aggregate $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrEfficiencyAdditionalDetailsInfo).NumberOfSisDisabledVolumes
+                            $VolInAggr = Get-NcVol -Aggregate $Item.Name -Controller $Array | Where-Object { $_.VolumeStateAttributes.IsVserverRoot -ne 'True' }
+                            $VolFilter = $VolInAggr | Where-Object { $_.VolumeSisAttributes.IsSisStateEnabled -ne 'True' }
+                            if ($Saving -ne 0 -and $VolFilter) {
+                                $inObj = [ordered] @{
+                                    'Aggregate' = $Item.Name
+                                    'Volumes without Deduplication' = $VolFilter.Name -join ', '
+                                }
+                                $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                            }
+                        } catch {
+                            Write-PScriboMessage -IsWarning $_.Exception.Message
+                        }
+                    }
+
+                    if ($Healthcheck.Storage.Efficiency) {
+                        $OutObj | Set-Style -Style Warning -Property 'Aggregate', 'Volumes without Deduplication'
+                    }
+
+                    $TableParams = @{
+                        Name = "HealthCheck - Volume without deduplication - $($ClusterInfo.ClusterName)"
+                        List = $false
+                        ColumnWidths = 45, 55
+                    }
+                    if ($Report.ShowTableCaptions) {
+                        $TableParams['Caption'] = "- $($TableParams.Name)"
+                    }
+                }
+                if ($OutObj) {
+                    Section -Style Heading4 'HealthCheck - Volume with Disabled Deduplication' {
+                        Paragraph "The following table provides the Volume efficiency healthcheck Information in $($ClusterInfo.ClusterName)."
+                        BlankLine
+                        $OutObj | Table @TableParams
+                        if ($Healthcheck.Storage.Efficiency) {
+                            Paragraph 'Health Check:' -Bold -Underline
+                            BlankLine
+                            Paragraph {
+                                Text 'Best Practice:' -Bold
+                                Text 'Ensure that deduplication is enabled on all volumes to maximize storage efficiency.'
+                            }
+                            BlankLine
+                        }
+                    }
+                }
+            } catch {
+                Write-PScriboMessage -IsWarning $_.Exception.Message
+            }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
+        }
+    }
+
+    end {}
+
+}

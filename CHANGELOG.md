@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.12] - 2026-03-16
+
+### Added
+
+- Add Vserver resources diagram showing SVM information, allocated aggregates, and network interfaces (LIFs)
+- Add Network ports diagram showing all network ports and their associated LIFs
+- Add Volume resources usage to the vserver diagram
+- Add node owner (Home Node) to network interface tables (Vserver, Cluster, Management, Intercluster, and Data network interfaces)
+- Add Health Check best practices for Network Broadcast Domains
+- Add Health Check best practices for NTP configuration
+  - Recommend multiple NTP servers for redundancy
+- Add Per Volume export policy information
+- Add `Node Name` to FCP Interfaces section in FCP Vserver configuration
+- Apply powershell best practices
+- Add ConvertTo-HashToYN function
+- Add EMS configuration setting health check
+- Add support for charts
+  - Aggregate Usage
+  - Per Node Disk Assignment
+
+### Changed
+
+- Migrate from Diagrammer.Core to AsBuiltReport.Diagram for diagram generation
+- Bump AsBuiltReport.Chart module requirement to v0.3.0
+- Bump AsBuiltReport.Core module requirement to v1.6.2
+- Bump NetApp.ONTAP module requirement to v9.18.1.2601
+- Bump module version to v0.6.12
+- Update github actions to use latest version
+- Export diagrams by default
+- Improved Cluster diagram to show Broadcast Domains and network ports per node
+- Reorganize module structure - moved module files to AsBuiltReport.System.Resources/ subdirectory
+
+### Fixed
+
+- Fix snapshot reserve space health check to use correct calculation method
+- Enhance Get-AbrOntapNodesSP function with detailed service-processor information
+- Fix model property assignment in Get-AbrOntapStorageAggrDiagram function
+- Fix Volume SnapShot Configuration section showing healthcheck for non violated item
+- Fix CodeQL analysis issues 27
+- Fix diagram size not respecting document border size
+- Fix HealthCheck - Volume without deduplication section displaying incorrect values
+- Fix type conversion for volume usage percentage checks in Get-AbrOntapVserverVolume function
+- Fix: Join management addresses into a comma-separated string in cluster and node diagrams
+
+### Removed
+
+- Removed Pwsh v5.1 support
+
 ## [0.6.11] - 2025-11-07
 
 ### Added

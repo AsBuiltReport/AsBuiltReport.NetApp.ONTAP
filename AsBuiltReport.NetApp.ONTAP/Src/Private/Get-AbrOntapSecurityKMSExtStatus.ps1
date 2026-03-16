@@ -1,0 +1,74 @@
+function Get-AbrOntapSecurityKMSExtStatus {
+    <#
+    .SYNOPSIS
+        Used by As Built Report to retrieve NetApp ONTAP Security Key Management Service External Status information from the Cluster Management Network
+    .DESCRIPTION
+
+    .NOTES
+        Version:        0.6.12
+        Author:         Jonathan Colon
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
+    .EXAMPLE
+
+    .LINK
+
+    #>
+    [CmdletBinding()]
+    param (
+    )
+
+    begin {
+        Write-PScriboMessage 'Collecting ONTAP Security Key Management Service External Status information.'
+    }
+
+    process {
+        try {
+            $Data = Get-NcSecurityKeyManager -Controller $Array
+            $OutObj = @()
+            if ($Data) {
+                foreach ($Item in $Data) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Node' = $Item.NodeName
+                            'Key Manager IP' = $Item.KeyManagerIpAddress
+                            'Key Manager Port' = $Item.KeyManagerTcpPort
+                            'Status' = $TextInfo.ToTitleCase($Item.KeyManagerServerStatus)
+                        }
+                        $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
+                    }
+                }
+
+                if ($Healthcheck.Security.KMS) {
+                    $OutObj | Where-Object { $_.'Status' -ne 'Available' } | Set-Style -Style Critical -Property 'Status'
+                }
+
+                $TableParams = @{
+                    Name = "External Key Management Service (KMS) Status - $($ClusterInfo.ClusterName)"
+                    List = $false
+                    ColumnWidths = 35, 25, 15, 25
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $OutObj | Table @TableParams
+                if ($Healthcheck.Security.KMS -and ($OutObj | Where-Object { $_.'Status' -ne 'Available' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text 'Best Practice:' -Bold
+                        Text "Ensure that all External Key Management Services are in 'Available' status to maintain encryption functionality."
+                    }
+                    BlankLine
+                }
+            }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
+        }
+    }
+
+    end {}
+
+}

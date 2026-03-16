@@ -48,15 +48,15 @@ Below are the instructions on how to install, configure and generate a NetApp ON
 The ONTAP Storage As Built Report supports the following ONTAP versions;
 
 - ONTAP 9.x
-  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1, 9.12.1, 9.13.1, 9.14.1, 9.15.1, 9.16.1, 9.17.1
+  - Tested on v9.5, 9.7, 9.8, 9.9.1, 9.10.1, 9.11.1, 9.12.1, 9.13.1, 9.14.1, 9.15.1, 9.16.1, 9.17.1, 9.18.1
 
 ### **PowerShell**
 
 This report is compatible with the following PowerShell versions;
 
-|   PowerShell 5.1   |    PowerShell 7    |
-| :----------------: | :----------------: |
-| :white_check_mark: | :white_check_mark: |
+| PowerShell 5.1 |    PowerShell 7    |
+| :------------: | :----------------: |
+|      :x:       | :white_check_mark: |
 
 ## :wrench: System Requirements
 
@@ -64,17 +64,19 @@ Each of the following modules will be automatically installed by following the [
 
 These modules may also be manually installed.
 
-| Module Name        | Minimum Required Version |                              PS Gallery                               |                                   GitHub                                    |
-| ------------------ | :----------------------: | :-------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
-| PScribo            |          0.10.0          |      [Link](https://www.powershellgallery.com/packages/PScribo)       |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
-| AsBuiltReport.Core |          1.5.0           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core) | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
-| Netapp.ONTAP       |       9.17.1.2509        |    [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)    |                                                                             |
+| Module Name           | Minimum Required Version |                                PS Gallery                                |                                   GitHub                                    |
+| --------------------- | :----------------------: | :----------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+| PScribo               |          0.11.1          |        [Link](https://www.powershellgallery.com/packages/PScribo)        |         [Link](https://github.com/iainbrighton/PScribo/tree/master)         |
+| AsBuiltReport.Core    |          1.6.2           |  [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Core)   | [Link](https://github.com/AsBuiltReport/AsBuiltReport.Core/releases/latest) |
+| Netapp.ONTAP          |       9.18.1.2601        |     [Link](https://www.powershellgallery.com/packages/NetApp.ONTAP)      |         [Link](https://github.com/NetApp/ontap-powershell-modules)          |
+| AsBuiltReport.Chart   |          0.3.0           |  [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Chart)  |        [Link](https://github.com/AsBuiltReport/AsBuiltReport.Chart)         |
+| AsBuiltReport.Diagram |          1.0.3           | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Diagram) |       [Link](https://github.com/AsBuiltReport/AsBuiltReport.Diagram)        |
 
 ## :package: Module Installation
 
 ### PowerShell
 
-Open a PowerShell terminal window and install each of the required modules as follows;
+Open a PowerShell 7 terminal window and install each of the required modules as follows;
 
 ```powershell
 Install-Module -Name AsBuiltReport.NetApp.ONTAP

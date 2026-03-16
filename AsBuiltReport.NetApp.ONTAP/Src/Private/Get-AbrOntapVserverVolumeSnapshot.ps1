@@ -1,0 +1,84 @@
+function Get-AbrOntapVserverVolumeSnapshot {
+    <#
+    .SYNOPSIS
+        Used by As Built Report to retrieve NetApp ONTAP vserver volumes snapshot information from the Cluster Management Network
+    .DESCRIPTION
+
+    .NOTES
+        Version:        0.6.12
+        Author:         Jonathan Colon
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
+    .EXAMPLE
+
+    .LINK
+
+    #>
+    param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+        [string]
+        $Vserver
+    )
+
+    begin {
+        Write-PScriboMessage 'Collecting ONTAP Vserver volumes snapshot information.'
+    }
+
+    process {
+        try {
+            $VolumeFilter = Get-NcVol -VserverContext $Vserver -Controller $Array | Where-Object { $_.JunctionPath -ne '/' -and $_.Name -ne 'vol0' }
+            $VserverObj = @()
+            if ($VolumeFilter) {
+                foreach ($Item in $VolumeFilter) {
+                    try {
+                        $SnapReserve = Get-NcVol $Item.Name -VserverContext $Vserver -Controller $Array | Select-Object -ExpandProperty VolumeSpaceAttributes
+                        $SnapPolicy = Get-NcVol $Item.Name -VserverContext $Vserver -Controller $Array | Select-Object -ExpandProperty VolumeSnapshotAttributes
+                        $inObj = [ordered] @{
+                            'Volume' = $Item.Name
+                            'Snapshot Enabled' = $SnapPolicy.AutoSnapshotsEnabled
+                            'Reserve Size' = ($SnapReserve.SnapshotReserveSize | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Reserve Available' = ($SnapReserve.SnapshotReserveAvailable | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Used' = ($SnapReserve.SizeUsedBySnapshots | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
+                            'Policy' = $SnapPolicy.SnapshotPolicy
+                        }
+
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
+                    }
+                }
+                if ($Healthcheck.Vserver.Snapshot) {
+                    $VserverObj | Where-Object { $_.'Used' -gt $_.'Reserve Size' } | Set-Style -Style Warning -Property 'Reserve Size', 'Reserve Available', 'Used'
+                }
+
+                $TableParams = @{
+                    Name = "Volume SnapShot Configuration - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 25, 15, 15, 15, 15, 15
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                if ($VserverObj) {
+                    $VserverObj | Table @TableParams
+                    if ($Healthcheck.Vserver.Snapshot -and ($VserverObj | Where-Object { $_.'Snapshot Enabled' -eq 'Yes' -and ($_.'Used'.split()[0] -gt $_.'Reserve Size'.split()[0]) })) {
+                        Paragraph 'Health Check:' -Bold -Underline
+                        BlankLine
+                        Paragraph {
+                            Text 'Best Practice:' -Bold
+                            Text 'Snapshots are enabled on volumes but there is no available snapshot reserve space. It is recommended to increase the snapshot reserve size to avoid snapshot failures.'
+                        }
+                        BlankLine
+                    }
+                }
+            }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
+        }
+    }
+
+    end {}
+
+}

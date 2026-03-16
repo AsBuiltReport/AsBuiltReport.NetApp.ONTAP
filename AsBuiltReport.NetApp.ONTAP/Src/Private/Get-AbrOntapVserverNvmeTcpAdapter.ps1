@@ -1,0 +1,79 @@
+function Get-AbrOntapVserverNvmeTcpAdapter {
+    <#
+    .SYNOPSIS
+        Used by As Built Report to retrieve NetApp ONTAP Vserver Nvme TCP adapter information from the Cluster Management Network
+    .DESCRIPTION
+
+    .NOTES
+        Version:        0.6.12
+        Author:         Jonathan Colon
+        Twitter:        @jcolonfzenpr
+        Github:         rebelinux
+    .EXAMPLE
+
+    .LINK
+
+    #>
+    param (
+        [Parameter (
+            Position = 0,
+            Mandatory)]
+        [string]
+        $Vserver
+    )
+
+    begin {
+        Write-PScriboMessage 'Collecting ONTAP Vserver Nvme TCP adapter information.'
+    }
+
+    process {
+        try {
+            $VserverData = Get-NcNvmeInterface -VserverContext $Vserver -Controller $Array | Where-Object { $_.PhysicalProtocol -eq 'ethernet' } | Sort-Object -Property HomeNode
+            $VserverObj = @()
+            if ($VserverData) {
+                foreach ($Item in $VserverData) {
+                    try {
+                        $inObj = [ordered] @{
+                            'Node Name' = $Item.HomeNode
+                            'Adapter' = $Item.HomePort
+                            'Protocol' = $Item.PhysicalProtocol
+                            'IP Address' = $Item.TransportAddress
+                            'Status' = $Item.StatusAdmin -eq 'up' ? 'Up': 'Down'
+                        }
+                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                    } catch {
+                        Write-PScriboMessage -IsWarning $_.Exception.Message
+                    }
+                }
+                if ($Healthcheck.Vserver.FCP) {
+                    $VserverObj | Where-Object { $_.'Status' -like 'Down' } | Set-Style -Style Warning -Property 'Status'
+                }
+
+                $TableParams = @{
+                    Name = "Nvme TCP Physical Adapter - $($Vserver)"
+                    List = $false
+                    ColumnWidths = 30, 17, 17, 20, 16
+
+                }
+                if ($Report.ShowTableCaptions) {
+                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                }
+                $VserverObj | Table @TableParams
+                if ($Healthcheck.Vserver.FCP -and ($VserverObj | Where-Object { $_.'Status' -like 'Down' })) {
+                    Paragraph 'Health Check:' -Bold -Underline
+                    BlankLine
+                    Paragraph {
+                        Text 'Best Practice:' -Bold
+                        Text "Ensure all Nvme TCP adapters are in 'Up' status to maintain optimal connectivity and performance."
+                    }
+                    BlankLine
+                }
+            }
+        } catch {
+            Write-PScriboMessage -IsWarning $_.Exception.Message
+        }
+    }
+
+    end {}
+
+}
