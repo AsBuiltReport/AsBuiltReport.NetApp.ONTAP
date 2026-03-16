@@ -21,6 +21,10 @@ jobs:
         shell: pwsh
         run: |
           Install-Module -Name NetApp.ONTAP -Repository PSGallery -Force
+      - name: Install AsBuiltReport.Chart module
+        shell: pwsh
+        run: |
+          Install-Module -Name AsBuiltReport.Chart -Repository PSGallery -Force
       - name: Install AsBuiltReport.Diagram module
         shell: pwsh
         run: |
