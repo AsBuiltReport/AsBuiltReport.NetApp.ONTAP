@@ -51,7 +51,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     if ($Options.UpdateCheck) {
         Write-Host '  - Getting dependency information:'
         # Check the version of the dependency modules
-        $ModuleArray = @('AsBuiltReport.Core', 'Diagrammer.Core', 'NetApp.ONTAP')
+        $ModuleArray = @('AsBuiltReport.Core', 'AsBuiltReport.Diagram', 'NetApp.ONTAP')
 
         foreach ($Module in $ModuleArray) {
             try {

@@ -63,6 +63,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                 $NodeAdditionalInfo = @()
                 $NetPortInfo = @()
                 $NetLifsInfo = @()
+                $NetVlanInfo = @()
 
                 foreach ($Node in $NodeSum) {
                     $ClusterHa = Get-NcClusterHa -Node $Node.Node -Controller $Array
@@ -150,6 +151,16 @@ function Get-AbrOntapNodeNetworkDiagram {
                                     default { 'Unknown' }
                                 }
                             }
+                        }
+                    }
+
+                    $NodeVlans = Get-NcNetPortVlan -Node $Node.Node -Controller $Array
+                    foreach ($NodeVlan in $NodeVlans) {
+                        $NetVlanInfo += [PSCustomObject][ordered]@{
+                            'NodeName' = $NodeVlan.Node
+                            'InterfaceName' = $NodeVlan.InterfaceName
+                            'ParentInterface' = $NodeVlan.ParentInterface
+                            'VlanID' = $NodeVlan.VlanID
                         }
                     }
                 }
