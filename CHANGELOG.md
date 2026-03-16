@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add ConvertTo-HashToYN function
 - Add EMS configuration setting health check
 - Add support for charts
-  - Aggragate Usage
+  - Aggregate Usage
   - Per Node Disk Assignment
 
 ### Changed
