@@ -59,7 +59,7 @@ function Get-AbrOntapVserverDiagram {
             $VserverAggrs = (Get-NcVol -VserverContext $Vserver -Controller $Array).Aggregate | ForEach-Object { Get-NcAggr -Name $_ } | Select-Object -Unique
             $VserverLifs = Get-NcNetInterface -Controller $Array | Where-Object { $_.Vserver -eq $Vserver -and $_.Role -eq 'data' }
 
-            $VserverNodeName = Remove-SpecialChar -String $Vserver -SpecialChars '\-_'
+            $VserverNodeName = Remove-SpecialCharacter -String $Vserver -SpecialChars '\-_'
 
             # SVM Additional Info
             $SVMAdditionalInfo = [PSCustomObject][ordered]@{
