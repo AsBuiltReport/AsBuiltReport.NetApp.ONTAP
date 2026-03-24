@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNonMappedLun {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP ISCSI/FCP Non Mapped Lun information.'
+        Write-PScriboMessage 'Collecting ONTAP iSCSI/FCP non-mapped LUN information.'
     }
 
     process {
@@ -50,7 +50,7 @@ function Get-AbrOntapVserverNonMappedLun {
                 }
 
                 $TableParams = @{
-                    Name = "HealthCheck - Non-Mapped Lun - $($Vserver)"
+                    Name = "Non-Mapped LUNs - $($Vserver)"
                     List = $false
                     ColumnWidths = 30, 30, 10, 10, 20
                 }

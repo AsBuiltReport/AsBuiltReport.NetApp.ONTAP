@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiSummary {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI information.'
+        Write-PScriboMessage 'Collecting ONTAP Vserver iSCSI information.'
     }
 
     process {
@@ -52,7 +52,7 @@ function Get-AbrOntapVserverIscsiSummary {
                 }
 
                 $TableParams = @{
-                    Name = "ISCSI Service - $($Vserver)"
+                    Name = "iSCSI Service - $($Vserver)"
                     List = $true
                     ColumnWidths = 30, 70
                 }
@@ -65,7 +65,7 @@ function Get-AbrOntapVserverIscsiSummary {
                     BlankLine
                     Paragraph {
                         Text 'Best Practice:' -Bold
-                        Text 'Ensure that all ISCSI services are operational to maintain optimal storage connectivity.'
+                        Text 'Ensure that all iSCSI services are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

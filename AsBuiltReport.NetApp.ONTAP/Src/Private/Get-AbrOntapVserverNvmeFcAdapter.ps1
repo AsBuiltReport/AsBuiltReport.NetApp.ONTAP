@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Vserver Nvme FC adapter information.'
+        Write-PScriboMessage 'Collecting ONTAP Vserver NVMe FC adapter information.'
     }
 
     process {
@@ -51,7 +51,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                 }
 
                 $TableParams = @{
-                    Name = "Nvme FC Physical Adapter - $($Vserver)"
+                    Name = "NVMe FC Physical Adapter - $($Vserver)"
                     List = $false
                     ColumnWidths = 25, 12, 15, 18, 18, 12
 
@@ -65,7 +65,7 @@ function Get-AbrOntapVserverNvmeFcAdapter {
                     BlankLine
                     Paragraph {
                         Text 'Best Practice:' -Bold
-                        Text "Ensure all Nvme FC adapters are in 'Up' status to maintain optimal connectivity and performance."
+                        Text "Ensure all NVMe FC adapters are in 'Up' status to maintain optimal connectivity and performance."
                     }
                     BlankLine
                 }

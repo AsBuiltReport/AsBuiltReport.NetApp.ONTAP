@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockClock {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Security Snaplock compliance clock information.'
+        Write-PScriboMessage 'Collecting ONTAP Security SnapLock compliance clock information.'
     }
 
     process {
@@ -44,7 +44,7 @@ function Get-AbrOntapSecuritySnapLockClock {
                 }
 
                 $TableParams = @{
-                    Name = "Snaplock Compliance Clock - $($ClusterInfo.ClusterName)"
+                    Name = "SnapLock Compliance Clock - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 40, 60
                 }

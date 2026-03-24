@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.14] - 2026-03-??
+
+### Changed
+
+- Bump module version to v0.6.14
+- Bump AsBuiltReport.Diagram module requirement to v1.0.5
+- Enhanced report section titles for clarity and consistency
+- Improved diagram export functionality with aspect ratio adjustments
+- Corrected SnapLock capitalization in various function outputs and messages
+- Updated health check section titles for better readability
+- Refined iSCSI and NVMe service section titles for consistency
+
 ## [0.6.13] - 2026-03-17
 
 ### Fixed

@@ -1,7 +1,7 @@
 function Get-AbrOntapEfficiencyAggrConfig {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Aggregate FabriPool Object Store Configuration from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Aggregate FabricPool Object Store Configuration from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -19,7 +19,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Aggregate FabriPool Object Store information.'
+        Write-PScriboMessage 'Collecting ONTAP Aggregate FabricPool Object Store information.'
     }
 
     process {
@@ -41,7 +41,7 @@ function Get-AbrOntapEfficiencyAggrConfig {
                         $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                         $TableParams = @{
-                            Name = "Aggregate FabriPool Object Store Configuration - $($Item.ObjectStoreName)"
+                            Name = "Aggregate FabricPool Object Store Configuration - $($Item.ObjectStoreName)"
                             List = $true
                             ColumnWidths = 30, 70
                         }

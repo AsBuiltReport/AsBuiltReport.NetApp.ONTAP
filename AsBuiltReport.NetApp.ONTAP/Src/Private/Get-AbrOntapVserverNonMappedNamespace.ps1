@@ -50,7 +50,7 @@ function Get-AbrOntapVserverNonMappedNamespace {
                 }
 
                 $TableParams = @{
-                    Name = "HealthCheck - Non-Mapped Namespace - $($Vserver)"
+                    Name = "Non-Mapped Namespaces - $($Vserver)"
                     List = $false
                     ColumnWidths = 30, 30, 10, 10, 20
                 }

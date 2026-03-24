@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Security Snaplock volume attributes information.'
+        Write-PScriboMessage 'Collecting ONTAP Security SnapLock volume attributes information.'
     }
 
     process {
@@ -36,7 +36,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                             $inObj = [ordered] @{
                                 'Volume' = $vol.Name
                                 'Aggregate' = $vol.Aggregate
-                                'Snaplock Type' = $TextInfo.ToTitleCase($SnapLockVolAttr.Type)
+                                'SnapLock Type' = $TextInfo.ToTitleCase($SnapLockVolAttr.Type)
                                 'Maximum Retention Period' = $SnapLockVolAttr.MaximumRetentionPeriod
                                 'Minimum Retention Period' = $SnapLockVolAttr.MinimumRetentionPeriod
                                 'Privileged Delete State' = $SnapLockVolAttr.PrivilegedDeleteState
@@ -49,7 +49,7 @@ function Get-AbrOntapSecuritySnapLockVollAttr {
                             $OutObj = [pscustomobject](ConvertTo-HashToYN $inObj)
 
                             $TableParams = @{
-                                Name = "Snaplock Volume Attributes - $($vol.Name)"
+                                Name = "SnapLock Volume Attributes - $($vol.Name)"
                                 List = $true
                                 ColumnWidths = 40, 60
                             }

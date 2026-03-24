@@ -1,7 +1,7 @@
 function Get-AbrOntapStorageFabricPool {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Aggregate FabriPool information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Aggregate FabricPool information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -19,7 +19,7 @@ function Get-AbrOntapStorageFabricPool {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Aggregate FabriPool information.'
+        Write-PScriboMessage 'Collecting ONTAP Aggregate FabricPool information.'
     }
 
     process {
@@ -47,7 +47,7 @@ function Get-AbrOntapStorageFabricPool {
                 }
 
                 $TableParams = @{
-                    Name = "Aggregate FabriPool - $($ClusterInfo.ClusterName)"
+                    Name = "Aggregate FabricPool - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 30, 20, 20, 15, 15
                 }
