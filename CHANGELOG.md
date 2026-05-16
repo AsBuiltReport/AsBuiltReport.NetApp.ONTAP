@@ -7,15 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.14] - 2026-03-??
 
+### Added
+
+- Add Get-AbrOntapLog cmdlet to retrieve diagnostic logs about the report generation process for troubleshooting purposes
+
 ### Changed
 
 - Bump module version to v0.6.14
-- Bump AsBuiltReport.Diagram module requirement to v1.0.5
+- Bump AsBuiltReport.Diagram module requirement to v1.0.7
+- Bump AsBuiltReport.Chart module requirement to v0.3.2
 - Enhanced report section titles for clarity and consistency
 - Improved diagram export functionality with aspect ratio adjustments
 - Corrected SnapLock capitalization in various function outputs and messages
 - Updated health check section titles for better readability
 - Refined iSCSI and NVMe service section titles for consistency
+- Improved Consistency Group section
+
+### Fixed
+
+- Fix issue in Get-AbrOntapVserverSubsystem where subsystem information may not be retrieved correctly for certain ONTAP versions
 
 ## [0.6.13] - 2026-03-17
 

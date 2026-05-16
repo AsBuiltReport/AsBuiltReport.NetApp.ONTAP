@@ -5,7 +5,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     .DESCRIPTION
         Documents the configuration of NetApp ONTAP in Word/HTML/Text formats using PScribo.
     .NOTES
-        Version:        0.6.12
+        Version:        0.6.14
         Author:         Jonathan Colon Feliciano
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -129,6 +129,13 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
         Section -Style Heading1 "$($ClusterInfo.ClusterName) Cluster Report" {
             Paragraph "The following section provides a summary of the array configuration for $($ClusterInfo.ClusterName)."
             BlankLine
+            #---------------------------------------------------------------------------------------------#
+            #                                 Report Brief Section                                        #
+            #---------------------------------------------------------------------------------------------#
+            Section -Style Heading2 'Report Brief' {
+                Paragraph "The following section provides a high-level overview of the infrastructure and installed licenses for $($ClusterInfo.ClusterName)."
+                BlankLine
+            }
             #region Cluster Section
             $ClusterDiagram = Get-AbrOntapClusterDiagram
             if ($ClusterDiagram) {
@@ -593,7 +600,7 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 Paragraph "The following section provides the ISCSI Service Information in $($SVM)."
                                                 BlankLine
                                                 Get-AbrOntapVserverIscsiSummary -Vserver $SVM
-                                                    Section -ExcludeFromTOC -Style Heading6 'iSCSI Interfaces' {
+                                                Section -ExcludeFromTOC -Style Heading6 'iSCSI Interfaces' {
                                                     Get-AbrOntapVserverIscsiInterface -Vserver $SVM
                                                 }
 
@@ -677,13 +684,18 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
                                                 BlankLine
                                                 Get-AbrOntapVserverCGSummary -Vserver $SVM
                                                 foreach ($CG in $CGs) {
+                                                    if ($CG.volumes) {
+                                                        Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Consistency Group Volumes" {
+                                                            Get-AbrOntapVserverCGVolume -CGObj $CG
+                                                        }
+                                                    }
                                                     if ($CG.luns) {
-                                                        Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Luns" {
+                                                        Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Consistency Group Luns" {
                                                             Get-AbrOntapVserverCGLun -CGObj $CG
                                                         }
                                                     }
                                                     if ($CG.namespaces) {
-                                                        Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Namespaces" {
+                                                        Section -ExcludeFromTOC -Style Heading6 "$($CG.name) Consistency Group Namespaces" {
                                                             Get-AbrOntapVserverCGNamespace -CGObj $CG
                                                         }
                                                     }
