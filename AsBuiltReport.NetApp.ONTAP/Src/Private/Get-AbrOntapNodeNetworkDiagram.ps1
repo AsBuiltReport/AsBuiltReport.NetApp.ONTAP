@@ -5,7 +5,7 @@ function Get-AbrOntapNodeNetworkDiagram {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.12
+        Version:        0.6.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
