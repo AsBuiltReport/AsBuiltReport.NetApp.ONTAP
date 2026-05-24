@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated health check section titles for better readability
 - Refined iSCSI and NVMe service section titles for consistency
 - Improved Consistency Group section
+- Improved Network diagram to better display Ifgrp ports and their associated Vlan\LIFs
 
 ### Fixed
 

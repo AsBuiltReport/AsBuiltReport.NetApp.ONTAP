@@ -75,7 +75,6 @@ function Invoke-AsBuiltReport.NetApp.ONTAP {
     $script:TextInfo = (Get-Culture).TextInfo
 
     $script:RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-    $FontPath = Join-Path -Path $RootPath -ChildPath 'Tools/Fonts/ARIAL.TTF'
 
     #Connect to Ontap Storage Array using supplied credentials
     foreach ($OntapArray in $Target) {
