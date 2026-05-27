@@ -122,7 +122,7 @@ function Export-AbrOntapDiagram {
                 $Graph = $DiagramObject
                 $Diagram = New-AbrDiagram @DiagramParams -InputObject $Graph
                 if ($Diagram) {
-                    $BestAspectRatio = Get-BestImageAspectRatio -GraphObj $Diagram -MaxWidth 600
+                    $BestAspectRatio = Get-BestImageAspectRatio -GraphObj $Diagram -MaxWidth 600 -MaxHeight 600
                     Section -Style Heading2 $MainDiagramLabel {
                         Image -Base64 $Diagram -Text 'NetApp Ontap Diagram' -Width $BestAspectRatio.Width -Height $BestAspectRatio.Height -Align Center
                     }

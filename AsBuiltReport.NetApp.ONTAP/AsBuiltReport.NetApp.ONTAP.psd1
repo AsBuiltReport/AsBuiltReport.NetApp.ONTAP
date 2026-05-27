@@ -12,7 +12,7 @@
     RootModule = 'AsBuiltReport.NetApp.ONTAP.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.6.13'
+    ModuleVersion = '0.6.14'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -54,11 +54,11 @@
     RequiredModules = @(
         @{
             ModuleName = 'AsBuiltReport.Core';
-            ModuleVersion = '1.6.2'
+            ModuleVersion = '1.6.4'
         },
         @{
             ModuleName = 'AsBuiltReport.Chart';
-            ModuleVersion = '0.3.0'
+            ModuleVersion = '0.3.2'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
@@ -66,7 +66,7 @@
         },
         @{
             ModuleName = 'AsBuiltReport.Diagram';
-            ModuleVersion = '1.0.3'
+            ModuleVersion = '1.0.7'
         }
     )
 
@@ -86,7 +86,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Invoke-AsBuiltReport.NetApp.ONTAP')
+    FunctionsToExport = @('Invoke-AsBuiltReport.NetApp.ONTAP', 'Get-AbrOntapLog')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     #CmdletsToExport = '*'

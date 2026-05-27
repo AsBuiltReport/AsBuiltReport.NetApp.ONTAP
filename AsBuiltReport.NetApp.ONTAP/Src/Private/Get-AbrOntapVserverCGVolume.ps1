@@ -1,7 +1,7 @@
-function Get-AbrOntapVserverCGSummary {
+function Get-AbrOntapVserverCGVolume {
     <#
     .SYNOPSIS
-        Used by As Built Report to retrieve NetApp ONTAP Vserver Consistency Groups information from the Cluster Management Network
+        Used by As Built Report to retrieve NetApp ONTAP Vserver Consistency Groups Volume information from the Cluster Management Network
     .DESCRIPTION
 
     .NOTES
@@ -18,43 +18,40 @@ function Get-AbrOntapVserverCGSummary {
         [Parameter (
             Position = 0,
             Mandatory)]
-        [string]
-        $Vserver
+        $CGObj
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Vserver Consistency Groups information.'
+        Write-PScriboMessage 'Collecting ONTAP Vserver Consistency Groups volume information.'
     }
 
     process {
         try {
-            $VserverData = Get-NetAppOntapAPI -uri "/api/application/consistency-groups?svm=$Vserver&fields=**&return_records=true&return_timeout=15"
-            $VserverObj = @()
-            if ($VserverData) {
-                foreach ($Item in $VserverData) {
+            $VolumeData = $CGObj.volumes
+            $CGVolumeObj = @()
+            if ($VolumeData) {
+                foreach ($Item in $VolumeData) {
                     try {
                         $inObj = [ordered] @{
                             'Name' = $Item.Name
                             'Capacity' = ($Item.space.size | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Available' = ($Item.space.available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Used' = ($Item.space.used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
-                            'Replicated' = $Item.replicated
                         }
-                        $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
+                        $CGVolumeObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
                         Write-PScriboMessage -IsWarning $_.Exception.Message
                     }
                 }
 
                 $TableParams = @{
-                    Name = "Consistency Groups - $($Vserver)"
+                    Name = "Consistency Group Volume - $($CGObj.Name)"
                     List = $false
-                    ColumnWidths = 40, 15, 15, 15, 15
+                    ColumnWidths = 33, 33, 34
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
                 }
-                $VserverObj | Table @TableParams
+                $CGVolumeObj | Sort-Object -Property Name | Table @TableParams
             }
         } catch {
             Write-PScriboMessage -IsWarning $_.Exception.Message

@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Security Aggregate Snaplock Type information.'
+        Write-PScriboMessage 'Collecting ONTAP Security Aggregate SnapLock Type information.'
     }
 
     process {
@@ -31,7 +31,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
                     try {
                         $inObj = [ordered] @{
                             'Aggregate Name' = $Item.Name
-                            'Snaplock Type' = $TextInfo.ToTitleCase((Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes).SnaplockType)
+                            'SnapLock Type' = $TextInfo.ToTitleCase((Get-NcAggr $Item.Name -Controller $Array | Select-Object -ExpandProperty AggrSnaplockAttributes).SnaplockType)
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -40,7 +40,7 @@ function Get-AbrOntapSecuritySnapLockAggr {
                 }
 
                 $TableParams = @{
-                    Name = "Aggregate Snaplock Type - $($ClusterInfo.ClusterName)"
+                    Name = "Aggregate SnapLock Type - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 40, 60
                 }
