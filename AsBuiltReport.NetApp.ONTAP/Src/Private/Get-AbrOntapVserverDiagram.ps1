@@ -141,7 +141,8 @@ function Get-AbrOntapVserverDiagram {
 
                         if ($AggrSubGraphObj) {
                             Node "$($VserverNodeName)Aggrs" @{Label = $AggrSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Edge -To "$($VserverNodeName)Aggrs" -From $VserverNodeName @{minlen = 2; color = $Edgecolor; style = 'filled'; arrowhead = 'box'; arrowtail = 'box' }
+                            Add-NodeEdge -To "$($VserverNodeName)Aggrs" -From $VserverNodeName -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled' }
+
                         }
                     }
                 } catch {
@@ -197,7 +198,7 @@ function Get-AbrOntapVserverDiagram {
 
                         if ($VolSubGraphObj) {
                             Node "$($VserverNodeName)Vols" @{Label = $VolSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Add-NodeEdge -From $VserverNodeName -To "$($VserverNodeName)Vols" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
+                            Add-NodeEdge -From $VserverNodeName -To "$($VserverNodeName)Vols" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled' }
                         }
                     }
                 } catch {
@@ -262,7 +263,7 @@ function Get-AbrOntapVserverDiagram {
 
                         if ($LifSubGraphObj) {
                             Node "$($VserverNodeName)Lifs" @{Label = $LifSubGraphObj; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
-                            Add-NodeEdge -From $VserverNodeName -To "$($VserverNodeName)Lifs" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled'}
+                            Add-NodeEdge -From $VserverNodeName -To "$($VserverNodeName)Lifs" -EdgeColor $Edgecolor -Arrowhead 'box' -Arrowtail 'box' -EdgeLength 2 -GraphvizAttributes @{style = 'filled' }
                         }
                     }
                 } catch {
