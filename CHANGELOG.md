@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved Consistency Group section
 - Improved Network diagram to better display Ifgrp ports and their associated Vlan\LIFs
 - Update diagram export functions for improved styling and edge handling
+- Bump Github Actions to use latest version for checkout and PSScriptAnalyzer actions
 
 ### Fixed
 
