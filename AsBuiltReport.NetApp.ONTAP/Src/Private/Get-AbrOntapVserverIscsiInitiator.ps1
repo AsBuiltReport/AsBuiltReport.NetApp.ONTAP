@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiInitiator {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI Client Initiators information.'
+        Write-PScriboMessage 'Collecting ONTAP Vserver iSCSI Client Initiators information.'
     }
 
     process {
@@ -44,7 +44,7 @@ function Get-AbrOntapVserverIscsiInitiator {
                 }
 
                 $TableParams = @{
-                    Name = "ISCSI Client Initiator - $($Vserver)"
+                    Name = "iSCSI Client Initiator - $($Vserver)"
                     List = $false
                     ColumnWidths = 60, 40
                 }

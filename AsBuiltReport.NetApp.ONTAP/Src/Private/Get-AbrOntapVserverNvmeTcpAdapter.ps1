@@ -23,7 +23,7 @@ function Get-AbrOntapVserverNvmeTcpAdapter {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Vserver Nvme TCP adapter information.'
+        Write-PScriboMessage 'Collecting ONTAP Vserver NVMe TCP adapter information.'
     }
 
     process {
@@ -50,7 +50,7 @@ function Get-AbrOntapVserverNvmeTcpAdapter {
                 }
 
                 $TableParams = @{
-                    Name = "Nvme TCP Physical Adapter - $($Vserver)"
+                    Name = "NVMe TCP Physical Adapter - $($Vserver)"
                     List = $false
                     ColumnWidths = 30, 17, 17, 20, 16
 
@@ -64,7 +64,7 @@ function Get-AbrOntapVserverNvmeTcpAdapter {
                     BlankLine
                     Paragraph {
                         Text 'Best Practice:' -Bold
-                        Text "Ensure all Nvme TCP adapters are in 'Up' status to maintain optimal connectivity and performance."
+                        Text "Ensure all NVMe TCP adapters are in 'Up' status to maintain optimal connectivity and performance."
                     }
                     BlankLine
                 }

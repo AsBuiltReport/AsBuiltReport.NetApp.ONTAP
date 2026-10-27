@@ -52,7 +52,7 @@ function Get-AbrOntapVserverVolumeSnapshotHealth {
                     }
 
                     $TableParams = @{
-                        Name = "HealthCheck - Volume Snapshot over $($SnapshotDays) days - $($Vserver)"
+                        Name = "Volume Snapshot Age (over $($SnapshotDays) days) - $($Vserver)"
                         List = $false
                         ColumnWidths = 25, 35, 25, 15
                     }

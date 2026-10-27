@@ -124,7 +124,7 @@ function Get-AbrOntapClusterReplicationDiagram {
                         'SourceVserver' = $VserverPeer.Vserver
                         'RemoteCluster' = $VserverPeer.PeerCluster
                         'RemoteVserver' = $VserverPeer.PeerVserver
-                        'Color' = Get-RandomPastelColorHex
+                        'Color' = Get-RandomPastelColorInHex
                         'SourceAdditionalInfo' = [PSCustomObject][ordered]@{
                             'Peer Vserver' = $VserverPeer.PeerVserver
                             'Peer Cluster' = $VserverPeer.PeerCluster

@@ -5,7 +5,7 @@ function Get-AbrOntapNodeNetworkDiagram {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.12
+        Version:        0.6.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -53,7 +53,6 @@ function Get-AbrOntapNodeNetworkDiagram {
 
     process {
         try {
-            $ClusterInfo = Get-NcCluster -Controller $Array
             $NodeSum = Get-NcNode -Controller $Array
 
             try {
@@ -119,6 +118,16 @@ function Get-AbrOntapNodeNetworkDiagram {
                                 }
                                 'Mac' = $NodePort.MacAddress
                                 'Mtu' = $NodePort.Mtu
+                                'Mode' = switch ([string]::IsNullOrEmpty($NodePort.IfgrpMode)) {
+                                    $true { 'Unknown' }
+                                    $false { $NodePort.IfgrpMode }
+                                    default { 'Unknown' }
+                                }
+                                'DistributionFunction' = switch ([string]::IsNullOrEmpty($NodePort.IfgrpDistributionFunction)) {
+                                    $true { 'Unknown' }
+                                    $false { $NodePort.IfgrpDistributionFunction }
+                                    default { 'Unknown' }
+                                }
                             }
                         }
                     }
@@ -154,7 +163,7 @@ function Get-AbrOntapNodeNetworkDiagram {
                         }
                     }
 
-                    $NodeVlans = Get-NcNetPortVlan -Node $Node.Node -Controller $Array
+                    $NodeVlans = Get-NcNetPortVlan -Node $Node.Node -Controller $Array | Sort-Object -Property VlanID
                     foreach ($NodeVlan in $NodeVlans) {
                         $NetVlanInfo += [PSCustomObject][ordered]@{
                             'NodeName' = $NodeVlan.Node
@@ -179,10 +188,10 @@ function Get-AbrOntapNodeNetworkDiagram {
                     if ($NetPortInfo) {
                         # Cluster Network Ports
                         $ClusterPortObj = @()
-                        foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Broadcast Domain' -eq 'Cluster' })) {
+                        foreach ($Port in ($NetPortInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.AdditionalInfo.'Broadcast Domain' -eq 'Cluster' })) {
 
                             $PerPortLifs = @()
-                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.CurrentPort -eq $Port.PortName })) {
+                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.CurrentPort -eq $Port.PortName })) {
                                 $PerPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
                                     Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                 } else {
@@ -208,9 +217,9 @@ function Get-AbrOntapNodeNetworkDiagram {
                         Add-NodeEdge -From "$($Port.NodeName)ClusterPorts" -To $Node.NodeName -EdgeColor $Edgecolor -EdgeStyle 'dashed' -EdgeThickness 1 -Arrowhead 'box' -Arrowtail 'box' -EdgeLabelFontColor $Fontcolor -EdgeLabelFontSize 12 -EdgeLength 1
 
                         # Non-IFGRP Ports without Vlan Interfces
-                        foreach ($Port in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') -and $_.PortName -notmatch 'a0' -and $_.PortType -ne 'vlan' -and $_.IsParentVlan -eq $false })) {
+                        foreach ($Port in ($NetPortInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') -and $_.PortName -notmatch 'a0' -and $_.PortType -ne 'vlan' -and $_.IsParentVlan -eq $false })) {
                             $PerPortLifs = @()
-                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $Port.PortName })) {
+                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.NodeName -and $_.CurrentPort -eq $Port.PortName })) {
                                 $PerPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
                                     Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                 } else {
@@ -230,9 +239,9 @@ function Get-AbrOntapNodeNetworkDiagram {
                         }
 
                         # IFGRP Ports (Link Aggregation Groups) with member ports and LIFs
-                        foreach ($IfgrpPort in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.PortType -eq 'ifgrp' })) {
+                        foreach ($IfgrpPort in ($NetPortInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.PortType -eq 'if_group' })) {
                             $IfgrpPortLifs = @()
-                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $IfgrpPort.PortName })) {
+                            foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.NodeName -and $_.CurrentPort -eq $IfgrpPort.PortName })) {
                                 $IfgrpPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
                                     Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                 } else {
@@ -244,27 +253,26 @@ function Get-AbrOntapNodeNetworkDiagram {
                                 $IfgrpPortLifs = Add-NodeIcon -Name "$($IfgrpPort.NodeName)_$($IfgrpPort.PortName)_NoLifs" -LabelName 'No LIFs Assigned' -ImagesObj $Images -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo @() -IconPath $IconPath
                             }
 
-                            if ($IfgrpPortLifs.Count -eq 1) { $IfgrpPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpPortLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpPortLifsColumnSize = $IfgrpPortLifs.Count }
-
                             # Member physical ports of this IFGRP
                             $MemberPortItems = @()
-                            foreach ($MemberPort in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.AdditionalInfo.'Ifgrp Port' -eq $IfgrpPort.PortName })) {
-                                $MemberPortItems += Add-NodeText -Name "$($MemberPort.NodeName)_$($MemberPort.PortName)_MemberPort" -Text $MemberPort.PortName -IconDebug $IconDebug -FontSize 12
+                            foreach ($MemberPort in ($NetPortInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.AdditionalInfo.'Ifgrp Port' -eq $IfgrpPort.PortName })) {
+                                $MemberPortItems += Add-NodeIcon -Name "$($MemberPort.NodeName)_$($MemberPort.PortName)_MemberPort" -LabelName $MemberPort.PortName -ImagesObj $Images -IconType 'Ontap_Network_Port' -IconDebug $IconDebug -FontSize 12 -ImageSizePercent 50 -AditionalInfo ($MemberPort.AdditionalInfo | Select-Object -Property Health, 'Link Status', Mac, Mtu) -IconPath $IconPath
                             }
 
                             $IfgrpPortObj = @()
+
+                            $IfgrpMemberPortObj = @()
                             if ($MemberPortItems) {
-                                if ($MemberPortItems.Count -eq 1) { $MemberPortColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $MemberPortColumnSize = $Options.DiagramColumnSize } else { $MemberPortColumnSize = $MemberPortItems.Count }
-                                $IfgrpPortObj += Add-HtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_Members" -TableArray $MemberPortItems -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label 'Member Ports' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $MemberPortColumnSize
+                                if ($MemberPortItems.Count -eq 1) { $MemberPortColumnSize = 1 } elseif ($MemberPortItems.Count -lt $Options.DiagramColumnSize) { $MemberPortColumnSize = $MemberPortItems.Count }elseif ($Options.DiagramColumnSize) { $MemberPortColumnSize = $Options.DiagramColumnSize } else { $MemberPortColumnSize = $MemberPortItems.Count }
+                                $IfgrpMemberPortObj += Add-HtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_Members" -TableArray $MemberPortItems -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label 'Interface Group Member Ports' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $MemberPortColumnSize
                             }
 
-                            $IfgrpPortObj += Add-HtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_IfgrpLifs" -TableArray $IfgrpPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label $IfgrpPort.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpPortLifsColumnSize
-
                             # Child VLAN interfaces grouped under this IFGRP port
+                            $IfgrpVlanPortObj = @()
                             if ($NetVlanInfo) {
-                                foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.ParentInterface -eq $IfgrpPort.PortName })) {
+                                foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.ParentInterface -eq $IfgrpPort.PortName })) {
                                     $IfgrpVlanLifs = @()
-                                    foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
+                                    foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.NodeName -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
                                         $IfgrpVlanLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
                                             Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                         } else {
@@ -278,8 +286,22 @@ function Get-AbrOntapNodeNetworkDiagram {
 
                                     if ($IfgrpVlanLifs.Count -eq 1) { $IfgrpVlanLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpVlanLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpVlanLifsColumnSize = $IfgrpVlanLifs.Count }
 
-                                    $IfgrpPortObj += Add-HtmlSubGraph -Name "$($VlanPort.NodeName)$($VlanPort.InterfaceName)_VlanLifs" -TableArray $IfgrpVlanLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label "$($VlanPort.InterfaceName) (VLAN $($VlanPort.VlanID))" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpVlanLifsColumnSize
+                                    $IfgrpVlanPortObj += Add-HtmlSubGraph -Name "$($VlanPort.NodeName)$($VlanPort.InterfaceName)_VlanLifs" -TableArray $IfgrpVlanLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label "$($VlanPort.InterfaceName) (VLAN $($VlanPort.VlanID))" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpVlanLifsColumnSize
                                 }
+                                if ($IfgrpVlanPortObj.Count -eq 1) { $IfgrpVlanPortObjColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpVlanPortObjColumnSize = $Options.DiagramColumnSize } else { $IfgrpVlanPortObjColumnSize = $IfgrpVlanPortObj.Count }
+
+                                $IfgrpMemberPortObj += Add-HtmlSubGraph -Name "$($VlanPort.ParentInterface)_Vlans" -TableArray $IfgrpVlanPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label 'Port VLANs' -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpVlanPortObjColumnSize
+
+                            }
+
+                            if ($IfgrpPortLifs.Count -eq 1) { $IfgrpPortLifsColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpPortLifsColumnSize = $Options.DiagramColumnSize } else { $IfgrpPortLifsColumnSize = $IfgrpPortLifs.Count }
+
+                            if ($IfgrpPortLifs -and (-not $IfgrpVlanPortObj)) {
+                                $IfgrpMemberPortObj += Add-HtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_IfgrpLifs" -TableArray $IfgrpPortLifs -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label $IfgrpPort.PortName -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize $IfgrpPortLifsColumnSize
+                            }
+
+                            if ($IfgrpMemberPortObj) {
+                                $IfgrpPortObj += Add-HtmlSubGraph -Name "$($IfgrpPort.NodeName)$($IfgrpPort.PortName)_IfgrpLifs" -TableArray $IfgrpMemberPortObj -ImagesObj $Images -IconDebug $IconDebug -TableBorder 1 -Label "Mode: $($IfgrpPort.AdditionalInfo.Mode.toUpper())  Distribution: $($IfgrpPort.AdditionalInfo.DistributionFunction.toUpper())" -LabelPos top -TableStyle 'rounded,dashed' -TableBorderColor '#71797E' -FontName 'Segoe Ui Bold' -ColumnSize 1
                             }
 
                             if ($IfgrpPortObj.Count -eq 1) { $IfgrpPortObjColumnSize = 1 } elseif ($Options.DiagramColumnSize) { $IfgrpPortObjColumnSize = $Options.DiagramColumnSize } else { $IfgrpPortObjColumnSize = $IfgrpPortObj.Count }
@@ -291,11 +313,11 @@ function Get-AbrOntapNodeNetworkDiagram {
 
                         # Physical Parent Ports with grouped Child VLAN Interfaces
                         if ($NetVlanInfo) {
-                            foreach ($ParentPort in ($NetPortInfo | Where-Object { $_.Nodename -eq $Node.Nodename -and $_.IsParentVlan -eq $true -and $_.PortType -ne 'ifgrp' -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') })) {
+                            foreach ($ParentPort in ($NetPortInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.IsParentVlan -eq $true -and $_.PortType -ne 'if_group' -and $_.AdditionalInfo.'Broadcast Domain' -ne 'Cluster' -and $_.AdditionalInfo.'Ifgrp Port' -in @('None', 'Unknown') })) {
                                 $ChildVlanObjs = @()
-                                foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.Nodename -and $_.ParentInterface -eq $ParentPort.PortName })) {
+                                foreach ($VlanPort in ($NetVlanInfo | Where-Object { $_.NodeName -eq $Node.NodeName -and $_.ParentInterface -eq $ParentPort.PortName })) {
                                     $VlanPortLifs = @()
-                                    foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.Nodename -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
+                                    foreach ($Lif in ($NetLifsInfo | Where-Object { $_.CurrentNode -eq $Node.NodeName -and $_.CurrentPort -eq $VlanPort.InterfaceName })) {
                                         $VlanPortLifs += if ($Lif.AdditionalInfo.'Is Home?' -eq 'Yes') {
                                             Add-NodeIcon -Name $Lif.InterfaceName -ImagesObj $Images -Align 'Center' -IconType 'Ontap_Network_Nic' -IconDebug $IconDebug -AditionalInfo $Lif.AdditionalInfo -ImageSizePercent 50 -IconPath $IconPath -FontSize 12
                                         } else {

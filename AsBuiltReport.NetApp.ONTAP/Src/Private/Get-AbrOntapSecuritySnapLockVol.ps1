@@ -19,7 +19,7 @@ function Get-AbrOntapSecuritySnapLockVol {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Security Volume Snaplock Type information.'
+        Write-PScriboMessage 'Collecting ONTAP Security Volume SnapLock Type information.'
     }
 
     process {
@@ -32,7 +32,7 @@ function Get-AbrOntapSecuritySnapLockVol {
                         $inObj = [ordered] @{
                             'Volume' = $Item.Name
                             'Aggregate' = $Item.Aggregate
-                            'Snaplock Type' = $TextInfo.ToTitleCase((Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes).SnaplockType)
+                            'SnapLock Type' = $TextInfo.ToTitleCase((Get-NcVol $Item.Name -Controller $Array | Select-Object -ExpandProperty VolumeSnaplockAttributes).SnaplockType)
                         }
                         $OutObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -41,7 +41,7 @@ function Get-AbrOntapSecuritySnapLockVol {
                 }
 
                 $TableParams = @{
-                    Name = "Volume Snaplock Type - $($ClusterInfo.ClusterName)"
+                    Name = "Volume SnapLock Type - $($ClusterInfo.ClusterName)"
                     List = $false
                     ColumnWidths = 45, 35, 20
                 }

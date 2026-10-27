@@ -23,7 +23,7 @@ function Get-AbrOntapVserverIscsiInterface {
     )
 
     begin {
-        Write-PScriboMessage 'Collecting ONTAP Vserver ISCSI interface information.'
+        Write-PScriboMessage 'Collecting ONTAP Vserver iSCSI interface information.'
     }
 
     process {
@@ -49,7 +49,7 @@ function Get-AbrOntapVserverIscsiInterface {
                 }
 
                 $TableParams = @{
-                    Name = "ISCSI Interface - $($Vserver)"
+                    Name = "iSCSI Interface - $($Vserver)"
                     List = $false
                     ColumnWidths = 40, 30, 15, 15
                 }
@@ -62,7 +62,7 @@ function Get-AbrOntapVserverIscsiInterface {
                     BlankLine
                     Paragraph {
                         Text 'Best Practice:' -Bold
-                        Text 'Ensure that all ISCSI interfaces are operational to maintain optimal storage connectivity.'
+                        Text 'Ensure that all iSCSI interfaces are operational to maintain optimal storage connectivity.'
                     }
                     BlankLine
                 }

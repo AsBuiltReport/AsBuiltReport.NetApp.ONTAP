@@ -81,7 +81,7 @@ function Get-AbrOntapEfficiencyAggr {
                     }
 
                     $TableParams = @{
-                        Name = "HealthCheck - Volume without deduplication - $($ClusterInfo.ClusterName)"
+                        Name = "Volumes Without Deduplication - $($ClusterInfo.ClusterName)"
                         List = $false
                         ColumnWidths = 45, 55
                     }

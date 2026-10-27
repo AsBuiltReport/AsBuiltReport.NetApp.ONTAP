@@ -41,7 +41,6 @@ function Export-AbrOntapDiagram {
                 'OutputFolderPath' = $OutputFolderPath
                 'MainDiagramLabel' = $MainDiagramLabel
                 'MainDiagramLabelFontsize' = 28
-                'MainDiagramLabelFontcolor' = '#565656'
                 'MainDiagramLabelFontname' = 'Segoe UI Black'
                 'IconPath' = $IconPath
                 'ImagesObj' = $Images
@@ -65,14 +64,26 @@ function Export-AbrOntapDiagram {
                 $DiagramParams.add('Fontcolor', 'White')
                 $DiagramParams.add('NodeFontcolor', 'White')
                 $DiagramParams.add('WaterMarkColor', 'White')
+                $DiagramParams.add('SignatureTableBorderColor', 'Black')
+                $DiagramParams.add('SignatureTableBackgroundColor', 'Black')
+                $DiagramParams.add('MainDiagramLabelFontcolor', 'White')
+                $DiagramParams.add('MainDiagramLabelTableBackgroundColor', 'Black')
             } elseif ($Options.DiagramTheme -eq 'Neon') {
                 $DiagramParams.add('MainGraphBGColor', 'grey14')
                 $DiagramParams.add('Edgecolor', 'gold2')
                 $DiagramParams.add('Fontcolor', 'gold2')
                 $DiagramParams.add('NodeFontcolor', 'gold2')
                 $DiagramParams.add('WaterMarkColor', '#FFD700')
+                $DiagramParams.add('SignatureTableBorderColor', 'gold2')
+                $DiagramParams.add('SignatureTableBackgroundColor', 'grey14')
+                $DiagramParams.add('MainDiagramLabelFontcolor', 'gold2')
+                $DiagramParams.add('MainDiagramLabelTableBackgroundColor', 'grey14')
             } else {
                 $DiagramParams.add('WaterMarkColor', '#333333')
+                $DiagramParams.add('SignatureTableBorderColor', '#71797E')
+                $DiagramParams.add('SignatureTableBackgroundColor', 'White')
+                $DiagramParams.add('MainDiagramLabelFontcolor', '#565656')
+                $DiagramParams.add('MainDiagramLabelTableBackgroundColor', 'White')
             }
 
             if ($Options.ExportDiagrams) {
@@ -122,7 +133,7 @@ function Export-AbrOntapDiagram {
                 $Graph = $DiagramObject
                 $Diagram = New-AbrDiagram @DiagramParams -InputObject $Graph
                 if ($Diagram) {
-                    $BestAspectRatio = Get-BestImageAspectRatio -GraphObj $Diagram -MaxWidth 600
+                    $BestAspectRatio = Get-BestImageAspectRatio -GraphObj $Diagram -MaxWidth 600 -MaxHeight 600
                     Section -Style Heading2 $MainDiagramLabel {
                         Image -Base64 $Diagram -Text 'NetApp Ontap Diagram' -Width $BestAspectRatio.Width -Height $BestAspectRatio.Height -Align Center
                     }

@@ -5,7 +5,7 @@ function Get-AbrOntapVserverCGSummary {
     .DESCRIPTION
 
     .NOTES
-        Version:        0.6.12
+        Version:        0.6.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,7 +39,6 @@ function Get-AbrOntapVserverCGSummary {
                             'Available' = ($Item.space.available | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Used' = ($Item.space.used | ConvertTo-FormattedNumber -ErrorAction SilentlyContinue -NumberFormatString 0.0 -Type Datasize) ?? '--'
                             'Replicated' = $Item.replicated
-                            'Lun Count' = ($Item.luns.name).count
                         }
                         $VserverObj += [pscustomobject](ConvertTo-HashToYN $inObj)
                     } catch {
@@ -50,7 +49,7 @@ function Get-AbrOntapVserverCGSummary {
                 $TableParams = @{
                     Name = "Consistency Groups - $($Vserver)"
                     List = $false
-                    ColumnWidths = 40, 12, 12, 12, 12, 12
+                    ColumnWidths = 40, 15, 15, 15, 15
                 }
                 if ($Report.ShowTableCaptions) {
                     $TableParams['Caption'] = "- $($TableParams.Name)"
