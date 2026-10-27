@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.14] - Unreleased
+## [0.6.14] - 2026-10-26
 
 ### Added
 
@@ -14,8 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump module version to v0.6.14
-- Bump AsBuiltReport.Diagram module requirement to v1.0.7
-- Bump AsBuiltReport.Chart module requirement to v0.3.2
+- Bump AsBuiltReport.Diagram module requirement to v1.0.12
+- Bump AsBuiltReport.Chart module requirement to v0.3.4
 - Enhanced report section titles for clarity and consistency
 - Improved diagram export functionality with aspect ratio adjustments
 - Corrected SnapLock capitalization in various function outputs and messages
@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refined iSCSI and NVMe service section titles for consistency
 - Improved Consistency Group section
 - Improved Network diagram to better display Ifgrp ports and their associated Vlan\LIFs
+- Update diagram export functions for improved styling and edge handling
+- Bump Github Actions to use latest version for checkout and PSScriptAnalyzer actions
 
 ### Fixed
 

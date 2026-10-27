@@ -58,7 +58,7 @@
         },
         @{
             ModuleName = 'AsBuiltReport.Chart';
-            ModuleVersion = '0.3.2'
+            ModuleVersion = '0.3.4'
         },
         @{
             ModuleName = 'NetApp.ONTAP';
@@ -66,7 +66,7 @@
         },
         @{
             ModuleName = 'AsBuiltReport.Diagram';
-            ModuleVersion = '1.0.7'
+            ModuleVersion = '1.0.12'
         }
     )
 
