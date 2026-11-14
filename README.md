@@ -1,14 +1,14 @@
 <p align="center">
-    <a href="https://www.asbuiltreport.com/" alt="AsBuiltReport"></a>
-            <img src='https://avatars.githubusercontent.com/u/42958564' width="8%" height="8%" /></a>
+    <a href="https://www.asbuiltreport.com/">
+        <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/repo-banners/AsBuiltReport.NetApp.ONTAP.png" alt="AsBuiltReport.NetApp.ONTAP" width="880"></a>
 </p>
 <p align="center">
     <a href="https://www.powershellgallery.com/packages/AsBuiltReport.NetApp.ONTAP/" alt="PowerShell Gallery Version">
-        <img src="https://img.shields.io/powershellgallery/v/AsBuiltReport.NetApp.ONTAP.svg" /></a>
+        <img src="https://img.shields.io/powershellgallery/v/AsBuiltReport.NetApp.ONTAP.svg?color=1F5FD0" /></a>
     <a href="https://www.powershellgallery.com/packages/AsBuiltReport.NetApp.ONTAP/" alt="PS Gallery Downloads">
-        <img src="https://img.shields.io/powershellgallery/dt/AsBuiltReport.NetApp.ONTAP.svg" /></a>
+        <img src="https://img.shields.io/powershellgallery/dt/AsBuiltReport.NetApp.ONTAP.svg?color=012456" /></a>
     <a href="https://www.powershellgallery.com/packages/AsBuiltReport.NetApp.ONTAP/" alt="PS Platform">
-        <img src="https://img.shields.io/powershellgallery/p/AsBuiltReport.NetApp.ONTAP.svg" /></a>
+        <img src="https://img.shields.io/powershellgallery/p/AsBuiltReport.NetApp.ONTAP.svg?color=FFD02B" /></a>
 </p>
 <p align="center">
     <a href="https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/graphs/commit-activity" alt="GitHub Last Commit">
@@ -16,14 +16,8 @@
     <a href="https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/master/LICENSE" alt="GitHub License">
         <img src="https://img.shields.io/github/license/AsBuiltReport/AsBuiltReport.NetApp.ONTAP.svg" /></a>
     <a href="https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/graphs/contributors" alt="GitHub Contributors">
-        <img src="https://img.shields.io/github/contributors/AsBuiltReport/AsBuiltReport.NetApp.ONTAP.svg"/></a>
+        <img src="https://img.shields.io/github/contributors/AsBuiltReport/AsBuiltReport.NetApp.ONTAP.svg?color=012456"/></a>
 </p>
-<p align="center">
-    <a href="https://twitter.com/AsBuiltReport" alt="Twitter">
-            <img src="https://img.shields.io/twitter/follow/AsBuiltReport.svg?style=social"/></a>
-</p>
-
-# NetApp ONTAP Arrays AsBuiltReport
 
 NetApp ONTAP As Built Report is a PowerShell module which works in conjunction with [AsBuiltReport.Core](https://github.com/AsBuiltReport/AsBuiltReport.Core).
 
@@ -31,17 +25,17 @@ NetApp ONTAP As Built Report is a PowerShell module which works in conjunction w
 
 Please refer to the AsBuiltReport [website](https://www.asbuiltreport.com) for more detailed information about this project.
 
-## :books: Sample Reports
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/sample-reports.svg" alt="" width="24" height="24" align="top"> Sample Reports
 
 ### Sample Report - Custom Style 1
 
 Sample NetApp ONTAP As Built report HTML file: [Sample NetApp As-Built Report.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/dev/Samples/Sample%20NetApp%20As-Built%20Report.html)
 
-# :beginner: Getting Started
+# <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/getting-started.svg" alt="" width="28" height="28" align="top"> Getting Started
 
 Below are the instructions on how to install, configure and generate a NetApp ONTAP As Built Report
 
-## :floppy_disk: Supported Versions
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/supported-versions.svg" alt="" width="24" height="24" align="top"> Supported Versions
 
 ### **NetApp / ONTAP**
 
@@ -58,7 +52,7 @@ This report is compatible with the following PowerShell versions;
 | :------------: | :----------------: |
 |      :x:       | :white_check_mark: |
 
-## :wrench: System Requirements
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/system-requirements.svg" alt="" width="24" height="24" align="top"> System Requirements
 
 Each of the following modules will be automatically installed by following the [module installation](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP#package-module-installation) procedure.
 
@@ -72,7 +66,7 @@ These modules may also be manually installed.
 | AsBuiltReport.Chart   |          0.3.4           |  [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Chart)  |        [Link](https://github.com/AsBuiltReport/AsBuiltReport.Chart)         |
 | AsBuiltReport.Diagram |          1.0.12          | [Link](https://www.powershellgallery.com/packages/AsBuiltReport.Diagram) |       [Link](https://github.com/AsBuiltReport/AsBuiltReport.Diagram)        |
 
-## :package: Module Installation
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/module-installation.svg" alt="" width="24" height="24" align="top"> Module Installation
 
 ### PowerShell
 
@@ -99,11 +93,11 @@ If you are unable to use the PowerShell Gallery, you can still install the modul
 
 _Note: You are not limited to installing the module to those example paths, you can add a new entry to the environment variable PSModulePath if you want to use another path._
 
-### :closed_lock_with_key: Required Privileges
+### <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/required-privileges.svg" alt="" width="20" height="20" align="top"> Required Privileges
 
 To generate a NetApp ONTAP Array report, a user account with the readonly role of higher on the AFF/FAS is required.
 
-## :pencil2: Configuration
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/configuration.svg" alt="" width="24" height="24" align="top"> Configuration
 
 The NetApp ONTAP Array As Built Report utilises a JSON file to allow configuration of report information, options, detail and healthchecks.
 
@@ -184,7 +178,7 @@ The table below outlines the default and maximum **InfoLevel** settings for each
 
 The **Healthcheck** schema is used to toggle health checks on or off.
 
-## :computer: Examples
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/examples.svg" alt="" width="24" height="24" align="top"> Examples
 
 There are a few examples listed below on running the AsBuiltReport script against a NetApp ONTAP Array target. Refer to the `README.md` file in the main AsBuiltReport project repository for more examples.
 
@@ -203,6 +197,6 @@ PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Credential 
 PS C:\> New-AsBuiltReport -Report NetApp.ONTAP -Target 192.168.7.60 -Username 'admin' -Password 'P@ssw0rd' -Format Html,Word -OutputFolderPath 'C:\Users\Jon\Documents' -SendEmail
 
 ```
-## :x: Known Issues
+## <img src="https://raw.githubusercontent.com/AsBuiltReport/.github/main/assets/section-icons/known-issues.svg" alt="" width="24" height="24" align="top"> Known Issues
 
 - Issues with ASA v1/v2 hardware model. [#56](https://github.com/AsBuiltReport/AsBuiltReport.NetApp.ONTAP/issues/56)
